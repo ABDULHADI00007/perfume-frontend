@@ -47,6 +47,7 @@ import {
   Phone,
   MapPin,
   MessageSquare,
+  Printer,
   LucideProps,
 } from "lucide-react";
 
@@ -106,5 +107,6 @@ export const Icons = {
   Phone: (props: LucideProps) => <Phone {...defaultProps} {...props} />,
   MapPin: (props: LucideProps) => <MapPin {...defaultProps} {...props} />,
   MessageSquare: (props: LucideProps) => <MessageSquare {...defaultProps} {...props} />,
+  Printer: (props: LucideProps) => <Printer {...defaultProps} {...props} />,
 };
 

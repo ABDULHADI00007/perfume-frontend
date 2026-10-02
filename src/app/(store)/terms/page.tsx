@@ -2,8 +2,8 @@ import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
 
 export const metadata = constructMetadata({
-  title: "Terms of Service — Maison de Parfum",
-  description: "Terms and conditions governing your use of the Maison de Parfum website and your purchase of our fragrances.",
+  title: "Terms of Service — Soulmate Scents",
+  description: "Terms and conditions governing your use of the Soulmate Scents website and your purchase of our fragrances.",
   canonical: "/terms",
 });
 

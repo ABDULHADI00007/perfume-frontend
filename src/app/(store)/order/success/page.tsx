@@ -5,8 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Container } from "@/components/layout/Container";
 
 export const metadata = constructMetadata({
-  title: "Order Confirmation | Maison de Parfum",
-  description: "Thank you for your order with Maison de Parfum.",
+  title: "Order Confirmation | Soulmate Scents",
+  description: "Thank you for your order with Soulmate Scents.",
   noIndex: true,
 });
 

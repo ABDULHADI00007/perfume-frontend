@@ -24,7 +24,7 @@ export function constructMetadata({
   modifiedTime,
   authors,
 }: SEOProps = {}): Metadata {
-  const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+  const fullTitle = title === siteConfig.name || title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
   const canonicalUrl = `${siteConfig.url}${canonical.startsWith("/") ? canonical : `/${canonical}`}`;
 
   const openGraphData: Metadata["openGraph"] =
@@ -67,6 +67,11 @@ export function constructMetadata({
     robots: {
       index: !noIndex,
       follow: !noIndex,
+    },
+    icons: {
+      icon: "/images/perfumes/favicon-icon.png?v=2",
+      shortcut: "/images/perfumes/favicon-icon.png?v=2",
+      apple: "/images/perfumes/favicon-icon.png?v=2",
     },
   };
 }

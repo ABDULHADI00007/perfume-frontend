@@ -165,8 +165,10 @@ export function CheckoutPageView() {
         items: cart.items.map((item) => ({
           productId: item.productId,
           sku: resolveSku(item.productId, item.variantId, item.size, item.sku),
+          name: item.title,
           size: item.size,
           quantity: item.quantity,
+          image: item.image,
         })),
         shippingAddress: {
           fullName: `${customer.firstName.trim()} ${customer.lastName.trim()}`,

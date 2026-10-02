@@ -102,7 +102,7 @@ export const CollectionHighlight: React.FC = () => {
             {/* Single Strong CTA */}
             <motion.div variants={staggerItem}>
               <Link
-                href="/collections"
+                href="/perfumes"
                 className="inline-flex items-center justify-center font-sans font-medium uppercase px-9 py-4 text-xs tracking-[0.2em] bg-primary text-primary-foreground hover:bg-[#080d38] active:bg-black transition-colors duration-200 group"
               >
                 Explore The Reserve

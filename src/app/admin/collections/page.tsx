@@ -18,9 +18,10 @@ import { Icons } from "@/components/ui/icons";
 
 export default function AdminCollectionsPage() {
   const { hasPermission } = useAdminAuth();
-  const [collections, setCollections] = useState<AdminCollection[]>([]);
+  const initialCached = adminService.getCachedCollections();
+  const [collections, setCollections] = useState<AdminCollection[]>(initialCached || []);
   const [availableProducts, setAvailableProducts] = useState<AdminProduct[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!initialCached);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -42,9 +43,9 @@ export default function AdminCollectionsPage() {
   const [collectionToDelete, setCollectionToDelete] = useState<AdminCollection | null>(null);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-  const fetchCollections = useCallback(async () => {
+  const fetchCollections = useCallback(async (isSilent = false) => {
     try {
-      setIsLoading(true);
+      if (!isSilent) setIsLoading(true);
       setError(null);
       const [colsData, prodsData] = await Promise.all([
         adminService.getCollections(),
@@ -53,7 +54,9 @@ export default function AdminCollectionsPage() {
       setCollections(colsData);
       setAvailableProducts(prodsData.products);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load collections");
+      if (!isSilent) {
+        setError(err instanceof Error ? err.message : "Failed to load collections");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +64,8 @@ export default function AdminCollectionsPage() {
 
   useEffect(() => {
     if (hasPermission("collections.manage")) {
-      fetchCollections();
+      const hasCache = Boolean(adminService.getCachedCollections());
+      fetchCollections(hasCache);
     }
   }, [fetchCollections, hasPermission]);
 

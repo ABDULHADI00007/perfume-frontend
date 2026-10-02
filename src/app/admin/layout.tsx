@@ -4,8 +4,8 @@ import { AdminAuthProvider } from "@/features/admin/context/AdminAuthContext";
 import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell";
 
 export const metadata = constructMetadata({
-  title: "Admin Dashboard | Maison de Parfum",
-  description: "Administrative control panel for Maison de Parfum luxury fragrance house.",
+  title: "Admin Dashboard | Soulmate Scents",
+  description: "Administrative control panel for Soulmate Scents luxury fragrance house.",
   noIndex: true,
 });
 

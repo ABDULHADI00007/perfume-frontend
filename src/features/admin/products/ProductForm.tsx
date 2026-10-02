@@ -32,7 +32,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [name, setName] = useState(initialProduct?.name || "");
   const [slug, setSlug] = useState(initialProduct?.slug || "");
   const [sku, setSku] = useState(initialProduct?.sku || "");
-  const [brand, setBrand] = useState(initialProduct?.brand || "House Perfume");
+  const [brand, setBrand] = useState(initialProduct?.brand || "Soulmate Scents");
   const [price, setPrice] = useState<string>(initialProduct?.price ? String(initialProduct.price) : "");
   const [compareAtPrice, setCompareAtPrice] = useState<string>(
     initialProduct?.compareAtPrice ? String(initialProduct.compareAtPrice) : ""

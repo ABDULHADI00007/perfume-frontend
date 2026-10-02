@@ -106,6 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Full Bleed Perfume Image */}
         <Link
           href={`/perfumes/${product.slug}`}
+          prefetch={false}
           aria-label={`View details for ${product.title}`}
           className="relative block w-full h-full"
         >
@@ -124,7 +125,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="mt-3.5 flex flex-col space-y-1">
         {/* Title */}
         <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0D1424] tracking-tight group-hover:text-amber-900 transition-colors">
-          <Link href={`/perfumes/${product.slug}`}>{product.title}</Link>
+          <Link href={`/perfumes/${product.slug}`} prefetch={false}>
+            {product.title}
+          </Link>
         </h3>
 
         {/* Type / Subtitle */}

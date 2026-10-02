@@ -14,7 +14,7 @@ export const metadata = constructMetadata({
 
 export default function AboutPage() {
   return (
-    <main className="bg-[#F8F6F0] min-h-screen py-8 sm:py-12">
+    <main className="bg-white min-h-screen py-8 sm:py-12">
       <Container size="wide">
         {/* Breadcrumb */}
         <div className="text-xs font-sans text-[#8E95A2] mb-4 flex items-center gap-1.5">
@@ -35,7 +35,7 @@ export default function AboutPage() {
               A Scent for Every Story
             </h1>
             <p className="text-xs sm:text-sm text-[#64748B] font-sans font-normal leading-relaxed max-w-xl pt-2">
-              At Soulmate Scents, we believe a fragrance is more than just a scent — it's a feeling, a memory, and a part of your story. Our passion is to create authentic, premium fragrances that bring confidence, elegance, and connection to your everyday life.
+              At Soulmate Scents, we believe a fragrance is more than just a scent &mdash; it&apos;s a feeling, a memory, and a part of your story. Our passion is to create authentic, premium fragrances that bring confidence, elegance, and connection to your everyday life.
             </p>
           </div>
 
@@ -201,7 +201,7 @@ export default function AboutPage() {
                 Dedicated Support
               </h3>
               <p className="text-xs text-[#64748B] font-sans leading-relaxed">
-                We're always here to help you find your perfect scent.
+                We&apos;re always here to help you find your perfect scent.
               </p>
             </div>
           </div>
@@ -216,7 +216,7 @@ export default function AboutPage() {
             A Scent for Every Story
           </h2>
           <p className="text-xs sm:text-sm text-[#64748B] font-sans max-w-xl mx-auto mb-6 leading-relaxed">
-            Whether it's a new beginning, a special occasion, or simply an everyday moment, Soulmate Scents is here to be part of your journey.
+            Whether it&apos;s a new beginning, a special occasion, or simply an everyday moment, Soulmate Scents is here to be part of your journey.
           </p>
 
           <Link

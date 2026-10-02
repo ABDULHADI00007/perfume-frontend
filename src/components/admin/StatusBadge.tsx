@@ -34,6 +34,15 @@ const statusMap: Record<string, NonNullable<BadgeProps["variant"]>> = {
   approved: "success",
 };
 
+const dotColors: Record<string, string> = {
+  success: "bg-[#2B5A41]",
+  warning: "bg-[#926618]",
+  error: "bg-[#9E2A2B]",
+  accent: "bg-[#D4ADFC]",
+  default: "bg-[#0C134F]",
+  neutral: "bg-[#6B6F80]",
+};
+
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,
   className = "",
@@ -47,11 +56,13 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     <Badge
       variant={variant}
       size="sm"
-      className={`capitalize font-mono tracking-wider text-[10px] px-2.5 py-0.5 border ${className}`}
+      className={`capitalize font-sans font-medium tracking-[0.14em] text-[9px] px-2.5 py-0.5 border inline-flex items-center gap-1.5 rounded-sm ${className}`}
     >
-      {label}
+      <span className={`w-1.5 h-1.5 rounded-full inline-block ${dotColors[variant] || "bg-current"}`} />
+      <span>{label}</span>
     </Badge>
   );
 };
+
 
 

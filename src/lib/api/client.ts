@@ -2,13 +2,18 @@ import { env } from "@/config/environment";
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
+  /** Timeout in milliseconds. Defaults to 5000ms on server, 10000ms on client. */
+  timeout?: number;
 }
+
+/** Default timeout: 1000ms for SSR (to prevent page render blocking), 10000ms for client */
+const DEFAULT_TIMEOUT_MS = typeof window === "undefined" ? 1000 : 10000;
 
 export async function apiClient<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { params, headers, ...customConfig } = options;
+  const { params, headers, timeout, ...customConfig } = options;
 
   let url = `${env.apiUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
 
@@ -25,9 +30,15 @@ export async function apiClient<T>(
     }
   }
 
+  // Create AbortController for timeout
+  const controller = new AbortController();
+  const timeoutMs = timeout ?? DEFAULT_TIMEOUT_MS;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   const config: RequestInit = {
     method: customConfig.method || "GET",
     credentials: "include",
+    signal: controller.signal,
     headers: {
       "Content-Type": "application/json",
       ...headers,
@@ -73,6 +84,14 @@ export async function apiClient<T>(
 
     return response.json();
   } catch (err) {
+    // Handle abort/timeout errors
+    if (err instanceof Error && err.name === "AbortError") {
+      const timeoutError = new Error(
+        "Request timed out. The server took too long to respond."
+      ) as Error & { status?: number };
+      timeoutError.status = 408;
+      throw timeoutError;
+    }
     if (err instanceof Error && err.name === "TypeError" && err.message.includes("fetch")) {
       const networkError = new Error(
         "Unable to connect to Maison de Parfum. Please check your internet connection."
@@ -81,6 +100,8 @@ export async function apiClient<T>(
       throw networkError;
     }
     throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 

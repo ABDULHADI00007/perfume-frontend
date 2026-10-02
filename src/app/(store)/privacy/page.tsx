@@ -2,9 +2,9 @@ import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
 
 export const metadata = constructMetadata({
-  title: "Privacy Policy — Maison de Parfum",
+  title: "Privacy Policy — Soulmate Scents",
   description:
-    "Maison de Parfum's privacy policy. How we collect, use, and protect your personal information.",
+    "Soulmate Scents's privacy policy. How we collect, use, and protect your personal information.",
   canonical: "/privacy",
 });
 

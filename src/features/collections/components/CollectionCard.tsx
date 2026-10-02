@@ -27,6 +27,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
       <div className="relative aspect-[4/3] sm:aspect-[16/9] w-full overflow-hidden bg-surface-subtle/60 border border-border">
         <Link
           href={`/collections/${collection.slug}`}
+          prefetch={false}
           aria-label={`Explore ${collection.title} collection`}
           className="block h-full w-full"
         >
@@ -58,7 +59,9 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
         )}
 
         <h3 className="font-serif text-2xl sm:text-3xl font-normal text-foreground group-hover:text-primary transition-colors leading-tight">
-          <Link href={`/collections/${collection.slug}`}>{collection.title}</Link>
+          <Link href={`/collections/${collection.slug}`} prefetch={false}>
+            {collection.title}
+          </Link>
         </h3>
 
         {collection.description && (
@@ -70,6 +73,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
         <div className="pt-2">
           <Link
             href={`/collections/${collection.slug}`}
+            prefetch={false}
             className="inline-flex items-center text-xs uppercase tracking-[0.18em] font-medium text-foreground group-hover:text-primary transition-colors"
           >
             Explore Collection

@@ -14,10 +14,10 @@ export const AdminLayoutShell: React.FC<{ children: React.ReactNode }> = ({ chil
 
   if (isLoading) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-surface-subtle">
-        <Spinner size="lg" className="text-foreground-muted mb-4" />
-        <p className="text-xs font-sans uppercase tracking-widest text-foreground-muted">
-          Authenticating Admin Portal...
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FBF9F5]">
+        <Spinner size="lg" className="text-[#0C134F] mb-4" />
+        <p className="text-xs font-sans uppercase tracking-[0.2em] text-[#6B6F80]">
+          Authenticating Soulmate Scents Portal...
         </p>
       </div>
     );
@@ -28,7 +28,7 @@ export const AdminLayoutShell: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface-subtle font-sans text-foreground">
+    <div className="min-h-screen flex flex-col bg-[#FBF9F5] font-sans text-[#121735]">
       <AdminHeader onToggleMobileMenu={() => setMobileMenuOpen(true)} />
 
       <div className="flex flex-1 overflow-hidden">
@@ -54,7 +54,7 @@ export const AdminLayoutShell: React.FC<{ children: React.ReactNode }> = ({ chil
 
         {/* Main Administrative Workspace */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="w-full max-w-[1700px] mx-auto space-y-8">{children}</div>
         </main>
       </div>
     </div>

@@ -29,6 +29,7 @@ export const JournalArticleCard: React.FC<JournalArticleCardProps> = ({
         {/* Cover Image Container */}
         <Link
           href={`/journal/${post.slug}`}
+          prefetch={false}
           className="block relative overflow-hidden"
           tabIndex={-1}
           aria-hidden="true"
@@ -59,7 +60,7 @@ export const JournalArticleCard: React.FC<JournalArticleCardProps> = ({
 
           {/* Title */}
           <h3 className="font-serif text-xl sm:text-2xl text-foreground font-normal group-hover:text-primary transition-colors leading-snug mb-3">
-            <Link href={`/journal/${post.slug}`} className="focus:outline-none">
+            <Link href={`/journal/${post.slug}`} prefetch={false} className="focus:outline-none">
               {post.title}
             </Link>
           </h3>
@@ -84,6 +85,7 @@ export const JournalArticleCard: React.FC<JournalArticleCardProps> = ({
       <div className="px-6 sm:px-7 pb-6 pt-2 border-t border-border/40">
         <Link
           href={`/journal/${post.slug}`}
+          prefetch={false}
           className="inline-flex items-center text-xs uppercase tracking-[0.16em] font-medium text-foreground group-hover:text-primary transition-colors"
           aria-label={`Read dispatch: ${post.title}`}
         >

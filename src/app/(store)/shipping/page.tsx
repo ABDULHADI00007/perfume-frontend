@@ -2,8 +2,8 @@ import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
 
 export const metadata = constructMetadata({
-  title: "Shipping & Delivery — Maison de Parfum",
-  description: "Shipping methods, delivery timelines, and packaging standards for Maison de Parfum orders worldwide.",
+  title: "Shipping & Delivery — Soulmate Scents",
+  description: "Shipping methods, delivery timelines, and packaging standards for Soulmate Scents orders worldwide.",
   canonical: "/shipping",
 });
 

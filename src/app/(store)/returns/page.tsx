@@ -2,8 +2,8 @@ import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
 
 export const metadata = constructMetadata({
-  title: "Returns & Exchanges — Maison de Parfum",
-  description: "Maison de Parfum's returns and exchanges policy. 14-day returns on unopened flacons.",
+  title: "Returns & Exchanges — Soulmate Scents",
+  description: "Soulmate Scents's returns and exchanges policy. 14-day returns on unopened flacons.",
   canonical: "/returns",
 });
 

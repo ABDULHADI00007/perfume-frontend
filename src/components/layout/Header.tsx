@@ -50,8 +50,15 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   };
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 15);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -62,8 +69,8 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
     <>
       <header
         className={`sticky top-0 z-30 w-full transition-all duration-300 ease-luxury ${isScrolled
-          ? "bg-[#FBF9F5]/95 backdrop-blur-md border-b border-[#E6E2EA] shadow-subtle py-2 sm:py-2.5"
-          : "bg-[#FBF9F5] border-b border-[#E6E2EA]/60 py-2.5 sm:py-3"
+          ? "bg-white/95 backdrop-blur-md border-b border-[#E6E2EA] shadow-subtle py-2 sm:py-2.5"
+          : "bg-white border-b border-[#E6E2EA]/60 py-2.5 sm:py-3"
           } ${className}`}
       >
         <Container size="wide">

@@ -38,14 +38,28 @@ export default async function JournalPage({ searchParams }: JournalPageProps) {
   let allCategories: string[] = [];
 
   try {
-    const res = await journalService.getPublishedPosts({
+    const postsPromise = journalService.getPublishedPosts({
       page,
       category: category || undefined,
       search: search || undefined,
       limit: 9,
     });
 
-    if (res.success && res.data) {
+    const categoriesPromise = (category || search)
+      ? journalService.getPublishedPosts({ limit: 50 })
+      : Promise.resolve(null);
+
+    const [resResult, allResResult] = await Promise.allSettled([
+      postsPromise,
+      categoriesPromise,
+    ]);
+
+    if (
+      resResult.status === "fulfilled" &&
+      resResult.value?.success &&
+      resResult.value.data
+    ) {
+      const res = resResult.value;
       initialPosts = res.data;
       if (res.meta) {
         const total = res.meta.total ?? res.data.length;
@@ -61,16 +75,16 @@ export default async function JournalPage({ searchParams }: JournalPageProps) {
       }
     }
 
-    // Also fetch unfiltered posts summary to extract all available categories
-    if (category || search) {
-      const allRes = await journalService.getPublishedPosts({ limit: 50 });
-      if (allRes.success && allRes.data) {
-        const catSet = new Set<string>();
-        allRes.data.forEach((p) => {
-          if (p.category && p.category.trim()) catSet.add(p.category.trim());
-        });
-        allCategories = Array.from(catSet);
-      }
+    if (
+      allResResult.status === "fulfilled" &&
+      allResResult.value?.success &&
+      allResResult.value.data
+    ) {
+      const catSet = new Set<string>();
+      allResResult.value.data.forEach((p) => {
+        if (p.category && p.category.trim()) catSet.add(p.category.trim());
+      });
+      allCategories = Array.from(catSet);
     } else {
       const catSet = new Set<string>();
       initialPosts.forEach((p) => {

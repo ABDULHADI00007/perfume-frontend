@@ -24,9 +24,11 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const refreshUser = useCallback(async () => {
+  const refreshUser = useCallback(async (isInitial = false) => {
     try {
-      setIsLoading(true);
+      if (isInitial) {
+        setIsLoading(true);
+      }
       setError(null);
       const profile = await adminAuthService.getMe();
       setUser(profile);
@@ -38,7 +40,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, []);
 
   useEffect(() => {
-    refreshUser();
+    refreshUser(true);
 
     const handleUnauthorized = () => {
       setUser(null);

@@ -33,10 +33,10 @@ export const EmptyCartView: React.FC = () => {
           Explore All Fragrances
         </Link>
         <Link
-          href="/collections"
+          href="/about"
           className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 border border-border text-foreground hover:border-foreground bg-surface text-xs uppercase tracking-[0.2em] font-medium transition-all duration-200"
         >
-          Curated Collections
+          About Our Maison
         </Link>
       </div>
     </div>

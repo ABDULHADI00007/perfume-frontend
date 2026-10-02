@@ -35,7 +35,7 @@ export const CartPageView: React.FC = () => {
       {/* Main 2-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start relative">
         {/* Left: Product Table White Card (8 cols) */}
-        <div className="lg:col-span-8 bg-white rounded-2xl p-5 sm:p-7 border border-[#EFECE6] shadow-sm">
+        <div className="lg:col-span-8 bg-white rounded-[24px] p-6 sm:p-8 border border-gray-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] transition-all duration-300">
           {/* Table Column Titles (Desktop) */}
           <div className="hidden sm:grid grid-cols-12 gap-4 pb-3.5 border-b border-[#F0ECE1] text-[11px] font-sans text-[#8E95A2] font-semibold uppercase tracking-wider">
             <div className="col-span-6">Product</div>
@@ -70,7 +70,7 @@ export const CartPageView: React.FC = () => {
 
         {/* Right: Order Summary White Card (4 cols) shifted UP to align with SHOPPING BAG line */}
         <aside className="lg:col-span-4 sticky top-20 lg:-mt-[6.5rem] xl:-mt-[7rem]">
-          <CartOrderSummary subtotal={cart.subtotal} itemCount={cart.itemCount} />
+          <CartOrderSummary subtotal={cart.subtotal} itemCount={cart.itemCount} items={cart.items} />
         </aside>
       </div>
     </div>

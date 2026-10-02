@@ -61,7 +61,7 @@ export default function AdminSettingsPage() {
       const data = await adminService.getSettings();
 
       if (data.store) {
-        setStoreName(data.store.name || "Maison de Parfum");
+        setStoreName(data.store.name || "Soulmate Scents");
         setSlogan(data.store.slogan || "");
         setSupportEmail(data.store.supportEmail || "");
         setSupportPhone(data.store.supportPhone || "");
@@ -299,7 +299,7 @@ export default function AdminSettingsPage() {
             />
             <Input
               label="Account Title / Beneficiary"
-              placeholder="e.g. Maison de Parfum SARL"
+              placeholder="e.g. Soulmate Scents Ltd"
               value={accountTitle}
               onChange={(e) => setAccountTitle(e.target.value)}
               disabled={!canEdit}

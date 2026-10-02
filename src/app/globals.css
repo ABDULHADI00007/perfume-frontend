@@ -1,75 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,600;0,700;1,700&family=Tenor+Sans&family=Poiret+One&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&family=Syne:wght@700;800;900&family=Outfit:wght@700;800;900&family=Bebas+Neue&family=Unbounded:wght@700;800;900&family=Big+Shoulders+Display:wght@800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
-    /* Colors - Approved Maison de Parfum Luxury Palette */
-    --color-background: #FBF9F5;
+    /* Colors - Approved Soulmate Scents Luxury Palette */
+    --color-background: #FFFFFF;
     --color-surface: #FFFFFF;
-    --color-surface-subtle: #F8F6F2;
-    --color-surface-muted: #EFECE6;
-    
+    --color-surface-subtle: #FFFFFF;
+    --color-surface-muted: #F5F5F5;
+
     --color-foreground: #121735;
     --color-foreground-muted: #6B6F80;
     --color-foreground-subtle: #9497A8;
-    
+
     --color-border: #E6E2EA;
     --color-border-subtle: #F1EFF4;
     --color-border-strong: #C5BFCB;
-    
-    --color-primary: #080E21;
-    --color-primary-hover: #121A38;
-    --color-primary-foreground: #FBF9F5;
-    
+
+    --color-primary: #0C134F;
+    --color-primary-hover: #121A4B;
+    --color-primary-foreground: #FFFFFF;
+
     --color-secondary: #D4ADFC;
     --color-secondary-hover: #C193F5;
-    --color-secondary-foreground: #080E21;
+    --color-secondary-foreground: #0C134F;
     --color-secondary-subtle: #F6F0FD;
-    
+
     --color-accent: #C5A880;
     --color-accent-hover: #B39266;
     --color-accent-foreground: #121735;
     --color-accent-subtle: #FAF6F0;
-    
-    --color-navy: #080E21;
-    --color-deep-navy: #080E21;
+
+    --color-navy: #0C134F;
+    --color-deep-navy: #0C134F;
     --color-violet: #D4ADFC;
     --color-champagne: #C5A880;
-    
+
     /* Semantic Feedback Colors */
     --color-success: #2B5A41;
     --color-success-subtle: #EDF5F0;
     --color-success-foreground: #173827;
-    
+
     --color-warning: #926618;
     --color-warning-subtle: #FAF4E6;
     --color-warning-foreground: #5C3F0A;
-    
+
     --color-error: #9E2A2B;
     --color-error-subtle: #FDF2F2;
     --color-error-foreground: #6B1718;
-    
+
     --color-info: #2B4B68;
     --color-info-subtle: #EEF4F9;
     --color-info-foreground: #162B3D;
 
     /* Admin Specific Palette */
-    --color-admin-bg: #F8F9FA;
+    --color-admin-bg: #FBF9F5;
     --color-admin-surface: #FFFFFF;
-    --color-admin-sidebar: #121212;
-    --color-admin-border: #E5E7EB;
+    --color-admin-sidebar: #FFFFFF;
+    --color-admin-border: #E6E2EA;
 
     /* Spacing System */
-    --space-xs: 0.25rem;    /* 4px */
-    --space-sm: 0.5rem;     /* 8px */
-    --space-md: 1rem;       /* 16px */
-    --space-lg: 1.5rem;     /* 24px */
-    --space-xl: 2rem;       /* 32px */
-    --space-2xl: 3rem;      /* 48px */
-    --space-3xl: 4rem;      /* 64px */
-    --space-4xl: 6rem;      /* 96px */
-    --space-5xl: 8rem;      /* 128px */
+    --space-xs: 0.25rem;
+    /* 4px */
+    --space-sm: 0.5rem;
+    /* 8px */
+    --space-md: 1rem;
+    /* 16px */
+    --space-lg: 1.5rem;
+    /* 24px */
+    --space-xl: 2rem;
+    /* 32px */
+    --space-2xl: 3rem;
+    /* 48px */
+    --space-3xl: 4rem;
+    /* 64px */
+    --space-4xl: 6rem;
+    /* 96px */
+    --space-5xl: 8rem;
+    /* 128px */
 
     /* Border Radii (Restrained luxury styling) */
     --radius-none: 0px;
@@ -151,19 +163,23 @@
     width: 6px;
     height: 6px;
   }
+
   ::-webkit-scrollbar-track {
     background: var(--color-surface-subtle);
   }
+
   ::-webkit-scrollbar-thumb {
     background: var(--color-border-strong);
     border-radius: 0;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-foreground-muted);
   }
 
   /* Accessible Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
+
     *,
     ::before,
     ::after {
@@ -172,6 +188,7 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+
     .cinematic-scroll-container {
       scroll-snap-type: none !important;
     }
@@ -179,6 +196,7 @@
 }
 
 @layer components {
+
   /* Primary Button — Cosmic Navy */
   .btn-primary {
     @apply inline-flex items-center justify-center;
@@ -190,10 +208,12 @@
     @apply cursor-pointer;
     border-radius: var(--radius-xs);
   }
+
   .btn-primary:hover {
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
   }
+
   .btn-primary:active {
     background-color: #050A2E;
   }
@@ -209,6 +229,7 @@
     @apply cursor-pointer;
     border-radius: var(--radius-xs);
   }
+
   .btn-secondary:hover {
     @apply border-primary bg-primary text-primary-foreground;
   }
@@ -219,6 +240,7 @@
     @apply transition-all duration-300;
     border-radius: var(--radius-xs);
   }
+
   .luxury-card:hover {
     border-color: var(--color-champagne);
     box-shadow: var(--shadow-hover);
@@ -226,6 +248,7 @@
 }
 
 @layer utilities {
+
   /* Editorial Typography Utilities */
   .text-display {
     font-family: var(--font-serif);
@@ -331,4 +354,19 @@
     height: 2px;
     background-color: var(--color-navy);
   }
+}
+
+/* Navigation overlay fade-in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out forwards;
 }

@@ -123,22 +123,22 @@ export const Footer: React.FC<FooterProps> = ({ className = "" }) => {
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-[13px] text-[#A4B1C3]">
               <li>
-                <Link href="/perfumes" className="hover:text-white transition-colors">
+                <Link href="/perfumes" prefetch={false} className="hover:text-white transition-colors">
                   All Perfumes
                 </Link>
               </li>
               <li>
-                <Link href="/perfumes?gender=men" className="hover:text-white transition-colors">
+                <Link href="/perfumes?gender=men" prefetch={false} className="hover:text-white transition-colors">
                   Men
                 </Link>
               </li>
               <li>
-                <Link href="/perfumes?gender=women" className="hover:text-white transition-colors">
+                <Link href="/perfumes?gender=women" prefetch={false} className="hover:text-white transition-colors">
                   Women
                 </Link>
               </li>
               <li>
-                <Link href="/perfumes?gender=unisex" className="hover:text-white transition-colors">
+                <Link href="/perfumes?gender=unisex" prefetch={false} className="hover:text-white transition-colors">
                   Unisex
                 </Link>
               </li>
@@ -152,12 +152,12 @@ export const Footer: React.FC<FooterProps> = ({ className = "" }) => {
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-[13px] text-[#A4B1C3]">
               <li>
-                <Link href="/perfumes?collection=ethereal" className="hover:text-white transition-colors">
+                <Link href="/perfumes?collection=ethereal" prefetch={false} className="hover:text-white transition-colors">
                   Ethereal Collections
                 </Link>
               </li>
               <li>
-                <Link href="/perfumes?collection=platinum" className="hover:text-white transition-colors">
+                <Link href="/perfumes?collection=platinum" prefetch={false} className="hover:text-white transition-colors">
                   Platinum Collection
                 </Link>
               </li>
@@ -171,22 +171,22 @@ export const Footer: React.FC<FooterProps> = ({ className = "" }) => {
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-[13px] text-[#A4B1C3]">
               <li>
-                <Link href="/shipping" className="hover:text-white transition-colors">
+                <Link href="/shipping" prefetch={false} className="hover:text-white transition-colors">
                   Shipping & Delivery
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="hover:text-white transition-colors">
+                <Link href="/returns" prefetch={false} className="hover:text-white transition-colors">
                   Returns & Exchanges
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-white transition-colors">
+                <Link href="/faq" prefetch={false} className="hover:text-white transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
+                <Link href="/contact" prefetch={false} className="hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>

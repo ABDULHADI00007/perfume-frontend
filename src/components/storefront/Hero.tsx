@@ -44,8 +44,8 @@ const slides: HeroSlide[] = [
     titleItalic: "Veil",
     description:
       "An enchanting symphony of rare botanicals, aged sandalwood, and precious amber resins crafted with uncompromising devotion.",
-    ctaText: "DISCOVER COLLECTION",
-    ctaHref: "/collections",
+    ctaText: "DISCOVER PERFUMES",
+    ctaHref: "/perfumes",
     watermark: ["RARE", "BOTANICALS", "AGED", "SANDALWOOD"],
   },
   {

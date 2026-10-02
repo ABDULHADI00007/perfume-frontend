@@ -17,7 +17,7 @@ export function CustomerInfoSection({
   const inputClass = "rounded-xl border-[#E2DED6] bg-[#F8F6F0]/50 focus:bg-white focus:border-[#0B1938] focus:ring-[#0B1938] text-[#0B1938] placeholder:text-[#94A3B8] h-11 transition-all";
 
   return (
-    <section className="bg-white border border-[#EFECE6] p-6 sm:p-8 rounded-2xl shadow-sm transition-all">
+    <section className="bg-white border border-gray-200/80 p-7 sm:p-9 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] transition-all duration-300">
       <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-[#EFECE6]">
         <span className="w-7 h-7 rounded-full bg-[#0B1938] text-white flex items-center justify-center text-xs font-serif font-bold shadow-xs">
           1

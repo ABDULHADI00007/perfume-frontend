@@ -17,8 +17,9 @@ import { Icons } from "@/components/ui/icons";
 
 export default function AdminCategoriesPage() {
   const { hasPermission } = useAdminAuth();
-  const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const initialCached = adminService.getCachedCategories();
+  const [categories, setCategories] = useState<AdminCategory[]>(initialCached || []);
+  const [isLoading, setIsLoading] = useState(!initialCached);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -39,14 +40,16 @@ export default function AdminCategoriesPage() {
   const [categoryToDelete, setCategoryToDelete] = useState<AdminCategory | null>(null);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-  const fetchCategories = useCallback(async () => {
+  const fetchCategories = useCallback(async (isSilent = false) => {
     try {
-      setIsLoading(true);
+      if (!isSilent) setIsLoading(true);
       setError(null);
       const data = await adminService.getCategories();
       setCategories(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load categories");
+      if (!isSilent) {
+        setError(err instanceof Error ? err.message : "Failed to load categories");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +57,8 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     if (hasPermission("categories.manage")) {
-      fetchCategories();
+      const hasCache = Boolean(adminService.getCachedCategories());
+      fetchCategories(hasCache);
     }
   }, [fetchCategories, hasPermission]);
 

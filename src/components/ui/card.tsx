@@ -3,17 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "rounded-2xl border border-border/80 bg-surface text-foreground shadow-sm transition-all duration-300 overflow-hidden",
+  "rounded-[24px] bg-white text-[#121735] shadow-[0_10px_30px_rgba(0,0,0,0.06)] border-0 transition-all duration-300 overflow-hidden",
   {
     variants: {
       variant: {
-        default: "hover:border-[#C5A880]/60 hover:shadow-xl hover:shadow-[#0C134F]/5",
-        hover: "hover:border-[#C5A880]/60 hover:shadow-xl hover:shadow-[#0C134F]/5 hover:-translate-y-1",
-        interactive: "hover:border-[#C5A880] hover:shadow-xl hover:shadow-[#0C134F]/5 hover:-translate-y-1 cursor-pointer",
-        glass: "bg-white/80 backdrop-blur-md border border-white/60 shadow-lg shadow-[#0C134F]/5",
-        bordered: "border-border-strong bg-surface shadow-xs",
-        flat: "border-transparent bg-surface-subtle shadow-none",
-        subtle: "border-border-subtle bg-surface-subtle/50",
+        default: "hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] hover:-translate-y-0.5",
+        hover: "hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] hover:-translate-y-0.5",
+        interactive: "hover:shadow-[0_18px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1 cursor-pointer",
+        glass: "bg-white/95 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.06)] border-0",
+        bordered: "bg-white shadow-[0_10px_30px_rgba(0,0,0,0.06)] border-0",
+        flat: "border-0 bg-[#FBF9F5] shadow-none",
+        subtle: "border-0 bg-[#F8F6F2] shadow-xs",
       },
     },
     defaultVariants: {

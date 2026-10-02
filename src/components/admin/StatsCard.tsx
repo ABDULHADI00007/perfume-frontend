@@ -1,4 +1,6 @@
 import React from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export interface StatsCardProps {
   title: string;
@@ -19,47 +21,55 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   icon,
   className = "",
 }) => {
-  const changeColors = {
-    positive: "text-status-success",
-    negative: "text-status-error",
-    neutral: "text-foreground-muted",
-  };
+  const badgeVariants = {
+    positive: "success",
+    negative: "error",
+    neutral: "neutral",
+  } as const;
 
   return (
-    <div
-      className={`p-6 border border-border bg-surface shadow-subtle flex flex-col justify-between relative overflow-hidden transition-all duration-200 hover:border-border-strong ${className}`}
+    <Card
+      variant="default"
+      className={`bg-white rounded-[24px] p-7 space-y-4 shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] border-0 transition-all duration-300 group ${className}`}
     >
-      <div className="flex items-center justify-between">
-        <h4 className="text-[10px] uppercase tracking-[0.18em] font-semibold text-foreground-muted font-sans">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0">
+        <CardTitle className="text-xs uppercase tracking-[0.18em] font-bold text-[#64748B] font-sans">
           {title}
-        </h4>
+        </CardTitle>
         {icon && (
-          <div className="w-8 h-8 rounded bg-surface-subtle border border-border flex items-center justify-center text-foreground-muted">
+          <div className="w-12 h-12 rounded-full bg-[#FAF4E8] text-[#0B1938] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform border-0">
             {icon}
           </div>
         )}
-      </div>
+      </CardHeader>
 
-      <div className="mt-4">
-        <p className="text-2xl sm:text-3xl font-serif font-normal text-foreground leading-none tracking-tight">
+      <CardContent className="p-0 space-y-2">
+        <div className="text-3xl sm:text-4xl font-sans font-bold text-[#0B1938] leading-none tracking-tight">
           {value}
-        </p>
+        </div>
 
         {(change || description) && (
-          <div className="mt-2.5 flex items-center space-x-2 text-[11px] font-sans">
+          <div className="pt-1 flex items-center gap-2 text-xs font-sans">
             {change && (
-              <span className={`font-semibold ${changeColors[changeType]}`}>
+              <Badge
+                variant={badgeVariants[changeType]}
+                size="sm"
+                className="font-mono text-[9px] px-2 py-0.5"
+              >
                 {change}
-              </span>
+              </Badge>
             )}
             {description && (
-              <span className="text-foreground-muted leading-tight">{description}</span>
+              <span className="text-[#64748B] text-xs leading-relaxed font-normal">
+                {description}
+              </span>
             )}
           </div>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
+
 
 

@@ -33,19 +33,19 @@ export const AdminLoginForm: React.FC = () => {
       <div className="w-full max-w-md bg-surface border border-border p-8 sm:p-10 shadow-card relative">
         <div className="text-center mb-8">
           <div className="w-8 h-[1px] bg-accent mx-auto mb-4" />
-          <span className="text-[10px] uppercase tracking-[0.25em] text-foreground-muted font-semibold block mb-2">
-            Maison de Parfum • Vault
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#6B6F80] font-semibold block mb-2">
+            Soulmate Scents • Admin
           </span>
-          <h1 className="font-serif text-3xl text-foreground font-normal tracking-wide">
+          <h1 className="font-serif text-3xl text-[#121735] font-normal tracking-wide">
             Administrative Portal
           </h1>
-          <p className="text-xs text-foreground-muted mt-2 font-sans leading-relaxed">
+          <p className="text-xs text-[#6B6F80] mt-2 font-sans leading-relaxed">
             Please authenticate with your administrative credentials to access management controls.
           </p>
         </div>
 
         {(localError || error) && (
-          <div className="mb-6 p-3.5 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+          <div className="mb-6 p-3.5 bg-[#FDF2F2] border border-[#9E2A2B]/20 text-[#9E2A2B] text-xs font-medium rounded-lg">
             {localError || error}
           </div>
         )}
@@ -55,7 +55,7 @@ export const AdminLoginForm: React.FC = () => {
             id="admin-email"
             label="Email Address"
             type="email"
-            placeholder="admin@maisonparfum.com"
+            placeholder="admin@soulmatescents.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

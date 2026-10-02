@@ -19,9 +19,12 @@ import { formatCurrency } from "@/lib/utils";
 
 export default function AdminProductsPage() {
   const { hasPermission } = useAdminAuth();
-  const [products, setProducts] = useState<AdminProduct[]>([]);
-  const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const initialCachedCat = adminService.getCachedCategories();
+  const initialCachedProd = adminService.getCachedProducts({ page: 1, limit: 10 });
+
+  const [products, setProducts] = useState<AdminProduct[]>(initialCachedProd?.products || []);
+  const [categories, setCategories] = useState<AdminCategory[]>(initialCachedCat || []);
+  const [isLoading, setIsLoading] = useState(!initialCachedProd);
   const [error, setError] = useState<string | null>(null);
 
   // Filters & Pagination
@@ -29,8 +32,8 @@ export default function AdminProductsPage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(initialCachedProd?.meta?.totalPages || 1);
+  const [totalCount, setTotalCount] = useState(initialCachedProd?.meta?.total || initialCachedProd?.products.length || 0);
 
   // Archive / Delete State
   const [productToArchive, setProductToArchive] = useState<AdminProduct | null>(null);
@@ -45,9 +48,9 @@ export default function AdminProductsPage() {
     }
   }, []);
 
-  const fetchProducts = useCallback(async () => {
+  const fetchProducts = useCallback(async (isSilent = false) => {
     try {
-      setIsLoading(true);
+      if (!isSilent) setIsLoading(true);
       setError(null);
       const res = await adminService.getProducts({
         page,
@@ -62,7 +65,9 @@ export default function AdminProductsPage() {
         setTotalCount(res.meta.total || res.products.length);
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load products");
+      if (!isSilent) {
+        setError(err instanceof Error ? err.message : "Failed to load products");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -70,10 +75,11 @@ export default function AdminProductsPage() {
 
   useEffect(() => {
     if (hasPermission("products.read")) {
+      const hasCache = Boolean(adminService.getCachedProducts({ page, limit: 10, search: search.trim() || undefined, category: categoryFilter || undefined, status: statusFilter || undefined }));
       fetchCategories();
-      fetchProducts();
+      fetchProducts(hasCache);
     }
-  }, [fetchCategories, fetchProducts, hasPermission]);
+  }, [fetchCategories, fetchProducts, hasPermission, page, search, categoryFilter, statusFilter]);
 
   if (!hasPermission("products.read")) {
     return <AdminAccessDenied requiredPermission="products.read" />;

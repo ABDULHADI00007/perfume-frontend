@@ -5,35 +5,35 @@ import { cn } from "@/lib/utils";
 import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-xs font-sans font-medium uppercase tracking-[0.2em] transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 cursor-pointer select-none active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-xs font-sans font-medium uppercase tracking-[0.18em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 cursor-pointer select-none active:scale-[0.99]",
   {
     variants: {
       variant: {
         default:
-          "bg-[#0B1938] text-white border border-[#C5A880]/40 hover:border-[#C5A880] hover:bg-[#172552] active:bg-[#060D24] shadow-md shadow-[#0B1938]/15 hover:shadow-xl hover:shadow-[#0B1938]/25 hover:-translate-y-0.5",
+          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] hover:border-[#121A4B] active:bg-[#070B30] shadow-xs",
         primary:
-          "bg-[#0B1938] text-white border border-[#C5A880]/40 hover:border-[#C5A880] hover:bg-[#172552] active:bg-[#060D24] shadow-md shadow-[#0B1938]/15 hover:shadow-xl hover:shadow-[#0B1938]/25 hover:-translate-y-0.5",
+          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] hover:border-[#121A4B] active:bg-[#070B30] shadow-xs",
         secondary:
-          "bg-[#FAF6F0] text-[#0B1938] border border-[#C5A880]/40 hover:bg-[#F3EADF] hover:border-[#C5A880] shadow-xs hover:shadow-md hover:-translate-y-0.5",
+          "bg-[#FBF9F5] text-[#0C134F] border border-[#E6E2EA] hover:bg-[#FFFFFF] hover:border-[#C5A880] shadow-xs",
         outline:
-          "bg-white/80 backdrop-blur-md text-[#0B1938] border border-[#0B1938]/20 hover:border-[#C5A880] hover:bg-[#0B1938] hover:text-white shadow-xs hover:shadow-md hover:-translate-y-0.5",
+          "bg-white text-[#121735] border border-[#E6E2EA] hover:border-[#0C134F] hover:bg-[#FBF9F5] hover:text-[#0C134F] shadow-xs",
         accent:
-          "bg-gradient-to-r from-[#C5A880] via-[#D4AF37] to-[#B39266] text-[#0B1938] font-semibold border border-[#C5A880] shadow-md shadow-[#C5A880]/20 hover:shadow-xl hover:shadow-[#C5A880]/35 hover:-translate-y-0.5 hover:brightness-105",
+          "bg-[#C5A880] text-[#0C134F] font-semibold border border-[#C5A880] hover:bg-[#B39266] shadow-xs",
         ghost:
-          "bg-transparent text-[#0B1938] hover:bg-[#0B1938]/5 active:bg-[#0B1938]/10 border border-transparent",
+          "bg-transparent text-[#6B6F80] hover:text-[#121735] hover:bg-[#F8F6F2] border border-transparent",
         link:
-          "bg-transparent text-[#0B1938] underline-offset-8 hover:underline hover:text-accent border border-transparent p-0 h-auto font-normal lowercase tracking-normal",
+          "bg-transparent text-[#0C134F] underline-offset-4 hover:underline border border-transparent p-0 h-auto font-normal lowercase tracking-normal",
         destructive:
-          "bg-destructive text-white hover:opacity-90 border border-destructive shadow-sm hover:shadow-md",
+          "bg-[#9E2A2B] text-white hover:bg-[#852324] border border-[#9E2A2B] shadow-xs",
         danger:
-          "bg-status-error text-white hover:opacity-90 border border-status-error shadow-sm hover:shadow-md",
+          "bg-[#9E2A2B] text-white hover:bg-[#852324] border border-[#9E2A2B] shadow-xs",
       },
       size: {
-        default: "px-7 py-3.5 text-[11px] tracking-[0.2em]",
-        sm: "px-5 py-2.5 text-[10px] tracking-[0.18em]",
-        md: "px-7 py-3.5 text-[11px] tracking-[0.2em]",
-        lg: "px-9 py-4 text-xs tracking-[0.22em]",
-        icon: "h-11 w-11 p-0 justify-center rounded-full",
+        default: "px-6 py-2.5 text-[11px] tracking-[0.18em]",
+        sm: "px-4 py-2 text-[10px] tracking-[0.16em]",
+        md: "px-6 py-2.5 text-[11px] tracking-[0.18em]",
+        lg: "px-8 py-3 text-xs tracking-[0.2em]",
+        icon: "h-9 w-9 p-0 justify-center rounded-lg",
       },
     },
     defaultVariants: {

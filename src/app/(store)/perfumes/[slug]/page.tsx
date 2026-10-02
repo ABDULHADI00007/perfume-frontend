@@ -73,7 +73,7 @@ export default async function PerfumeDetailPage({ params }: PageProps) {
     <>
       <ProductJsonLd product={product} />
 
-      <main className="py-6 sm:py-10 bg-[#FAF8F5] min-h-screen">
+      <main className="py-6 sm:py-10 bg-white min-h-screen">
         <Container size="wide">
           {/* Breadcrumbs Navigation */}
           <div className="mb-6 sm:mb-8">

@@ -28,6 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cormorant.variable} ${plusJakarta.variable}`}>
+      <head>
+        <link rel="icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" sizes="any" />
+        <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/perfumes/favicon-icon.png?v=2" />
+      </head>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col selection:bg-accent-subtle selection:text-foreground">
         <Suspense fallback={null}>
           <TopProgressBar />

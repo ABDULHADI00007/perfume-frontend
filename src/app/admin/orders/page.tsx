@@ -18,8 +18,9 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function AdminOrdersPage() {
   const { hasPermission } = useAdminAuth();
-  const [orders, setOrders] = useState<AdminOrder[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const initialCached = adminService.getCachedOrders({ page: 1, limit: 10 });
+  const [orders, setOrders] = useState<AdminOrder[]>(initialCached?.orders || []);
+  const [isLoading, setIsLoading] = useState(!initialCached);
   const [error, setError] = useState<string | null>(null);
 
   // Filters & Pagination
@@ -27,12 +28,12 @@ export default function AdminOrdersPage() {
   const [orderStatus, setOrderStatus] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(initialCached?.meta?.totalPages || 1);
+  const [totalCount, setTotalCount] = useState(initialCached?.meta?.total || initialCached?.orders.length || 0);
 
-  const fetchOrders = useCallback(async () => {
+  const fetchOrders = useCallback(async (isSilent = false) => {
     try {
-      setIsLoading(true);
+      if (!isSilent) setIsLoading(true);
       setError(null);
       const res = await adminService.getOrders({
         page,
@@ -47,7 +48,9 @@ export default function AdminOrdersPage() {
         setTotalCount(res.meta.total || res.orders.length);
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load orders");
+      if (!isSilent) {
+        setError(err instanceof Error ? err.message : "Failed to load orders");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -55,9 +58,10 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     if (hasPermission("orders.read")) {
-      fetchOrders();
+      const hasCache = Boolean(adminService.getCachedOrders({ page, limit: 10, search: search.trim() || undefined, orderStatus: orderStatus || undefined, paymentStatus: paymentStatus || undefined }));
+      fetchOrders(hasCache);
     }
-  }, [fetchOrders, hasPermission]);
+  }, [fetchOrders, hasPermission, page, search, orderStatus, paymentStatus]);
 
   if (!hasPermission("orders.read")) {
     return <AdminAccessDenied requiredPermission="orders.read" />;

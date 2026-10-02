@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CartItem } from "@/features/cart/types";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import { checkoutService } from "../services/checkoutService";
 import { CouponValidationData } from "../types";
 
 interface CheckoutOrderSummaryProps {
@@ -33,16 +32,10 @@ export function CheckoutOrderSummary({
   taxRate = 5,
   enableTax = false,
   appliedCoupon,
-  onApplyCoupon,
   isSubmitting,
   onSubmitOrder,
   submitError,
-  customerEmail,
 }: CheckoutOrderSummaryProps) {
-  const [couponInput, setCouponInput] = useState("");
-  const [couponLoading, setCouponLoading] = useState(false);
-  const [couponError, setCouponError] = useState<string | null>(null);
-
   const isFreeShipping = subtotal >= freeShippingThreshold;
   const shippingFee = isFreeShipping ? 0 : flatRateFee;
 
@@ -53,39 +46,8 @@ export function CheckoutOrderSummary({
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleApplyCoupon = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!couponInput.trim()) return;
-
-    setCouponLoading(true);
-    setCouponError(null);
-
-    try {
-      const res = await checkoutService.validateCoupon(
-        couponInput.trim(),
-        subtotal,
-        customerEmail
-      );
-      if (res.success && res.data) {
-        onApplyCoupon(res.data);
-        setCouponInput("");
-      } else {
-        setCouponError(res.message || "Invalid coupon code");
-      }
-    } catch (err) {
-      setCouponError(err instanceof Error ? err.message : "Unable to validate coupon code");
-    } finally {
-      setCouponLoading(false);
-    }
-  };
-
-  const handleRemoveCoupon = () => {
-    onApplyCoupon(null);
-    setCouponError(null);
-  };
-
   return (
-    <div className="p-6 sm:p-8 bg-white border border-[#E2DED6]/90 rounded-2xl shadow-[0_10px_30px_-10px_rgba(11,25,56,0.08)] hover:shadow-[0_15px_35px_-8px_rgba(11,25,56,0.12)] transition-all duration-300 flex flex-col space-y-5">
+    <div className="p-7 sm:p-9 bg-white border border-gray-200/80 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col space-y-5">
       <h2 className="font-serif text-2xl font-bold text-[#0B1938] leading-snug pb-2">
         Order Summary
       </h2>

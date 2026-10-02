@@ -123,11 +123,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </Link>{" "}
             or visit our{" "}
             <Link
-              href="/collections"
+              href="/about"
               onClick={onClose}
               className="underline underline-offset-2 text-foreground font-medium hover:text-violet"
             >
-              Curated Collections
+              About Us
             </Link>
             .
           </p>

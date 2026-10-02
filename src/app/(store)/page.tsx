@@ -1,17 +1,18 @@
 import { constructMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/config/site";
 import { Hero } from "@/components/storefront/Hero";
-import { BrandValuesStrip } from "@/components/storefront/BrandValuesStrip";
+import { NewCollectionSection } from "@/components/storefront/NewCollectionSection";
+import { PerfumeJesminaSection } from "@/components/storefront/PerfumeJesminaSection";
 import { FeaturedProducts } from "@/components/storefront/FeaturedProducts";
 import { BrandSavoirFaire } from "@/components/storefront/BrandSavoirFaire";
-import { PrivateReserveDiscovery } from "@/components/storefront/PrivateReserveDiscovery";
+import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
 import { JournalPreview } from "@/components/storefront/JournalPreview";
 import { FinalCTA } from "@/components/storefront/FinalCTA";
 
 export const metadata = constructMetadata({
-  title: "Haute Parfumerie & Artisanal Extraits",
+  title: "Soulmate Scents",
   description:
-    "Discover the art of personal scent with Maison de Parfum. Exceptional extraits de parfum composed with rare botanicals, aged sandalwood, and precious resins.",
+    "Discover the art of personal scent with Soulmate Scents. Exceptional extraits de parfum composed with rare botanicals, aged sandalwood, and precious resins.",
   canonical: "/",
 });
 
@@ -54,17 +55,22 @@ export default function HomePage() {
       {/* 01 — HERO: Cinematic luxury hero */}
       <Hero />
 
-      {/* 02 — BRAND VALUES: Refined signature strip */}
-      <BrandValuesStrip />
+      {/* 01.5 — PERFUME JESMINA MUST-HAVES: Editorial reference grid section */}
+      <PerfumeJesminaSection />
+
+      {/* 04.5 — THE ART OF BLOOM: Editorial dual-card showcase */}
+      <ArtOfBloomSection />
 
       {/* 03 — SIGNATURE FRAGRANCES: 5-product selection */}
       <FeaturedProducts />
 
+      {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
+      <NewCollectionSection />
+
+
       {/* 04 — BRAND PHILOSOPHY / SAVOIR-FAIRE: 45/55 editorial split */}
       <BrandSavoirFaire />
 
-      {/* 05 — PRIVATE RESERVE / FEATURED COLLECTION: Panoramic Mediterranean showcase */}
-      <PrivateReserveDiscovery />
 
       {/* 06 — OLFACTORY JOURNAL: 3-story editorial magazine composition */}
       <JournalPreview />
