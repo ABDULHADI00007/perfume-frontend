@@ -193,7 +193,7 @@ const SelectComponent = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
             disabled={disabled}
             aria-invalid={Boolean(error)}
             className={cn(
-              "w-full appearance-none rounded-xs border border-border bg-surface text-xs font-sans text-foreground px-3 py-2 pr-9 transition-colors focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
+              "w-full appearance-none rounded-xl border border-[#E6E2EA] bg-white text-xs font-sans text-[#0B1938] px-3.5 py-2.5 pr-9 transition-all focus:outline-none focus:ring-2 focus:ring-[#0C134F]/20 focus:border-[#0C134F] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 shadow-2xs",
               error && "border-status-error focus:ring-status-error",
               className
             )}

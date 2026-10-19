@@ -8,6 +8,7 @@ import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -257,15 +258,25 @@ export default function AdminProductsPage() {
       )}
 
       {/* Filters Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 bg-surface p-4 border border-border">
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search || categoryFilter || statusFilter)}
+        resetLabel="RESET FILTERS"
+        onReset={() => {
+          setSearch("");
+          setCategoryFilter("");
+          setStatusFilter("");
+          setPage(1);
+        }}
+      >
         <Input
-          placeholder="Search by name, SKU..."
+          placeholder="Search perfumes by name, SKU..."
           value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="text-xs"
+          className="w-full text-xs"
         />
 
         <Select
@@ -293,20 +304,7 @@ export default function AdminProductsPage() {
             { label: "Archived", value: "archived" },
           ]}
         />
-
-        <Button
-          variant="outline"
-          size="md"
-          onClick={() => {
-            setSearch("");
-            setCategoryFilter("");
-            setStatusFilter("");
-            setPage(1);
-          }}
-        >
-          Reset Filters
-        </Button>
-      </div>
+      </AdminFilterBar>
 
       {/* Products Table */}
       <DataTable

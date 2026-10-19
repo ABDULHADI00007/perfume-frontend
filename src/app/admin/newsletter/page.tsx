@@ -8,9 +8,11 @@ import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
+import { Icons } from "@/components/ui/icons";
 import { formatDate } from "@/lib/utils";
 
 
@@ -180,28 +182,25 @@ export default function AdminNewsletterPage() {
       )}
 
       {/* Search Bar */}
-      <div className="bg-surface p-4 border border-border flex items-center gap-3">
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search)}
+        resetLabel="RESET SEARCH"
+        onReset={() => {
+          setSearch("");
+          setPage(1);
+        }}
+      >
         <Input
           placeholder="Search subscriber email..."
           value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="text-xs max-w-md"
+          className="w-full text-xs"
         />
-
-        <Button
-          variant="outline"
-          size="md"
-          onClick={() => {
-            setSearch("");
-            setPage(1);
-          }}
-        >
-          Reset Search
-        </Button>
-      </div>
+      </AdminFilterBar>
 
       <DataTable
         columns={columns}

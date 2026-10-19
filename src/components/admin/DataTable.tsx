@@ -1,6 +1,15 @@
 import React from "react";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+} from "@/components/ui/table";
 import { Spinner } from "@/components/ui/spinner";
 import { Icons } from "@/components/ui/icons";
+import { cn } from "@/lib/utils";
 
 export interface Column<T> {
   header: string;
@@ -28,94 +37,94 @@ export function DataTable<T>({
   className = "",
 }: DataTableProps<T>) {
   return (
-    <div
-      className={`w-full overflow-hidden bg-white border-0 ${className}`}
-    >
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm font-sans border-collapse">
-          <thead className="border-b border-[#F0ECE1] bg-[#F8F6F0]/40 text-[11px] uppercase tracking-[0.18em] font-bold text-[#0B1938] font-sans">
-            <tr>
-              {columns.map((col, idx) => (
-                <th
-                  key={idx}
-                  className={`px-7 py-4 font-bold ${
-                    col.align === "right"
-                      ? "text-right"
-                      : col.align === "center"
-                      ? "text-center"
-                      : "text-left"
-                  } ${col.className || ""}`}
-                >
-                  {col.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#F0ECE1] text-xs">
-            {isLoading ? (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="px-7 py-16 text-center text-[#64748B] bg-white"
-                >
-                  <Spinner size="md" className="mx-auto mb-3 text-[#0B1938]" />
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#64748B] font-bold font-sans">
-                    Loading records...
+    <div className={cn("w-full space-y-4", className)}>
+      <Table>
+        <TableHeader>
+          <TableRow className="border-b border-[#EFECE6] bg-[#F9F8F5]">
+            {columns.map((col, idx) => (
+              <TableHead
+                key={idx}
+                className={cn(
+                  "py-4 px-6 font-bold text-[11px] uppercase tracking-[0.16em] text-[#0B1938]",
+                  col.align === "right"
+                    ? "text-right"
+                    : col.align === "center"
+                    ? "text-center"
+                    : "text-left",
+                  col.className
+                )}
+              >
+                {col.header}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading ? (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="py-16 text-center text-muted-foreground bg-white"
+              >
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <Spinner size="md" className="text-[#0B1938]" />
+                  <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#64748B]">
+                    Loading data...
                   </p>
-                </td>
-              </tr>
-            ) : data.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="px-7 py-16 text-center text-[#64748B] bg-white"
-                >
-                  <div className="w-14 h-14 mx-auto mb-3 flex items-center justify-center rounded-full bg-[#FAF4E8] text-[#0B1938] shadow-xs border-0">
-                    <Icons.Package size={22} />
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : data.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="py-16 text-center text-muted-foreground bg-white"
+              >
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-[#FAF4E8] text-[#0B1938] flex items-center justify-center shadow-xs">
+                    <Icons.Package size={20} />
                   </div>
-                  <p className="text-xs sm:text-sm tracking-wide text-[#64748B] font-medium font-sans">
+                  <p className="text-xs text-[#64748B] font-medium tracking-wide">
                     {emptyMessage}
                   </p>
-                </td>
-              </tr>
-            ) : (
-              data.map((row, rIdx) => (
-                <tr
-                  key={rIdx}
-                  onClick={() => onRowClick && onRowClick(row)}
-                  className={`transition-colors duration-150 ${
-                    onRowClick
-                      ? "cursor-pointer hover:bg-[#F8F6F0]/50"
-                      : "hover:bg-[#F8F6F0]/30"
-                  }`}
-                >
-                  {columns.map((col, cIdx) => (
-                    <td
-                      key={cIdx}
-                      className={`px-7 py-4.5 text-[#0B1938] font-sans ${
-                        col.align === "right"
-                          ? "text-right"
-                          : col.align === "center"
-                          ? "text-center"
-                          : "text-left"
-                      } ${col.className || ""}`}
-                    >
-                      {col.cell
-                        ? col.cell(row)
-                        : col.accessorKey
-                        ? String(row[col.accessorKey] ?? "")
-                        : null}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            data.map((row, rIdx) => (
+              <TableRow
+                key={rIdx}
+                onClick={() => onRowClick && onRowClick(row)}
+                className={cn(
+                  "group transition-colors duration-200 border-b border-[#F0ECE1] bg-white hover:bg-[#FAF8F5]/80",
+                  onRowClick && "cursor-pointer"
+                )}
+              >
+                {columns.map((col, cIdx) => (
+                  <TableCell
+                    key={cIdx}
+                    className={cn(
+                      "py-4 px-6 text-xs text-[#0B1938] font-sans",
+                      col.align === "right"
+                        ? "text-right"
+                        : col.align === "center"
+                        ? "text-center"
+                        : "text-left",
+                      col.className
+                    )}
+                  >
+                    {col.cell
+                      ? col.cell(row)
+                      : col.accessorKey
+                      ? String(row[col.accessorKey] ?? "")
+                      : null}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }
-
-
-

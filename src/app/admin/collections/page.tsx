@@ -14,6 +14,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Modal } from "@/components/ui/modal";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/ui/icons";
 
 export default function AdminCollectionsPage() {
@@ -182,18 +189,22 @@ export default function AdminCollectionsPage() {
     {
       header: "Collection",
       cell: (row) => (
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-surface-subtle border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="flex items-center space-x-3 py-1">
+          <div className="w-11 h-11 rounded-xl bg-[#FAF8F5] border border-[#E6E2EA] flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
             {row.image?.url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={row.image.url} alt={row.name} className="w-full h-full object-cover" />
             ) : (
-              <Icons.Layers size={16} className="text-foreground-muted" />
+              <Icons.Layers size={18} className="text-[#64748B]" />
             )}
           </div>
-          <div>
-            <span className="font-semibold text-xs text-foreground">{row.name}</span>
-            <p className="text-[11px] text-foreground-muted font-mono">{row.slug}</p>
+          <div className="flex flex-col min-w-0">
+            <span className="font-semibold text-xs sm:text-sm text-[#0B1938] leading-tight truncate">
+              {row.name}
+            </span>
+            <span className="text-[10px] text-[#64748B] font-mono mt-0.5 truncate">
+              {row.slug}
+            </span>
           </div>
         </div>
       ),
@@ -201,14 +212,19 @@ export default function AdminCollectionsPage() {
     {
       header: "Products Assigned",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted font-mono">
-          {row.products?.length || row.productCount || 0} product(s)
-        </span>
+        <Badge variant="secondary" size="sm" className="font-mono gap-1 text-[10px]">
+          <Icons.Package size={12} className="text-[#64748B]" />
+          <span>{row.products?.length || row.productCount || 0} items</span>
+        </Badge>
       ),
     },
     {
       header: "Order",
-      cell: (row) => <span className="text-xs font-mono">{row.sortOrder || 0}</span>,
+      cell: (row) => (
+        <Badge variant="outline" size="sm" className="font-mono text-[10px]">
+          #{row.sortOrder || 0}
+        </Badge>
+      ),
     },
     {
       header: "Status",
@@ -218,30 +234,46 @@ export default function AdminCollectionsPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
-          <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(row)}>
-            Edit
-          </Button>
-
-          {row.status === "active" ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleArchive(row)}
-              className="text-foreground-muted"
-            >
-              Archive
-            </Button>
-          ) : null}
-
+        <div className="flex items-center justify-end gap-2">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            onClick={() => setCollectionToDelete(row)}
-            className="text-status-error hover:bg-status-error/10"
+            onClick={() => handleOpenEdit(row)}
+            className="h-8 px-3 text-xs gap-1.5 bg-white hover:bg-[#FAF8F5] text-[#0B1938] border-[#E2DED6] rounded-lg shadow-2xs transition-all cursor-pointer"
           >
-            Delete
+            <Icons.Edit size={13} />
+            <span>Edit</span>
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 rounded-lg hover:bg-[#FAF8F5] text-[#64748B] hover:text-[#0B1938] cursor-pointer"
+              >
+                <Icons.MoreVertical size={15} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40 font-sans border-[#E6E2EA] bg-white shadow-md">
+              {row.status === "active" && (
+                <DropdownMenuItem
+                  onClick={() => handleArchive(row)}
+                  className="cursor-pointer text-xs flex items-center gap-2 text-[#64748B] focus:bg-[#FAF8F5]"
+                >
+                  <Icons.Archive size={14} />
+                  <span>Archive</span>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => setCollectionToDelete(row)}
+                className="cursor-pointer text-xs flex items-center gap-2 text-rose-600 focus:text-rose-600 focus:bg-rose-50"
+              >
+                <Icons.Trash size={14} />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
     },
@@ -249,33 +281,43 @@ export default function AdminCollectionsPage() {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#E6E2EA] pb-5">
         <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Curations & Themes
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#6B6F80] font-medium block">
+              Curations & Themes
+            </span>
+            <Badge variant="secondary" size="sm" className="font-mono text-[9px]">
+              {collections.length} total
+            </Badge>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl text-[#0C134F] font-normal">
             Collections
           </h1>
         </div>
 
-        <Button variant="primary" size="sm" onClick={handleOpenCreate}>
+        <Button variant="primary" size="sm" onClick={handleOpenCreate} className="shadow-xs">
           <Icons.Plus size={14} className="mr-1.5" />
-          Add Collection
+          <span>Add Collection</span>
         </Button>
       </div>
 
+      {/* Alert Messages */}
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
-          {error}
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
+          <Icons.AlertCircle size={16} className="shrink-0" />
+          <span>{error}</span>
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
-          {successMessage}
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2">
+          <Icons.Check size={16} className="shrink-0 text-emerald-600" />
+          <span>{successMessage}</span>
         </div>
       )}
 
+      {/* Data Table */}
       <DataTable
         columns={columns}
         data={collections}
@@ -283,15 +325,16 @@ export default function AdminCollectionsPage() {
         emptyMessage="No collections created yet."
       />
 
-      {/* Create / Edit Collection Modal */}
+      {/* Create / Edit Collection Modal (Powered by Shadcn Dialog) */}
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           title={editingCollection ? "Edit Collection" : "New Collection"}
+          description={editingCollection ? "Update collection details and assigned fragrances." : "Create a new curated fragrance collection."}
           maxWidth="lg"
         >
-          <form onSubmit={handleSaveCollection} className="space-y-4 font-sans">
+          <form onSubmit={handleSaveCollection} className="space-y-4 font-sans pt-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Collection Name *"
@@ -344,30 +387,42 @@ export default function AdminCollectionsPage() {
             />
 
             {/* Products Assignment */}
-            <div className="pt-2 border-t border-border-subtle">
-              <label className="text-xs font-semibold text-foreground uppercase tracking-wider block mb-2">
-                Assign Fragrances ({selectedProductIds.length} selected)
-              </label>
-              <div className="max-h-48 overflow-y-auto divide-y divide-border-subtle border border-border p-2 bg-surface-subtle">
-                {availableProducts.map((p) => (
-                  <div key={p._id} className="py-1.5 flex items-center justify-between">
-                    <Checkbox
-                      label={`${p.name} (${p.sku})`}
-                      checked={selectedProductIds.includes(p._id)}
-                      onChange={() => handleToggleProduct(p._id)}
-                    />
-                  </div>
-                ))}
+            <div className="pt-3 border-t border-[#E6E2EA]">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-[10px] font-sans font-semibold uppercase tracking-[0.15em] text-[#6B6F80]">
+                  Assign Fragrances
+                </label>
+                <Badge variant="secondary" size="sm" className="font-mono text-[9px]">
+                  {selectedProductIds.length} selected
+                </Badge>
+              </div>
+
+              <div className="max-h-40 overflow-y-auto divide-y divide-[#E6E2EA] border border-[#E6E2EA] rounded-xl p-2 bg-[#FBF9F5] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                {availableProducts.length === 0 ? (
+                  <p className="text-xs text-[#6B6F80] text-center py-4">No products available to assign.</p>
+                ) : (
+                  availableProducts.map((p) => (
+                    <div key={p._id} className="py-2 px-1 flex items-center justify-between hover:bg-white rounded-lg transition-colors">
+                      <Checkbox
+                        label={`${p.name} (${p.sku})`}
+                        checked={selectedProductIds.includes(p._id)}
+                        onCheckedChange={() => handleToggleProduct(p._id)}
+                      />
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-border-subtle">
+            {/* Modal Actions */}
+            <div className="flex justify-end gap-3 pt-3 border-t border-[#E6E2EA] bg-white sticky bottom-0 z-10 mt-4">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
+                className="border-[#E6E2EA] text-[#6B6F80]"
               >
                 Cancel
               </Button>
@@ -384,13 +439,13 @@ export default function AdminCollectionsPage() {
         </Modal>
       )}
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog (Powered by Shadcn Dialog & Button) */}
       <ConfirmDialog
         isOpen={Boolean(collectionToDelete)}
         onClose={() => setCollectionToDelete(null)}
         onConfirm={handleDelete}
         title="Delete Collection"
-        message={`Are you sure you want to delete collection "${collectionToDelete?.name}"?`}
+        message={`Are you sure you want to delete collection "${collectionToDelete?.name}"? This action cannot be undone.`}
         confirmLabel="Delete Collection"
         isDestructive
         isLoading={isDeleteLoading}

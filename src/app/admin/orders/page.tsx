@@ -7,6 +7,7 @@ import { AdminOrder } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { DataTable, Column } from "@/components/admin/DataTable";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -169,15 +170,25 @@ export default function AdminOrdersPage() {
       )}
 
       {/* Filter Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 bg-surface p-4 border border-border">
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search || orderStatus || paymentStatus)}
+        resetLabel="RESET FILTERS"
+        onReset={() => {
+          setSearch("");
+          setOrderStatus("");
+          setPaymentStatus("");
+          setPage(1);
+        }}
+      >
         <Input
-          placeholder="Search by order #, customer, email..."
+          placeholder="Search by order #, customer name, email..."
           value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="text-xs"
+          className="w-full text-xs"
         />
 
         <Select
@@ -216,24 +227,7 @@ export default function AdminOrdersPage() {
             { label: "Refunded", value: "refunded" },
           ]}
         />
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => {
-              setSearch("");
-              setOrderStatus("");
-              setPaymentStatus("");
-              setPage(1);
-            }}
-            className="w-full"
-          >
-            Reset Filters
-          </Button>
-        </div>
-
-      </div>
+      </AdminFilterBar>
 
       {/* Orders Table */}
       <DataTable

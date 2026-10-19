@@ -2,6 +2,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectOption } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { CheckoutAddress } from "../types";
 import { CheckoutFormErrors } from "../validation";
 
@@ -29,34 +31,33 @@ export function ShippingAddressSection({
   onNotesChange,
   errors,
 }: ShippingAddressSectionProps) {
-  const inputClass = "rounded-xl border-[#E2DED6] bg-[#F8F6F0]/50 focus:bg-white focus:border-[#0B1938] focus:ring-[#0B1938] text-[#0B1938] placeholder:text-[#94A3B8] h-11 transition-all";
-
   return (
-    <section className="bg-white border border-gray-200/80 p-7 sm:p-9 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] transition-all duration-300">
-      <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-[#EFECE6]">
-        <span className="w-7 h-7 rounded-full bg-[#0B1938] text-white flex items-center justify-center text-xs font-serif font-bold shadow-xs">
-          2
-        </span>
-        <div>
-          <h2 className="font-serif text-lg sm:text-xl font-bold text-[#0B1938] uppercase tracking-wider">
-            Shipping Destination
-          </h2>
-          <p className="text-xs text-[#64748B] font-sans mt-0.5">
-            White-glove courier delivery address
-          </p>
+    <Card variant="default" className="border border-[#E2DED6] bg-white p-2 sm:p-4">
+      <CardHeader className="pb-4 border-b border-[#F0ECE1]">
+        <div className="flex items-center gap-3">
+          <Badge variant="default" size="lg" className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#0B1938]">
+            2
+          </Badge>
+          <div>
+            <CardTitle className="font-serif text-xl font-bold text-[#0B1938]">
+              Shipping Destination
+            </CardTitle>
+            <CardDescription className="text-xs text-[#64748B] mt-0.5">
+              White-glove courier delivery location & instructions
+            </CardDescription>
+          </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="space-y-4">
+      <CardContent className="pt-6 space-y-4">
         <Input
           id="checkout-address-1"
-          label="Street Address"
+          label="Street Address *"
           placeholder="e.g. House #12, Block H-3, Johar Town"
           value={address.addressLine1}
           onChange={(e) => onChange("addressLine1", e.target.value)}
           error={errors.addressLine1}
           autoComplete="street-address"
-          className={inputClass}
           required
         />
 
@@ -67,55 +68,50 @@ export function ShippingAddressSection({
           value={address.addressLine2 || ""}
           onChange={(e) => onChange("addressLine2", e.target.value)}
           autoComplete="address-line2"
-          className={inputClass}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
             id="checkout-city"
-            label="City"
+            label="City *"
             placeholder="e.g. Lahore"
             value={address.city}
             onChange={(e) => onChange("city", e.target.value)}
             error={errors.city}
             autoComplete="address-level2"
-            className={inputClass}
             required
           />
 
           <Input
             id="checkout-state"
-            label="State / Province"
+            label="State / Province *"
             placeholder="e.g. Punjab"
             value={address.state}
             onChange={(e) => onChange("state", e.target.value)}
             error={errors.state}
             autoComplete="address-level1"
-            className={inputClass}
             required
           />
 
           <Input
             id="checkout-postal-code"
-            label="Postal / ZIP Code"
+            label="Postal / ZIP Code *"
             placeholder="e.g. 54000"
             value={address.postalCode}
             onChange={(e) => onChange("postalCode", e.target.value)}
             error={errors.postalCode}
             autoComplete="postal-code"
-            className={inputClass}
             required
           />
         </div>
 
         <Select
           id="checkout-country"
-          label="Country / Region"
+          label="Country / Region *"
           value={address.country}
           onChange={(e) => onChange("country", e.target.value)}
           error={errors.country}
           options={COUNTRY_OPTIONS}
-          className={inputClass}
         />
 
         {/* Gift Message / Special Delivery Instructions */}
@@ -129,11 +125,11 @@ export function ShippingAddressSection({
             value={notes}
             onChange={(e) => onNotesChange(e.target.value)}
             helperText="Max 500 characters. Complimentary calligraphy gift card included upon request."
-            className="rounded-xl border-[#E2DED6] bg-[#F8F6F0]/50 focus:bg-white focus:border-[#0B1938] focus:ring-[#0B1938] text-[#0B1938] placeholder:text-[#94A3B8] transition-all"
           />
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }
+
 

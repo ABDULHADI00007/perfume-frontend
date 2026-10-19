@@ -3,7 +3,7 @@ import { siteConfig } from "@/config/site";
 import { Hero } from "@/components/storefront/Hero";
 import { NewCollectionSection } from "@/components/storefront/NewCollectionSection";
 import { PerfumeJesminaSection } from "@/components/storefront/PerfumeJesminaSection";
-import { FeaturedProducts } from "@/components/storefront/FeaturedProducts";
+import { DiscoverCollectionSection } from "@/components/storefront/DiscoverCollectionSection";
 import { BrandSavoirFaire } from "@/components/storefront/BrandSavoirFaire";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
 import { JournalPreview } from "@/components/storefront/JournalPreview";
@@ -58,11 +58,12 @@ export default function HomePage() {
       {/* 01.5 — PERFUME JESMINA MUST-HAVES: Editorial reference grid section */}
       <PerfumeJesminaSection />
 
+      {/* 01.8 — DISCOVER THE COLLECTION: Luxury Editorial Asymmetrical Grid */}
+      <DiscoverCollectionSection />
+
       {/* 04.5 — THE ART OF BLOOM: Editorial dual-card showcase */}
       <ArtOfBloomSection />
 
-      {/* 03 — SIGNATURE FRAGRANCES: 5-product selection */}
-      <FeaturedProducts />
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />

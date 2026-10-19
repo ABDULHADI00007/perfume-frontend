@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Icons } from "./icons";
-import { modalVariants, overlayVariants } from "@/lib/motion";
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./dialog";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -11,7 +15,7 @@ export interface ModalProps {
   title?: string;
   description?: string;
   children: React.ReactNode;
-  maxWidth?: "sm" | "md" | "lg" | "xl";
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
   showCloseButton?: boolean;
 }
 
@@ -20,6 +24,10 @@ const maxWidthMap = {
   md: "max-w-md",
   lg: "max-w-lg",
   xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+  "4xl": "max-w-4xl",
+  "5xl": "max-w-5xl",
 };
 
 export const Modal: React.FC<ModalProps> = ({
@@ -31,95 +39,23 @@ export const Modal: React.FC<ModalProps> = ({
   maxWidth = "md",
   showCloseButton = true,
 }) => {
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    },
-    [onClose]
-  );
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, handleKeyDown]);
-
-  const titleId = title ? "modal-title" : undefined;
-  const descriptionId = description ? "modal-description" : undefined;
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
-          className="fixed inset-0 z-modal flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
-        >
-          {/* Backdrop */}
-          <motion.div
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-[2px]"
-          />
-
-          {/* Modal Card */}
-          <motion.div
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className={`relative w-full ${maxWidthMap[maxWidth]} bg-surface border border-border shadow-modal p-6 sm:p-8 z-10 my-8`}
-          >
-            {showCloseButton && (
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close dialog"
-                className="absolute top-4 right-4 p-2 text-foreground-subtle hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                <Icons.Close size={18} />
-              </button>
-            )}
-
-            {title && (
-              <h2
-                id={titleId}
-                className="font-serif text-xl sm:text-2xl font-normal text-foreground leading-snug pr-8"
-              >
-                {title}
-              </h2>
-            )}
-
-            {description && (
-              <p
-                id={descriptionId}
-                className="text-xs sm:text-sm text-foreground-muted mt-1.5 leading-relaxed font-sans"
-              >
-                {description}
-              </p>
-            )}
-
-            <div className={`${title || description ? "mt-6" : ""}`}>
-              {children}
-            </div>
-          </motion.div>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        hideCloseButton={!showCloseButton}
+        className={`w-full ${maxWidthMap[maxWidth]} bg-white border border-[#E6E2EA] shadow-2xl font-sans flex flex-col max-h-[85vh] p-6 sm:p-7 rounded-2xl`}
+      >
+        {(title || description) && (
+          <DialogHeader className="shrink-0 mb-3 pr-6">
+            {title && <DialogTitle>{title}</DialogTitle>}
+            {description && <DialogDescription>{description}</DialogDescription>}
+          </DialogHeader>
+        )}
+        <div className="flex-1 overflow-y-auto min-h-0 pr-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {children}
         </div>
-      )}
-    </AnimatePresence>
+      </DialogContent>
+    </Dialog>
   );
 };
 

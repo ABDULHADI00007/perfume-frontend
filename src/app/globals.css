@@ -1,4 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,600;0,700;1,700&family=Tenor+Sans&family=Poiret+One&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&family=Syne:wght@700;800;900&family=Outfit:wght@700;800;900&family=Bebas+Neue&family=Unbounded:wght@700;800;900&family=Big+Shoulders+Display:wght@800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,600;0,700;1,700&family=Tenor+Sans&family=Poiret+One&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&family=Syne:wght@700;800;900&family=Outfit:wght@700;800;900&family=Bebas+Neue&family=Unbounded:wght@700;800;900&family=Big+Shoulders+Display:wght@800;900&family=Cinzel:wght@400;500;600;700;800;900&family=Italiana&family=Marcellus&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800;12..96,900&display=swap');
+
+@font-face {
+  font-family: 'Hobo BT';
+  src: url('/fonts/hobo-bt.woff') format('woff'),
+       url('/fonts/hobo.woff') format('woff'),
+       url('https://fonts.cdnfonts.com/s/56210/Hobo%20BT.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hobo';
+  src: url('/fonts/hobo.woff') format('woff'),
+       url('/fonts/hobo-bt.woff') format('woff'),
+       url('https://fonts.cdnfonts.com/s/134738/hobo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -160,21 +180,49 @@
 
   /* Luxury Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-surface-subtle);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-border-strong);
-    border-radius: 0;
+    background: #D0C9D6;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-foreground-muted);
+    background: #0C134F;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #C5BFCB;
+    border-radius: 9999px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0C134F;
+  }
+
+  /* Hide scrollbar utility */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 
   /* Accessible Reduced Motion */

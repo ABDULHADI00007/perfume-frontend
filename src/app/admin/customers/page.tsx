@@ -7,9 +7,11 @@ import { AdminCustomer } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { DataTable, Column } from "@/components/admin/DataTable";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Icons } from "@/components/ui/icons";
 import { Pagination } from "@/components/ui/pagination";
 import { formatDate } from "@/lib/utils";
 
@@ -152,28 +154,25 @@ export default function AdminCustomersPage() {
       )}
 
       {/* Filter Bar */}
-      <div className="bg-surface p-4 border border-border flex items-center gap-3">
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search)}
+        resetLabel="RESET SEARCH"
+        onReset={() => {
+          setSearch("");
+          setPage(1);
+        }}
+      >
         <Input
-          placeholder="Search by name, email..."
+          placeholder="Search customers by name, email..."
           value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="text-xs max-w-md"
+          className="w-full text-xs"
         />
-
-        <Button
-          variant="outline"
-          size="md"
-          onClick={() => {
-            setSearch("");
-            setPage(1);
-          }}
-        >
-          Reset Search
-        </Button>
-      </div>
+      </AdminFilterBar>
 
       <DataTable
         columns={columns}

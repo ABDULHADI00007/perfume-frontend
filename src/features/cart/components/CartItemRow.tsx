@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { CartItem } from "../types";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 
@@ -22,7 +24,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
 }) => {
   const lineTotal = item.price * item.quantity;
   const productSlug = item.productId.replace("prod-", "");
-  const [isWishlisted, setIsWishlisted] = React.useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   return (
     <article className={`py-6 sm:py-8 flex flex-col sm:grid sm:grid-cols-12 gap-4 sm:items-center ${className}`}>
@@ -31,7 +33,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
         {/* Flacon Thumbnail */}
         <Link
           href={`/perfumes/${productSlug}`}
-          className="relative h-24 sm:h-28 w-20 sm:w-24 flex-shrink-0 bg-[#F7F5EE] border border-[#EFECE6] rounded-xl overflow-hidden group block shadow-xs"
+          className="relative h-24 sm:h-28 w-20 sm:w-24 flex-shrink-0 bg-[#FAF8F5] border border-[#E2DED6] rounded-xl overflow-hidden group block shadow-xs"
           aria-label={`View ${item.title}`}
         >
           <OptimizedImage
@@ -44,40 +46,39 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
         </Link>
 
         {/* Text Info */}
-        <div className="flex flex-col items-start justify-center">
+        <div className="flex flex-col items-start justify-center space-y-1">
           <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0B1938] leading-tight">
             <Link
               href={`/perfumes/${productSlug}`}
-              className="hover:text-amber-900 transition-colors"
+              className="hover:text-[#C5A880] transition-colors"
             >
               {item.title}
             </Link>
           </h3>
-          <span className="text-xs text-[#8E95A2] font-sans font-normal mt-0.5">
-            Eau de Parfum
+          <span className="text-xs text-[#8E95A2] font-sans font-normal">
+            Extrait De Parfum (30% Concentration)
           </span>
 
-          {/* Size Pill */}
-          <span className="inline-block bg-[#F3EFEC] text-[#5A6270] text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider my-2">
+          {/* Size Badge using shadcn Badge */}
+          <Badge variant="secondary" size="sm" className="my-1">
             {item.size}
-          </span>
+          </Badge>
 
           {/* Wishlist Link */}
           <button
             type="button"
             onClick={() => setIsWishlisted(!isWishlisted)}
-            className="text-xs text-[#64748B] hover:text-[#0B1938] font-sans font-normal flex items-center gap-1.5 transition-colors cursor-pointer mt-0.5"
+            className="text-xs text-[#64748B] hover:text-[#0B1938] font-sans font-normal flex items-center gap-1.5 transition-colors cursor-pointer pt-0.5"
           >
             <Icons.Heart
-              size={13}
-              className={isWishlisted ? "fill-red-600 stroke-red-600" : "stroke-current"}
+              className={`w-3.5 h-3.5 ${isWishlisted ? "fill-red-600 stroke-red-600 text-red-600" : "stroke-current"}`}
             />
-            <span>{isWishlisted ? "Wishlisted" : "Move to Wishlist"}</span>
+            <span>{isWishlisted ? "Saved to Wishlist" : "Move to Wishlist"}</span>
           </button>
         </div>
       </div>
 
-      {/* Col 2: Price (Col span 2 on desktop) */}
+      {/* Col 2: Unit Price (Col span 2 on desktop) */}
       <div className="sm:col-span-2 text-left sm:text-center flex sm:block items-center justify-between">
         <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Price:</span>
         <span className="font-serif font-bold text-[#0B1938] text-sm sm:text-base">
@@ -88,19 +89,19 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
       {/* Col 3: Quantity Stepper (Col span 2 on desktop) */}
       <div className="sm:col-span-2 flex sm:justify-center items-center justify-between">
         <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Quantity:</span>
-        <div className="flex items-center border border-[#E5E0D8] rounded-md bg-white">
+        <div className="flex items-center border border-[#E2DED6] rounded-xl bg-white shadow-2xs overflow-hidden">
           <button
             type="button"
             onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
             disabled={item.quantity <= 1}
             aria-label={`Decrease quantity of ${item.title}`}
-            className="p-1.5 text-[#0B1938] hover:bg-gray-100 disabled:opacity-30 transition-colors rounded-l-md cursor-pointer"
+            className="p-2 text-[#0B1938] hover:bg-[#FAF8F5] disabled:opacity-30 transition-colors cursor-pointer"
           >
-            <Icons.Minus size={12} />
+            <Icons.Minus className="w-3 h-3" />
           </button>
           <span
             aria-live="polite"
-            className="px-2.5 text-xs font-bold font-sans select-none text-[#0B1938]"
+            className="px-3 text-xs font-bold font-sans select-none text-[#0B1938]"
           >
             {item.quantity}
           </span>
@@ -108,29 +109,32 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
             type="button"
             onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
             aria-label={`Increase quantity of ${item.title}`}
-            className="p-1.5 text-[#0B1938] hover:bg-gray-100 transition-colors rounded-r-md cursor-pointer"
+            className="p-2 text-[#0B1938] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
           >
-            <Icons.Plus size={12} />
+            <Icons.Plus className="w-3 h-3" />
           </button>
         </div>
       </div>
 
-      {/* Col 4: Line Total & Remove Cross (Col span 2 on desktop) */}
+      {/* Col 4: Line Total & Remove Action (Col span 2 on desktop) */}
       <div className="sm:col-span-2 flex items-center justify-between sm:justify-end gap-3 text-right">
         <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Total:</span>
         <span className="font-serif font-bold text-[#0B1938] text-sm sm:text-base">
           {formatCurrency(lineTotal)}
         </span>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => onRemove(item.id)}
           aria-label={`Remove ${item.title} from shopping bag`}
-          className="text-gray-400 hover:text-red-600 text-lg transition-colors cursor-pointer ml-2 p-1"
+          className="text-[#94A3B8] hover:text-red-600 hover:bg-red-50 ml-1"
           title="Remove item"
         >
-          <Icons.Close size={16} />
-        </button>
+          <Icons.Close className="w-4 h-4" />
+        </Button>
       </div>
     </article>
   );
 };
+

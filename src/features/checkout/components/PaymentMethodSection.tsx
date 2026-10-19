@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import { PaymentMethod, BankTransferSettings } from "../types";
 import { Icons } from "@/components/ui/icons";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface PaymentMethodSectionProps {
   paymentMethod: PaymentMethod;
@@ -28,27 +31,29 @@ export function PaymentMethodSection({
   };
 
   return (
-    <section className="bg-white border border-gray-200/80 p-7 sm:p-9 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] transition-all duration-300">
-      <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-[#EFECE6]">
-        <span className="w-7 h-7 rounded-full bg-[#0B1938] text-white flex items-center justify-center text-xs font-serif font-bold shadow-xs">
-          3
-        </span>
-        <div>
-          <h2 className="font-serif text-lg sm:text-xl font-bold text-[#0B1938] uppercase tracking-wider">
-            Payment Method
-          </h2>
-          <p className="text-xs text-[#64748B] font-sans mt-0.5">
-            Select your preferred settlement method
-          </p>
+    <Card variant="default" className="border border-[#E2DED6] bg-white p-2 sm:p-4">
+      <CardHeader className="pb-4 border-b border-[#F0ECE1]">
+        <div className="flex items-center gap-3">
+          <Badge variant="default" size="lg" className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#0B1938]">
+            3
+          </Badge>
+          <div>
+            <CardTitle className="font-serif text-xl font-bold text-[#0B1938]">
+              Payment Settlement
+            </CardTitle>
+            <CardDescription className="text-xs text-[#64748B] mt-0.5">
+              Select your preferred secure payment method
+            </CardDescription>
+          </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="space-y-4">
+      <CardContent className="pt-6 space-y-4">
         {/* Cash on Delivery Option */}
         {codEnabled && (
           <label
             htmlFor="payment-cod"
-            className={`block border p-5 rounded-xl cursor-pointer transition-all duration-200 ${
+            className={`block border p-5 rounded-2xl cursor-pointer transition-all duration-200 ${
               paymentMethod === "cash_on_delivery"
                 ? "border-2 border-[#0B1938] bg-[#0B1938]/[0.03] shadow-xs"
                 : "border-[#EFECE6] hover:border-[#CBD5E1] bg-white"
@@ -65,13 +70,12 @@ export function PaymentMethodSection({
                 className="mt-1 h-4 w-4 text-[#0B1938] border-[#E2DED6] focus:ring-[#0B1938] accent-[#0B1938]"
               />
               <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <span className="font-serif text-base text-[#0B1938] font-bold tracking-wide">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="font-serif text-base text-[#0B1938] font-bold tracking-wide flex items-center gap-2">
+                    <Icons.Cash className="w-4 h-4 text-[#C5A880]" />
                     Cash on Delivery (COD)
                   </span>
-                  <span className="text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full border border-[#EFECE6] bg-[#F8F6F0] text-[#0B1938]">
-                    Handover
-                  </span>
+                  <Badge variant="secondary">Handover Delivery</Badge>
                 </div>
                 <p className="text-xs text-[#64748B] font-sans mt-1.5 leading-relaxed">
                   Settle your order directly with our courier concierge in cash upon delivery of your sealed fragrance parcel.
@@ -84,7 +88,7 @@ export function PaymentMethodSection({
         {/* Bank Transfer Option */}
         {bankEnabled && (
           <div
-            className={`border rounded-xl transition-all duration-200 overflow-hidden ${
+            className={`border rounded-2xl transition-all duration-200 overflow-hidden ${
               paymentMethod === "bank_transfer"
                 ? "border-2 border-[#0B1938] bg-[#0B1938]/[0.03] shadow-xs"
                 : "border-[#EFECE6] hover:border-[#CBD5E1] bg-white"
@@ -105,27 +109,26 @@ export function PaymentMethodSection({
                   className="mt-1 h-4 w-4 text-[#0B1938] border-[#E2DED6] focus:ring-[#0B1938] accent-[#0B1938]"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-serif text-base text-[#0B1938] font-bold tracking-wide">
-                      Direct Bank Transfer / Wire
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <span className="font-serif text-base text-[#0B1938] font-bold tracking-wide flex items-center gap-2">
+                      <Icons.Bank className="w-4 h-4 text-[#C5A880]" />
+                      Direct Bank Transfer / IBFT
                     </span>
-                    <span className="text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full border border-[#0B1938]/20 bg-[#0B1938] text-white">
-                      Treasury
-                    </span>
+                    <Badge variant="default">Official Treasury</Badge>
                   </div>
                   <p className="text-xs text-[#64748B] font-sans mt-1.5 leading-relaxed">
-                    Transfer funds directly to the Maison de Parfum banking account. Your order will be prepared and allocated immediately.
+                    Transfer funds directly to the Soulmate Scents banking account. Your order will be allocated immediately.
                   </p>
                 </div>
               </div>
             </label>
 
-            {/* Live Bank Details Display (Accordion/Card when selected) */}
+            {/* Live Bank Details Display */}
             {paymentMethod === "bank_transfer" && (
-              <div className="px-5 pb-5 pt-2 border-t border-[#EFECE6] bg-[#F8F6F0] mx-4 sm:mx-5 mb-4 rounded-xl">
+              <div className="px-5 pb-5 pt-2 border-t border-[#EFECE6] bg-[#FAF8F5] mx-4 sm:mx-5 mb-4 rounded-xl">
                 <div className="flex items-center gap-2 mb-3.5 text-xs font-serif uppercase tracking-widest text-[#0B1938] font-bold">
-                  <Icons.Bank className="w-4 h-4 text-[#0B1938]" />
-                  <span>Maison Official Treasury Details</span>
+                  <Icons.Bank className="w-4 h-4 text-[#C5A880]" />
+                  <span>Official Treasury Bank Details</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
@@ -134,7 +137,7 @@ export function PaymentMethodSection({
                       Bank Name
                     </span>
                     <span className="font-semibold text-[#0B1938]">
-                      {bankSettings?.bankName || "Standard Chartered Bank"}
+                      {bankSettings?.bankName || "Meezan Bank Limited"}
                     </span>
                   </div>
 
@@ -143,7 +146,7 @@ export function PaymentMethodSection({
                       Account Title
                     </span>
                     <span className="font-semibold text-[#0B1938]">
-                      {bankSettings?.accountTitle || "Maison de Parfum Ltd"}
+                      {bankSettings?.accountTitle || "Soulmate Scents Private Ltd"}
                     </span>
                   </div>
 
@@ -153,59 +156,60 @@ export function PaymentMethodSection({
                         Account Number
                       </span>
                       <span className="font-mono font-bold text-[#0B1938]">
-                        {bankSettings?.accountNumber || "01029384756"}
+                        {bankSettings?.accountNumber || "01029384756123"}
                       </span>
                     </div>
-                    <button
+                    <Button
                       type="button"
-                      onClick={() => handleCopy(bankSettings?.accountNumber || "01029384756", "accountNumber")}
-                      aria-label="Copy account number"
-                      className="p-1.5 text-[#64748B] hover:text-[#0B1938] hover:bg-[#F8F6F0] rounded-md transition-colors"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleCopy(bankSettings?.accountNumber || "01029384756123", "accountNumber")}
                     >
                       {copiedField === "accountNumber" ? (
                         <Icons.Check className="w-4 h-4 text-emerald-600" />
                       ) : (
-                        <Icons.Copy className="w-4 h-4" />
+                        <Icons.Copy className="w-4 h-4 text-[#64748B]" />
                       )}
-                    </button>
+                    </Button>
                   </div>
 
                   <div className="p-3.5 bg-white rounded-lg border border-[#EFECE6] flex items-center justify-between">
                     <div>
                       <span className="block text-[10px] tracking-[0.14em] uppercase text-[#64748B] font-medium mb-0.5">
-                        IBAN / SWIFT
+                        IBAN / Swift
                       </span>
                       <span className="font-mono font-bold text-[#0B1938] text-[11px] break-all">
-                        {bankSettings?.iban || "US93SCBL00000001029384756"}
+                        {bankSettings?.iban || "PK36MEZN0001029384756123"}
                       </span>
                     </div>
-                    <button
+                    <Button
                       type="button"
-                      onClick={() => handleCopy(bankSettings?.iban || "US93SCBL00000001029384756", "iban")}
-                      aria-label="Copy IBAN"
-                      className="p-1.5 text-[#64748B] hover:text-[#0B1938] hover:bg-[#F8F6F0] rounded-md transition-colors"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleCopy(bankSettings?.iban || "PK36MEZN0001029384756123", "iban")}
                     >
                       {copiedField === "iban" ? (
                         <Icons.Check className="w-4 h-4 text-emerald-600" />
                       ) : (
-                        <Icons.Copy className="w-4 h-4" />
+                        <Icons.Copy className="w-4 h-4 text-[#64748B]" />
                       )}
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
                 <div className="mt-3.5 p-3.5 bg-white rounded-lg border border-[#EFECE6] text-[#475569] text-[11px] leading-relaxed">
                   <span className="font-bold text-[#0B1938] block mb-0.5">
-                    Wire Instructions:
+                    Transfer Instructions:
                   </span>
                   {bankSettings?.instructions ||
-                    "Please transfer the exact order total and use your unique Order Reference Number in the transfer memo. You will receive your reference number immediately upon clicking Place Order."}
+                    "Please transfer the exact order amount and specify your Order Reference Number in the transaction note. Your order will be confirmed immediately."}
                 </div>
               </div>
             )}
           </div>
         )}
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }
+

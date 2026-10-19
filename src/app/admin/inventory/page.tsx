@@ -6,6 +6,7 @@ import { AdminInventoryItem } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { DataTable, Column } from "@/components/admin/DataTable";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -263,15 +264,25 @@ export default function AdminInventoryPage() {
       )}
 
       {/* Filter Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 bg-surface p-4 border border-border">
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search || statusFilter || lowStockOnly)}
+        resetLabel="RESET FILTERS"
+        onReset={() => {
+          setSearch("");
+          setStatusFilter("");
+          setLowStockOnly(false);
+          setPage(1);
+        }}
+      >
         <Input
           placeholder="Search by product name or SKU..."
           value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="text-xs"
+          className="w-full text-xs"
         />
 
         <Select
@@ -288,7 +299,7 @@ export default function AdminInventoryPage() {
           ]}
         />
 
-        <div className="flex items-center space-x-2 bg-surface-subtle px-3 py-2 border border-border">
+        <div className="flex items-center space-x-2 bg-[#FAF8F5] px-3.5 py-2.5 rounded-xl border border-[#E6E2EA] h-10">
           <input
             type="checkbox"
             id="low-stock-toggle"
@@ -297,26 +308,13 @@ export default function AdminInventoryPage() {
               setLowStockOnly(e.target.checked);
               setPage(1);
             }}
-            className="w-4 h-4 text-primary rounded border-border"
+            className="w-4 h-4 text-[#0C134F] rounded border-[#E6E2EA] cursor-pointer"
           />
-          <label htmlFor="low-stock-toggle" className="text-xs text-foreground font-medium cursor-pointer">
+          <label htmlFor="low-stock-toggle" className="text-xs text-[#0B1938] font-medium cursor-pointer select-none">
             Low Stock Alerts Only
           </label>
         </div>
-
-        <Button
-          variant="outline"
-          size="md"
-          onClick={() => {
-            setSearch("");
-            setStatusFilter("");
-            setLowStockOnly(false);
-            setPage(1);
-          }}
-        >
-          Reset Filters
-        </Button>
-      </div>
+      </AdminFilterBar>
 
       <DataTable
         columns={columns}

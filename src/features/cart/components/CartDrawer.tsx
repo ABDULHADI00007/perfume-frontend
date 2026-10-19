@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Drawer } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Icons } from "@/components/ui/icons";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
@@ -39,25 +41,33 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const footerContent = (
     <div className="flex flex-col space-y-4">
-      <div className="flex items-center justify-between text-sm">
-        <span className="font-sans uppercase tracking-[0.16em] text-xs font-semibold text-[#475569]">
+      {/* Subtotal Row */}
+      <div className="flex items-center justify-between">
+        <span className="font-sans uppercase tracking-[0.16em] text-xs font-bold text-[#64748B]">
           Estimated Subtotal
         </span>
-        <span className="font-serif text-xl text-[#0B1938] font-bold">
+        <span className="font-serif text-2xl text-[#0B1938] font-bold">
           {formatCurrency(cart.subtotal)}
         </span>
       </div>
-      <p className="text-xs text-[#64748B] font-sans leading-relaxed font-normal">
-        Complimentary 2ml discovery sample and signature presentation box included.
-      </p>
 
+      {/* Gift Perk Box */}
+      <div className="bg-[#FAF4E8] rounded-xl p-3.5 flex items-start gap-2.5 border border-[#F5EAD4]">
+        <Icons.Gift className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-[#6B5A3E] font-sans leading-relaxed font-normal">
+          Complimentary 2ml discovery sample & signature packaging included.
+        </p>
+      </div>
+
+      {/* CTA Buttons using shadcn Button */}
       <div className="flex flex-col space-y-2.5 pt-1">
         <Button
-          variant="primary"
+          variant="default"
           size="lg"
           onClick={handleCheckout}
           disabled={cart.itemCount === 0}
-          className="w-full tracking-[0.18em] bg-[#0B1938] hover:bg-[#172552] text-white font-semibold py-3.5 rounded-lg"
+          leftIcon={<Icons.Lock className="w-4 h-4" />}
+          className="w-full tracking-[0.18em] bg-[#0B1938] hover:bg-[#121E3D] text-white font-bold py-3.5 rounded-xl shadow-md min-h-[48px]"
         >
           Proceed to Checkout
         </Button>
@@ -66,7 +76,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           size="md"
           onClick={handleViewCart}
           disabled={cart.itemCount === 0}
-          className="w-full tracking-[0.16em] border border-[#0B1938] text-[#0B1938] hover:bg-[#0B1938] hover:text-white font-semibold py-3 rounded-lg"
+          className="w-full tracking-[0.16em] font-semibold text-xs uppercase"
         >
           View Shopping Bag
         </Button>
@@ -81,108 +91,142 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       title="Shopping Bag"
       description={
         cart.itemCount > 0
-          ? `${cart.itemCount} ${cart.itemCount === 1 ? "item" : "items"}`
+          ? `${cart.itemCount} ${cart.itemCount === 1 ? "item selected" : "items selected"}`
           : undefined
       }
       footer={cart.itemCount > 0 ? footerContent : undefined}
       maxWidth="md"
     >
       {cart.itemCount === 0 && !children ? (
-        <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-          <div className="p-4 rounded-full bg-slate-100 text-[#0B1938] mb-4">
-            <Icons.Bag size={32} />
+        <div className="flex flex-col items-center justify-center py-10 px-4 text-center my-auto min-h-[60vh]">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#FAF4E8] to-[#F5EAD4] border border-[#E2DED6] flex items-center justify-center text-[#0B1938] shadow-md mb-5">
+            <Icons.Bag className="w-9 h-9 text-[#0B1938]" />
           </div>
-          <h3 className="font-serif text-2xl font-bold text-[#0B1938]">
+
+          <Badge variant="accent" className="mb-3">
+            <Icons.Sparkles className="w-3 h-3 mr-1.5 text-[#C5A880]" />
+            SOULMATE SCENTS
+          </Badge>
+
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0B1938] tracking-tight">
             Your Bag is Empty
           </h3>
-          <p className="text-xs text-[#64748B] max-w-xs mt-2 leading-relaxed font-sans font-normal">
-            Discover our exquisite fragrances and curated collections to begin your olfactory journey.
+
+          <p className="text-xs sm:text-sm text-[#64748B] max-w-xs mx-auto leading-relaxed font-sans mt-2 mb-7">
+            Explore our artisanal extraits de parfum, rare harvest botanicals, and bespoke discovery sets.
           </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              onClose();
-              router.push("/perfumes");
-            }}
-            className="mt-6 tracking-[0.16em] border border-[#0B1938] text-[#0B1938] hover:bg-[#0B1938] hover:text-white font-semibold"
-          >
-            Explore Perfumes
-          </Button>
+
+          <div className="w-full max-w-xs space-y-3">
+            <Button
+              variant="default"
+              size="lg"
+              onClick={() => {
+                onClose();
+                router.push("/perfumes");
+              }}
+              rightIcon={<Icons.ArrowRight className="w-4 h-4" />}
+              className="w-full tracking-[0.18em] bg-[#0B1938] hover:bg-[#121E3D] text-white font-bold py-3.5 rounded-xl shadow-md min-h-[48px]"
+            >
+              Explore All Perfumes
+            </Button>
+
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => {
+                onClose();
+                router.push("/about");
+              }}
+              className="w-full tracking-[0.16em] font-semibold text-xs uppercase"
+            >
+              Our Story & Craft
+            </Button>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-[#F0ECE1] w-full max-w-xs flex items-center justify-center gap-2 text-[11px] text-[#8E95A2] font-sans">
+            <Icons.ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+            <span>Complimentary 2ml Sample With Every Order</span>
+          </div>
         </div>
       ) : children ? (
         <div className="flex flex-col space-y-4">{children}</div>
       ) : (
-        <div className="flex flex-col divide-y divide-gray-200">
+        <div className="flex flex-col divide-y divide-[#F0ECE1]">
           {cart.items.map((item) => (
-            <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex space-x-4">
-              {/* Product Thumbnail */}
-              <div className="relative h-20 w-16 flex-shrink-0 bg-slate-100 border border-gray-200 rounded-md overflow-hidden">
+            <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex gap-4 items-start">
+              {/* Product Flacon Thumbnail */}
+              <Link
+                href={`/perfumes/${item.productId.replace("prod-", "")}`}
+                onClick={onClose}
+                className="relative h-20 w-16 flex-shrink-0 bg-[#FAF8F5] border border-[#E2DED6] rounded-xl overflow-hidden group block shadow-2xs"
+              >
                 <OptimizedImage
                   src={item.image || "/images/perfumes/oyd_royal.png"}
                   alt={item.title}
                   aspectRatio="3/4"
                   priority={false}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              </div>
+              </Link>
 
               {/* Item Info */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="flex-1 flex flex-col justify-between space-y-2">
+                <div className="flex items-start justify-between gap-2">
                   <div>
                     <h4 className="font-serif text-base font-bold text-[#0B1938] leading-snug">
                       <Link
                         href={`/perfumes/${item.productId.replace("prod-", "")}`}
                         onClick={onClose}
-                        className="hover:text-amber-900 transition-colors"
+                        className="hover:text-[#C5A880] transition-colors"
                       >
                         {item.title}
                       </Link>
                     </h4>
-                    <span className="inline-block mt-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 bg-slate-100 border border-slate-200 text-[#475569] font-sans font-semibold rounded-sm">
+                    <Badge variant="secondary" size="sm" className="mt-1">
                       {item.size}
-                    </span>
+                    </Badge>
                   </div>
 
-                  <span className="font-serif text-base text-[#0B1938] font-bold ml-2">
+                  <span className="font-serif text-sm font-bold text-[#0B1938] flex-shrink-0">
                     {formatCurrency(item.price * item.quantity)}
                   </span>
                 </div>
 
-                {/* Stepper & Remove */}
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex items-center border border-gray-300 rounded-md bg-white">
+                {/* Stepper & Remove Action */}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center border border-[#E2DED6] rounded-xl bg-white shadow-2xs overflow-hidden">
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       disabled={item.quantity <= 1}
                       aria-label="Decrease quantity"
-                      className="p-1.5 text-[#0B1938] hover:bg-gray-100 disabled:opacity-30 transition-colors rounded-l-md"
+                      className="p-1.5 text-[#0B1938] hover:bg-[#FAF8F5] disabled:opacity-30 transition-colors cursor-pointer"
                     >
-                      <Icons.Minus size={12} />
+                      <Icons.Minus className="w-3 h-3" />
                     </button>
-                    <span className="px-3 text-xs font-bold text-[#0B1938] font-sans select-none">
+                    <span className="px-2.5 text-xs font-bold text-[#0B1938] font-sans select-none">
                       {item.quantity}
                     </span>
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       aria-label="Increase quantity"
-                      className="p-1.5 text-[#0B1938] hover:bg-gray-100 transition-colors rounded-r-md"
+                      className="p-1.5 text-[#0B1938] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                     >
-                      <Icons.Plus size={12} />
+                      <Icons.Plus className="w-3 h-3" />
                     </button>
                   </div>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() => removeItem(item.id)}
                     aria-label={`Remove ${item.title} from bag`}
-                    className="text-[11px] uppercase tracking-[0.14em] text-gray-500 hover:text-red-600 transition-colors font-semibold"
+                    className="text-[10px] uppercase tracking-[0.14em] text-[#94A3B8] hover:text-red-600 font-bold p-1 h-auto"
                   >
                     Remove
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -192,3 +236,4 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     </Drawer>
   );
 };
+

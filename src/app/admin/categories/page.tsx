@@ -13,6 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/ui/icons";
 
 export default function AdminCategoriesPage() {
@@ -162,18 +168,18 @@ export default function AdminCategoriesPage() {
     {
       header: "Category",
       cell: (row) => (
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-surface-subtle border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="flex items-center space-x-3 py-1">
+          <div className="w-11 h-11 rounded-xl bg-[#FAF8F5] border border-[#E6E2EA] flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
             {row.image?.url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={row.image.url} alt={row.name} className="w-full h-full object-cover" />
             ) : (
-              <Icons.Tag size={16} className="text-foreground-muted" />
+              <Icons.Tag size={18} className="text-[#64748B]" />
             )}
           </div>
-          <div>
-            <span className="font-semibold text-xs text-foreground">{row.name}</span>
-            <p className="text-[11px] text-foreground-muted font-mono">{row.slug}</p>
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm text-[#0B1938] leading-tight">{row.name}</span>
+            <span className="text-[11px] text-[#64748B] font-mono mt-0.5">{row.slug}</span>
           </div>
         </div>
       ),
@@ -181,14 +187,18 @@ export default function AdminCategoriesPage() {
     {
       header: "Description",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted truncate max-w-xs block">
+        <span className="text-xs text-[#64748B] truncate max-w-xs block font-sans">
           {row.description || "—"}
         </span>
       ),
     },
     {
       header: "Order",
-      cell: (row) => <span className="text-xs font-mono">{row.sortOrder || 0}</span>,
+      cell: (row) => (
+        <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#FAF8F5] text-xs font-bold font-mono text-[#0B1938] border border-[#EFECE6]">
+          {row.sortOrder || 0}
+        </span>
+      ),
     },
     {
       header: "Status",
@@ -198,30 +208,46 @@ export default function AdminCategoriesPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
-          <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(row)}>
-            Edit
-          </Button>
-
-          {row.status === "active" ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleArchive(row)}
-              className="text-foreground-muted"
-            >
-              Archive
-            </Button>
-          ) : null}
-
+        <div className="flex items-center justify-end gap-2">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            onClick={() => setCategoryToDelete(row)}
-            className="text-status-error hover:bg-status-error/10"
+            onClick={() => handleOpenEdit(row)}
+            className="h-8 px-3 text-xs gap-1.5 bg-white hover:bg-[#FAF8F5] text-[#0B1938] border-[#E2DED6] rounded-lg shadow-2xs transition-all cursor-pointer"
           >
-            Delete
+            <Icons.Edit size={13} />
+            <span>Edit</span>
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 rounded-lg hover:bg-[#FAF8F5] text-[#64748B] hover:text-[#0B1938] cursor-pointer"
+              >
+                <Icons.MoreVertical size={15} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40 font-sans border-[#E6E2EA] bg-white shadow-md">
+              {row.status === "active" && (
+                <DropdownMenuItem
+                  onClick={() => handleArchive(row)}
+                  className="cursor-pointer text-xs flex items-center gap-2 text-[#64748B] focus:bg-[#FAF8F5]"
+                >
+                  <Icons.Archive size={14} />
+                  <span>Archive</span>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => setCategoryToDelete(row)}
+                className="cursor-pointer text-xs flex items-center gap-2 text-rose-600 focus:text-rose-600 focus:bg-rose-50"
+              >
+                <Icons.Trash size={14} />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
     },

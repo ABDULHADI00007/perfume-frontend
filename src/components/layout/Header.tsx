@@ -68,10 +68,14 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   return (
     <>
       <header
-        className={`sticky top-0 z-30 w-full transition-all duration-300 ease-luxury ${isScrolled
-          ? "bg-white/95 backdrop-blur-md border-b border-[#E6E2EA] shadow-subtle py-2 sm:py-2.5"
-          : "bg-white border-b border-[#E6E2EA]/60 py-2.5 sm:py-3"
+        className={`sticky top-0 z-30 w-full transition-all duration-300 ease-luxury bg-white/10 backdrop-blur-xl border-b border-white/15 ${isScrolled
+          ? "py-2 sm:py-2.5 bg-white/12"
+          : "py-2.5 sm:py-3"
           } ${className}`}
+        style={{
+          WebkitBackdropFilter: "blur(25px)",
+          backdropFilter: "blur(25px)",
+        }}
       >
         <Container size="wide">
           <div className="flex items-center justify-between gap-4 sm:gap-6">

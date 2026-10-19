@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { allProducts } from "@/features/products/data/products";
@@ -9,6 +10,8 @@ import { ShippingAddressSection } from "./ShippingAddressSection";
 import { PaymentMethodSection } from "./PaymentMethodSection";
 import { CheckoutOrderSummary } from "./CheckoutOrderSummary";
 import { CheckoutEmptyState } from "./CheckoutEmptyState";
+import { Badge } from "@/components/ui/badge";
+import { Icons } from "@/components/ui/icons";
 import {
   CheckoutCustomer,
   CheckoutAddress,
@@ -229,19 +232,43 @@ export function CheckoutPageView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F6F0]">
-      <main className="py-6 sm:py-8 lg:py-10">
+    <div className="min-h-screen bg-[#FAF9F6] text-[#0B1938]">
+      <main className="py-6 sm:py-10">
         <Container size="wide">
-          <div className="mb-6 sm:mb-8">
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] uppercase tracking-tight">
-              Checkout
-            </h1>
-            <p className="text-xs sm:text-sm text-[#64748B] font-sans mt-1">
-              Finalize your bespoke fragrance acquisition
-            </p>
+          {/* Breadcrumb Navigation */}
+          <nav className="text-xs font-sans text-[#8E95A2] mb-6 flex items-center gap-2" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-[#0B1938] transition-colors flex items-center gap-1">
+              <span>Home</span>
+            </Link>
+            <span className="text-[#C5A880]">&gt;</span>
+            <Link href="/cart" className="hover:text-[#0B1938] transition-colors">
+              <span>Shopping Bag</span>
+            </Link>
+            <span className="text-[#C5A880]">&gt;</span>
+            <span className="text-[#0B1938] font-semibold">Checkout</span>
+          </nav>
+
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F0ECE1] pb-6">
+            <div>
+              <Badge variant="accent" className="mb-2">
+                <Icons.Lock className="w-3 h-3 mr-1.5 text-[#C5A880]" />
+                256-BIT ENCRYPTED LUXURY CHECKOUT
+              </Badge>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] tracking-tight">
+                Secure Checkout
+              </h1>
+              <p className="text-xs sm:text-sm text-[#64748B] font-sans mt-1">
+                Finalize your bespoke fragrance acquisition with Maison concierge delivery
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs text-[#64748B] bg-white border border-[#E2DED6] px-4 py-2.5 rounded-xl shadow-2xs">
+              <Icons.ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>100% Authentic Product Guarantee</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start relative">
             {/* Left Column: Customer Details, Shipping, Payment */}
             <div className="lg:col-span-8 space-y-6 sm:space-y-8">
               <CustomerInfoSection
@@ -268,7 +295,7 @@ export function CheckoutPageView() {
             </div>
 
             {/* Right Column: Order Summary & Place Order CTA */}
-            <aside className="lg:col-span-4 sticky top-20 lg:-mt-[6.5rem] xl:-mt-[7rem]">
+            <aside className="lg:col-span-4 sticky top-20">
               <CheckoutOrderSummary
                 items={cart.items}
                 subtotal={cart.subtotal}
@@ -290,3 +317,4 @@ export function CheckoutPageView() {
     </div>
   );
 }
+

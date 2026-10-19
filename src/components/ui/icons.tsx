@@ -48,6 +48,9 @@ import {
   MapPin,
   MessageSquare,
   Printer,
+  MoreVertical,
+  MoreHorizontal,
+  Archive,
   LucideProps,
 } from "lucide-react";
 
@@ -108,5 +111,9 @@ export const Icons = {
   MapPin: (props: LucideProps) => <MapPin {...defaultProps} {...props} />,
   MessageSquare: (props: LucideProps) => <MessageSquare {...defaultProps} {...props} />,
   Printer: (props: LucideProps) => <Printer {...defaultProps} {...props} />,
+  RotateCcw: (props: LucideProps) => <RotateCcw {...defaultProps} {...props} />,
+  MoreVertical: (props: LucideProps) => <MoreVertical {...defaultProps} {...props} />,
+  MoreHorizontal: (props: LucideProps) => <MoreHorizontal {...defaultProps} {...props} />,
+  Archive: (props: LucideProps) => <Archive {...defaultProps} {...props} />,
 };
 

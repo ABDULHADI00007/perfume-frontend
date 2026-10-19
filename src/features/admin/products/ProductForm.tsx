@@ -9,7 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Icons } from "@/components/ui/icons";
+import {
+  Package,
+  Sparkles,
+  Image as ImageIcon,
+  Layers,
+  Eye,
+  Tag,
+  Search,
+  Plus,
+  Trash2,
+  AlertCircle,
+  Check,
+} from "lucide-react";
 
 export interface ProductFormProps {
   initialProduct?: AdminProduct;
@@ -33,11 +45,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [slug, setSlug] = useState(initialProduct?.slug || "");
   const [sku, setSku] = useState(initialProduct?.sku || "");
   const [brand, setBrand] = useState(initialProduct?.brand || "Soulmate Scents");
-  const [price, setPrice] = useState<string>(initialProduct?.price ? String(initialProduct.price) : "");
+  const [price, setPrice] = useState<string>(
+    initialProduct?.price ? String(initialProduct.price) : ""
+  );
   const [compareAtPrice, setCompareAtPrice] = useState<string>(
     initialProduct?.compareAtPrice ? String(initialProduct.compareAtPrice) : ""
   );
-  const [shortDescription, setShortDescription] = useState(initialProduct?.shortDescription || "");
+  const [shortDescription, setShortDescription] = useState(
+    initialProduct?.shortDescription || ""
+  );
   const [description, setDescription] = useState(initialProduct?.description || "");
   const [status, setStatus] = useState<"active" | "draft" | "archived">(
     initialProduct?.status || "draft"
@@ -79,7 +95,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   // Variants
   const [variants, setVariants] = useState<
-    Array<{ size: string; price: number; compareAtPrice?: number; sku: string; stock: number; status: "active" | "inactive" }>
+    Array<{
+      size: string;
+      price: number;
+      compareAtPrice?: number;
+      sku: string;
+      stock: number;
+      status: "active" | "inactive";
+    }>
   >(
     initialProduct?.variants && initialProduct.variants.length > 0
       ? initialProduct.variants.map((v) => ({
@@ -100,7 +123,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   // SEO
   const [metaTitle, setMetaTitle] = useState(initialProduct?.seo?.metaTitle || "");
-  const [metaDescription, setMetaDescription] = useState(initialProduct?.seo?.metaDescription || "");
+  const [metaDescription, setMetaDescription] = useState(
+    initialProduct?.seo?.metaDescription || ""
+  );
 
   useEffect(() => {
     async function loadMetadata() {
@@ -245,21 +270,23 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 font-sans">
+    <form onSubmit={handleSubmit} className="space-y-6 font-sans">
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
-          {error}
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-medium flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+          <span>{error}</span>
         </div>
       )}
 
       {/* 2-Column Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Left 2 Columns: Core Info & Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* General Information Card */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border-subtle pb-3">
-              General Information
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2">
+              <Package className="w-4 h-4 text-foreground-muted" />
+              General Product Information
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -269,12 +296,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                className="text-xs"
               />
               <Input
                 label="Custom Slug (optional)"
                 placeholder="noir-eternel"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
+                className="text-xs"
               />
             </div>
 
@@ -285,12 +314,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
                 required
+                className="text-xs font-mono"
               />
               <Input
                 label="Brand"
-                placeholder="House Perfume"
+                placeholder="Soulmate Scents"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
+                className="text-xs"
               />
             </div>
 
@@ -304,6 +335,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
+                className="text-xs font-mono"
               />
               <Input
                 label="Compare at Price ($)"
@@ -313,6 +345,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 placeholder="220.00"
                 value={compareAtPrice}
                 onChange={(e) => setCompareAtPrice(e.target.value)}
+                className="text-xs font-mono"
               />
             </div>
 
@@ -322,6 +355,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
               rows={2}
+              className="text-xs leading-relaxed resize-none"
             />
 
             <Textarea
@@ -330,13 +364,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
+              className="text-xs leading-relaxed resize-none"
             />
           </div>
 
           {/* Fragrance Composition Card */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border-subtle pb-3">
-              Olfactory Architecture & Formulation
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-foreground-muted" />
+              Olfactory Architecture & Notes
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -370,6 +406,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               placeholder="Bergamot, Cardamom, Pink Pepper"
               value={topNotes}
               onChange={(e) => setTopNotes(e.target.value)}
+              className="text-xs"
             />
 
             <Input
@@ -377,6 +414,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               placeholder="Damask Rose, Iris, Nutmeg"
               value={heartNotes}
               onChange={(e) => setHeartNotes(e.target.value)}
+              className="text-xs"
             />
 
             <Input
@@ -384,30 +422,32 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               placeholder="Oud, Amber, Sandalwood, Vanilla"
               value={baseNotes}
               onChange={(e) => setBaseNotes(e.target.value)}
+              className="text-xs"
             />
           </div>
 
           {/* Product Images Card */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-foreground-muted" />
                 Product Imagery (URLs)
               </h3>
-              <Button type="button" variant="outline" size="sm" onClick={handleAddImage}>
-                <Icons.Plus size={14} className="mr-1" />
+              <Button type="button" variant="outline" size="sm" onClick={handleAddImage} className="gap-1.5 text-xs h-8">
+                <Plus className="w-3.5 h-3.5" />
                 Add Image URL
               </Button>
             </div>
 
             <div className="space-y-3">
               {images.map((img, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-surface-subtle p-3 border border-border">
-                  <div className="w-12 h-12 bg-surface border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div key={idx} className="flex items-center gap-3 bg-surface-subtle/60 p-3 rounded-lg border border-border">
+                  <div className="w-12 h-12 bg-surface border border-border rounded-md flex items-center justify-center overflow-hidden shrink-0">
                     {img.url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={img.url} alt={img.altText || "Preview"} className="w-full h-full object-cover" />
                     ) : (
-                      <Icons.Package size={16} className="text-foreground-muted" />
+                      <Package className="w-5 h-5 text-foreground-muted/60" />
                     )}
                   </div>
 
@@ -434,7 +474,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     />
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <button
                       type="button"
                       onClick={() => {
@@ -445,9 +485,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         setImages(next);
                       }}
                       title="Set as Primary"
-                      className={`px-2 py-1 text-[10px] uppercase font-semibold border ${
+                      className={`px-2.5 py-1 rounded text-[10px] uppercase font-semibold border transition-colors ${
                         img.isPrimary
-                          ? "bg-primary text-primary-foreground border-primary"
+                          ? "bg-[#0C134F] text-[#C5A880] border-[#0C134F]"
                           : "bg-surface text-foreground-muted border-border hover:text-foreground"
                       }`}
                     >
@@ -458,9 +498,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <button
                         type="button"
                         onClick={() => handleRemoveImage(idx)}
-                        className="p-1 text-foreground-subtle hover:text-status-error"
+                        className="p-1.5 text-foreground-muted hover:text-rose-600 transition-colors"
                       >
-                        <Icons.Close size={16} />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     )}
                   </div>
@@ -470,20 +510,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
 
           {/* Variants Card */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-                Sizes & Variants
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground flex items-center gap-2">
+                <Layers className="w-4 h-4 text-foreground-muted" />
+                Sizes & Product Variants
               </h3>
-              <Button type="button" variant="outline" size="sm" onClick={handleAddVariant}>
-                <Icons.Plus size={14} className="mr-1" />
+              <Button type="button" variant="outline" size="sm" onClick={handleAddVariant} className="gap-1.5 text-xs h-8">
+                <Plus className="w-3.5 h-3.5" />
                 Add Size
               </Button>
             </div>
 
             <div className="space-y-3">
               {variants.map((v, idx) => (
-                <div key={idx} className="grid grid-cols-1 sm:grid-cols-5 gap-2 bg-surface-subtle p-3 border border-border items-end">
+                <div key={idx} className="grid grid-cols-1 sm:grid-cols-5 gap-3 bg-surface-subtle/60 p-3.5 rounded-lg border border-border items-end">
                   <Input
                     label="Size"
                     placeholder="100ml"
@@ -493,6 +534,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       next[idx].size = e.target.value;
                       setVariants(next);
                     }}
+                    className="text-xs"
                   />
                   <Input
                     label="Price ($)"
@@ -504,6 +546,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       next[idx].price = Number(e.target.value);
                       setVariants(next);
                     }}
+                    className="text-xs font-mono"
                   />
                   <Input
                     label="Variant SKU"
@@ -513,6 +556,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       next[idx].sku = e.target.value;
                       setVariants(next);
                     }}
+                    className="text-xs font-mono"
                   />
                   <Input
                     label="Stock"
@@ -524,13 +568,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       next[idx].stock = Number(e.target.value);
                       setVariants(next);
                     }}
+                    className="text-xs font-mono"
                   />
                   <div className="flex items-center justify-end pb-1">
                     {variants.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveVariant(idx)}
-                        className="p-2 text-foreground-subtle hover:text-status-error text-xs"
+                        className="p-2 text-rose-600 hover:text-rose-700 text-xs font-medium transition-colors"
                       >
                         Remove
                       </button>
@@ -545,8 +590,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         {/* Right Column: Taxonomy, Status & Publishing */}
         <div className="space-y-6">
           {/* Status & Actions */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border-subtle pb-3">
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-5">
+            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2">
+              <Eye className="w-4 h-4 text-foreground-muted" />
               Status & Visibility
             </h3>
 
@@ -561,7 +607,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               ]}
             />
 
-            <div className="space-y-2 pt-2 border-t border-border-subtle">
+            <div className="space-y-3 pt-2 border-t border-border">
               <label className="text-xs font-medium text-foreground block">Badges & Highlights</label>
               <Checkbox
                 label="Featured on Homepage"
@@ -580,23 +626,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               />
             </div>
 
-            <div className="pt-4 border-t border-border-subtle">
+            <div className="pt-4 border-t border-border">
               <Button
                 type="submit"
                 variant="primary"
                 size="lg"
-                className="w-full"
+                className="w-full gap-2 text-xs font-semibold h-10 shadow-xs"
                 isLoading={isSubmitting}
               >
-                {isEdit ? "Update Product" : "Publish Fragrance"}
+                <Check className="w-4 h-4" />
+                {isEdit ? "Update Fragrance" : "Publish Fragrance"}
               </Button>
             </div>
-
           </div>
 
           {/* Categories & Collections Taxonomy */}
-          <div className="border border-border bg-surface p-6 space-y-4">
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border-subtle pb-3">
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2">
+              <Tag className="w-4 h-4 text-foreground-muted" />
               Category & Collections
             </h3>
 
@@ -612,7 +659,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               }
             />
 
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2.5 pt-2 border-t border-border">
               <label className="text-xs font-medium text-foreground block">
                 Assign to Collections
               </label>
@@ -628,16 +675,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
 
           {/* SEO Metadata */}
-          <div className="border border-border bg-surface p-6 space-y-3">
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border-subtle pb-2">
-              Search Engine Optimization
+          <div className="bg-surface border border-border rounded-xl p-6 shadow-xs space-y-4">
+            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2">
+              <Search className="w-4 h-4 text-foreground-muted" />
+              SEO & Metadata
             </h3>
 
             <Input
               label="Meta Title"
-              placeholder="e.g. Noir Éternel Eau de Parfum | Maison de Parfum"
+              placeholder="e.g. Noir Éternel Eau de Parfum | Soulmate Scents"
               value={metaTitle}
               onChange={(e) => setMetaTitle(e.target.value)}
+              className="text-xs"
             />
 
             <Textarea
@@ -646,6 +695,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               value={metaDescription}
               onChange={(e) => setMetaDescription(e.target.value)}
               rows={3}
+              className="text-xs leading-relaxed resize-none"
             />
           </div>
         </div>
@@ -653,3 +703,4 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     </form>
   );
 };
+

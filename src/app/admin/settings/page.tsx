@@ -6,6 +6,8 @@ import { AdminSettings } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -219,14 +221,19 @@ export default function AdminSettingsPage() {
         </div>
       )}
 
-      <form onSubmit={handleSave} className="space-y-8">
+      <form onSubmit={handleSave} className="space-y-6">
         {/* 1. Store Identity */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center gap-2 border-b border-border-subtle pb-3">
-            <Icons.Package size={16} className="text-foreground-muted" />
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-              Store Profile & Identity
-            </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
+            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+              <Icons.Package size={18} />
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                Store Profile & Identity
+              </h3>
+              <p className="text-[11px] text-[#64748B]">General store branding & support contacts</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -266,28 +273,29 @@ export default function AdminSettingsPage() {
             onChange={(e) => setAddress(e.target.value)}
             disabled={!canEdit}
           />
-        </div>
+        </Card>
 
         {/* 2. Bank Transfer Payment Configuration */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-            <div className="flex items-center gap-2">
-              <Icons.ShieldCheck size={16} className="text-foreground-muted" />
-              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-                Bank Transfer & Manual Checkout Configuration
-              </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+                <Icons.ShieldCheck size={18} />
+              </div>
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                  Bank Transfer & Manual Checkout Configuration
+                </h3>
+                <p className="text-[11px] text-[#64748B]">Credentials shown to customers on checkout</p>
+              </div>
             </div>
             <Checkbox
-              label="Enable Bank Transfer at Checkout"
+              label="Enable Bank Transfer"
               checked={bankTransferEnabled}
               onChange={(e) => setBankTransferEnabled(e.target.checked)}
               disabled={!canEdit}
             />
           </div>
-
-          <p className="text-xs text-foreground-muted">
-            These banking credentials are displayed to customers on the Bank Transfer confirmation screen and checkout review.
-          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
@@ -331,16 +339,21 @@ export default function AdminSettingsPage() {
             disabled={!canEdit}
             rows={3}
           />
-        </div>
+        </Card>
 
         {/* 3. Cash on Delivery */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-            <div className="flex items-center gap-2">
-              <Icons.Delivery size={16} className="text-foreground-muted" />
-              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-                Cash on Delivery (COD)
-              </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+                <Icons.Delivery size={18} />
+              </div>
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                  Cash on Delivery (COD)
+                </h3>
+                <p className="text-[11px] text-[#64748B]">Pay cash upon delivery confirmation</p>
+              </div>
             </div>
             <Checkbox
               label="Enable COD at Checkout"
@@ -349,18 +362,20 @@ export default function AdminSettingsPage() {
               disabled={!canEdit}
             />
           </div>
-          <p className="text-xs text-foreground-muted">
-            Allow customers to pay in cash upon courier delivery.
-          </p>
-        </div>
+        </Card>
 
         {/* 4. Shipping & Rates */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center gap-2 border-b border-border-subtle pb-3">
-            <Icons.Delivery size={16} className="text-foreground-muted" />
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-              Shipping Rates & Carriers
-            </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
+            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+              <Icons.Delivery size={18} />
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                Shipping Rates & Carriers
+              </h3>
+              <p className="text-[11px] text-[#64748B]">Thresholds and default delivery partner</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -385,16 +400,21 @@ export default function AdminSettingsPage() {
               disabled={!canEdit}
             />
           </div>
-        </div>
+        </Card>
 
         {/* 5. Tax Configuration */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-            <div className="flex items-center gap-2">
-              <Icons.Dollar size={16} className="text-foreground-muted" />
-              <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-                Tax Calculation
-              </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+                <Icons.Dollar size={18} />
+              </div>
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                  Tax Calculation
+                </h3>
+                <p className="text-[11px] text-[#64748B]">Default tax rate settings</p>
+              </div>
             </div>
             <Checkbox
               label="Enable Tax Calculation"
@@ -422,15 +442,20 @@ export default function AdminSettingsPage() {
               />
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* 6. Social Links */}
-        <div className="border border-border bg-surface p-6 space-y-4">
-          <div className="flex items-center gap-2 border-b border-border-subtle pb-3">
-            <Icons.ExternalLink size={16} className="text-foreground-muted" />
-            <h3 className="text-xs uppercase tracking-[0.16em] font-semibold text-foreground">
-              Social Media Channels
-            </h3>
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
+            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
+              <Icons.ExternalLink size={18} />
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
+                Social Media Channels
+              </h3>
+              <p className="text-[11px] text-[#64748B]">Official social URLs in storefront footer</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -456,16 +481,17 @@ export default function AdminSettingsPage() {
               disabled={!canEdit}
             />
           </div>
-        </div>
+        </Card>
 
         {/* Submit Actions */}
         {canEdit && (
-          <div className="flex justify-end pt-4 border-t border-border">
+          <div className="flex justify-end pt-4 border-t border-[#EFECE6]">
             <Button
               type="submit"
               variant="primary"
               size="lg"
               isLoading={isSaving}
+              className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-8 py-3 text-xs font-bold tracking-[0.18em] uppercase shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
               Save Storefront Settings
             </Button>
