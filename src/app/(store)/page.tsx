@@ -7,6 +7,7 @@ import { DiscoverCollectionSection } from "@/components/storefront/DiscoverColle
 import { BrandSavoirFaire } from "@/components/storefront/BrandSavoirFaire";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
 import { JournalPreview } from "@/components/storefront/JournalPreview";
+import { CircularTestimonialsSection } from "@/components/storefront/CircularTestimonialsSection";
 import { FinalCTA } from "@/components/storefront/FinalCTA";
 
 export const metadata = constructMetadata({
@@ -75,6 +76,9 @@ export default function HomePage() {
 
       {/* 06 — OLFACTORY JOURNAL: 3-story editorial magazine composition */}
       <JournalPreview />
+
+      {/* 06.5 — VOICES OF DISTINCTION: Circular 3D Carousel Testimonials */}
+      <CircularTestimonialsSection />
 
       {/* 07 — FINAL CLOSING CTA: Quiet cinematic closing section */}
       <FinalCTA />
