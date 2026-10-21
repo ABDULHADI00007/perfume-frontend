@@ -418,3 +418,38 @@
 .animate-fade-in {
   animation: fade-in 0.25s ease-out forwards;
 }
+
+/* 21st.dev Luxury Admin Portal Utilities */
+@layer components {
+  .admin-page-container {
+    @apply space-y-6 sm:space-y-8 max-w-[1700px] mx-auto pb-12 font-sans;
+  }
+
+  .admin-card {
+    @apply bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_20px_rgba(18,23,53,0.03)] hover:shadow-[0_10px_30px_rgba(18,23,53,0.06)] transition-all duration-300;
+  }
+
+  .admin-card-interactive {
+    @apply bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_20px_rgba(18,23,53,0.03)] hover:shadow-[0_12px_36px_rgba(18,23,53,0.08)] hover:border-slate-300 transition-all duration-300 cursor-pointer;
+  }
+
+  .admin-glass {
+    @apply backdrop-blur-xl bg-white/90 border border-slate-200/60 shadow-[0_4px_24px_rgba(18,23,53,0.04)];
+  }
+
+  .admin-badge-dot {
+    @apply relative flex h-2 w-2 mr-1.5;
+  }
+
+  .admin-heading {
+    @apply font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#0C134F];
+  }
+
+  .admin-subheading {
+    @apply font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#8E95A2];
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
@@ -14,14 +16,14 @@ export interface AdminFilterBarProps {
 export const AdminFilterBar: React.FC<AdminFilterBarProps> = ({
   children,
   onReset,
-  resetLabel = "RESET FILTERS",
+  resetLabel = "RESET",
   hasActiveFilters = false,
   className = "",
 }) => {
   return (
     <div
       className={cn(
-        "bg-white rounded-2xl border border-[#E6E2EA] p-4 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 font-sans transition-all duration-200",
+        "bg-white rounded-2xl border border-slate-200/70 p-4 shadow-[0_4px_20px_rgba(18,23,53,0.02)] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 font-sans transition-all duration-200",
         className
       )}
     >
@@ -30,18 +32,18 @@ export const AdminFilterBar: React.FC<AdminFilterBarProps> = ({
       </div>
 
       {onReset && (
-        <div className="flex items-center justify-end shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#EFECE6]">
+        <div className="flex items-center justify-end shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
           <Button
             variant="outline"
             size="sm"
             onClick={onReset}
             disabled={!hasActiveFilters}
             className={cn(
-              "h-10 px-4 text-[10px] font-bold tracking-[0.16em] uppercase rounded-xl gap-2 transition-all duration-200 cursor-pointer border-[#E2DED6] text-[#0B1938] hover:bg-[#FAF8F5]",
-              !hasActiveFilters && "opacity-50 cursor-not-allowed"
+              "h-10 px-4 text-[10px] font-bold tracking-[0.16em] uppercase rounded-xl gap-2 transition-all duration-200 cursor-pointer border-slate-200 text-[#0C134F] hover:bg-slate-50",
+              !hasActiveFilters && "opacity-40 cursor-not-allowed hover:bg-transparent"
             )}
           >
-            <Icons.RotateCcw size={13} className="text-[#64748B]" />
+            <Icons.RotateCcw size={12} className="text-slate-400" />
             <span>{resetLabel}</span>
           </Button>
         </div>

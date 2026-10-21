@@ -139,6 +139,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   src="/images/perfumes/sultan-veils.png"
                   alt="Top Notes"
                   fill
+                  sizes="(max-width: 640px) 80px, 96px"
                   className="object-cover object-center"
                 />
               </div>
@@ -157,6 +158,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   src="/images/perfumes/oyd_royal.png"
                   alt="Heart Notes"
                   fill
+                  sizes="(max-width: 640px) 80px, 96px"
                   className="object-cover object-center"
                 />
               </div>
@@ -175,6 +177,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   src="/images/perfumes/amber-rivera.png"
                   alt="Base Notes"
                   fill
+                  sizes="(max-width: 640px) 80px, 96px"
                   className="object-cover object-center"
                 />
               </div>

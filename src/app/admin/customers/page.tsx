@@ -6,10 +6,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminCustomer } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { Button } from "@/components/ui/button";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/ui/icons";
 import { Pagination } from "@/components/ui/pagination";
@@ -79,11 +80,11 @@ export default function AdminCustomersPage() {
           <div>
             <Link
               href={`/admin/customers/${row._id}`}
-              className="font-medium text-xs text-foreground hover:underline"
+              className="font-semibold text-xs text-[#0C134F] hover:text-[#590B16] transition-colors"
             >
               {displayName}
             </Link>
-            <p className="text-[11px] text-foreground-muted">{row.email}</p>
+            <p className="text-[11px] text-slate-500 font-mono tracking-tight">{row.email}</p>
           </div>
         );
       },
@@ -91,13 +92,13 @@ export default function AdminCustomersPage() {
     {
       header: "Phone",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted font-mono">{row.phone || "—"}</span>
+        <span className="text-xs text-slate-500 font-mono tracking-tight">{row.phone || "—"}</span>
       ),
     },
     {
       header: "Joined",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted">{formatDate(row.createdAt)}</span>
+        <span className="text-xs text-slate-600 font-sans">{formatDate(row.createdAt)}</span>
       ),
     },
     {
@@ -108,44 +109,36 @@ export default function AdminCustomersPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
-          <Link href={`/admin/customers/${row._id}`}>
-            <Button variant="ghost" size="sm">
-              Details
-            </Button>
-          </Link>
+        <TableActionGroup>
+          <TableActionButton
+            variant="outline"
+            href={`/admin/customers/${row._id}`}
+          >
+            Details
+          </TableActionButton>
 
           {hasPermission("customers.update") && (
-            <Button
-              variant="ghost"
-              size="sm"
+            <TableActionButton
+              variant={row.status === "active" ? "destructive" : "success"}
               onClick={() => handleStatusToggle(row)}
-              className={row.status === "active" ? "text-status-error" : "text-status-success"}
             >
               {row.status === "active" ? "Block" : "Unblock"}
-            </Button>
+            </TableActionButton>
           )}
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Clients & Accounts
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Customers
-          </h1>
-        </div>
-
-        <div className="text-xs text-foreground-muted">
-          Total registered: <span className="font-semibold text-foreground">{totalCount}</span>
-        </div>
-      </div>
+      <AdminPageHeader
+        category="CLIENTS & ACCOUNTS"
+        title="Customer Directory"
+        description="Comprehensive list of registered patrons, shipping profiles, and account statuses."
+        count={totalCount}
+        breadcrumbs={[{ label: "Customers" }]}
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">

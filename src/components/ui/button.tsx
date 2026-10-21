@@ -19,6 +19,14 @@ const buttonVariants = cva(
           "bg-white text-[#121735] border border-[#E6E2EA] hover:border-[#0C134F] hover:bg-[#FBF9F5] hover:text-[#0C134F] shadow-xs",
         accent:
           "bg-[#C5A880] text-[#0C134F] font-semibold border border-[#C5A880] hover:bg-[#B39266] shadow-xs",
+        brand:
+          "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#6D0E1C] active:bg-[#470811] shadow-xs hover:shadow-[0_2px_10px_rgba(89,11,22,0.25)]",
+        tableAction:
+          "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-[#FAF7EE] hover:text-[#590B16] hover:border-[#590B16]/30 shadow-2xs hover:shadow-xs capitalize font-medium tracking-normal",
+        tableActionDestructive:
+          "bg-rose-50/70 text-rose-600 border border-rose-200/80 hover:bg-rose-100 hover:text-rose-700 hover:border-rose-300 shadow-2xs capitalize font-medium tracking-normal",
+        tableActionSuccess:
+          "bg-emerald-50/70 text-emerald-600 border border-emerald-200/80 hover:bg-emerald-100 hover:text-emerald-700 hover:border-emerald-300 shadow-2xs capitalize font-medium tracking-normal",
         ghost:
           "bg-transparent text-[#6B6F80] hover:text-[#121735] hover:bg-[#F8F6F2] border border-transparent",
         link:
@@ -30,6 +38,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "px-6 py-2.5 text-[11px] tracking-[0.18em]",
+        xs: "h-7 px-2.5 text-[11px] tracking-normal font-sans rounded-lg",
         sm: "px-4 py-2 text-[10px] tracking-[0.16em]",
         md: "px-6 py-2.5 text-[11px] tracking-[0.18em]",
         lg: "px-8 py-3 text-xs tracking-[0.2em]",

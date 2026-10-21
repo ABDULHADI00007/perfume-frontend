@@ -4,8 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ProductForm } from "@/features/admin/products/ProductForm";
 import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
 
 export default function AdminNewProductPage() {
   const { hasPermission } = useAdminAuth();
@@ -16,30 +18,27 @@ export default function AdminNewProductPage() {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex items-center justify-between border-b border-border pb-4">
-        <div className="flex items-center space-x-2 text-xs text-foreground-muted">
-          <Link href="/admin/products" className="hover:text-foreground">
-            Products
+      <AdminPageHeader
+        category="CATALOG CREATION"
+        title="Add New Fragrance"
+        description="Craft an exquisite perfume profile with olfactory pyramid, bottle variants, and visual presentation."
+        breadcrumbs={[
+          { label: "Products", href: "/admin/products" },
+          { label: "New Fragrance" },
+        ]}
+        actions={
+          <Link href="/admin/products">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white hover:bg-slate-50 text-[#0C134F] border-slate-200 rounded-xl px-4 py-2 text-xs font-semibold shadow-2xs gap-1.5"
+            >
+              <Icons.ArrowLeft size={14} />
+              <span>Back to Catalog</span>
+            </Button>
           </Link>
-          <span>/</span>
-          <span className="text-foreground font-medium">New Fragrance</span>
-        </div>
-
-        <Link href="/admin/products">
-          <Button variant="outline" size="sm">
-            ← Back to Products
-          </Button>
-        </Link>
-      </div>
-
-      <div>
-        <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-          Catalog Creation
-        </span>
-        <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-          Add New Fragrance
-        </h1>
-      </div>
+        }
+      />
 
       <ProductForm isEdit={false} />
     </div>

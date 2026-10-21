@@ -2,10 +2,10 @@ import { constructMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/config/site";
 import { Hero } from "@/components/storefront/Hero";
 import { NewCollectionSection } from "@/components/storefront/NewCollectionSection";
-import { PerfumeJesminaSection } from "@/components/storefront/PerfumeJesminaSection";
 import { DiscoverCollectionSection } from "@/components/storefront/DiscoverCollectionSection";
 import { BrandSavoirFaire } from "@/components/storefront/BrandSavoirFaire";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
+import { TiltCascadeSection } from "@/components/storefront/TiltCascadeSection";
 import { JournalPreview } from "@/components/storefront/JournalPreview";
 import { CircularTestimonialsSection } from "@/components/storefront/CircularTestimonialsSection";
 import { FinalCTA } from "@/components/storefront/FinalCTA";
@@ -56,8 +56,8 @@ export default function HomePage() {
       {/* 01 — HERO: Cinematic luxury hero */}
       <Hero />
 
-      {/* 01.5 — PERFUME JESMINA MUST-HAVES: Editorial reference grid section */}
-      <PerfumeJesminaSection />
+      {/* 01.1 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
+      <TiltCascadeSection />
 
       {/* 01.8 — DISCOVER THE COLLECTION: Luxury Editorial Asymmetrical Grid */}
       <DiscoverCollectionSection />
@@ -68,7 +68,6 @@ export default function HomePage() {
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />
-
 
       {/* 04 — BRAND PHILOSOPHY / SAVOIR-FAIRE: 45/55 editorial split */}
       <BrandSavoirFaire />

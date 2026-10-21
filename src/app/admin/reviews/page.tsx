@@ -5,10 +5,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminReview } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { Button } from "@/components/ui/button";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Select } from "@/components/ui/select";
 import { Icons } from "@/components/ui/icons";
 import { formatDate } from "@/lib/utils";
@@ -144,69 +145,61 @@ export default function AdminReviewsPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
+        <TableActionGroup>
           {hasPermission("reviews.moderate") && (
             <>
               {row.status !== "approved" && (
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <TableActionButton
+                  variant="success"
                   onClick={() => handleModerate(row._id, "approved")}
-                  className="text-status-success hover:bg-status-success/10"
                 >
                   Approve
-                </Button>
+                </TableActionButton>
               )}
               {row.status !== "rejected" && (
-                <Button
+                <TableActionButton
                   variant="ghost"
-                  size="sm"
                   onClick={() => handleModerate(row._id, "rejected")}
-                  className="text-status-warning hover:bg-status-warning/10"
                 >
                   Reject
-                </Button>
+                </TableActionButton>
               )}
-              <Button
-                variant="ghost"
-                size="sm"
+              <TableActionButton
+                variant="destructive"
                 onClick={() => setReviewToDelete(row)}
-                className="text-status-error hover:bg-status-error/10"
               >
                 Delete
-              </Button>
+              </TableActionButton>
             </>
           )}
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Customer Feedback & Verification
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Reviews Moderation
-          </h1>
-        </div>
-
-        <div className="w-48">
-          <Select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            options={[
-              { label: "All Reviews", value: "" },
-              { label: "Pending Verification", value: "pending" },
-              { label: "Approved", value: "approved" },
-              { label: "Rejected", value: "rejected" },
-            ]}
-          />
-        </div>
-      </div>
+      <AdminPageHeader
+        category="CUSTOMER INTELLIGENCE"
+        title="Reviews Moderation"
+        description="Verify testimonials from authentic perfume connoisseurs, approve star ratings, and filter spam."
+        count={reviews.length}
+        breadcrumbs={[{ label: "Reviews" }]}
+        actions={
+          <div className="w-52">
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              options={[
+                { label: "All Reviews", value: "" },
+                { label: "Pending Verification", value: "pending" },
+                { label: "Approved", value: "approved" },
+                { label: "Rejected", value: "rejected" },
+              ]}
+            />
+          </div>
+        }
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">

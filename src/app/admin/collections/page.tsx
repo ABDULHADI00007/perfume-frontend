@@ -5,9 +5,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminCollection, AdminProduct } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -199,10 +201,10 @@ export default function AdminCollectionsPage() {
             )}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-semibold text-xs sm:text-sm text-[#0B1938] leading-tight truncate">
+            <span className="font-semibold text-xs sm:text-sm text-[#0B1938] hover:text-[#590B16] transition-colors leading-tight truncate">
               {row.name}
             </span>
-            <span className="text-[10px] text-[#64748B] font-mono mt-0.5 truncate">
+            <span className="text-[10px] text-slate-500 font-mono mt-0.5 truncate">
               {row.slug}
             </span>
           </div>
@@ -212,18 +214,18 @@ export default function AdminCollectionsPage() {
     {
       header: "Products Assigned",
       cell: (row) => (
-        <Badge variant="secondary" size="sm" className="font-mono gap-1 text-[10px]">
-          <Icons.Package size={12} className="text-[#64748B]" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-mono font-medium bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 shadow-2xs">
+          <Icons.Package size={11} className="text-[#590B16]" />
           <span>{row.products?.length || row.productCount || 0} items</span>
-        </Badge>
+        </span>
       ),
     },
     {
       header: "Order",
       cell: (row) => (
-        <Badge variant="outline" size="sm" className="font-mono text-[10px]">
+        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 text-slate-700 font-mono text-[11px] font-semibold border border-slate-200/80">
           #{row.sortOrder || 0}
-        </Badge>
+        </span>
       ),
     },
     {
@@ -234,32 +236,30 @@ export default function AdminCollectionsPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-2">
-          <Button
+        <TableActionGroup>
+          <TableActionButton
             variant="outline"
-            size="sm"
             onClick={() => handleOpenEdit(row)}
-            className="h-8 px-3 text-xs gap-1.5 bg-white hover:bg-[#FAF8F5] text-[#0B1938] border-[#E2DED6] rounded-lg shadow-2xs transition-all cursor-pointer"
+            icon={<Icons.Edit size={12} />}
           >
-            <Icons.Edit size={13} />
-            <span>Edit</span>
-          </Button>
+            Edit
+          </TableActionButton>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 rounded-lg hover:bg-[#FAF8F5] text-[#64748B] hover:text-[#0B1938] cursor-pointer"
+                className="h-7 w-7 p-0 rounded-lg hover:bg-slate-100/70 text-slate-500 hover:text-[#0C134F] cursor-pointer"
               >
-                <Icons.MoreVertical size={15} />
+                <Icons.MoreVertical size={14} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40 font-sans border-[#E6E2EA] bg-white shadow-md">
+            <DropdownMenuContent align="end" className="w-40 font-sans border-slate-200/80 bg-white shadow-md">
               {row.status === "active" && (
                 <DropdownMenuItem
                   onClick={() => handleArchive(row)}
-                  className="cursor-pointer text-xs flex items-center gap-2 text-[#64748B] focus:bg-[#FAF8F5]"
+                  className="cursor-pointer text-xs flex items-center gap-2 text-slate-600 focus:bg-slate-50"
                 >
                   <Icons.Archive size={14} />
                   <span>Archive</span>
@@ -274,34 +274,31 @@ export default function AdminCollectionsPage() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#E6E2EA] pb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#6B6F80] font-medium block">
-              Curations & Themes
-            </span>
-            <Badge variant="secondary" size="sm" className="font-mono text-[9px]">
-              {collections.length} total
-            </Badge>
-          </div>
-          <h1 className="font-serif text-2xl sm:text-3xl text-[#0C134F] font-normal">
-            Collections
-          </h1>
-        </div>
-
-        <Button variant="primary" size="sm" onClick={handleOpenCreate} className="shadow-xs">
-          <Icons.Plus size={14} className="mr-1.5" />
-          <span>Add Collection</span>
-        </Button>
-      </div>
+      <AdminPageHeader
+        category="CURATIONS & THEMES"
+        title="Collections"
+        description="Curate themed fragrance anthologies, seasonal releases, and limited edition drops."
+        count={collections.length}
+        breadcrumbs={[{ label: "Collections" }]}
+        actions={
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleOpenCreate}
+            className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-xs hover:shadow-md transition-all flex items-center gap-1.5"
+          >
+            <Icons.Plus size={14} />
+            <span>Add Collection</span>
+          </Button>
+        }
+      />
 
       {/* Alert Messages */}
       {error && (
@@ -415,22 +412,23 @@ export default function AdminCollectionsPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex justify-end gap-3 pt-3 border-t border-[#E6E2EA] bg-white sticky bottom-0 z-10 mt-4">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100 bg-white sticky bottom-0 z-10 mt-4">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
-                className="border-[#E6E2EA] text-[#6B6F80]"
+                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="primary"
+                variant="brand"
                 size="sm"
                 isLoading={isSubmitting}
+                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
               >
                 {editingCollection ? "Save Changes" : "Create Collection"}
               </Button>

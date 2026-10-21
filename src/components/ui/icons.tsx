@@ -51,6 +51,9 @@ import {
   MoreVertical,
   MoreHorizontal,
   Archive,
+  Bell,
+  ArrowUpRight,
+  ArrowDownRight,
   LucideProps,
 } from "lucide-react";
 
@@ -61,6 +64,9 @@ const defaultProps = {
 };
 
 export const Icons = {
+  Bell: (props: LucideProps) => <Bell {...defaultProps} {...props} />,
+  ArrowUpRight: (props: LucideProps) => <ArrowUpRight {...defaultProps} {...props} />,
+  ArrowDownRight: (props: LucideProps) => <ArrowDownRight {...defaultProps} {...props} />,
   Search: (props: LucideProps) => <Search {...defaultProps} {...props} />,
   Bag: (props: LucideProps) => <ShoppingBag {...defaultProps} {...props} />,
   Menu: (props: LucideProps) => <Menu {...defaultProps} {...props} />,

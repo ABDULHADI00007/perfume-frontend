@@ -5,9 +5,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminCoupon } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -231,54 +233,56 @@ export default function AdminCouponsPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
+        <TableActionGroup>
           {hasPermission("coupons.update") && (
             <>
-              <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(row)}>
+              <TableActionButton
+                variant="outline"
+                onClick={() => handleOpenEdit(row)}
+              >
                 Edit
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
+              </TableActionButton>
+              <TableActionButton
+                variant={row.status === "active" ? "ghost" : "success"}
                 onClick={() => handleToggleStatus(row)}
-                className="text-foreground-muted"
               >
                 {row.status === "active" ? "Deactivate" : "Activate"}
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
+              </TableActionButton>
+              <TableActionButton
+                variant="destructive"
                 onClick={() => setCouponToDelete(row)}
-                className="text-status-error hover:bg-status-error/10"
               >
                 Delete
-              </Button>
+              </TableActionButton>
             </>
           )}
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Promotions & Marketing
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Discount Coupons
-          </h1>
-        </div>
-
-        {hasPermission("coupons.create") && (
-          <Button variant="primary" size="sm" onClick={handleOpenCreate}>
-            <Icons.Plus size={14} className="mr-1.5" />
-            Create Coupon
-          </Button>
-        )}
-      </div>
+      <AdminPageHeader
+        category="PROMOTIONS & MARKETING"
+        title="Discount Coupons"
+        description="Configure promotional vouchers, percentage discounts, minimum thresholds, and redemption caps."
+        count={coupons.length}
+        breadcrumbs={[{ label: "Coupons" }]}
+        actions={
+          hasPermission("coupons.create") && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleOpenCreate}
+              className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-xs hover:shadow-md transition-all flex items-center gap-1.5"
+            >
+              <Icons.Plus size={14} />
+              <span>Create Coupon</span>
+            </Button>
+          )
+        }
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
@@ -392,21 +396,23 @@ export default function AdminCouponsPage() {
               rows={2}
             />
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-border-subtle">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
+                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="primary"
+                variant="brand"
                 size="sm"
                 isLoading={isSubmitting}
+                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
               >
                 {editingCoupon ? "Save Changes" : "Create Coupon"}
               </Button>

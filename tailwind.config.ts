@@ -87,6 +87,8 @@ const config: Config = {
       fontFamily: {
         serif: ["var(--font-serif)", "Playfair Display", "Georgia", "serif"],
         sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        display: ["var(--font-outfit)", "var(--font-sans)", "Inter", "sans-serif"],
+        outfit: ["var(--font-outfit)", "var(--font-sans)", "sans-serif"],
       },
       spacing: {
         xs: "var(--space-xs)",

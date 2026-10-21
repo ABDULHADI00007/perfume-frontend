@@ -95,10 +95,10 @@ export function DiscoverCollectionSection() {
   };
 
   return (
-    <section className="w-full bg-[#FAF7EE] py-14 sm:py-20 lg:py-28 overflow-hidden select-none border-y border-[#ECE5D8]/70">
+    <section className="w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70">
       <Container size="wide">
         {/* ================= TOP EDITORIAL HEADER ================= */}
-        <div className="w-full mb-10 sm:mb-14 lg:mb-16">
+        <div className="w-full mb-6 sm:mb-7 lg:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -107,10 +107,10 @@ export function DiscoverCollectionSection() {
             className="text-left select-none"
           >
             <h2
-              className="text-[#590B16] font-normal uppercase leading-[0.98] tracking-[0.02em]"
+              className="text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
-                fontSize: "clamp(2.4rem, 5.2vw, 4.8rem)",
+                fontSize: "clamp(1.85rem, 3.2vw, 3rem)",
               }}
             >
               DISCOVER THE
@@ -119,13 +119,13 @@ export function DiscoverCollectionSection() {
             </h2>
 
             {/* Subtle luxury accent line */}
-            <div className="w-20 h-[1.5px] bg-[#590B16]/30 mt-5" />
+            <div className="w-16 h-[1.5px] bg-[#590B16]/30 mt-3" />
           </motion.div>
         </div>
 
         {/* ================= ASYMMETRICAL EDITORIAL MASONRY GRID ================= */}
         {/* On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-x-10 lg:gap-y-16">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
           {collectionProducts.map((product, idx) => (
             <motion.article
               key={product.id}
@@ -142,7 +142,7 @@ export function DiscoverCollectionSection() {
               {/* Product Card Canvas (Crisp pure white box with shimmer & lift) */}
               <Link
                 href={`/perfumes/${product.slug}`}
-                className="relative w-full aspect-[3/4] bg-white rounded-none overflow-hidden flex items-center justify-center p-6 sm:p-8 transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_22px_44px_rgba(89,11,22,0.12)] group-hover:-translate-y-2"
+                className="relative w-full aspect-[4/4.3] bg-white rounded-none overflow-hidden flex items-center justify-center p-4 sm:p-5 lg:p-6 transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_22px_44px_rgba(89,11,22,0.12)] group-hover:-translate-y-2"
                 aria-label={`Explore ${product.title}`}
               >
                 {/* Diagonal Glass Reflection Sheen Sweep on Hover */}
@@ -152,6 +152,7 @@ export function DiscoverCollectionSection() {
                 <div className="relative w-full h-full flex items-center justify-center z-10">
                   <motion.div
                     className="relative w-full h-full"
+                    style={{ position: "relative", width: "100%", height: "100%" }}
                     whileHover={{ scale: 1.07, y: -4 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
@@ -161,7 +162,6 @@ export function DiscoverCollectionSection() {
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       className="object-contain p-2 drop-shadow-[0_8px_16px_rgba(89,11,22,0.06)] group-hover:drop-shadow-[0_16px_28px_rgba(89,11,22,0.14)] transition-all duration-700"
-                      priority={idx === 0}
                     />
                   </motion.div>
                 </div>
@@ -189,9 +189,9 @@ export function DiscoverCollectionSection() {
               </Link>
 
               {/* Text Details below the white box */}
-              <div className="mt-3.5 sm:mt-4 text-left transition-transform duration-300 group-hover:translate-x-1">
+              <div className="mt-2.5 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
                 <Link href={`/perfumes/${product.slug}`}>
-                  <h3 className="text-[#590B16] text-[14px] sm:text-[15px] font-medium tracking-[0.01em] font-serif hover:text-[#42060F] transition-colors">
+                  <h3 className="text-[#590B16] text-[13.5px] sm:text-[14.5px] font-medium tracking-[0.01em] font-serif hover:text-[#42060F] transition-colors">
                     {product.title}
                   </h3>
                 </Link>
@@ -225,11 +225,15 @@ export function DiscoverCollectionSection() {
               </button>
 
               {/* Product Image Frame */}
-              <div className="relative w-full md:w-1/2 aspect-square bg-white flex items-center justify-center p-4 shadow-sm">
+              <div
+                className="relative w-full md:w-1/2 aspect-square min-h-[260px] bg-white flex items-center justify-center p-4 shadow-sm"
+                style={{ position: "relative" }}
+              >
                 <Image
                   src={quickViewProduct.image}
                   alt={quickViewProduct.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-contain p-3"
                 />
               </div>

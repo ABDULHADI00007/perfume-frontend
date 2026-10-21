@@ -5,11 +5,12 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminSubscriber } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
 import { Icons } from "@/components/ui/icons";
@@ -128,47 +129,36 @@ export default function AdminNewsletterPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
-          <Button
-            variant="ghost"
-            size="sm"
+        <TableActionGroup>
+          <TableActionButton
+            variant={row.status === "subscribed" ? "ghost" : "success"}
             onClick={() => handleToggleStatus(row)}
-            className="text-foreground-muted"
           >
             {row.status === "subscribed"
               ? "Unsubscribe"
               : "Re-subscribe"}
-          </Button>
+          </TableActionButton>
 
-          <Button
-            variant="ghost"
-            size="sm"
+          <TableActionButton
+            variant="destructive"
             onClick={() => setSubscriberToDelete(row)}
-            className="text-status-error hover:bg-status-error/10"
           >
             Delete
-          </Button>
-        </div>
+          </TableActionButton>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Audience & Subscriptions
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Newsletter Subscribers
-          </h1>
-        </div>
-
-        <div className="text-xs text-foreground-muted">
-          Total subscribers: <span className="font-semibold text-foreground">{totalCount}</span>
-        </div>
-      </div>
+      <AdminPageHeader
+        category="AUDIENCE & SUBSCRIPTIONS"
+        title="Newsletter Subscribers"
+        description="Monitor VIP mailing list signups, customer subscription statuses, and lead funnels."
+        count={totalCount}
+        breadcrumbs={[{ label: "Newsletter" }]}
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">

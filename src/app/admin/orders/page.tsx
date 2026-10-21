@@ -6,16 +6,16 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminOrder } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { Button } from "@/components/ui/button";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Pagination } from "@/components/ui/pagination";
 import { Icons } from "@/components/ui/icons";
 import { formatCurrency, formatDate } from "@/lib/utils";
-
 
 export default function AdminOrdersPage() {
   const { hasPermission } = useAdminAuth();
@@ -70,11 +70,11 @@ export default function AdminOrdersPage() {
 
   const columns: Column<AdminOrder>[] = [
     {
-      header: "Order #",
+      header: "Order Ref",
       cell: (row) => (
         <Link
           href={`/admin/orders/${row._id}`}
-          className="font-medium text-foreground hover:underline font-mono text-xs"
+          className="font-mono text-xs font-bold text-[#0C134F] hover:text-[#590B16] transition-colors"
         >
           {row.orderNumber}
         </Link>
@@ -84,87 +84,84 @@ export default function AdminOrdersPage() {
       header: "Customer",
       cell: (row) => (
         <div>
-          <p className="font-medium text-xs text-foreground">{row.customer?.name}</p>
-          <p className="text-[11px] text-foreground-muted">{row.customer?.email}</p>
+          <p className="font-semibold text-xs text-[#0C134F]">{row.customer?.name || "Guest"}</p>
+          <p className="text-[11px] text-slate-500 font-mono tracking-tight">{row.customer?.email}</p>
         </div>
       ),
     },
     {
-      header: "Date",
+      header: "Date Placed",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted">
+        <span className="text-xs text-slate-600 font-sans">
           {formatDate(row.createdAt)}
         </span>
       ),
     },
     {
-      header: "Method",
+      header: "Payment Method",
       cell: (row) => (
-        <span className="text-xs uppercase tracking-wider font-mono text-foreground-muted">
+        <span className="text-[10.5px] uppercase tracking-wider font-mono font-medium text-slate-500">
           {row.paymentMethod?.replace(/_/g, " ")}
         </span>
       ),
     },
     {
-      header: "Payment",
+      header: "Payment Status",
       cell: (row) => (
         <div className="flex items-center gap-1.5">
           <StatusBadge status={row.paymentStatus} />
           {row.paymentProof?.url && (
             <span
-              title="Payment proof attached"
-              className="text-foreground-muted hover:text-foreground"
+              title="Bank wire proof attached"
+              className="p-1 bg-amber-50 text-amber-700 border border-amber-200/80 rounded-md shadow-2xs"
             >
-              <Icons.ShieldCheck size={14} />
+              <Icons.ShieldCheck size={12} />
             </span>
           )}
         </div>
       ),
     },
     {
-      header: "Order Status",
+      header: "Fulfillment",
       cell: (row) => <StatusBadge status={row.orderStatus} />,
     },
     {
       header: "Total",
       align: "right",
       cell: (row) => (
-        <span className="font-medium text-xs">
+        <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
           {formatCurrency(row.totalAmount, row.currency || "USD")}
         </span>
       ),
     },
     {
-      header: "Actions",
+      header: "Action",
       align: "right",
       cell: (row) => (
-        <Link href={`/admin/orders/${row._id}`}>
-          <Button variant="ghost" size="sm">
-            Details →
-          </Button>
-        </Link>
+        <TableActionGroup>
+          <TableActionButton
+            variant="outline"
+            href={`/admin/orders/${row._id}`}
+          >
+            Review →
+          </TableActionButton>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Fulfillment & Sales
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Orders Management
-          </h1>
-        </div>
-        <div className="text-xs text-foreground-muted">
-          Total orders: <span className="font-semibold text-foreground">{totalCount}</span>
-        </div>
-      </div>
+      <AdminPageHeader
+        category="STORE OPERATIONS"
+        title="Orders Management"
+        description="Monitor customer orders, review wire transfer slips, and track dispatch fulfillment."
+        count={totalCount}
+        breadcrumbs={[{ label: "Orders" }]}
+      />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium rounded-2xl shadow-2xs">
           {error}
         </div>
       )}
@@ -172,7 +169,7 @@ export default function AdminOrdersPage() {
       {/* Filter Bar */}
       <AdminFilterBar
         hasActiveFilters={Boolean(search || orderStatus || paymentStatus)}
-        resetLabel="RESET FILTERS"
+        resetLabel="CLEAR"
         onReset={() => {
           setSearch("");
           setOrderStatus("");
@@ -181,9 +178,9 @@ export default function AdminOrdersPage() {
         }}
       >
         <Input
-          placeholder="Search by order #, customer name, email..."
+          placeholder="Search by order #, customer, email..."
           value={search}
-          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
+          leftIcon={<Icons.Search size={15} className="text-slate-400" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
@@ -200,14 +197,13 @@ export default function AdminOrdersPage() {
           options={[
             { label: "All Order Statuses", value: "" },
             { label: "Pending", value: "pending" },
-            { label: "Awaiting Payment Verification", value: "awaiting_payment_verification" },
+            { label: "Awaiting Verification", value: "awaiting_payment_verification" },
             { label: "Confirmed", value: "confirmed" },
             { label: "Processing", value: "processing" },
             { label: "Shipped", value: "shipped" },
             { label: "Delivered", value: "delivered" },
             { label: "Cancelled", value: "cancelled" },
             { label: "Refunded", value: "refunded" },
-            { label: "Payment Rejected", value: "payment_rejected" },
           ]}
         />
 
@@ -234,7 +230,7 @@ export default function AdminOrdersPage() {
         columns={columns}
         data={orders}
         isLoading={isLoading}
-        emptyMessage="No orders found matching the filter criteria."
+        emptyMessage="No customer orders match the applied filters."
       />
 
       {/* Pagination */}

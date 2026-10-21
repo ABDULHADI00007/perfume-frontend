@@ -56,6 +56,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
                         src={item.image}
                         alt={item.title}
                         fill
+                        sizes="48px"
                         className="object-cover rounded-xl border border-gray-100 shadow-2xs"
                       />
                     ) : (

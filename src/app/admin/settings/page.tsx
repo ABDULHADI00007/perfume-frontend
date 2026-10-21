@@ -5,6 +5,7 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminSettings } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 // import { Badge } from "@/components/ui/badge";
@@ -193,22 +194,19 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            System & Operations
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Storefront Settings
-          </h1>
-        </div>
-
-        {!canEdit && (
-          <span className="text-xs px-2.5 py-1 bg-status-warning/10 border border-status-warning/20 text-status-warning font-medium">
-            Read-Only (Superadmin required to modify)
-          </span>
-        )}
-      </div>
+      <AdminPageHeader
+        category="SYSTEM & OPERATIONS"
+        title="Storefront Settings"
+        description="Configure bank wire transfer details, shipping fee matrices, currency, and store identity."
+        breadcrumbs={[{ label: "Settings" }]}
+        actions={
+          !canEdit ? (
+            <span className="text-xs px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 font-semibold rounded-full">
+              Read-Only (Superadmin Required)
+            </span>
+          ) : undefined
+        }
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">

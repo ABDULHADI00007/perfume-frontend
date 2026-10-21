@@ -1186,7 +1186,7 @@ function computeRect(
   aspect: number,
   band: { top: number; bottom: number },
   p: { scale: number; mobileScale: number; x: number; y: number }
-): Rect {
+): Rect & { baseCy: number } {
   let rw: number
   if (w >= 1024) {
     rw = w * 1.02 * p.scale
@@ -1202,7 +1202,7 @@ function computeRect(
   // Position the sculpture so it spans edge-to-edge in the upper-middle region
   const baseCy = Math.max(band.top + rh * 0.36, h * 0.37)
   const cy = baseCy + h * (p.y / 100)
-  return { x: cx - rw / 2, y: cy - rh / 2, w: rw, h: rh }
+  return { x: cx - rw / 2, y: cy - rh / 2, w: rw, h: rh, baseCy }
 }
 
 /* ────────────────────────────────────────────────────────────────────
@@ -1390,7 +1390,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     sculptureScale = 1,
     mobileSculptureScale = 1,
     sculptureX = 0,
-    sculptureY = 0,
+    sculptureY = 6,
     interactive = true,
     strength = 1,
     radius = 220,
@@ -1503,7 +1503,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     if (bd) {
       const chars = Math.max(1, (bd.textContent || "").length)
       bd.style.fontSize = Math.min(h * 0.52, (w * 0.92) / (chars * 0.52)) + "px"
-      bd.style.top = (rect.y + rect.h / 2) + "px"
+      bd.style.top = rect.baseCy + "px"
     }
     const img = imgRef.current
     if (img) {

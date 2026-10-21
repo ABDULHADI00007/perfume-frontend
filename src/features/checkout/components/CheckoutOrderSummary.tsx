@@ -72,6 +72,7 @@ export function CheckoutOrderSummary({
                     src={item.image}
                     alt={item.title}
                     fill
+                    sizes="56px"
                     className="object-cover rounded-xl border border-[#E2DED6] shadow-2xs"
                   />
                 ) : (

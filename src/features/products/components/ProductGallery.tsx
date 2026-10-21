@@ -73,6 +73,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                 src={img}
                 alt={`${title} thumbnail ${idx + 1}`}
                 fill
+                sizes="(max-width: 640px) 64px, 80px"
                 className="object-cover object-center"
               />
               {isVideoThumb && (
@@ -164,7 +165,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                         : "border-transparent opacity-50 hover:opacity-100"
                     }`}
                   >
-                    <Image src={img} alt={`Thumb ${idx + 1}`} fill className="object-cover" />
+                    <Image src={img} alt={`Thumb ${idx + 1}`} fill sizes="80px" className="object-cover" />
                   </button>
                 );
               })}
@@ -188,6 +189,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                   src={currentImage}
                   alt={title}
                   fill
+                  sizes="(max-width: 1024px) 90vw, 72vh"
                   className="object-contain"
                 />
               </div>

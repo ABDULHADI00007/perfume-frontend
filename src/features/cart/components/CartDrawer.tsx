@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Drawer } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Icons } from "@/components/ui/icons";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { formatCurrency } from "@/lib/utils/formatCurrency";

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,107 +25,145 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   onToggleMobileMenu,
   className = "",
 }) => {
+  const router = useRouter();
   const { user, logout } = useAdminAuth();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const userInitials = user?.email
     ? user.email.substring(0, 2).toUpperCase()
     : "AD";
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/admin/products?search=${encodeURIComponent(searchQuery.trim())}`);
+  };
+
   return (
     <header
-      className={`h-16 bg-white px-4 sm:px-8 flex items-center justify-between sticky top-0 z-sticky font-sans shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-0 ${className}`}
+      className={`h-16 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 flex items-center justify-between gap-4 font-sans ${className}`}
     >
-      {/* Left Branding */}
-      <div className="flex items-center space-x-3 sm:space-x-4">
+      {/* Left: Mobile Menu + Quick Search Bar */}
+      <div className="flex items-center gap-3 sm:gap-4 flex-1 max-w-xl">
         {onToggleMobileMenu && (
           <button
             type="button"
             onClick={onToggleMobileMenu}
-            aria-label="Open navigation menu"
-            className="md:hidden p-2 text-[#6B6F80] hover:text-[#121735] focus:outline-none rounded-lg hover:bg-[#FBF9F5] transition-colors"
+            aria-label="Open mobile navigation"
+            className="md:hidden p-2 text-slate-500 hover:text-[#0C134F] rounded-xl hover:bg-slate-100 transition-colors"
           >
             <Icons.Menu size={20} />
           </button>
         )}
 
-        <Link
-          href="/admin"
-          className="flex items-center gap-2.5 group transition-opacity hover:opacity-90"
-        >
-          <span className="font-serif text-xl font-normal tracking-wide text-[#0C134F]">
-            Soulmate Scents
-          </span>
-          <span className="inline-block text-[9px] font-sans font-medium tracking-[0.2em] uppercase px-2 py-0.5 rounded-sm bg-[#FBF9F5] text-[#0C134F] border border-[#E6E2EA]">
-            ADMIN
-          </span>
-        </Link>
+        {/* Global Quick Search Form */}
+        <form onSubmit={handleSearchSubmit} className="relative w-full max-w-md hidden sm:block">
+          <div className="relative flex items-center">
+            <Icons.Search
+              size={15}
+              className="absolute left-3.5 text-slate-400 pointer-events-none"
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search catalog, orders, customers..."
+              className="w-full pl-9 pr-14 py-2 text-xs bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 rounded-xl text-[#0C134F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0C134F]/10 focus:border-[#0C134F] transition-all"
+            />
+            <div className="absolute right-2.5 flex items-center gap-0.5">
+              <kbd className="px-1.5 py-0.5 text-[9px] font-mono font-semibold bg-white border border-slate-200 rounded text-slate-400 shadow-2xs">
+                ↵
+              </kbd>
+            </div>
+          </div>
+        </form>
       </div>
 
-      {/* Right User Actions */}
-      <div className="flex items-center space-x-3 sm:space-x-5">
+      {/* Right Actions: Storefront, Status, Notifications, Profile */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* System Status Pill */}
+        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200/80 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+          </span>
+          <span>Store Live</span>
+        </div>
+
+        {/* View Storefront Pill Button */}
         <Link href="/" target="_blank">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="gap-1.5 text-xs tracking-[0.14em] text-[#6B6F80] hover:text-[#0C134F]"
+            className="h-9 px-3 text-xs tracking-wider font-semibold text-[#0C134F] border-slate-200 bg-white hover:bg-slate-50 rounded-xl gap-1.5 shadow-2xs"
           >
-            <span>VIEW STORE</span>
-            <Icons.ExternalLink size={13} className="opacity-80" />
+            <span className="hidden sm:inline">Storefront</span>
+            <Icons.ExternalLink size={13} className="text-slate-400" />
           </Button>
         </Link>
 
-        <div className="h-4 w-[1px] bg-[#E6E2EA]" />
+        {/* Notification Bell */}
+        <Link href="/admin/orders">
+          <button
+            type="button"
+            title="View Notifications"
+            className="relative p-2 text-slate-500 hover:text-[#0C134F] rounded-xl hover:bg-slate-100 transition-colors"
+          >
+            <Icons.Bell size={18} />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+          </button>
+        </Link>
 
-        {/* Admin Profile Dropdown Menu */}
+        <div className="h-4 w-[1px] bg-slate-200 hidden sm:block mx-1" />
+
+        {/* Admin Profile Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center space-x-2.5 p-1 rounded-lg hover:bg-[#FBF9F5] transition-all duration-200 outline-none focus:ring-1 focus:ring-[#0C134F]/20 cursor-pointer"
+              className="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-xl hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all outline-none cursor-pointer"
             >
-              <Avatar className="h-8 w-8 border border-[#E6E2EA] bg-[#0C134F] text-white">
-                <AvatarFallback className="bg-[#0C134F] text-white font-medium text-xs">
+              <Avatar className="h-8 w-8 rounded-lg bg-[#0C134F] text-white border border-slate-200 shadow-2xs">
+                <AvatarFallback className="bg-[#0C134F] text-white font-semibold text-xs rounded-lg">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:flex flex-col text-left">
-                <span className="text-xs font-medium text-[#121735] leading-tight">
-                  {user?.email || "admin@soulmatescents.com"}
+                <span className="text-xs font-semibold text-[#0C134F] leading-tight max-w-[130px] truncate">
+                  {user?.email?.split("@")[0] || "Admin"}
                 </span>
-                <span className="text-[10px] text-[#6B6F80] uppercase tracking-wider font-mono">
-                  {user?.role ? user.role.replace("_", " ") : "Administrator"}
+                <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">
+                  {user?.role ? user.role.replace("_", " ") : "ADMIN"}
                 </span>
               </div>
-              <Icons.ChevronDown size={14} className="text-[#6B6F80] hidden md:inline" />
+              <Icons.ChevronDown size={13} className="text-slate-400 hidden md:block" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 font-sans border-[#E6E2EA] bg-white">
-            <DropdownMenuLabel className="font-normal p-3">
-              <div className="flex flex-col space-y-1">
-                <p className="text-[10px] uppercase tracking-wider font-semibold text-[#6B6F80]">Signed in as</p>
-                <p className="text-xs font-medium text-[#121735] truncate">{user?.email || "admin@soulmatescents.com"}</p>
-              </div>
+          <DropdownMenuContent align="end" className="w-56 font-sans bg-white border-slate-200 shadow-lg rounded-xl p-1">
+            <DropdownMenuLabel className="p-3 pb-2">
+              <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Signed in as</p>
+              <p className="text-xs font-semibold text-[#0C134F] truncate mt-0.5">{user?.email}</p>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-[#E6E2EA]" />
-            <DropdownMenuItem asChild className="cursor-pointer text-xs focus:bg-[#FBF9F5]">
-              <Link href="/admin/settings" className="flex items-center gap-2 text-[#121735]">
-                <Icons.Settings size={14} className="text-[#6B6F80]" />
-                <span>Store Settings</span>
+            <DropdownMenuSeparator className="bg-slate-100" />
+            <DropdownMenuItem asChild className="cursor-pointer text-xs rounded-lg text-slate-700 hover:text-[#0C134F] hover:bg-slate-50 p-2">
+              <Link href="/admin/settings" className="flex items-center gap-2">
+                <Icons.Settings size={14} className="text-slate-400" />
+                <span>Portal Settings</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer text-xs focus:bg-[#FBF9F5]">
-              <Link href="/" target="_blank" className="flex items-center gap-2 text-[#121735]">
-                <Icons.ExternalLink size={14} className="text-[#6B6F80]" />
-                <span>Open Storefront</span>
+            <DropdownMenuItem asChild className="cursor-pointer text-xs rounded-lg text-slate-700 hover:text-[#0C134F] hover:bg-slate-50 p-2">
+              <Link href="/" target="_blank" className="flex items-center gap-2">
+                <Icons.Eye size={14} className="text-slate-400" />
+                <span>Customer Storefront</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-[#E6E2EA]" />
+            <DropdownMenuSeparator className="bg-slate-100" />
             <DropdownMenuItem
               onClick={logout}
-              className="cursor-pointer text-xs text-[#9E2A2B] focus:text-[#9E2A2B] focus:bg-[#FDF2F2] flex items-center gap-2"
+              className="cursor-pointer text-xs rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50 p-2 flex items-center gap-2"
             >
               <Icons.LogOut size={14} />
-              <span>Sign Out</span>
+              <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -132,6 +171,3 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
     </header>
   );
 };
-
-
-

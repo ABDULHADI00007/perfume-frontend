@@ -6,17 +6,18 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminProduct, AdminCategory } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Pagination } from "@/components/ui/pagination";
 import { Icons } from "@/components/ui/icons";
-import { formatCurrency } from "@/lib/utils";
-
+import { formatCurrency, cn } from "@/lib/utils";
 
 export default function AdminProductsPage() {
   const { hasPermission } = useAdminAuth();
@@ -114,31 +115,40 @@ export default function AdminProductsPage() {
 
   const columns: Column<AdminProduct>[] = [
     {
-      header: "Product",
+      header: "Fragrance",
       cell: (row) => {
         const primaryImg = row.images?.find((i) => i.isPrimary) || row.images?.[0];
         return (
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-surface-subtle border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
               {primaryImg?.url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={primaryImg.url}
                   alt={row.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <Icons.Package size={16} className="text-foreground-muted" />
+                <Icons.Package size={18} className="text-slate-400" />
               )}
             </div>
             <div>
               <Link
                 href={`/admin/products/${row._id}`}
-                className="font-medium text-xs text-foreground hover:underline"
+                className="font-semibold text-xs text-[#0C134F] hover:text-[#590B16] transition-colors block leading-snug"
               >
                 {row.name}
               </Link>
-              <p className="text-[11px] text-foreground-muted font-mono">{row.sku}</p>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="text-[10.5px] text-slate-500 font-mono tracking-tight">
+                  {row.sku}
+                </span>
+                {row.fragrance?.concentration && (
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 bg-slate-100/90 text-slate-600 rounded-md border border-slate-200/60">
+                    {row.fragrance.concentration}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -151,18 +161,22 @@ export default function AdminProductsPage() {
           typeof row.category === "object" && row.category !== null
             ? row.category.name
             : categories.find((c) => c._id === row.category)?.name || "—";
-        return <span className="text-xs text-foreground-muted">{catName}</span>;
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-medium bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 tracking-wide shadow-2xs">
+            {catName}
+          </span>
+        );
       },
     },
     {
       header: "Price",
       cell: (row) => (
-        <div>
-          <span className="font-medium text-xs font-mono">
+        <div className="space-y-0.5">
+          <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
             {formatCurrency(row.price, row.currency || "USD")}
           </span>
           {row.compareAtPrice ? (
-            <span className="text-[10px] text-foreground-subtle line-through ml-1.5 font-mono">
+            <span className="block text-[10.5px] text-slate-400 line-through font-mono tabular-nums">
               {formatCurrency(row.compareAtPrice, row.currency || "USD")}
             </span>
           ) : null}
@@ -170,13 +184,33 @@ export default function AdminProductsPage() {
       ),
     },
     {
-      header: "Variants / Stock",
+      header: "Stock Level",
       cell: (row) => {
         const totalStock = row.variants?.reduce((sum, v) => sum + (v.stock || 0), 0) ?? 0;
+        const isLow = totalStock > 0 && totalStock <= 10;
+        const isOut = totalStock <= 0;
+
         return (
-          <span className="text-xs text-foreground-muted">
-            {row.variants?.length || 0} variant(s) • {totalStock} in stock
-          </span>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  isOut
+                    ? "bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.6)]"
+                    : isLow
+                    ? "bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]"
+                    : "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"
+                )}
+              />
+              <span className="text-xs font-semibold text-[#0C134F] tabular-nums">
+                {totalStock} units
+              </span>
+            </div>
+            <span className="text-[10px] text-slate-400 block font-mono">
+              {row.variants?.length || 0} variant(s)
+            </span>
+          </div>
         );
       },
     },
@@ -188,79 +222,72 @@ export default function AdminProductsPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
+        <TableActionGroup>
           {hasPermission("products.update") && (
-            <Link href={`/admin/products/${row._id}`}>
-              <Button variant="ghost" size="sm">
-                Edit
-              </Button>
-            </Link>
+            <TableActionButton
+              variant="outline"
+              href={`/admin/products/${row._id}`}
+            >
+              Edit
+            </TableActionButton>
           )}
 
           {hasPermission("products.archive") && row.status !== "archived" && (
-            <Button
-              variant="ghost"
-              size="sm"
+            <TableActionButton
+              variant="destructive"
               onClick={() => setProductToArchive(row)}
-              className="text-status-error hover:bg-status-error/10"
             >
               Archive
-            </Button>
+            </TableActionButton>
           )}
 
           {hasPermission("products.update") && row.status === "archived" && (
-            <Button
-              variant="ghost"
-              size="sm"
+            <TableActionButton
+              variant="success"
               onClick={() => handleRestore(row._id)}
-              className="text-status-success hover:bg-status-success/10"
             >
               Restore
-            </Button>
+            </TableActionButton>
           )}
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Catalog Management
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Products
-          </h1>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="text-xs text-foreground-muted mr-2">
-            Total products: <span className="font-semibold text-foreground">{totalCount}</span>
-          </div>
-
-          {hasPermission("products.create") && (
+      <AdminPageHeader
+        category="STORE OPERATIONS"
+        title="Fragrance Catalog"
+        description="Curate perfume formulations, variant inventory, pricing models, and olfactory pyramids."
+        count={totalCount}
+        breadcrumbs={[{ label: "Products" }]}
+        actions={
+          hasPermission("products.create") && (
             <Link href="/admin/products/new">
-              <Button variant="primary" size="sm">
-                <Icons.Plus size={14} className="mr-1.5" />
-                Add Product
+              <Button
+                variant="primary"
+                size="sm"
+                className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-xs hover:shadow-md transition-all flex items-center gap-1.5"
+              >
+                <Icons.Plus size={14} />
+                <span>Add Fragrance</span>
               </Button>
             </Link>
-          )}
-        </div>
-      </div>
+          )
+        }
+      />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium rounded-2xl shadow-2xs">
           {error}
         </div>
       )}
 
-      {/* Filters Bar */}
+      {/* 21st.dev Filter Bar */}
       <AdminFilterBar
         hasActiveFilters={Boolean(search || categoryFilter || statusFilter)}
-        resetLabel="RESET FILTERS"
+        resetLabel="CLEAR"
         onReset={() => {
           setSearch("");
           setCategoryFilter("");
@@ -269,9 +296,9 @@ export default function AdminProductsPage() {
         }}
       >
         <Input
-          placeholder="Search perfumes by name, SKU..."
+          placeholder="Search fragrance by name or SKU..."
           value={search}
-          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
+          leftIcon={<Icons.Search size={15} className="text-slate-400" />}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
@@ -306,12 +333,12 @@ export default function AdminProductsPage() {
         />
       </AdminFilterBar>
 
-      {/* Products Table */}
+      {/* 21st.dev Products Table */}
       <DataTable
         columns={columns}
         data={products}
         isLoading={isLoading}
-        emptyMessage="No products found matching the criteria."
+        emptyMessage="No perfumes match the applied catalog filters."
       />
 
       {/* Pagination */}
@@ -330,8 +357,8 @@ export default function AdminProductsPage() {
         isOpen={Boolean(productToArchive)}
         onClose={() => setProductToArchive(null)}
         onConfirm={handleConfirmArchive}
-        title="Archive Product"
-        message={`Are you sure you want to archive "${productToArchive?.name}"? It will be removed from active storefront catalog.`}
+        title="Archive Fragrance"
+        message={`Are you sure you want to archive "${productToArchive?.name}"? It will be safely removed from customer storefront listings.`}
         confirmLabel="Archive"
         isDestructive
         isLoading={isArchiveLoading}

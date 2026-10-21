@@ -45,7 +45,6 @@ export const Footer: React.FC<FooterProps> = ({ className = "" }) => {
                 alt="Soulmate Scents Logo"
                 width={175}
                 height={52}
-                priority
                 className="h-11 sm:h-12 w-auto object-contain brightness-0 invert"
               />
             </Link>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import { Cormorant_Garamond, Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import React, { Suspense } from "react";
 import "./globals.css";
 import { constructMetadata } from "@/lib/seo/metadata";
@@ -19,6 +19,13 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = constructMetadata();
 
 export default function RootLayout({
@@ -27,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${plusJakarta.variable} ${outfit.variable}`}>
       <head>
         <link rel="icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" sizes="any" />
         <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" />

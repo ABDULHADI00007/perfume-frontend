@@ -19,6 +19,7 @@ export const Hero: React.FC<SculptureHeroProps> = ({
   hintTouch = "Touch the essence",
   background = "#FAF7EE",
   accentColor = "#590B16",
+  sculptureY = 6,
   ...props
 }) => {
   // Dynamically compute hero height so the hero + announcement bar + header fit within viewport without scrolling
@@ -61,6 +62,7 @@ export const Hero: React.FC<SculptureHeroProps> = ({
         hintTouch={hintTouch}
         background={background}
         accentColor={accentColor}
+        sculptureY={sculptureY}
         {...props}
       />
     </div>

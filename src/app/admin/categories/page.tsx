@@ -5,9 +5,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminCategory } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -208,16 +210,14 @@ export default function AdminCategoriesPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-2">
-          <Button
+        <TableActionGroup>
+          <TableActionButton
             variant="outline"
-            size="sm"
             onClick={() => handleOpenEdit(row)}
-            className="h-8 px-3 text-xs gap-1.5 bg-white hover:bg-[#FAF8F5] text-[#0B1938] border-[#E2DED6] rounded-lg shadow-2xs transition-all cursor-pointer"
+            icon={<Icons.Edit size={12} />}
           >
-            <Icons.Edit size={13} />
-            <span>Edit</span>
-          </Button>
+            Edit
+          </TableActionButton>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -248,28 +248,31 @@ export default function AdminCategoriesPage() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Taxonomy & Organization
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Categories
-          </h1>
-        </div>
-
-        <Button variant="primary" size="sm" onClick={handleOpenCreate}>
-          <Icons.Plus size={14} className="mr-1.5" />
-          Add Category
-        </Button>
-      </div>
+      <AdminPageHeader
+        category="TAXONOMY & ARCHITECTURE"
+        title="Categories"
+        description="Organize fragrance concentrations, olfactive families, and store catalog groupings."
+        count={categories.length}
+        breadcrumbs={[{ label: "Categories" }]}
+        actions={
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleOpenCreate}
+            className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-xs hover:shadow-md transition-all flex items-center gap-1.5"
+          >
+            <Icons.Plus size={14} />
+            <span>Add Category</span>
+          </Button>
+        }
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
@@ -347,21 +350,23 @@ export default function AdminCategoriesPage() {
               rows={3}
             />
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-border-subtle">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
+                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="primary"
+                variant="brand"
                 size="sm"
                 isLoading={isSubmitting}
+                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
               >
                 {editingCategory ? "Save Changes" : "Create Category"}
               </Button>

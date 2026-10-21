@@ -5,9 +5,11 @@ import { adminService } from "@/features/admin/services/adminService";
 import { AdminInventoryItem } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
+import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -202,8 +204,8 @@ export default function AdminInventoryPage() {
           row.quantity === 0
             ? "out_of_stock"
             : row.quantity <= (row.lowStockThreshold ?? 5)
-            ? "low_stock"
-            : "in_stock";
+              ? "low_stock"
+              : "in_stock";
         return <StatusBadge status={row.status || computedStatus} />;
       },
     },
@@ -211,46 +213,37 @@ export default function AdminInventoryPage() {
       header: "Actions",
       align: "right",
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
+        <TableActionGroup>
           {hasPermission("inventory.adjust") && (
             <>
-              <Button
+              <TableActionButton
                 variant="outline"
-                size="sm"
                 onClick={() => handleOpenAdjust(row)}
               >
                 ± Adjust
-              </Button>
-              <Button
+              </TableActionButton>
+              <TableActionButton
                 variant="ghost"
-                size="sm"
                 onClick={() => handleOpenDirect(row)}
               >
                 Set Qty
-              </Button>
+              </TableActionButton>
             </>
           )}
-        </div>
+        </TableActionGroup>
       ),
     },
   ];
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground-muted font-medium block">
-            Warehouse & Stock Levels
-          </span>
-          <h1 className="font-serif text-2xl sm:text-3xl text-foreground font-normal">
-            Inventory Management
-          </h1>
-        </div>
-
-        <div className="text-xs text-foreground-muted">
-          Tracked items: <span className="font-semibold text-foreground">{totalCount}</span>
-        </div>
-      </div>
+      <AdminPageHeader
+        category="WAREHOUSE & LOGISTICS"
+        title="Inventory Management"
+        description="Monitor physical stock levels, manage replenishment thresholds, and record stock adjustments."
+        count={totalCount}
+        breadcrumbs={[{ label: "Inventory" }]}
+      />
 
       {error && (
         <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
@@ -368,21 +361,23 @@ export default function AdminInventoryPage() {
               required
             />
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-border-subtle">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setSelectedItemForAdjust(null)}
                 disabled={isAdjusting}
+                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="primary"
+                variant="brand"
                 size="sm"
                 isLoading={isAdjusting}
+                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
               >
                 Apply Adjustment
               </Button>
@@ -401,10 +396,10 @@ export default function AdminInventoryPage() {
         >
           <form onSubmit={handleSaveDirectQuantity} className="space-y-4 font-sans">
             <div>
-              <p className="text-xs font-semibold text-foreground">
+              <p className="text-xs font-semibold text-slate-800">
                 {selectedItemForDirect.product?.name}
               </p>
-              <p className="text-[11px] text-foreground-muted font-mono">
+              <p className="text-[11px] text-slate-500 font-mono">
                 SKU: {selectedItemForDirect.variantSku}
               </p>
             </div>
@@ -425,21 +420,23 @@ export default function AdminInventoryPage() {
               onChange={(e) => setDirectReason(e.target.value)}
             />
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-border-subtle">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setSelectedItemForDirect(null)}
                 disabled={isDirectUpdating}
+                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="primary"
+                variant="brand"
                 size="sm"
                 isLoading={isDirectUpdating}
+                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
               >
                 Set Quantity
               </Button>
