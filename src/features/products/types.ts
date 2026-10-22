@@ -37,6 +37,7 @@ export interface Product extends Timestamps {
   collectionId?: ID;
   rating?: number;
   ratingCount?: number;
+  seoDescription?: string;
 }
 
 

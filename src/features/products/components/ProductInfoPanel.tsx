@@ -60,6 +60,11 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
         <p className="text-xs sm:text-sm font-sans text-gray-500 font-normal">
           {product.concentration || "Eau de Parfum"} &nbsp;|&nbsp; {selectedVariant?.size || "50ml"}
         </p>
+        {product.shortDescription && (
+          <p className="text-xs sm:text-sm text-[#8C6D37] font-medium italic pt-0.5">
+            &ldquo;{product.shortDescription}&rdquo;
+          </p>
+        )}
       </div>
 
       {/* Star Ratings */}
@@ -97,11 +102,10 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
                 key={variant.id}
                 type="button"
                 onClick={() => onVariantChange?.(variant)}
-                className={`px-5 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
-                  selectedVariant?.id === variant.id
+                className={`px-5 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all ${selectedVariant?.id === variant.id
                     ? "bg-[#0B1938] text-white shadow-sm"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 {variant.size}
               </button>
@@ -157,9 +161,8 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
         <button
           type="button"
           onClick={() => setIsWishlisted((prev) => !prev)}
-          className={`p-3 min-h-[46px] min-w-[46px] rounded-lg border flex items-center justify-center transition-all bg-white shadow-xs cursor-pointer active:scale-95 ${
-            isWishlisted ? "text-rose-600 border-rose-200 bg-rose-50" : "text-[#0B1938] border-gray-200 hover:border-[#0B1938]"
-          }`}
+          className={`p-3 min-h-[46px] min-w-[46px] rounded-lg border flex items-center justify-center transition-all bg-white shadow-xs cursor-pointer active:scale-95 ${isWishlisted ? "text-rose-600 border-rose-200 bg-rose-50" : "text-[#0B1938] border-gray-200 hover:border-[#0B1938]"
+            }`}
           aria-label="Add to wishlist"
         >
           <Icons.Heart

@@ -106,9 +106,9 @@ export default function AdminEditProductPage({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] border-slate-200 hover:border-[#590B16]/30 rounded-xl px-3.5 py-2 text-xs font-medium shadow-2xs gap-1.5 transition-all"
+                  className="bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 rounded-xl px-3.5 py-2 text-xs font-medium shadow-2xs gap-1.5 transition-all"
                 >
-                  <Icons.ExternalLink size={13} className="text-slate-400 group-hover:text-[#590B16]" />
+                  <Icons.ExternalLink size={13} className="text-slate-400 group-hover:text-[#0C134F]" />
                   <span>View Storefront</span>
                 </Button>
               </a>
@@ -117,7 +117,7 @@ export default function AdminEditProductPage({
               <Button
                 variant="outline"
                 size="sm"
-                className="bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] border-slate-200 hover:border-[#590B16]/30 rounded-xl px-3.5 py-2 text-xs font-medium shadow-2xs gap-1.5 transition-all"
+                className="bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 rounded-xl px-3.5 py-2 text-xs font-medium shadow-2xs gap-1.5 transition-all"
               >
                 <Icons.ArrowLeft size={13} className="text-slate-400" />
                 <span>Back to Catalog</span>
@@ -128,10 +128,10 @@ export default function AdminEditProductPage({
       />
 
       {/* Product Hero Header Summary Card - 21st.dev Luxury Card */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#FCFAF6] to-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_4px_24px_-4px_rgba(12,19,79,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#590B16]/5 via-transparent to-transparent pointer-events-none rounded-full blur-2xl" />
+      <div className="relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_4px_24px_-4px_rgba(12,19,79,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#0C134F]/5 via-transparent to-transparent pointer-events-none rounded-full blur-2xl" />
         <div className="relative flex items-start sm:items-center gap-5">
-          <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center overflow-hidden shrink-0 shadow-sm ring-4 ring-[#FAF7EE]">
+          <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center overflow-hidden shrink-0 shadow-sm ring-4 ring-slate-100">
             {primaryImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -156,7 +156,7 @@ export default function AdminEditProductPage({
                 SKU: {product.sku}
               </span>
               <span className="text-slate-300">•</span>
-              <span className="font-medium bg-[#FAF7EE] text-[#590B16] px-2.5 py-0.5 rounded-md border border-[#590B16]/15 font-sans">
+              <span className="font-medium bg-[#0C134F]/5 text-[#0C134F] px-2.5 py-0.5 rounded-md border border-[#0C134F]/15 font-sans">
                 {categoryName}
               </span>
               <span className="text-slate-300">•</span>

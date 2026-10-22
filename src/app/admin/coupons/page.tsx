@@ -403,7 +403,7 @@ export default function AdminCouponsPage() {
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
-                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
+                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>

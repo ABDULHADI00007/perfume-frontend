@@ -9,6 +9,8 @@ import { TiltCascadeSection } from "@/components/storefront/TiltCascadeSection";
 import { JournalPreview } from "@/components/storefront/JournalPreview";
 import { CircularTestimonialsSection } from "@/components/storefront/CircularTestimonialsSection";
 import { FinalCTA } from "@/components/storefront/FinalCTA";
+import { Skiper30 } from "@/components/storefront/ParallaxGallerySection";
+import { Skiper79 } from "@/components/storefront/Skiper79TeamScroll";
 
 export const metadata = constructMetadata({
   title: "Soulmate Scents",
@@ -56,7 +58,10 @@ export default function HomePage() {
       {/* 01 — HERO: Cinematic luxury hero */}
       <Hero />
 
-      {/* 01.1 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
+      {/* 01.1 — PARALLAX GALLERY: Skiper 30 multi-speed column parallax showcase with SOULMATE SCENTS */}
+      <Skiper30 />
+
+      {/* 01.2 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
       <TiltCascadeSection />
 
       {/* 01.8 — DISCOVER THE COLLECTION: Luxury Editorial Asymmetrical Grid */}
@@ -72,6 +77,8 @@ export default function HomePage() {
       {/* 04 — BRAND PHILOSOPHY / SAVOIR-FAIRE: 45/55 editorial split */}
       <BrandSavoirFaire />
 
+      {/* 04.8 — TEAM SHOWCASE SCROLL: Skiper 79 Master Noses & Artisan Collective */}
+      <Skiper79 />
 
       {/* 06 — OLFACTORY JOURNAL: 3-story editorial magazine composition */}
       <JournalPreview />

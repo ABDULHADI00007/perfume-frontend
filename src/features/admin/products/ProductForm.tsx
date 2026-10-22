@@ -206,14 +206,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       name: name.trim(),
       slug: slug.trim() || undefined,
       sku: sku.trim(),
-      brand: brand.trim() || "House Perfume",
+      brand: brand.trim() || "Soulmate Scents",
       price: Number(price),
       compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
       shortDescription: shortDescription.trim() || undefined,
       description: description.trim() || undefined,
       status,
-      category,
-      collections: selectedCollections,
+      category: typeof category === "object" && category !== null && "_id" in category ? (category as { _id: string })._id : String(category),
+      collections: selectedCollections.map((c) =>
+        typeof c === "object" && c !== null && "_id" in c ? (c as { _id: string })._id : String(c)
+      ),
       fragrance: {
         concentration,
         gender,
@@ -439,7 +441,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleAddImage}
-                className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] hover:border-[#590B16]/30 shadow-2xs transition-all"
+                className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] hover:border-slate-300 shadow-2xs transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Image URL
@@ -494,8 +496,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       title="Set as Primary"
                       className={`px-2.5 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-wider border transition-all cursor-pointer ${
                         img.isPrimary
-                          ? "bg-[#590B16] text-[#FAF7EE] border-[#590B16] shadow-xs"
-                          : "bg-white text-slate-500 border-slate-200 hover:border-[#590B16]/30 hover:text-[#590B16] hover:bg-[#FAF7EE]"
+                          ? "bg-[#0C134F] text-white border-[#0C134F] shadow-xs"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-[#0C134F]/30 hover:text-[#0C134F] hover:bg-slate-100"
                       }`}
                     >
                       {img.isPrimary ? "Primary" : "Set Primary"}
@@ -528,7 +530,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleAddVariant}
-                className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] hover:border-[#590B16]/30 shadow-2xs transition-all"
+                className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] hover:border-slate-300 shadow-2xs transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Size

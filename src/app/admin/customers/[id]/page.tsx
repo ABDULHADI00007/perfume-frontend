@@ -180,7 +180,7 @@ export default function AdminCustomerDetailPage({
         <div className="flex items-center space-x-2 text-xs text-slate-500">
           <Link
             href="/admin/customers"
-            className="hover:text-[#590B16] transition-colors font-medium"
+            className="hover:text-[#0C134F] transition-colors font-medium"
           >
             Customers
           </Link>
@@ -192,7 +192,7 @@ export default function AdminCustomerDetailPage({
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 text-xs h-8.5 px-3.5 font-medium shadow-2xs border-slate-200 bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] hover:border-[#590B16]/30 rounded-xl transition-all"
+            className="gap-2 text-xs h-8.5 px-3.5 font-medium shadow-2xs border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] hover:border-slate-300 rounded-xl transition-all"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-slate-400" /> Back to Customers
           </Button>
@@ -200,10 +200,10 @@ export default function AdminCustomerDetailPage({
       </div>
 
       {/* Customer Hero Profile Header Card - 21st.dev Luxury Card */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#FCFAF6] to-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_4px_24px_-4px_rgba(12,19,79,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#590B16]/5 via-transparent to-transparent pointer-events-none rounded-full blur-2xl" />
+      <div className="relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_4px_24px_-4px_rgba(12,19,79,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#0C134F]/5 via-transparent to-transparent pointer-events-none rounded-full blur-2xl" />
         <div className="relative flex items-start sm:items-center gap-5">
-          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-br from-[#0C134F] to-[#590B16] text-[#FAF7EE] flex items-center justify-center font-serif text-2xl font-bold border border-[#590B16]/30 shadow-sm ring-4 ring-[#FAF7EE] shrink-0">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-br from-[#0C134F] to-[#1D267D] text-white flex items-center justify-center font-serif text-2xl font-bold border border-[#0C134F]/30 shadow-sm ring-4 ring-slate-100 shrink-0">
             {initials}
           </div>
           <div className="space-y-1.5">
@@ -287,7 +287,7 @@ export default function AdminCustomerDetailPage({
               {orderCount}
             </span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="w-11 h-11 rounded-xl bg-[#0C134F]/5 text-[#0C134F] border border-[#0C134F]/15 flex items-center justify-center shrink-0 shadow-2xs">
             <ShoppingBag className="w-5 h-5" />
           </div>
         </div>
@@ -431,13 +431,13 @@ export default function AdminCustomerDetailPage({
               {ordersList.map((ord) => (
                 <div
                   key={ord._id}
-                  className="py-3.5 flex items-center justify-between gap-3 text-xs hover:bg-[#FAF7EE]/50 -mx-2 px-3 rounded-xl transition-colors"
+                  className="py-3.5 flex items-center justify-between gap-3 text-xs hover:bg-slate-50 -mx-2 px-3 rounded-xl transition-colors"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/admin/orders/${ord._id}`}
-                        className="font-semibold hover:underline font-mono text-xs flex items-center gap-1 text-[#0C134F] hover:text-[#590B16]"
+                        className="font-semibold hover:underline font-mono text-xs flex items-center gap-1 text-[#0C134F] hover:text-[#1D267D]"
                       >
                         {ord.orderNumber}
                         <ExternalLink className="w-3 h-3 opacity-60" />

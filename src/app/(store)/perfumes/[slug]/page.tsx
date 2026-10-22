@@ -50,6 +50,8 @@ export async function generateMetadata({ params }: PageProps) {
   return constructMetadata({
     title: `${product.title} | Soulmate Scents`,
     description:
+      product.seoDescription ||
+      product.shortDescription ||
       product.description ||
       `Experience ${product.title}, a handcrafted ${product.concentration} by Soulmate Scents.`,
     image: primaryImage,

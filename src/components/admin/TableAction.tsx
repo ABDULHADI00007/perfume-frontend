@@ -16,9 +16,9 @@ const variantStyles = {
   default:
     "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#151D68] shadow-xs hover:shadow-sm",
   brand:
-    "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#6D0E1C] shadow-xs hover:shadow-[0_2px_10px_rgba(89,11,22,0.25)]",
+    "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#151D68] shadow-xs hover:shadow-[0_2px_10px_rgba(12,19,79,0.25)]",
   outline:
-    "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-[#FAF7EE] hover:text-[#590B16] hover:border-[#590B16]/30 shadow-2xs hover:shadow-xs",
+    "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-slate-100 hover:text-[#0C134F] hover:border-slate-300 shadow-2xs hover:shadow-xs",
   ghost:
     "bg-transparent text-slate-600 hover:text-[#0C134F] hover:bg-slate-100/70 border border-transparent",
   destructive:
@@ -51,7 +51,7 @@ export const TableActionButton = React.forwardRef<
   ) => {
     const baseClasses = cn(
       "inline-flex items-center justify-center font-sans font-medium rounded-lg transition-all duration-200 select-none cursor-pointer tracking-normal",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#590B16]/30 focus-visible:ring-offset-1",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C134F]/30 focus-visible:ring-offset-1",
       "disabled:pointer-events-none disabled:opacity-40 active:scale-[0.97]",
       variantStyles[variant],
       sizeStyles[size],

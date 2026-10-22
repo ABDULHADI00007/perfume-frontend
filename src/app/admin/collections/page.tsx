@@ -201,7 +201,7 @@ export default function AdminCollectionsPage() {
             )}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-semibold text-xs sm:text-sm text-[#0B1938] hover:text-[#590B16] transition-colors leading-tight truncate">
+            <span className="font-semibold text-xs sm:text-sm text-[#0B1938] hover:text-[#0C134F] transition-colors leading-tight truncate">
               {row.name}
             </span>
             <span className="text-[10px] text-slate-500 font-mono mt-0.5 truncate">
@@ -214,8 +214,8 @@ export default function AdminCollectionsPage() {
     {
       header: "Products Assigned",
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-mono font-medium bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 shadow-2xs">
-          <Icons.Package size={11} className="text-[#590B16]" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-mono font-medium bg-[#0C134F]/5 text-[#0C134F] border border-[#0C134F]/15 shadow-2xs">
+          <Icons.Package size={11} className="text-[#0C134F]" />
           <span>{row.products?.length || row.productCount || 0} items</span>
         </span>
       ),
@@ -419,7 +419,7 @@ export default function AdminCollectionsPage() {
                 size="sm"
                 onClick={() => setIsModalOpen(false)}
                 disabled={isSubmitting}
-                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs h-9 px-4"
+                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs h-9 px-4"
               >
                 Cancel
               </Button>

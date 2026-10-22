@@ -49,56 +49,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
 
   return (
     <div className="w-full font-sans">
-      {/* 01 — FULL SCREEN WIDTH HERO HEADER */}
-      <section className="relative w-full bg-white border-b border-[#EAE4D9] pt-10 sm:pt-14 lg:pt-16 pb-10 sm:pb-12 px-6 sm:px-12 lg:px-20 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto">
-          {/* Top Hero Heading & Right Slogan Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Column: Kicker, Title & Subtitle */}
-            <div className="lg:col-span-8 flex flex-col items-start text-left z-10">
-              <span className="text-[11px] sm:text-xs uppercase tracking-[0.24em] font-semibold text-[#8C8F9A] font-sans mb-4">
-                FRAGRANCES FOR A HIGHER YOU
-              </span>
-
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#121A2D] font-normal tracking-tight mb-5 leading-[1.08]">
-                Find Your Signature
-              </h1>
-
-              <p className="text-sm sm:text-base text-[#686D7A] font-sans font-normal max-w-xl leading-relaxed">
-                Timeless fragrances. Modern expressions. Explore our curated collections crafted for every mood, every moment.
-              </p>
-            </div>
-
-            {/* Right Column: Slogan with Line Accent */}
-            <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-start pt-2 z-10">
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-8 h-[1px] bg-gray-400 hidden sm:block" />
-                <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.24em] font-medium text-[#686D7A]">
-                  MORE THAN A SCENT
-                </span>
-              </div>
-              <span className="text-xs sm:text-sm uppercase tracking-[0.26em] font-serif font-bold text-[#121A2D]">
-                A STATE OF MIND
-              </span>
-            </div>
-          </div>
-
-          {/* Elegant Purple Wave Graphic Lines SVG */}
-          <div className="absolute right-0 top-10 w-7/12 h-44 sm:h-52 pointer-events-none hidden lg:block overflow-hidden z-0 opacity-60">
-            <svg className="w-full h-full" viewBox="0 0 700 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M40 105 C 200 40, 450 150, 700 75" stroke="#C084FC" strokeWidth="1.2" fill="none" />
-              <path d="M40 113 C 200 48, 450 158, 700 83" stroke="#D8B4FE" strokeWidth="1" fill="none" />
-              <path d="M40 121 C 200 56, 450 166, 700 91" stroke="#E9D5FF" strokeWidth="0.8" fill="none" />
-              <path d="M40 97 C 200 32, 450 142, 700 67" stroke="#A855F7" strokeWidth="0.9" fill="none" />
-              <path d="M40 89 C 200 24, 450 134, 700 59" stroke="#DDD0F5" strokeWidth="0.7" fill="none" />
-              <path d="M40 129 C 200 64, 450 174, 700 99" stroke="#F3EFEA" strokeWidth="0.6" fill="none" />
-            </svg>
-          </div>
-        </div>
-      </section>
-
-      {/* 02 — PRODUCT GRID SECTION (In Centered Container below Hero) */}
-      <Container size="wide" className="py-10">
+      {/* PRODUCT GRID & FILTERS SECTION */}
+      <Container size="wide" className="pt-8 pb-12">
         {/* CIRCULAR CATEGORY FILTER ICONS ROW */}
         <div className="w-full mb-10 overflow-x-auto scrollbar-none py-2 relative">
           <div className="flex items-center justify-start lg:justify-between gap-8 sm:gap-12 lg:gap-14 min-w-max">

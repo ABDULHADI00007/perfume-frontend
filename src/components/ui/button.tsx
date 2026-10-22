@@ -20,9 +20,9 @@ const buttonVariants = cva(
         accent:
           "bg-[#C5A880] text-[#0C134F] font-semibold border border-[#C5A880] hover:bg-[#B39266] shadow-xs",
         brand:
-          "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#6D0E1C] active:bg-[#470811] shadow-xs hover:shadow-[0_2px_10px_rgba(89,11,22,0.25)]",
+          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] active:bg-[#070B30] shadow-xs hover:shadow-[0_2px_10px_rgba(12,19,79,0.25)]",
         tableAction:
-          "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-[#FAF7EE] hover:text-[#590B16] hover:border-[#590B16]/30 shadow-2xs hover:shadow-xs capitalize font-medium tracking-normal",
+          "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-slate-100 hover:text-[#0C134F] hover:border-slate-300 shadow-2xs hover:shadow-xs capitalize font-medium tracking-normal",
         tableActionDestructive:
           "bg-rose-50/70 text-rose-600 border border-rose-200/80 hover:bg-rose-100 hover:text-rose-700 hover:border-rose-300 shadow-2xs capitalize font-medium tracking-normal",
         tableActionSuccess:

@@ -225,7 +225,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8.5 px-3.5 text-xs text-[#0C134F] hover:text-[#590B16] border-slate-200 hover:border-[#590B16]/30 bg-white hover:bg-[#FAF7EE] rounded-xl shadow-2xs transition-all gap-1.5"
+                className="h-8.5 px-3.5 text-xs text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-100 rounded-xl shadow-2xs transition-all gap-1.5"
               >
                 <Icons.ArrowLeft size={13} className="text-slate-400" />
                 <span>Back to Orders</span>
@@ -254,7 +254,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
         <div className="border border-slate-200/80 bg-white rounded-2xl p-6 space-y-4 shadow-2xs relative overflow-hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="size-8 rounded-lg bg-[#FAF7EE] text-[#590B16] flex items-center justify-center border border-[#590B16]/20">
+              <div className="size-8 rounded-lg bg-[#0C134F]/5 text-[#0C134F] flex items-center justify-center border border-[#0C134F]/15">
                 <Icons.ShieldCheck size={16} />
               </div>
               <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
@@ -265,7 +265,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
           </div>
 
           {proofUrl ? (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FAF7EE]/50 p-4.5 rounded-xl border border-[#590B16]/15">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-4.5 rounded-xl border border-slate-200">
               <div>
                 <p className="text-xs font-semibold text-[#0C134F]">
                   Proof File: {order.paymentProof?.originalName || "Payment Receipt"}
@@ -287,7 +287,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                   variant="outline"
                   size="sm"
                   onClick={() => setIsProofModalOpen(true)}
-                  className="bg-white hover:bg-[#FAF7EE] text-[#0C134F] hover:text-[#590B16] border-slate-200 hover:border-[#590B16]/30 rounded-xl px-3 h-8.5 text-xs shadow-2xs gap-1.5"
+                  className="bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 rounded-xl px-3 h-8.5 text-xs shadow-2xs gap-1.5"
                 >
                   <Icons.ExternalLink size={13} className="text-slate-400" />
                   <span>View Receipt</span>
@@ -346,7 +346,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
               {order.items?.map((item, idx) => (
                 <div key={idx} className="py-4 flex items-center justify-between text-xs transition-colors hover:bg-slate-50/50 -mx-2 px-2 rounded-xl">
                   <div className="flex items-center space-x-3.5">
-                    <div className="w-12 h-12 rounded-xl bg-[#FAF7EE]/60 border border-[#590B16]/15 flex items-center justify-center font-serif text-[#590B16] shrink-0 shadow-2xs">
+                    <div className="w-12 h-12 rounded-xl bg-[#0C134F]/5 border border-[#0C134F]/15 flex items-center justify-center font-serif text-[#0C134F] shrink-0 shadow-2xs">
                       <Icons.Package size={20} />
                     </div>
                     <div>
@@ -395,7 +395,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
               ) : null}
               <div className="flex justify-between text-sm font-bold text-[#0C134F] pt-3.5 border-t border-slate-200">
                 <span>Total Amount</span>
-                <span className="font-mono text-lg font-bold text-[#590B16]">{formatCurrency(order.totalAmount, order.currency || "USD")}</span>
+                <span className="font-mono text-lg font-bold text-[#0C134F]">{formatCurrency(order.totalAmount, order.currency || "USD")}</span>
               </div>
             </div>
           </div>
@@ -560,7 +560,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
           maxWidth="lg"
         >
           <div className="space-y-4 pt-2 font-sans">
-            <div className="max-h-[55vh] overflow-auto flex items-center justify-center bg-[#FAF7EE]/60 p-3 rounded-2xl border border-[#590B16]/15 shadow-inner">
+            <div className="max-h-[55vh] overflow-auto flex items-center justify-center bg-slate-50 p-3 rounded-2xl border border-slate-200 shadow-inner">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={proofUrl}
@@ -573,7 +573,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                 href={proofUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs text-slate-500 hover:text-[#590B16] underline font-medium"
+                className="text-xs text-slate-500 hover:text-[#0C134F] underline font-medium"
               >
                 Open image in new tab
               </a>
@@ -628,7 +628,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                 size="sm"
                 onClick={() => setIsRejectModalOpen(false)}
                 disabled={actionLoading}
-                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs"
+                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs"
               >
                 Cancel
               </Button>
@@ -668,7 +668,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                 size="sm"
                 onClick={() => setIsCancelModalOpen(false)}
                 disabled={actionLoading}
-                className="border-slate-200 text-slate-600 hover:bg-[#FAF7EE] hover:text-[#590B16] rounded-xl text-xs"
+                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs"
               >
                 Keep Order
               </Button>
