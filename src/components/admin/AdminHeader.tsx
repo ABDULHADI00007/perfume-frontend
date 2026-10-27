@@ -79,25 +79,16 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
         </form>
       </div>
 
-      {/* Right Actions: Storefront, Status, Notifications, Profile */}
+      {/* Right Actions: Storefront, Notifications, Profile */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* System Status Pill */}
-        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200/80 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-          </span>
-          <span>Store Live</span>
-        </div>
-
-        {/* View Storefront Pill Button */}
+        {/* View Store Button */}
         <Link href="/" target="_blank">
           <Button
             variant="outline"
             size="sm"
             className="h-9 px-3 text-xs tracking-wider font-semibold text-[#0C134F] border-slate-200 bg-white hover:bg-slate-50 rounded-xl gap-1.5 shadow-2xs"
           >
-            <span className="hidden sm:inline">Storefront</span>
+            <span className="hidden sm:inline">View Store</span>
             <Icons.ExternalLink size={13} className="text-slate-400" />
           </Button>
         </Link>

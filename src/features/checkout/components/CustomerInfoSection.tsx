@@ -21,14 +21,14 @@ export function CustomerInfoSection({
     <Card variant="default" className="border border-[#E2DED6] bg-white p-2 sm:p-4">
       <CardHeader className="pb-4 border-b border-[#F0ECE1]">
         <div className="flex items-center gap-3">
-          <Badge variant="default" size="lg" className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#0B1938]">
+          <Badge variant="default" size="lg" className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#590B16] text-white">
             1
           </Badge>
           <div>
-            <CardTitle className="font-serif text-xl font-bold text-[#0B1938]">
+            <CardTitle className="font-serif text-xl font-bold text-black">
               Customer Information
             </CardTitle>
-            <CardDescription className="text-xs text-[#64748B] mt-0.5">
+            <CardDescription className="text-xs text-stone-500 mt-0.5">
               Personal contact details for order confirmation & dispatch updates
             </CardDescription>
           </div>

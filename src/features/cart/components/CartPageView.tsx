@@ -19,32 +19,32 @@ export const CartPageView: React.FC = () => {
   }
 
   return (
-    <div className="w-full font-sans text-[#0B1938]">
+    <div className="w-full font-sans text-black">
       {/* Breadcrumb Navigation */}
-      <nav className="text-xs font-sans text-[#8E95A2] mb-6 flex items-center gap-2" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-[#0B1938] transition-colors flex items-center gap-1">
+      <nav className="text-xs font-sans text-stone-500 mb-6 flex items-center gap-2" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-black transition-colors flex items-center gap-1">
           <span>Home</span>
         </Link>
         <span className="text-[#C5A880]">&gt;</span>
-        <span className="text-[#0B1938] font-semibold">Shopping Bag</span>
+        <span className="text-black font-semibold">Shopping Bag</span>
       </nav>
 
       {/* Top Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-[#F0ECE1] gap-4">
         <div>
-          <Badge variant="accent" className="mb-2">
-            <Icons.Bag className="w-3 h-3 mr-1.5 text-[#C5A880]" />
+          <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
+            <Icons.Bag className="w-3 h-3 mr-1.5 text-[#590B16]" />
             YOUR SELECTIONS
           </Badge>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] tracking-tight">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight">
             Shopping Bag
           </h1>
-          <p className="text-xs sm:text-sm text-[#64748B] font-sans font-normal mt-1">
+          <p className="text-xs sm:text-sm text-black/80 font-sans font-normal mt-1">
             Refined fragrance choices curated for your signature scent journey.
           </p>
         </div>
 
-        <Badge variant="default" size="lg" className="self-start sm:self-auto bg-[#0B1938]">
+        <Badge variant="default" size="lg" className="self-start sm:self-auto bg-[#590B16] text-white">
           {cart.itemCount} {cart.itemCount === 1 ? "Fragrance" : "Fragrances"}
         </Badge>
       </div>
@@ -54,7 +54,7 @@ export const CartPageView: React.FC = () => {
         {/* Left: Product Table White Card (8 cols) */}
         <Card variant="default" className="lg:col-span-8 border border-[#E2DED6] bg-white p-2 sm:p-4">
           <CardHeader className="pb-4 border-b border-[#F0ECE1]">
-            <CardTitle className="font-serif text-xl sm:text-2xl font-bold text-[#0B1938]">
+            <CardTitle className="font-serif text-xl sm:text-2xl font-bold text-black">
               Selected Items
             </CardTitle>
           </CardHeader>

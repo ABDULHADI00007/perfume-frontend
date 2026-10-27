@@ -48,7 +48,7 @@ const perfumeCylinderImages: CarouselImage[] = [
   },
   {
     title: "Whisper Blossom — Delicate Petals",
-    src: "/images/perfumes/whisper-blosem.png",
+    src: "/images/perfumes/whispers-bloom.jpg",
     alt: "Whisper Blossom Perfume Flacon",
   },
 ];

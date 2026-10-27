@@ -90,7 +90,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                   {title && (
                     <h2
                       id={titleId}
-                      className="font-serif text-2xl font-bold text-[#0B1938] leading-tight"
+                      className="font-serif text-2xl font-bold text-black leading-tight"
                     >
                       {title}
                     </h2>
@@ -108,7 +108,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                   type="button"
                   onClick={onClose}
                   aria-label="Close drawer"
-                  className="p-2 text-[#64748B] hover:text-[#0B1938] transition-colors focus-visible:outline-none"
+                  className="p-2 text-[#64748B] hover:text-[#590B16] transition-colors focus-visible:outline-none"
                 >
                   <Icons.Close size={18} />
                 </button>

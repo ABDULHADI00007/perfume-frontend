@@ -103,11 +103,11 @@ export default function AdminDashboardPage() {
       cell: (row) => <StatusBadge status={row.orderStatus} />,
     },
     {
-      header: "Total Value",
+      header: "Total",
       align: "right",
       cell: (row) => (
         <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
-          {formatCurrency(row.totalAmount, row.currency || "USD")}
+          {formatCurrency(row.totalAmount ?? (row as unknown as { total?: number }).total, "PKR")}
         </span>
       ),
     },
@@ -120,7 +120,7 @@ export default function AdminDashboardPage() {
             variant="outline"
             href={`/admin/orders/${row._id}`}
           >
-            Review →
+            View →
           </TableActionButton>
         </TableActionGroup>
       ),
@@ -129,11 +129,11 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-8 font-sans">
-      {/* 21st.dev Executive Header */}
+      {/* Executive Header */}
       <AdminPageHeader
-        category="EXECUTIVE OVERVIEW"
-        title="Command Center"
-        description="Comprehensive real-time telemetry, transaction flows, and catalog metrics for Soulmate Scents."
+        category="DASHBOARD"
+        title="Overview"
+        description="Real-time sales, order fulfillment, and catalog overview for Soulmate Scents."
         actions={
           <div className="flex items-center gap-2.5">
             <Link href="/admin/orders">
@@ -142,7 +142,7 @@ export default function AdminDashboardPage() {
                 size="sm"
                 className="bg-white hover:bg-slate-50 text-[#0C134F] border-slate-200 rounded-xl px-4 py-2 text-xs font-semibold shadow-2xs cursor-pointer"
               >
-                All Orders
+                View All Orders
               </Button>
             </Link>
 
@@ -166,7 +166,7 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* 21st.dev Metrics KPI Grid */}
+      {/* KPI Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
@@ -179,41 +179,34 @@ export default function AdminDashboardPage() {
         ) : (
           <>
             <StatsCard
-              title="Gross Sales"
-              value={formatCurrency(stats?.totalSales ?? 0)}
+              title="Total Revenue"
+              value={formatCurrency(stats?.totalSales ?? 0, "PKR")}
               icon={<Icons.Dollar size={18} />}
-              change="+14.2%"
-              changeType="positive"
-              trendLabel="vs last 30 days"
+              description="Gross recorded revenue"
             />
             <StatsCard
               title="Total Orders"
-              value={stats?.totalOrders ?? 0}
+              value={(stats?.totalOrders ?? 0).toLocaleString()}
               icon={<Icons.Delivery size={18} />}
-              change="+8.5%"
-              changeType="positive"
-              trendLabel="active & fulfilled"
+              description="Orders received"
             />
             <StatsCard
-              title="Verified Customers"
-              value={stats?.totalCustomers ?? 0}
+              title="Total Customers"
+              value={(stats?.totalCustomers ?? 0).toLocaleString()}
               icon={<Icons.User size={18} />}
-              change="+12"
-              changeType="positive"
-              trendLabel="registered accounts"
+              description="Registered customer profiles"
             />
             <StatsCard
-              title="Perfume Catalog"
-              value={stats?.totalProducts ?? 0}
+              title="Total Products"
+              value={(stats?.totalProducts ?? 0).toLocaleString()}
               icon={<Icons.Package size={18} />}
-              changeType="neutral"
-              trendLabel="active collections"
+              description="Catalog fragrances"
             />
           </>
         )}
       </div>
 
-      {/* Pending Action Banner: Wire Transfer Review Required */}
+      {/* Operational Alert: Bank Wire Verification Awaiting Attention */}
       {pendingProofOrders.length > 0 && (
         <div className="bg-amber-50/70 border border-amber-200 p-5 rounded-2xl shadow-2xs">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -224,98 +217,31 @@ export default function AdminDashboardPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-display font-bold text-[#0C134F]">
-                    Bank Wire Proofs Awaiting Verification
+                    Bank Transfer Payments Awaiting Verification
                   </h4>
                   <Badge variant="warning" size="sm" className="font-mono text-[10px]">
                     {pendingProofOrders.length} Pending
                   </Badge>
                 </div>
                 <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                  Customers have submitted payment slips for bank transfers that need verification before dispatch.
+                  Customer payment receipts have been uploaded and require verification prior to dispatch.
                 </p>
               </div>
             </div>
-            <Link href={`/admin/orders/${pendingProofOrders[0]._id}`}>
+            <Link href="/admin/orders?paymentStatus=pending_verification">
               <Button
                 variant="outline"
                 size="sm"
                 className="whitespace-nowrap rounded-xl bg-white border-amber-200 text-[#0C134F] hover:bg-amber-100/50 shadow-2xs"
               >
-                Review Proofs
+                Review Verification Proofs →
               </Button>
             </Link>
           </div>
         </div>
       )}
 
-      {/* Quick Operational Shortcuts */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Link
-          href="/admin/products"
-          className="p-4 bg-white rounded-2xl border border-slate-200/70 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 group flex items-center justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#0C134F] group-hover:bg-[#0C134F] group-hover:text-white transition-all">
-              <Icons.Package size={18} />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0C134F]">Fragrances</p>
-              <p className="text-[10px] text-slate-400">Manage catalog</p>
-            </div>
-          </div>
-          <Icons.ChevronRight size={14} className="text-slate-300 group-hover:text-[#0C134F] transition-colors" />
-        </Link>
-
-        <Link
-          href="/admin/inventory"
-          className="p-4 bg-white rounded-2xl border border-slate-200/70 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 group flex items-center justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#0C134F] group-hover:bg-[#0C134F] group-hover:text-white transition-all">
-              <Icons.ShieldCheck size={18} />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0C134F]">Inventory</p>
-              <p className="text-[10px] text-slate-400">Stock controls</p>
-            </div>
-          </div>
-          <Icons.ChevronRight size={14} className="text-slate-300 group-hover:text-[#0C134F] transition-colors" />
-        </Link>
-
-        <Link
-          href="/admin/reviews"
-          className="p-4 bg-white rounded-2xl border border-slate-200/70 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 group flex items-center justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#0C134F] group-hover:bg-[#0C134F] group-hover:text-white transition-all">
-              <Icons.Star size={18} />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0C134F]">Reviews</p>
-              <p className="text-[10px] text-slate-400">Customer feedback</p>
-            </div>
-          </div>
-          <Icons.ChevronRight size={14} className="text-slate-300 group-hover:text-[#0C134F] transition-colors" />
-        </Link>
-
-        <Link
-          href="/admin/settings"
-          className="p-4 bg-white rounded-2xl border border-slate-200/70 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 group flex items-center justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#0C134F] group-hover:bg-[#0C134F] group-hover:text-white transition-all">
-              <Icons.Settings size={18} />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0C134F]">Settings</p>
-              <p className="text-[10px] text-slate-400">Banking & store</p>
-            </div>
-          </div>
-          <Icons.ChevronRight size={14} className="text-slate-300 group-hover:text-[#0C134F] transition-colors" />
-        </Link>
-      </div>
-
-      {/* Recent Orders Section with Elevated 21st.dev Card */}
+      {/* Recent Orders Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -323,14 +249,14 @@ export default function AdminDashboardPage() {
               Recent Orders
             </h2>
             <p className="text-xs text-slate-500 font-sans mt-0.5">
-              Live transactions and customer acquisitions
+              Latest store orders and transaction details
             </p>
           </div>
           <Link
             href="/admin/orders"
             className="inline-flex items-center gap-1 text-xs font-semibold text-[#0C134F] hover:text-[#926618] transition-colors"
           >
-            <span>View All</span>
+            <span>View All Orders</span>
             <Icons.ChevronRight size={14} />
           </Link>
         </div>
@@ -342,7 +268,7 @@ export default function AdminDashboardPage() {
         />
       </div>
 
-      {/* Low Stock Alerts */}
+      {/* Low Stock Operational Alerts */}
       {lowStockItems.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -352,7 +278,7 @@ export default function AdminDashboardPage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
               </span>
               <h3 className="font-display text-base font-bold text-[#0C134F]">
-                Critical Inventory Alerts
+                Low Stock Alerts
               </h3>
             </div>
             <Link

@@ -10,10 +10,11 @@ import { DataTable, Column } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
+import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Icons } from "@/components/ui/icons";
 import { formatDate } from "@/lib/utils";
-
 
 export default function AdminReviewsPage() {
   const { hasPermission } = useAdminAuth();
@@ -22,6 +23,7 @@ export default function AdminReviewsPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [reviewToDelete, setReviewToDelete] = useState<AdminReview | null>(null);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -54,7 +56,7 @@ export default function AdminReviewsPage() {
       setIsLoading(true);
       setError(null);
       await adminService.moderateReview(reviewId, nextStatus);
-      setSuccessMessage(`Review ${nextStatus} successfully.`);
+      setSuccessMessage(`Review marked as ${nextStatus}.`);
       fetchReviews();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : `Failed to ${nextStatus} review`);
@@ -81,15 +83,22 @@ export default function AdminReviewsPage() {
   };
 
   const filteredReviews = reviews.filter((r) => {
-    if (!statusFilter) return true;
-    return r.status === statusFilter;
+    if (statusFilter && r.status !== statusFilter) return false;
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      const matchProduct = r.product?.name?.toLowerCase().includes(q);
+      const matchCustomer = r.customerName?.toLowerCase().includes(q) || r.customerEmail?.toLowerCase().includes(q);
+      const matchComment = r.comment?.toLowerCase().includes(q) || r.title?.toLowerCase().includes(q);
+      return Boolean(matchProduct || matchCustomer || matchComment);
+    }
+    return true;
   });
 
   const columns: Column<AdminReview>[] = [
     {
       header: "Product",
       cell: (row) => (
-        <span className="font-semibold text-xs text-foreground">
+        <span className="font-semibold text-xs text-foreground block">
           {row.product?.name || "Product Review"}
         </span>
       ),
@@ -98,7 +107,7 @@ export default function AdminReviewsPage() {
       header: "Customer",
       cell: (row) => (
         <div>
-          <span className="font-medium text-xs text-foreground">{row.customerName}</span>
+          <span className="font-medium text-xs text-foreground block">{row.customerName}</span>
           <p className="text-[11px] text-foreground-muted">{row.customerEmail}</p>
         </div>
       ),
@@ -124,7 +133,7 @@ export default function AdminReviewsPage() {
       header: "Comment",
       cell: (row) => (
         <div className="max-w-xs sm:max-w-md">
-          {row.title && <p className="font-semibold text-xs text-foreground">{row.title}</p>}
+          {row.title && <p className="font-semibold text-xs text-foreground mb-0.5">{row.title}</p>}
           <p className="text-xs text-foreground-muted line-clamp-2 leading-relaxed font-serif italic">
             &ldquo;{row.comment}&rdquo;
           </p>
@@ -180,37 +189,52 @@ export default function AdminReviewsPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="CUSTOMER INTELLIGENCE"
+        category="MARKETING"
         title="Reviews Moderation"
-        description="Verify testimonials from authentic perfume connoisseurs, approve star ratings, and filter spam."
+        description="Verify testimonials from authentic perfume connoisseurs, approve ratings, and manage public visibility."
         count={reviews.length}
         breadcrumbs={[{ label: "Reviews" }]}
-        actions={
-          <div className="w-52">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { label: "All Reviews", value: "" },
-                { label: "Pending Verification", value: "pending" },
-                { label: "Approved", value: "approved" },
-                { label: "Rejected", value: "rejected" },
-              ]}
-            />
-          </div>
-        }
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
           {successMessage}
         </div>
       )}
+
+      {/* Filter Bar */}
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search || statusFilter)}
+        resetLabel="RESET FILTERS"
+        onReset={() => {
+          setSearch("");
+          setStatusFilter("");
+        }}
+      >
+        <Input
+          placeholder="Search by customer, product, or comment..."
+          value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full text-xs"
+        />
+
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={[
+            { label: "All Review Statuses", value: "" },
+            { label: "Pending Verification", value: "pending" },
+            { label: "Approved", value: "approved" },
+            { label: "Rejected", value: "rejected" },
+          ]}
+        />
+      </AdminFilterBar>
 
       <DataTable
         columns={columns}
@@ -225,7 +249,7 @@ export default function AdminReviewsPage() {
         onClose={() => setReviewToDelete(null)}
         onConfirm={handleDelete}
         title="Delete Review"
-        message={`Are you sure you want to permanently remove this review from ${reviewToDelete?.customerName}?`}
+        message={`Are you sure you want to permanently remove this review from ${reviewToDelete?.customerName}? This action cannot be undone.`}
         confirmLabel="Delete Review"
         isDestructive
         isLoading={isDeleteLoading}

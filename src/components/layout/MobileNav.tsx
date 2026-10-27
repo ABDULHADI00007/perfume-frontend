@@ -74,14 +74,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 onClick={onClose}
                 className={`flex items-center justify-between py-3 px-2 border-b border-border-subtle transition-colors ${
                   isActive
-                    ? "font-serif text-lg text-navy font-medium border-navy"
-                    : "font-serif text-lg text-foreground hover:text-navy"
+                    ? "font-serif text-lg text-[#590B16] font-medium border-[#590B16]"
+                    : "font-serif text-lg text-foreground hover:text-[#590B16]"
                 }`}
               >
                 <span>{item.title}</span>
                 <Icons.ChevronRight
                   size={16}
-                  className={isActive ? "text-navy" : "text-foreground-subtle"}
+                  className={isActive ? "text-[#590B16]" : "text-foreground-subtle"}
                 />
               </Link>
             );

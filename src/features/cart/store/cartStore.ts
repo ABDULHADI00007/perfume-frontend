@@ -12,8 +12,22 @@ const CART_STORAGE_KEY = "maison_parfum_cart";
 let currentCartState: CartState = initialCartState;
 const listeners = new Set<() => void>();
 
+let isDrawerOpenState = false;
+const drawerListeners = new Set<() => void>();
+
 function notify() {
   listeners.forEach((listener) => listener());
+}
+
+function notifyDrawer() {
+  drawerListeners.forEach((listener) => listener());
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("cart-drawer-change", {
+        detail: { isOpen: isDrawerOpenState },
+      })
+    );
+  }
 }
 
 export function updateCartState(items: CartItem[]): CartState {
@@ -39,6 +53,32 @@ export const cartStore = {
     return () => {
       listeners.delete(listener);
     };
+  },
+
+  getDrawerSnapshot(): boolean {
+    return isDrawerOpenState;
+  },
+
+  subscribeDrawer(listener: () => void): () => void {
+    drawerListeners.add(listener);
+    return () => {
+      drawerListeners.delete(listener);
+    };
+  },
+
+  openCart() {
+    isDrawerOpenState = true;
+    notifyDrawer();
+  },
+
+  closeCart() {
+    isDrawerOpenState = false;
+    notifyDrawer();
+  },
+
+  toggleCart() {
+    isDrawerOpenState = !isDrawerOpenState;
+    notifyDrawer();
   },
 
   init() {
@@ -111,6 +151,7 @@ export const cartStore = {
       items.push(item);
     }
     this.save(updateCartState(items));
+    this.openCart();
   },
 
   updateQuantity(id: string, quantity: number) {

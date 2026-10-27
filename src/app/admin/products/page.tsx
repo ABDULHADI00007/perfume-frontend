@@ -43,7 +43,7 @@ export default function AdminProductsPage() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const cats = await adminService.getCategories();
+      const cats = await adminService.getCategories(true);
       setCategories(cats);
     } catch {
       // Best effort categories load
@@ -173,11 +173,11 @@ export default function AdminProductsPage() {
       cell: (row) => (
         <div className="space-y-0.5">
           <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
-            {formatCurrency(row.price, row.currency || "USD")}
+            {formatCurrency(row.price, row.currency || "PKR")}
           </span>
           {row.compareAtPrice ? (
             <span className="block text-[10.5px] text-slate-400 line-through font-mono tabular-nums">
-              {formatCurrency(row.compareAtPrice, row.currency || "USD")}
+              {formatCurrency(row.compareAtPrice, row.currency || "PKR")}
             </span>
           ) : null}
         </div>
@@ -199,8 +199,8 @@ export default function AdminProductsPage() {
                   isOut
                     ? "bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.6)]"
                     : isLow
-                    ? "bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]"
-                    : "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"
+                      ? "bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]"
+                      : "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"
                 )}
               />
               <span className="text-xs font-semibold text-[#0C134F] tabular-nums">
@@ -257,9 +257,9 @@ export default function AdminProductsPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="STORE OPERATIONS"
+        category="STORE MANAGEMENT"
         title="Fragrance Catalog"
-        description="Curate perfume formulations, variant inventory, pricing models, and olfactory pyramids."
+        description="Manage fragrance listings, inventory levels, pricing models, and olfactory specifications."
         count={totalCount}
         breadcrumbs={[{ label: "Products" }]}
         actions={

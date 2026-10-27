@@ -16,6 +16,7 @@ import {
   SortDirection,
 } from "@/components/ui/table";
 import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
@@ -216,21 +217,43 @@ export function DataTable<T>({
 
         <TableBody animatedSort={sortable}>
           {isLoading ? (
-            <TableRow>
-              <TableCell
-                colSpan={totalColSpan}
-                className="py-20 text-center text-muted-foreground bg-white"
-              >
-                <div className="flex flex-col items-center justify-center space-y-3">
-                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70 shadow-xs">
-                    <Spinner size="md" className="text-[#0C134F]" />
-                  </div>
-                  <p className="text-xs uppercase tracking-[0.2em] font-semibold text-slate-500 font-sans">
-                    Loading data...
-                  </p>
-                </div>
-              </TableCell>
-            </TableRow>
+            Array.from({ length: 6 }).map((_, rIdx) => (
+              <TableRow key={`skeleton-row-${rIdx}`} className="border-b border-slate-100 last:border-b-0">
+                {selectable && (
+                  <TableCell className="w-12 px-4 text-center">
+                    <Skeleton className="w-4 h-4 rounded mx-auto bg-slate-200/80" />
+                  </TableCell>
+                )}
+                {renderExpanded && (
+                  <TableCell className="w-10 px-2 text-center">
+                    <Skeleton className="w-4 h-4 rounded mx-auto bg-slate-200/80" />
+                  </TableCell>
+                )}
+                {columns.map((col, cIdx) => (
+                  <TableCell key={`skeleton-cell-${cIdx}`} className={cn("py-4", col.className)}>
+                    <Skeleton
+                      className={cn(
+                        "h-4 rounded-md bg-slate-200/80",
+                        col.align === "right"
+                          ? "ml-auto"
+                          : col.align === "center"
+                          ? "mx-auto"
+                          : "mr-auto",
+                        cIdx === 0
+                          ? "w-3/4 max-w-[160px]"
+                          : cIdx === columns.length - 1
+                          ? "w-16"
+                          : (rIdx + cIdx) % 3 === 0
+                          ? "w-24"
+                          : (rIdx + cIdx) % 3 === 1
+                          ? "w-32"
+                          : "w-20"
+                      )}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
           ) : sortedData.length === 0 ? (
             <TableRow>
               <TableCell

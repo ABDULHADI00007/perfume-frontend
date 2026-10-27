@@ -85,7 +85,9 @@ const config: Config = {
         input: "var(--color-border)",
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Playfair Display", "Georgia", "serif"],
+        cinzel: ["'Cinzel'", "'Marcellus'", "serif"],
+        playfair: ["'Cinzel'", "'Marcellus'", "serif"],
+        serif: ["'Cinzel'", "'Marcellus'", "serif"],
         sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
         display: ["var(--font-outfit)", "var(--font-sans)", "Inter", "sans-serif"],
         outfit: ["var(--font-outfit)", "var(--font-sans)", "sans-serif"],

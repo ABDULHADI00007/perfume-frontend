@@ -7,13 +7,13 @@ import { AdminOrder } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
 import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/ui/spinner";
 import { Icons } from "@/components/ui/icons";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -76,14 +76,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   }
 
   if (isLoading) {
-    return (
-      <div className="py-20 text-center flex flex-col items-center justify-center space-y-3">
-        <Spinner size="lg" className="text-[#0C134F]" />
-        <p className="text-xs text-[#6B6F80] uppercase tracking-[0.2em] font-medium font-sans">
-          Loading Order Details...
-        </p>
-      </div>
-    );
+    return <AdminDetailSkeleton category="FULFILLMENT & DISPATCH" />;
   }
 
   if (!order) {
@@ -198,7 +191,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="FULFILLMENT & DISPATCH"
+        category="STORE MANAGEMENT"
         title={`Order #${order.orderNumber}`}
         description={`Placed on ${formatDate(order.createdAt)} • Payment Method: ${order.paymentMethod?.replace(/_/g, " ").toUpperCase()}`}
         breadcrumbs={[
@@ -361,10 +354,10 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
 
                   <div className="text-right">
                     <p className="font-mono text-slate-500 text-[11px]">
-                      {item.quantity} × {formatCurrency(item.unitPrice, order.currency || "USD")}
+                      {item.quantity} × {formatCurrency(item.unitPrice, "PKR")}
                     </p>
                     <p className="font-bold text-[#0C134F] font-mono mt-0.5 text-sm">
-                      {formatCurrency(item.totalPrice, order.currency || "USD")}
+                      {formatCurrency(item.totalPrice, "PKR")}
                     </p>
                   </div>
                 </div>
@@ -375,27 +368,27 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
             <div className="pt-4 border-t border-slate-100 space-y-2.5 text-xs">
               <div className="flex justify-between text-slate-600">
                 <span>Subtotal</span>
-                <span className="font-mono">{formatCurrency(order.subtotal, order.currency || "USD")}</span>
+                <span className="font-mono">{formatCurrency(order.subtotal, "PKR")}</span>
               </div>
               {order.discountAmount ? (
                 <div className="flex justify-between text-emerald-700 font-medium">
                   <span>Discount ({order.couponCode || "Coupon"})</span>
-                  <span className="font-mono">-{formatCurrency(order.discountAmount, order.currency || "USD")}</span>
+                  <span className="font-mono">-{formatCurrency(order.discountAmount, "PKR")}</span>
                 </div>
               ) : null}
               <div className="flex justify-between text-slate-600">
                 <span>Shipping Fee</span>
-                <span className="font-mono">{formatCurrency(order.shippingFee, order.currency || "USD")}</span>
+                <span className="font-mono">{formatCurrency(order.shippingFee, "PKR")}</span>
               </div>
               {order.taxAmount ? (
                 <div className="flex justify-between text-slate-600">
                   <span>Estimated Tax</span>
-                  <span className="font-mono">{formatCurrency(order.taxAmount, order.currency || "USD")}</span>
+                  <span className="font-mono">{formatCurrency(order.taxAmount, "PKR")}</span>
                 </div>
               ) : null}
               <div className="flex justify-between text-sm font-bold text-[#0C134F] pt-3.5 border-t border-slate-200">
                 <span>Total Amount</span>
-                <span className="font-mono text-lg font-bold text-[#0C134F]">{formatCurrency(order.totalAmount, order.currency || "USD")}</span>
+                <span className="font-mono text-lg font-bold text-[#0C134F]">{formatCurrency(order.totalAmount, "PKR")}</span>
               </div>
             </div>
           </div>

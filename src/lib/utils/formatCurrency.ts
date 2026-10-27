@@ -1,8 +1,11 @@
 export function formatCurrency(
-  amount: number,
+  amount?: number | null,
   currency?: string,
   locale?: string
 ): string {
+  const numericAmount =
+    typeof amount === "number" && !Number.isNaN(amount) ? amount : 0;
+
   if (currency && currency !== "PKR" && currency !== "Rs") {
     try {
       return new Intl.NumberFormat(locale || "en-US", {
@@ -10,10 +13,10 @@ export function formatCurrency(
         currency,
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      }).format(amount);
+      }).format(numericAmount);
     } catch {
       // fallback
     }
   }
-  return `Rs. ${amount.toLocaleString("en-US")}`;
+  return `Rs. ${numericAmount.toLocaleString("en-US")}`;
 }

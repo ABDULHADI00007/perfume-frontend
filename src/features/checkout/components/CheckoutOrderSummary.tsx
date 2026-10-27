@@ -52,10 +52,10 @@ export function CheckoutOrderSummary({
     <Card variant="default" className="border border-[#E2DED6] bg-white p-2 sm:p-4 shadow-xl">
       <CardHeader className="pb-3 border-b border-[#F0ECE1]">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-serif text-2xl font-bold text-[#0B1938]">
+          <CardTitle className="font-serif text-2xl font-bold text-black">
             Order Summary
           </CardTitle>
-          <Badge variant="accent">
+          <Badge variant="accent" className="bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
             {totalItemCount} {totalItemCount === 1 ? "Item" : "Items"}
           </Badge>
         </div>
@@ -80,22 +80,22 @@ export function CheckoutOrderSummary({
                     <Icons.Bag className="w-5 h-5 text-[#94A3B8]" />
                   </div>
                 )}
-                <span className="absolute -top-2 -right-2 bg-[#0B1938] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 font-sans">
+                <span className="absolute -top-2 -right-2 bg-[#590B16] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 font-sans">
                   {item.quantity}
                 </span>
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="font-serif text-sm font-semibold text-[#0B1938] truncate leading-tight">
+                <h3 className="font-serif text-sm font-semibold text-black truncate leading-tight">
                   {item.title}
                 </h3>
-                <p className="text-xs text-[#64748B] font-sans uppercase tracking-wider font-normal mt-0.5">
+                <p className="text-xs text-stone-500 font-sans uppercase tracking-wider font-normal mt-0.5">
                   {item.size}
                 </p>
               </div>
 
               <div className="text-right pl-2">
-                <span className="font-serif text-sm sm:text-base font-bold text-[#0B1938]">
+                <span className="font-serif text-sm sm:text-base font-bold text-black">
                   {formatCurrency(item.price * item.quantity)}
                 </span>
               </div>
@@ -105,16 +105,16 @@ export function CheckoutOrderSummary({
 
         {/* Breakdown */}
         <div className="flex flex-col space-y-3 text-sm font-sans font-normal pt-2 border-t border-[#F0ECE1]">
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>Subtotal ({totalItemCount} items)</span>
-            <span className="text-[#0B1938] font-bold">
+            <span className="text-black font-bold">
               {formatCurrency(subtotal)}
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>White-Glove Shipping</span>
-            <span className="text-[#0B1938] font-bold">
+            <span className="text-black font-bold">
               {isFreeShipping ? (
                 <span className="text-emerald-700 font-semibold">Free Delivery</span>
               ) : (
@@ -124,15 +124,15 @@ export function CheckoutOrderSummary({
           </div>
 
           {appliedCoupon && (
-            <div className="flex items-center justify-between text-[#0B1938]">
+            <div className="flex items-center justify-between text-black">
               <span>Privilege Discount ({appliedCoupon.coupon.code})</span>
               <span className="font-bold text-emerald-700">-{formatCurrency(discountAmount)}</span>
             </div>
           )}
 
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>Estimated Tax</span>
-            <span className="text-[#0B1938] font-bold">
+            <span className="text-black font-bold">
               {enableTax && calculatedTax > 0 ? formatCurrency(calculatedTax) : "Rs. 0"}
             </span>
           </div>
@@ -140,10 +140,10 @@ export function CheckoutOrderSummary({
 
         {/* Estimated Total Divider & Row */}
         <div className="pt-4 border-t border-[#F0ECE1] flex items-baseline justify-between">
-          <span className="font-serif text-lg font-bold text-[#0B1938]">
+          <span className="font-serif text-lg font-bold text-black">
             Total Amount
           </span>
-          <span className="font-serif text-2xl sm:text-3xl text-[#0B1938] font-bold tracking-tight">
+          <span className="font-serif text-2xl sm:text-3xl text-black font-bold tracking-tight">
             {formatCurrency(finalTotal)}
           </span>
         </div>
@@ -174,7 +174,8 @@ export function CheckoutOrderSummary({
             disabled={isSubmitting || items.length === 0}
             isLoading={isSubmitting}
             leftIcon={!isSubmitting && <Icons.Lock className="w-4 h-4" />}
-            className="w-full tracking-[0.18em] font-semibold text-xs uppercase py-4 rounded-xl bg-[#0B1938] hover:bg-[#121E3D] text-white flex items-center justify-center cursor-pointer shadow-md min-h-[48px]"
+            className="w-full tracking-[0.18em] font-bold text-xs uppercase py-4 rounded-xl bg-[#590B16] hover:bg-[#3E060E] text-white flex items-center justify-center cursor-pointer shadow-md min-h-[48px] font-serif"
+            style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
           >
             Place Order
           </Button>

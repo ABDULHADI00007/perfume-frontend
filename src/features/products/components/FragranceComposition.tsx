@@ -33,55 +33,50 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab("description")}
-            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${
-              activeTab === "description"
+            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${activeTab === "description"
                 ? "text-[#0D1424] border-b-2 border-[#0D1424]"
                 : "text-gray-400 hover:text-gray-700"
-            }`}
+              }`}
           >
             Description
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("notes")}
-            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${
-              activeTab === "notes"
+            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${activeTab === "notes"
                 ? "text-[#0D1424] border-b-2 border-[#0D1424]"
                 : "text-gray-400 hover:text-gray-700"
-            }`}
+              }`}
           >
             Scent Notes
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("details")}
-            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${
-              activeTab === "details"
+            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${activeTab === "details"
                 ? "text-[#0D1424] border-b-2 border-[#0D1424]"
                 : "text-gray-400 hover:text-gray-700"
-            }`}
+              }`}
           >
             Details
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("shipping")}
-            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${
-              activeTab === "shipping"
+            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${activeTab === "shipping"
                 ? "text-[#0D1424] border-b-2 border-[#0D1424]"
                 : "text-gray-400 hover:text-gray-700"
-            }`}
+              }`}
           >
             Shipping & Returns
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("reviews")}
-            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${
-              activeTab === "reviews"
+            className={`pb-3 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all relative ${activeTab === "reviews"
                 ? "text-[#0D1424] border-b-2 border-[#0D1424]"
                 : "text-gray-400 hover:text-gray-700"
-            }`}
+              }`}
           >
             Reviews (91)
           </button>

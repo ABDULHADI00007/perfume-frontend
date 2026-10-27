@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { ProductDiscoveryView } from "@/features/products/components/ProductDiscoveryView";
 import { allProducts } from "@/features/products/data/products";
-import { Spinner } from "@/components/ui/spinner";
+import { ProductCatalogSkeleton } from "@/features/products/components/ProductCatalogSkeleton";
 
 export const metadata = constructMetadata({
   title: "Perfumes & Extraits | Soulmate Scents",
@@ -14,13 +14,7 @@ export const metadata = constructMetadata({
 export default function PerfumesPage() {
   return (
     <main className="w-full bg-white min-h-screen">
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center py-32">
-            <Spinner size="lg" />
-          </div>
-        }
-      >
+      <Suspense fallback={<ProductCatalogSkeleton cardCount={16} />}>
         <ProductDiscoveryView
           initialProducts={allProducts}
           itemsPerPage={16}

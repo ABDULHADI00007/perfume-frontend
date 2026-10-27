@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
+import { motion, MotionValue, useScroll, useTransform, useSpring } from "framer-motion";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
 
 const perfumeImages = [
@@ -21,18 +22,29 @@ const perfumeImages = [
 
 export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
   const gallery = useRef<HTMLDivElement>(null);
-  const [dimension, setDimension] = useState({ width: 0, height: 0 });
+  const [dimension, setDimension] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 1200,
+    height: typeof window !== "undefined" ? window.innerHeight : 900,
+  });
 
   const { scrollYProgress } = useScroll({
     target: gallery,
     offset: ["start end", "end start"],
   });
 
+  // Physics-based spring interpolation to eliminate discrete mouse wheel jumping & jitter
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 85,
+    damping: 24,
+    mass: 0.1,
+    restDelta: 0.0005,
+  });
+
   const { height } = dimension;
-  const y = useTransform(scrollYProgress, [0, 1], [0, height * 2]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, height * 3.3]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, height * 1.25]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, height * 3]);
+  const y = useTransform(smoothProgress, [0, 1], [0, height * 2]);
+  const y2 = useTransform(smoothProgress, [0, 1], [0, height * 3.3]);
+  const y3 = useTransform(smoothProgress, [0, 1], [0, height * 1.25]);
+  const y4 = useTransform(smoothProgress, [0, 1], [0, height * 3]);
 
   useEffect(() => {
     let reqId: number;
@@ -40,7 +52,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
 
     try {
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.1,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         orientation: "vertical",
         gestureOrientation: "vertical",
@@ -71,27 +83,29 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
     };
   }, []);
 
-  const headlineX = useTransform(scrollYProgress, [0, 1], ["2%", "-6%"]);
+  const headlineX = useTransform(smoothProgress, [0, 1], ["2%", "-6%"]);
 
   return (
-    <section className="w-full bg-[#FAF7EE] text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none">
+    <section className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none">
       {/* Giant SOULMATE SCENTS Header with exact brand color #590B16 */}
       <div className="pt-20 pb-8 sm:pt-28 sm:pb-12 px-4 text-center overflow-hidden select-none relative z-10 flex flex-col items-center justify-center">
         <motion.h2
           style={{
             x: headlineX,
             color: "color-mix(in srgb, #590B16 28%, transparent)",
+            willChange: "transform",
+            fontFamily: "'Cinzel', 'Marcellus', serif",
           }}
-          className="font-serif text-[11vw] sm:text-[12vw] uppercase font-semibold tracking-[-0.03em] leading-none whitespace-nowrap select-none"
+          className="font-serif text-[11vw] sm:text-[12vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none"
         >
           SOULMATE SCENTS
         </motion.h2>
       </div>
 
-      {/* 4-Column Parallax Gallery Container */}
+      {/* 4-Column Parallax Gallery Container — Full Width Edge-to-Edge */}
       <div
         ref={gallery}
-        className="relative box-border flex h-[175vh] gap-[2vw] overflow-hidden bg-white/80 backdrop-blur-xs p-[2vw] rounded-3xl mx-2 sm:mx-6 shadow-[0_24px_70px_-20px_rgba(89,11,22,0.08)] border border-[#590B16]/15"
+        className="relative box-border flex h-[175vh] w-full gap-2 sm:gap-3 md:gap-4 overflow-hidden px-1 sm:px-2 md:px-3"
       >
         <Column images={[images[0], images[1], images[2]]} y={y} />
         <Column images={[images[3], images[4], images[5]]} y={y2} />
@@ -112,20 +126,28 @@ type ColumnProps = {
 const Column = ({ images, y }: ColumnProps) => {
   return (
     <motion.div
-      className="relative -top-[45%] flex h-full w-1/4 min-w-[200px] sm:min-w-[250px] flex-col gap-[2vw] first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
-      style={{ y }}
+      className="relative -top-[45%] flex h-full flex-1 min-w-0 flex-col gap-2 sm:gap-3 md:gap-4 first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
+      style={{
+        y,
+        willChange: "transform",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+      }}
     >
       {images.map((src, i) => (
         <div
           key={i}
           className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)] border border-stone-200/70 group"
+          style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt="Soulmate Scents Parfumerie Flacon"
             className="pointer-events-none w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
+            draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>

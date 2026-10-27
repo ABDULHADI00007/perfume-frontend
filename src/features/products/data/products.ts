@@ -20,7 +20,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-01-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-EF-50" },
     ],
-    images: ["/images/perfumes/elite-fusion.png", "/images/perfumes/elite_fusion_nobg.png", "/images/perfumes/oyd_royal.png"],
+    images: ["/images/perfumes/collection_elite_fusion.jpg", "/images/perfumes/elite-fusion.png", "/images/perfumes/elite_fusion_nobg.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -50,7 +50,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-02-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-CL-50" },
     ],
-    images: ["/images/perfumes/oyd_royal.png", "/images/perfumes/oud-majesty.png", "/images/perfumes/noir_external.png"],
+    images: ["/images/perfumes/collection_crown_legacy.jpg", "/images/perfumes/oyd_royal.png", "/images/perfumes/oud-majesty.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -80,7 +80,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-03-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 20, sku: "SS-SV-50" },
     ],
-    images: ["/images/perfumes/sultan-veils.png", "/images/perfumes/oud-majesty.png", "/images/perfumes/amber-rivera.png"],
+    images: ["/images/perfumes/collection_sultans_veil.jpg", "/images/perfumes/sultan-veils.png", "/images/perfumes/oud-majesty.png"],
     featured: true,
     isBestSeller: false,
     isPlatinum: true,
@@ -110,7 +110,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-04-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 32, sku: "SS-BH-50" },
     ],
-    images: ["/images/perfumes/cool-water.png", "/images/perfumes/mediterrane_blu.png", "/images/perfumes/cirtus-revrie.png"],
+    images: ["/images/perfumes/collection_blue_horizon.jpg", "/images/perfumes/cool-water.png", "/images/perfumes/mediterrane_blu.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -140,7 +140,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-05-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VO-50" },
     ],
-    images: ["/images/perfumes/lyce_blush.png", "/images/perfumes/flowers_img.png", "/images/perfumes/whisper-blosem.png"],
+    images: ["/images/perfumes/collection_velvet_orchid.jpg", "/images/perfumes/lyce_blush.png", "/images/perfumes/flowers_img.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -230,7 +230,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-08-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VD-50" },
     ],
-    images: ["/images/perfumes/vivid-desire.png", "/images/perfumes/vivid_desire_nobg.png", "/images/perfumes/whisper-blosem.png"],
+    images: ["/images/perfumes/vivid-desire-luxury.jpg", "/images/perfumes/vivid-desire.png", "/images/perfumes/vivid_desire_nobg.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -319,7 +319,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-11-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 35, sku: "SS-DK-50" },
     ],
-    images: ["/images/perfumes/dusk.png", "/images/perfumes/gentleman.png", "/images/perfumes/noir_external.png"],
+    images: ["/images/perfumes/dusk-luxury.jpg", "/images/perfumes/dusk.png", "/images/perfumes/gentleman.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -349,7 +349,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-12-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-WB-50" },
     ],
-    images: ["/images/perfumes/whisper-blosem.png", "/images/perfumes/flowers_img.png", "/images/perfumes/lyce_blush.png"],
+    images: ["/images/perfumes/whispers-bloom-luxury.jpg", "/images/perfumes/flowers_img.png", "/images/perfumes/lyce_blush.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -408,7 +408,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-14-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 25, sku: "SS-PL-50" },
     ],
-    images: ["/images/perfumes/cirtus-revrie.png", "/images/perfumes/cool-water.png", "/images/perfumes/mediterrane_blu.png"],
+    images: ["/images/perfumes/pulse-luxury.jpg", "/images/perfumes/cirtus-revrie.png", "/images/perfumes/cool-water.png"],
     featured: false,
     isNewArrival: true,
     isPlatinum: false,

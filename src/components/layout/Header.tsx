@@ -19,28 +19,27 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { cart } = useCart();
+  const { cart, isCartOpen, closeCart, toggleCart } = useCart();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const toggleSearch = () => {
-    setIsCartOpen(false);
+    closeCart();
     setIsMobileNavOpen(false);
     setIsSearchOpen((prev) => !prev);
   };
 
-  const toggleCart = () => {
+  const handleToggleCart = () => {
     setIsSearchOpen(false);
     setIsMobileNavOpen(false);
-    setIsCartOpen((prev) => !prev);
+    toggleCart();
   };
 
   const toggleMobileNav = () => {
+    closeCart();
     setIsSearchOpen(false);
-    setIsCartOpen(false);
     setIsMobileNavOpen((prev) => !prev);
   };
 
@@ -127,8 +126,8 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                     key={item.href}
                     href={item.href}
                     className={`text-[11px] uppercase tracking-[0.22em] transition-all relative py-1.5 font-sans ${isActive
-                      ? "text-navy font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-navy"
-                      : "text-[#6B6F80] hover:text-navy font-medium"
+                      ? "text-[#590B16] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-[#590B16]"
+                      : "text-[#6B6F80] hover:text-[#590B16] font-medium"
                       }`}
                   >
                     {item.title}
@@ -144,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={toggleSearch}
                 aria-label="Search collection"
-                className="p-2 text-[#6B6F80] hover:text-navy transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider"
+                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider"
               >
                 <Icons.Search size={18} />
                 <span className="hidden xl:inline-block text-[10px] tracking-[0.18em] font-medium">
@@ -156,7 +155,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
               <Link
                 href="/admin"
                 aria-label="Account and Administration"
-                className="p-2 text-[#6B6F80] hover:text-navy transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Admin / Account"
               >
                 <Icons.User size={18} />
@@ -167,10 +166,10 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={toggleCart}
                 aria-label={`Shopping bag with ${cart.itemCount} items`}
-                className="relative p-2 text-foreground hover:text-navy transition-colors flex items-center justify-center"
+                className="relative p-2 text-foreground hover:text-[#590B16] transition-colors flex items-center justify-center"
               >
                 <Icons.Bag size={20} />
-                <span className="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute -top-1 -right-1 bg-[#590B16] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {cart.itemCount}
                 </span>
               </button>
@@ -195,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
 
       <CartDrawer
         isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
+        onClose={closeCart}
         itemCount={cart.itemCount}
         subtotal={cart.subtotal}
       />

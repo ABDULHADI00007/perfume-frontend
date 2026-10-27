@@ -63,6 +63,8 @@ export const Hero: React.FC<SculptureHeroProps> = ({
         background={background}
         accentColor={accentColor}
         sculptureY={sculptureY}
+        headingFont="'Cinzel', 'Marcellus', serif"
+        accentFont="'Cinzel', 'Marcellus', serif"
         {...props}
       />
     </div>

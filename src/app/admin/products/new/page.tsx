@@ -19,7 +19,7 @@ export default function AdminNewProductPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="CATALOG CREATION"
+        category="STORE MANAGEMENT"
         title="Add New Fragrance"
         description="Craft an exquisite perfume profile with olfactory pyramid, bottle variants, and visual presentation."
         breadcrumbs={[

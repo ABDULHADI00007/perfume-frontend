@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Plus_Jakarta_Sans, Outfit } from "next/font/google";
+import { Cormorant_Garamond, Plus_Jakarta_Sans, Outfit, Playfair_Display } from "next/font/google";
 import React, { Suspense } from "react";
 import "./globals.css";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { TopProgressBar } from "@/components/layout/TopProgressBar";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -34,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${plusJakarta.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${cormorant.variable} ${plusJakarta.variable} ${outfit.variable}`}>
       <head>
         <link rel="icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" sizes="any" />
         <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" />

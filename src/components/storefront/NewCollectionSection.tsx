@@ -66,11 +66,11 @@ export function NewCollectionSection() {
             {/* ROW 1: NEW + Star Badge */}
             <div className="flex items-center" style={{ gap: "clamp(6px, 1.2vw, 18px)", paddingLeft: "clamp(10px, 2.5vw, 40px)" }}>
               <h2
-                className="uppercase text-[#90C293] leading-[0.88] tracking-tight"
+                className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
                 style={{
-                  fontFamily: "'Hobo BT', 'Hobo', cursive, sans-serif",
+                  fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                   fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                  fontWeight: 400,
+                  fontWeight: 700,
                 }}
               >
                 NEW
@@ -96,11 +96,11 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — indented */}
             <h2
-              className="uppercase text-[#90C293] leading-[0.88] tracking-tight"
+              className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
               style={{
-                fontFamily: "'Hobo BT', 'Hobo', cursive, sans-serif",
+                fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                fontWeight: 400,
+                fontWeight: 700,
                 paddingLeft: "clamp(24px, 4.5vw, 75px)",
                 marginTop: "clamp(18px, 2.8vw, 48px)",
               }}
@@ -110,11 +110,11 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION */}
             <h2
-              className="uppercase text-[#90C293] leading-[0.88] tracking-tight"
+              className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
               style={{
-                fontFamily: "'Hobo BT', 'Hobo', cursive, sans-serif",
+                fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                fontWeight: 400,
+                fontWeight: 700,
                 marginTop: "clamp(18px, 2.8vw, 48px)",
               }}
             >

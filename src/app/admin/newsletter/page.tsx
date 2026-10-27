@@ -153,20 +153,20 @@ export default function AdminNewsletterPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="AUDIENCE & SUBSCRIPTIONS"
+        category="MARKETING"
         title="Newsletter Subscribers"
-        description="Monitor VIP mailing list signups, customer subscription statuses, and lead funnels."
+        description="Monitor VIP mailing list signups, subscriber statuses, and audience growth."
         count={totalCount}
         breadcrumbs={[{ label: "Newsletter" }]}
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
           {successMessage}
         </div>
       )}

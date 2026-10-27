@@ -61,15 +61,11 @@ export default function HomePage() {
       {/* 01.1 — PARALLAX GALLERY: Skiper 30 multi-speed column parallax showcase with SOULMATE SCENTS */}
       <Skiper30 />
 
-      {/* 01.2 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
-      <TiltCascadeSection />
-
       {/* 01.8 — DISCOVER THE COLLECTION: Luxury Editorial Asymmetrical Grid */}
       <DiscoverCollectionSection />
 
       {/* 04.5 — THE ART OF BLOOM: Editorial dual-card showcase */}
       <ArtOfBloomSection />
-
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />
@@ -85,6 +81,9 @@ export default function HomePage() {
 
       {/* 06.5 — VOICES OF DISTINCTION: Circular 3D Carousel Testimonials */}
       <CircularTestimonialsSection />
+
+      {/* 06.8 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
+      <TiltCascadeSection />
 
       {/* 07 — FINAL CLOSING CTA: Quiet cinematic closing section */}
       <FinalCTA />

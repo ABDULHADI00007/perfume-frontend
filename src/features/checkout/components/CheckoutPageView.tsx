@@ -232,37 +232,37 @@ export function CheckoutPageView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#0B1938]">
+    <div className="min-h-screen bg-[#FAF9F6] text-black">
       <main className="py-6 sm:py-10">
         <Container size="wide">
           {/* Breadcrumb Navigation */}
-          <nav className="text-xs font-sans text-[#8E95A2] mb-6 flex items-center gap-2" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-[#0B1938] transition-colors flex items-center gap-1">
+          <nav className="text-xs font-sans text-stone-500 mb-6 flex items-center gap-2" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-black transition-colors flex items-center gap-1">
               <span>Home</span>
             </Link>
             <span className="text-[#C5A880]">&gt;</span>
-            <Link href="/cart" className="hover:text-[#0B1938] transition-colors">
+            <Link href="/cart" className="hover:text-black transition-colors">
               <span>Shopping Bag</span>
             </Link>
             <span className="text-[#C5A880]">&gt;</span>
-            <span className="text-[#0B1938] font-semibold">Checkout</span>
+            <span className="text-black font-semibold">Checkout</span>
           </nav>
 
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F0ECE1] pb-6">
             <div>
-              <Badge variant="accent" className="mb-2">
-                <Icons.Lock className="w-3 h-3 mr-1.5 text-[#C5A880]" />
+              <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
+                <Icons.Lock className="w-3 h-3 mr-1.5 text-[#590B16]" />
                 256-BIT ENCRYPTED LUXURY CHECKOUT
               </Badge>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight">
                 Secure Checkout
               </h1>
-              <p className="text-xs sm:text-sm text-[#64748B] font-sans mt-1">
+              <p className="text-xs sm:text-sm text-black/80 font-sans mt-1">
                 Finalize your bespoke fragrance acquisition with Maison concierge delivery
               </p>
             </div>
 
-            <div className="flex items-center gap-3 text-xs text-[#64748B] bg-white border border-[#E2DED6] px-4 py-2.5 rounded-xl shadow-2xs">
+            <div className="flex items-center gap-3 text-xs text-black/80 bg-white border border-[#E2DED6] px-4 py-2.5 rounded-xl shadow-2xs">
               <Icons.ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>100% Authentic Product Guarantee</span>
             </div>

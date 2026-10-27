@@ -8,11 +8,10 @@ import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-// import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Spinner } from "@/components/ui/spinner";
+import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
 import { Icons } from "@/components/ui/icons";
 
 export default function AdminSettingsPage() {
@@ -182,12 +181,7 @@ export default function AdminSettingsPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="py-20 text-center font-sans">
-        <Spinner size="lg" className="mx-auto mb-3 text-foreground-muted" />
-        <p className="text-xs text-foreground-muted uppercase tracking-wider">Loading Configuration...</p>
-      </div>
-    );
+    return <AdminDetailSkeleton category="CONFIGURATION" hasSidebar={false} />;
   }
 
   const canEdit = hasPermission("settings.update");
@@ -195,9 +189,9 @@ export default function AdminSettingsPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="SYSTEM & OPERATIONS"
+        category="CONFIGURATION"
         title="Storefront Settings"
-        description="Configure bank wire transfer details, shipping fee matrices, currency, and store identity."
+        description="Configure bank wire transfer credentials, shipping fee thresholds, COD options, and store identity."
         breadcrumbs={[{ label: "Settings" }]}
         actions={
           !canEdit ? (
@@ -209,12 +203,12 @@ export default function AdminSettingsPage() {
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
           {successMessage}
         </div>
       )}
@@ -298,14 +292,14 @@ export default function AdminSettingsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Bank Name"
-              placeholder="e.g. Banque Privée de France"
+              placeholder="e.g. Meezan Bank, HBL, Bank Alfalah"
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
               disabled={!canEdit}
             />
             <Input
               label="Account Title / Beneficiary"
-              placeholder="e.g. Soulmate Scents Ltd"
+              placeholder="e.g. Soulmate Scents (Pvt) Ltd"
               value={accountTitle}
               onChange={(e) => setAccountTitle(e.target.value)}
               disabled={!canEdit}
@@ -315,14 +309,14 @@ export default function AdminSettingsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Account Number"
-              placeholder="1234567890"
+              placeholder="e.g. 02010101234567"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
               disabled={!canEdit}
             />
             <Input
               label="IBAN / Swift Code"
-              placeholder="FR76 3000 4000 5000 6000 7000 800"
+              placeholder="e.g. PK36MEZN0000000000000000"
               value={iban}
               onChange={(e) => setIban(e.target.value)}
               disabled={!canEdit}
@@ -331,7 +325,7 @@ export default function AdminSettingsPage() {
 
           <Textarea
             label="Payment Instructions for Customers"
-            placeholder="Please quote your Order Reference # when making wire transfer. Upload proof upon completion."
+            placeholder="Please quote your Order Reference # in your mobile banking transfer remarks. Upload screenshot proof upon completion."
             value={bankInstructions}
             onChange={(e) => setBankInstructions(e.target.value)}
             disabled={!canEdit}
@@ -370,29 +364,32 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                Shipping Rates & Carriers
+                Shipping Rates & Logistics
               </h3>
-              <p className="text-[11px] text-[#64748B]">Thresholds and default delivery partner</p>
+              <p className="text-[11px] text-[#64748B]">Free shipping thresholds and delivery carriers</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
-              label="Free Shipping Minimum ($)"
+              label="Free Shipping Minimum (Rs.)"
               type="number"
+              placeholder="e.g. 5000"
               value={freeShippingThreshold}
               onChange={(e) => setFreeShippingThreshold(e.target.value)}
               disabled={!canEdit}
             />
             <Input
-              label="Flat Rate Shipping Fee ($)"
+              label="Flat Rate Shipping Fee (Rs.)"
               type="number"
+              placeholder="e.g. 250"
               value={flatRateFee}
               onChange={(e) => setFlatRateFee(e.target.value)}
               disabled={!canEdit}
             />
             <Input
-              label="Default Carrier"
+              label="Default Logistics Partner"
+              placeholder="e.g. TCS Express / Leopard"
               value={defaultCarrier}
               onChange={(e) => setDefaultCarrier(e.target.value)}
               disabled={!canEdit}

@@ -11,6 +11,7 @@ export interface ProductCardProps {
   isWishlisted?: boolean;
   priority?: boolean;
   className?: string;
+  titleClassName?: string;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -19,6 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onWishlistToggle,
   isWishlisted,
   className = "",
+  titleClassName,
 }) => {
   const [added, setAdded] = useState(false);
 
@@ -42,8 +44,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const badgeText = product.isBestSeller
     ? "Best Seller"
     : product.isNewArrival
-    ? "New"
-    : "Signature";
+      ? "New"
+      : "Signature";
 
   const stockText = `${selectedVariant?.stock || 9} left`;
 
@@ -51,9 +53,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <article className={`flex justify-center w-full ${className}`}>
       <InteractiveTravelCard
         title={product.title}
+        titleClassName={titleClassName}
         subtitle={selectedVariant?.size || "50ml"}
         stockBadge={stockText}
         overview={product.shortDescription || product.description || ""}
+        rating={product.rating || 5}
+        ratingCount={product.ratingCount || 124}
         imageUrl={primaryImage}
         price={currentPrice}
         originalPrice={originalPrice}
@@ -66,6 +71,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         isAdded={added}
         isWishlisted={isWishlisted}
         onWishlistToggle={onWishlistToggle ? () => onWishlistToggle(product) : undefined}
+        imageClassName={
+          ["whispers-bloom", "pulse", "dusk", "vivid-desire"].includes(product.slug)
+            ? "!h-[108%] !object-cover !object-top !-translate-y-6 sm:!-translate-y-8"
+            : "!h-[112%] !object-cover !object-top !-translate-y-6 sm:!-translate-y-8"
+        }
       />
     </article>
   );

@@ -5,24 +5,15 @@ import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminSidebar } from "./AdminSidebar";
 import { AdminHeader } from "./AdminHeader";
 import { AdminLoginForm } from "./AdminLoginForm";
+import { AdminAppShellSkeleton } from "./AdminAppShellSkeleton";
 import { Drawer } from "@/components/ui/drawer";
-import { Spinner } from "@/components/ui/spinner";
 
 export const AdminLayoutShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAdminAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#F8F9FA]">
-        <div className="p-4 bg-white rounded-2xl shadow-sm border border-slate-200/80 flex flex-col items-center space-y-3">
-          <Spinner size="lg" className="text-[#0C134F]" />
-          <p className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-slate-500">
-            Soulmate Scents Admin
-          </p>
-        </div>
-      </div>
-    );
+    return <AdminAppShellSkeleton />;
   }
 
   if (!isAuthenticated) {

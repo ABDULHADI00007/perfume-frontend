@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Product } from "../types";
 import { ProductCard } from "./ProductCard";
 import { filterAndSortProducts, FilterOptions } from "../utils";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { Container } from "@/components/layout/Container";
+import { ProductCatalogSkeleton } from "./ProductCatalogSkeleton";
 
 export interface ProductDiscoveryViewProps {
   initialProducts: Product[];
@@ -20,9 +21,17 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
   itemsPerPage = 16,
 }) => {
   const { addItem } = useCart();
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Active Category State
   const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Compute filtered & sorted products
   const filterOptions: FilterOptions = useMemo(
@@ -36,16 +45,47 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
     [itemsPerPage]
   );
 
+  const isPremiumProduct = (product: Product): boolean => {
+    const slug = (product.slug || "").toLowerCase();
+    const id = product.id || "";
+    const title = (product.title || "").toLowerCase();
+    return (
+      id === "prod-01" ||
+      id === "prod-02" ||
+      id === "prod-03" ||
+      id === "prod-04" ||
+      id === "prod-05" ||
+      slug === "elite-fusion" ||
+      slug === "crown-legacy" ||
+      slug === "sultans-veil" ||
+      slug === "blue-horizon" ||
+      slug === "velvet-orchid" ||
+      title.includes("elite fusion") ||
+      title.includes("crown legacy") ||
+      title.includes("sultan") ||
+      title.includes("blue horizon") ||
+      title.includes("velvet orchid")
+    );
+  };
+
   const { products } = useMemo(() => {
     let filtered = [...initialProducts];
     if (activeCategory === "men") filtered = filtered.filter((p) => p.gender === "men");
     else if (activeCategory === "women") filtered = filtered.filter((p) => p.gender === "women");
     else if (activeCategory === "unisex") filtered = filtered.filter((p) => p.gender === "unisex");
     else if (activeCategory === "bestsellers") filtered = filtered.filter((p) => p.isBestSeller);
-    else if (activeCategory === "new") filtered = filtered.filter((p) => p.isNewArrival);
+    else if (activeCategory === "premium") {
+      filtered = filtered.filter((p) => isPremiumProduct(p));
+    } else if (activeCategory === "gold") {
+      filtered = filtered.filter((p) => !isPremiumProduct(p));
+    }
 
     return filterAndSortProducts(filtered, filterOptions);
   }, [initialProducts, activeCategory, filterOptions]);
+
+  if (isInitialLoading) {
+    return <ProductCatalogSkeleton cardCount={itemsPerPage} />;
+  }
 
   return (
     <div className="w-full font-sans">
@@ -64,8 +104,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             >
               <div
                 className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "all"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Flower Bouquet Icon */}
@@ -76,7 +116,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "all" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "all" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
                 All Perfumes
@@ -93,8 +133,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             >
               <div
                 className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "men"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Necktie Icon */}
@@ -103,7 +143,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "men" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "men" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
                 Men
@@ -120,8 +160,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             >
               <div
                 className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "women"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Lotus Flower Icon */}
@@ -131,7 +171,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "women" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "women" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
                 Women
@@ -148,8 +188,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             >
               <div
                 className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "unisex"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Interlocking Circles Icon */}
@@ -159,7 +199,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "unisex" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "unisex" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
                 Unisex
@@ -176,8 +216,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             >
               <div
                 className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "bestsellers"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Star Icon */}
@@ -186,67 +226,68 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "bestsellers" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "bestsellers" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
                 Best Sellers
               </span>
             </button>
 
-            {/* 6. New Arrivals */}
+            {/* 6. Premium Collection */}
             <button
               type="button"
               onClick={() => {
-                setActiveCategory("new");
+                setActiveCategory("premium");
               }}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
               <div
-                className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "new"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "premium"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
-                {/* Scalloped Circle Badge Icon */}
+                {/* Diamond Gem Icon for Premium */}
                 <svg className="w-7 h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
-                  <circle cx="12" cy="12" r="9" strokeDasharray="3 2" />
-                  <text x="12" y="15" textAnchor="middle" fontSize="7" fontWeight="bold" fill="currentColor" stroke="none" className="uppercase font-sans">
-                    NEW
-                  </text>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h12l4 6-10 12L2 9l4-6z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2 9h20M10 3l-2 6 4 12 4-12-2-6" />
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "new" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "premium" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
-                New Arrivals
+                Premium
               </span>
             </button>
 
-            {/* 7. Gift Sets */}
+            {/* 7. Gold Edition */}
             <button
               type="button"
               onClick={() => {
-                setActiveCategory("gift");
+                setActiveCategory("gold");
               }}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
               <div
-                className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "gift"
-                    ? "bg-[#E5D7FA] text-[#121A2D] shadow-sm scale-105"
-                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#E7E2D8]"
+                className={`w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "gold"
+                    ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
+                    : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
-                {/* Gift Box Icon */}
+                {/* Royal Crown Icon for Gold */}
                 <svg className="w-7 h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 12v10H4V12M2 7h20v5H2zM12 7V22M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 18h16M4 18l2-10 4.5 4L12 6l1.5 6 4.5-4 2 10H4z" />
+                  <circle cx="6" cy="7" r="1" fill="currentColor" />
+                  <circle cx="12" cy="5" r="1" fill="currentColor" />
+                  <circle cx="18" cy="7" r="1" fill="currentColor" />
                 </svg>
               </div>
               <span
-                className={`text-xs font-sans tracking-tight ${activeCategory === "gift" ? "text-[#121A2D] font-bold" : "text-[#4A4E5A] font-medium"
+                className={`text-xs font-sans tracking-tight transition-colors ${activeCategory === "gold" ? "text-[#590B16] font-bold" : "text-[#4A4E5A] font-medium group-hover:text-[#590B16]"
                   }`}
               >
-                Gift Sets
+                Gold Edition
               </span>
             </button>
           </div>

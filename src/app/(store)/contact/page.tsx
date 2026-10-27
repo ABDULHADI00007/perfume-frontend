@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { Icons } from "@/components/ui/icons";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { ContactSkeleton } from "./ContactSkeleton";
 
 interface FaqItem {
   question: string;
@@ -53,6 +54,7 @@ const SUBJECT_OPTIONS = [
 ];
 
 export default function ContactPage() {
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -62,6 +64,17 @@ export default function ContactPage() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isPageLoading) {
+    return <ContactSkeleton />;
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -86,27 +99,27 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="bg-[#FAF9F6] text-[#0B1938] min-h-screen py-8 sm:py-14 font-sans selection:bg-[#D4ADFC]/20">
+    <main className="bg-[#FAF9F6] text-black min-h-screen py-8 sm:py-14 font-sans selection:bg-[#590B16]/20">
       <Container size="wide">
         {/* Breadcrumb Navigation */}
-        <nav className="text-xs font-sans text-[#8E95A2] mb-6 flex items-center gap-2" aria-label="Breadcrumb">
-          <Link href="/" className="hover:text-[#0B1938] transition-colors flex items-center gap-1">
+        <nav className="text-xs font-sans text-stone-500 mb-6 flex items-center gap-2" aria-label="Breadcrumb">
+          <Link href="/" className="hover:text-black transition-colors flex items-center gap-1">
             <span>Home</span>
           </Link>
           <span className="text-[#C5A880]">&gt;</span>
-          <span className="text-[#0B1938] font-semibold">Contact Us</span>
+          <span className="text-black font-semibold">Contact Us</span>
         </nav>
 
         {/* Header Section */}
         <div className="mb-10 sm:mb-14">
-          <Badge variant="accent" className="mb-3">
-            <Icons.Mail className="w-3 h-3 mr-1.5 text-[#C5A880]" />
+          <Badge variant="accent" className="mb-3 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
+            <Icons.Mail className="w-3 h-3 mr-1.5 text-[#590B16]" />
             CONCIERGE & SUPPORT
           </Badge>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] tracking-tight leading-tight">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight leading-tight">
             We&apos;d Love to Hear From You
           </h1>
-          <p className="text-xs sm:text-sm text-[#64748B] font-sans font-normal mt-2 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-black/80 font-sans font-normal mt-2 max-w-2xl leading-relaxed">
             Have a question about our fragrances, need help with an order, or looking for a personalized recommendation? Our concierge team is here to assist you.
           </p>
         </div>
@@ -116,10 +129,10 @@ export default function ContactPage() {
           {/* Left Card: Send Us a Message (8 cols) */}
           <Card variant="default" className="lg:col-span-8 border border-[#E2DED6] bg-white p-2 sm:p-4">
             <CardHeader className="pb-4">
-              <CardTitle className="font-serif text-2xl sm:text-3xl font-bold text-[#0B1938]">
+              <CardTitle className="font-serif text-2xl sm:text-3xl font-bold text-black">
                 Send Us a Message
               </CardTitle>
-              <CardDescription className="text-xs sm:text-sm text-[#64748B]">
+              <CardDescription className="text-xs sm:text-sm text-black/70">
                 Fill out the form below and our scent concierges will respond within 24 hours.
               </CardDescription>
             </CardHeader>
@@ -127,13 +140,13 @@ export default function ContactPage() {
             <CardContent>
               {status === "success" ? (
                 <div className="p-8 sm:p-10 bg-[#FAF4E8] rounded-2xl border border-[#F5EAD4] text-center space-y-4">
-                  <div className="w-14 h-14 bg-[#0B1938] text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+                  <div className="w-14 h-14 bg-[#590B16] text-white rounded-full flex items-center justify-center mx-auto shadow-md">
                     <Icons.Check className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0B1938]">
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-black">
                     Message Sent Successfully
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#6B5A3E] font-sans leading-relaxed max-w-md mx-auto">
+                  <p className="text-xs sm:text-sm text-black/80 font-sans leading-relaxed max-w-md mx-auto">
                     Thank you for reaching out to Soulmate Scents. Our team will review your inquiry and get back to you shortly.
                   </p>
                   <Button
@@ -219,7 +232,7 @@ export default function ContactPage() {
                     size="lg"
                     isLoading={status === "loading"}
                     rightIcon={!status && <Icons.ArrowRight className="w-4 h-4" />}
-                    className="w-full min-h-[48px] shadow-md bg-[#0B1938] hover:bg-[#131F37]"
+                    className="w-full min-h-[48px] shadow-md bg-[#590B16] hover:bg-[#3E060E] text-white font-serif uppercase tracking-[0.18em] text-xs font-bold"
                   >
                     Send Message
                   </Button>
@@ -231,10 +244,10 @@ export default function ContactPage() {
           {/* Right Card: Contact Information (4 cols) using shadcn Card */}
           <Card variant="default" className="lg:col-span-4 border border-[#E2DED6] bg-white p-2 sm:p-4">
             <CardHeader className="pb-4">
-              <CardTitle className="font-serif text-2xl font-bold text-[#0B1938]">
+              <CardTitle className="font-serif text-2xl font-bold text-black">
                 Contact Channels
               </CardTitle>
-              <CardDescription className="text-xs text-[#64748B]">
+              <CardDescription className="text-xs text-black/70">
                 Reach our team directly through your preferred channel.
               </CardDescription>
             </CardHeader>
@@ -242,49 +255,49 @@ export default function ContactPage() {
             <CardContent className="space-y-5">
               {/* 1. Email Us */}
               <div className="flex items-start gap-4 pb-4 border-b border-[#F0ECE1]">
-                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#0B1938]">
-                  <Icons.Mail className="w-5 h-5 text-[#0B1938]" />
+                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#590B16]">
+                  <Icons.Mail className="w-5 h-5 text-[#590B16]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#0B1938]">Email Concierge</h3>
-                  <p className="text-xs font-semibold text-[#0B1938] mt-0.5">support@soulmatescents.com</p>
-                  <p className="text-[11px] text-[#64748B] font-sans mt-0.5">Replies within 24 hours</p>
+                  <h3 className="font-serif text-base font-bold text-black">Email Concierge</h3>
+                  <p className="text-xs font-semibold text-black mt-0.5">support@soulmatescents.com</p>
+                  <p className="text-[11px] text-stone-500 font-sans mt-0.5">Replies within 24 hours</p>
                 </div>
               </div>
 
               {/* 2. Call Us */}
               <div className="flex items-start gap-4 pb-4 border-b border-[#F0ECE1]">
-                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#0B1938]">
-                  <Icons.Phone className="w-5 h-5 text-[#0B1938]" />
+                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#590B16]">
+                  <Icons.Phone className="w-5 h-5 text-[#590B16]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#0B1938]">Call Us</h3>
-                  <p className="text-xs font-semibold text-[#0B1938] mt-0.5">+92 300 1234567</p>
-                  <p className="text-[11px] text-[#64748B] font-sans mt-0.5">Mon – Sat, 10:00 AM – 7:00 PM</p>
+                  <h3 className="font-serif text-base font-bold text-black">Call Us</h3>
+                  <p className="text-xs font-semibold text-black mt-0.5">+92 300 1234567</p>
+                  <p className="text-[11px] text-stone-500 font-sans mt-0.5">Mon – Sat, 10:00 AM – 7:00 PM</p>
                 </div>
               </div>
 
               {/* 3. Visit Our Studio */}
               <div className="flex items-start gap-4 pb-4 border-b border-[#F0ECE1]">
-                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#0B1938]">
-                  <Icons.MapPin className="w-5 h-5 text-[#0B1938]" />
+                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#590B16]">
+                  <Icons.MapPin className="w-5 h-5 text-[#590B16]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#0B1938]">Maison Studio</h3>
-                  <p className="text-xs font-semibold text-[#0B1938] mt-0.5">Lahore, Pakistan</p>
-                  <p className="text-[11px] text-[#64748B] font-sans mt-0.5">By appointment only</p>
+                  <h3 className="font-serif text-base font-bold text-black">Maison Studio</h3>
+                  <p className="text-xs font-semibold text-black mt-0.5">Lahore, Pakistan</p>
+                  <p className="text-[11px] text-stone-500 font-sans mt-0.5">By appointment only</p>
                 </div>
               </div>
 
               {/* 4. Live Chat */}
               <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#0B1938]">
-                  <Icons.MessageSquare className="w-5 h-5 text-[#0B1938]" />
+                <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#590B16]">
+                  <Icons.MessageSquare className="w-5 h-5 text-[#590B16]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#0B1938]">Instant Live Chat</h3>
-                  <p className="text-xs font-semibold text-[#0B1938] mt-0.5">Available on website</p>
-                  <p className="text-[11px] text-[#64748B] font-sans mt-0.5">Instant olfactory assistance</p>
+                  <h3 className="font-serif text-base font-bold text-black">Instant Live Chat</h3>
+                  <p className="text-xs font-semibold text-black mt-0.5">Available on website</p>
+                  <p className="text-[11px] text-stone-500 font-sans mt-0.5">Instant olfactory assistance</p>
                 </div>
               </div>
             </CardContent>
@@ -295,10 +308,10 @@ export default function ContactPage() {
         <Card variant="default" className="border border-[#E2DED6] bg-white mt-10 p-2 sm:p-4">
           <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#F0ECE1] gap-4">
             <div>
-              <CardTitle className="font-serif text-2xl font-bold text-[#0B1938]">
+              <CardTitle className="font-serif text-2xl font-bold text-black">
                 Frequently Asked Questions
               </CardTitle>
-              <CardDescription className="text-xs text-[#64748B] mt-0.5">
+              <CardDescription className="text-xs text-black/70 mt-0.5">
                 Quick answers to the most common queries about our scents & delivery.
               </CardDescription>
             </div>
@@ -318,17 +331,16 @@ export default function ContactPage() {
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full flex items-center justify-between text-left group cursor-pointer py-1"
                   >
-                    <span className="font-sans text-xs sm:text-sm font-semibold text-[#0B1938] group-hover:text-[#C5A880] transition-colors pr-2">
+                    <span className="font-sans text-xs sm:text-sm font-semibold text-black group-hover:text-[#590B16] transition-colors pr-2">
                       {faq.question}
                     </span>
                     <Icons.ChevronDown
-                      className={`w-4 h-4 text-[#64748B] transition-transform duration-200 flex-shrink-0 ${
-                        openFaq === idx ? "rotate-180 text-[#C5A880]" : ""
-                      }`}
+                      className={`w-4 h-4 text-stone-500 transition-transform duration-200 flex-shrink-0 ${openFaq === idx ? "rotate-180 text-[#590B16]" : ""
+                        }`}
                     />
                   </button>
                   {openFaq === idx && (
-                    <p className="text-xs text-[#64748B] font-sans mt-2 leading-relaxed font-normal">
+                    <p className="text-xs text-black/80 font-sans mt-2 leading-relaxed font-normal">
                       {faq.answer}
                     </p>
                   )}

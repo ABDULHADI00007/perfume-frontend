@@ -1223,22 +1223,22 @@ const CSS = `
 .sh-root[data-swap="1"] .sh-canvas{opacity:0;transition-duration:.25s}
 .sh-root[data-swap="1"] .sh-fallback{opacity:0;transition-duration:.25s}
 .sh-backdrop{position:absolute;left:50%;top:42%;z-index:0;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;user-select:none;
-  font-size:min(52svh,25.4vw);font-size:min(52cqh,25.4cqw);font-family:var(--sh-head);font-weight:600;letter-spacing:-.06em;line-height:.8;color:color-mix(in srgb,#590B16 28%,transparent)}
+  font-size:min(52svh,25.4vw);font-size:min(52cqh,25.4cqw);font-family:var(--sh-head);font-weight:600;letter-spacing:.02em;text-transform:uppercase;line-height:.8;color:color-mix(in srgb,#590B16 28%,transparent)}
 .sh-nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px;
   padding:26px clamp(20px,3.2cqw,48px) 0}
-.sh-brand{font-family:var(--sh-head);font-weight:600;font-size:17px;letter-spacing:-.02em;color:inherit;text-decoration:none}
+.sh-brand{font-family:var(--sh-head);font-weight:600;font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:inherit;text-decoration:none}
 .sh-links{display:flex;align-items:center;gap:clamp(18px,2.4cqw,36px);list-style:none;margin:0;padding:0}
-.sh-link{color:inherit;text-decoration:none;font-size:13.5px;letter-spacing:-.005em;opacity:.72;transition:opacity .2s}
+.sh-link{color:inherit;text-decoration:none;font-family:var(--sh-head);font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;transition:opacity .2s}
 .sh-link:hover{opacity:1}
 .sh-theme{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border-radius:50%;cursor:pointer;color:inherit;background:transparent;
   border:1px solid color-mix(in srgb,var(--sh-fg) 22%,transparent);transition:background .25s,color .25s}
 .sh-theme:hover{background:var(--sh-fg);color:var(--sh-bg)}
 .sh-theme:focus-visible{outline:2px solid var(--sh-fg);outline-offset:4px}
-.sh-navcta{color:inherit;text-decoration:none;font-size:13.5px;padding:8px 14px;border:1px solid color-mix(in srgb,var(--sh-fg) 22%,transparent);
+.sh-navcta{color:inherit;text-decoration:none;font-family:var(--sh-head);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid color-mix(in srgb,var(--sh-fg) 22%,transparent);
   border-radius:999px;transition:background .25s,color .25s}
 .sh-navcta:hover{background:var(--sh-fg);color:var(--sh-bg)}
 .sh-hint{position:absolute;left:50%;top:50%;z-index:1;transform:translate(-50%,0);display:flex;align-items:center;gap:10px;white-space:nowrap;
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .6s ease;color:#590B16}
+  font-family:var(--sh-head);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .6s ease;color:#590B16}
 .sh-hint::before{content:"";width:6px;height:6px;border-radius:50%;background:#590B16;animation:sh-pulse 2.4s ease-in-out infinite}
 .sh-root[data-gl="on"] .sh-hint{opacity:.75}
 .sh-root[data-touched="1"] .sh-hint{opacity:0 !important}
@@ -1246,23 +1246,23 @@ const CSS = `
 .sh-spacer{flex:1 1 auto;min-height:0}
 .sh-content{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);align-items:end;
   gap:clamp(24px,3.6cqw,64px);padding:0 clamp(24px,3.5cqw,56px) clamp(28px,4.5cqh,52px)}
-.sh-eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#590B16;opacity:.92;margin:0 0 clamp(10px,1.4cqh,16px);
+.sh-eyebrow{font-family:var(--sh-head);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#590B16;opacity:.92;margin:0 0 clamp(10px,1.4cqh,16px);
   display:flex;align-items:center;gap:12px;font-weight:600}
 .sh-eyebrow::before{content:"";width:32px;height:1.5px;background:#590B16;opacity:1}
-.sh-h1{font-family:var(--sh-head);font-weight:500;font-size:clamp(44px,5.8cqw,118px);line-height:.92;letter-spacing:-.045em;margin:0;
+.sh-h1{font-family:var(--sh-head);font-weight:600;font-size:clamp(44px,5.8cqw,118px);line-height:.92;letter-spacing:.02em;text-transform:uppercase;margin:0;
   text-wrap:balance}
 .sh-h1 .sh-line{display:block}
-.sh-accent{font-family:var(--sh-accent);font-style:italic;font-weight:400;letter-spacing:-.02em;color:var(--sh-acc)}
+.sh-accent{font-family:var(--sh-accent);font-style:normal;font-weight:600;letter-spacing:.02em;color:var(--sh-acc)}
 .sh-aside{max-width:440px;justify-self:end;padding-bottom:2px;display:flex;flex-direction:column;justify-content:flex-end}
 .sh-body{font-size:clamp(15px,1.1cqw,17.5px);line-height:1.52;letter-spacing:-.01em;margin:0 0 clamp(16px,2cqh,24px);opacity:.82;text-wrap:pretty}
 .sh-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:22px}
 .sh-btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 24px;border-radius:999px;background:#590B16;
-  color:#FAF7EE;text-decoration:none;font-size:14.5px;font-weight:500;letter-spacing:-.01em;transition:transform .3s cubic-bezier(.2,.7,.2,1),background-color .25s,box-shadow .25s;box-shadow:0 4px 18px rgba(89,11,22,0.18)}
+  color:#FAF7EE;text-decoration:none;font-family:var(--sh-head);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;transition:transform .3s cubic-bezier(.2,.7,.2,1),background-color .25s,box-shadow .25s;box-shadow:0 4px 18px rgba(89,11,22,0.18)}
 .sh-btn:hover{background:#3E060E;transform:translateY(-1px);box-shadow:0 6px 24px rgba(89,11,22,0.28)}
 .sh-btn svg,.sh-txt svg{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
 .sh-btn:hover svg,.sh-txt:hover svg{transform:translateX(3px)}
-.sh-txt{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;font-size:14.5px;font-weight:500;
-  letter-spacing:-.01em;padding:4px 0;border-bottom:1px solid color-mix(in srgb,#590B16 40%,transparent);transition:color .2s,border-color .2s}
+.sh-txt{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;font-family:var(--sh-head);font-size:12px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.16em;padding:4px 0;border-bottom:1px solid color-mix(in srgb,#590B16 40%,transparent);transition:color .2s,border-color .2s}
 .sh-txt:hover{color:#590B16;border-bottom-color:#590B16}
 .sh-root a:focus-visible{outline:2px solid var(--sh-fg);outline-offset:4px}
 .sh-credit{position:absolute;z-index:2;right:clamp(20px,3.2cqw,48px);bottom:8px;font-size:10px;letter-spacing:.06em;

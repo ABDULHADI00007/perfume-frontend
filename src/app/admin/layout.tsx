@@ -15,9 +15,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AdminAuthProvider>
-      <AdminLayoutShell>{children}</AdminLayoutShell>
-    </AdminAuthProvider>
+    <div data-admin-portal="true" className="font-sans antialiased text-slate-900 bg-[#F8F9FA]">
+      <AdminAuthProvider>
+        <AdminLayoutShell>{children}</AdminLayoutShell>
+      </AdminAuthProvider>
+    </div>
   );
 }
 

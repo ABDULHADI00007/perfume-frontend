@@ -34,10 +34,10 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
     <Card variant="default" className={`border border-[#E2DED6] bg-white p-2 sm:p-4 shadow-xl ${className}`}>
       <CardHeader className="pb-3 border-b border-[#F0ECE1]">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-serif text-2xl font-bold text-[#0B1938]">
+          <CardTitle className="font-serif text-2xl font-bold text-black">
             Summary
           </CardTitle>
-          <Badge variant="accent">
+          <Badge variant="accent" className="bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
             {itemCount} {itemCount === 1 ? "Item" : "Items"}
           </Badge>
         </div>
@@ -64,20 +64,20 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
                         <Icons.Bag className="w-4 h-4 text-[#94A3B8]" />
                       </div>
                     )}
-                    <span className="absolute -top-2 -right-2 bg-[#0B1938] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 font-sans">
+                    <span className="absolute -top-2 -right-2 bg-[#590B16] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 font-sans">
                       {item.quantity}
                     </span>
                   </div>
                   <div>
-                    <h4 className="font-serif text-sm font-bold text-[#0B1938] line-clamp-1">
+                    <h4 className="font-serif text-sm font-bold text-black line-clamp-1">
                       {item.title}
                     </h4>
-                    <span className="text-[11px] text-[#64748B] font-sans uppercase tracking-wider block mt-0.5">
+                    <span className="text-[11px] text-stone-500 font-sans uppercase tracking-wider block mt-0.5">
                       {item.size}
                     </span>
                   </div>
                 </div>
-                <span className="font-serif text-sm font-bold text-[#0B1938] flex-shrink-0">
+                <span className="font-serif text-sm font-bold text-black flex-shrink-0">
                   {formatCurrency(item.price * item.quantity)}
                 </span>
               </div>
@@ -87,30 +87,30 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
 
         {/* Breakdown */}
         <div className="flex flex-col space-y-3 text-xs sm:text-sm font-sans font-normal pt-2 border-t border-[#F0ECE1]">
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})</span>
-            <span className="text-[#0B1938] font-bold text-sm">
+            <span className="text-black font-bold text-sm">
               {formatCurrency(subtotal)}
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>White-Glove Courier</span>
             <span className="text-emerald-700 font-semibold text-sm">Complimentary</span>
           </div>
 
-          <div className="flex items-center justify-between text-[#64748B]">
+          <div className="flex items-center justify-between text-black/80">
             <span>Estimated Tax</span>
-            <span className="text-[#0B1938] font-bold text-sm">Rs. 0</span>
+            <span className="text-black font-bold text-sm">Rs. 0</span>
           </div>
         </div>
 
         {/* Estimated Total Divider & Row */}
         <div className="pt-4 border-t border-[#F0ECE1] flex items-baseline justify-between">
-          <span className="font-serif text-base sm:text-lg font-bold text-[#0B1938]">
+          <span className="font-serif text-base sm:text-lg font-bold text-black">
             Subtotal Amount
           </span>
-          <span className="font-serif text-2xl sm:text-3xl text-[#0B1938] font-bold tracking-tight">
+          <span className="font-serif text-2xl sm:text-3xl text-black font-bold tracking-tight">
             {formatCurrency(subtotal)}
           </span>
         </div>
@@ -131,13 +131,19 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
             disabled={itemCount === 0}
             onClick={handleCheckout}
             leftIcon={<Icons.Lock className="w-4 h-4" />}
-            className="w-full tracking-[0.18em] font-semibold text-xs uppercase py-4 rounded-xl bg-[#0B1938] hover:bg-[#121A38] text-white flex items-center justify-center gap-2 cursor-pointer shadow-md min-h-[48px]"
+            className="w-full tracking-[0.18em] font-bold text-xs uppercase py-4 rounded-xl bg-[#590B16] hover:bg-[#3E060E] text-white flex items-center justify-center gap-2 cursor-pointer shadow-md min-h-[48px] font-serif"
+            style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
           >
             Proceed to Checkout
           </Button>
 
           <Link href="/perfumes" className="w-full">
-            <Button variant="outline" size="md" className="w-full font-semibold text-xs uppercase tracking-[0.16em]">
+            <Button
+              variant="outline"
+              size="md"
+              className="w-full font-semibold text-xs uppercase tracking-[0.16em] font-serif"
+              style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+            >
               Continue Shopping
             </Button>
           </Link>

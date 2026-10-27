@@ -116,10 +116,11 @@ export function ArtOfBloomSection() {
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 pt-0 sm:pt-0 lg:pt-0 -mt-1 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
             <motion.h2
               variants={fadeInUpTitle}
-              className="font-serif uppercase text-6xl sm:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.84] tracking-[0.06em]"
+              className="font-cinzel uppercase text-6xl sm:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.84] tracking-[0.06em]"
+              style={{ fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif" }}
             >
               <span className="block">THE ART</span>
-              <span className="font-serif block pl-14 sm:pl-28 lg:pl-36 font-normal -mt-1 sm:-mt-3 lg:-mt-5">
+              <span className="block pl-14 sm:pl-28 lg:pl-36 font-normal -mt-1 sm:-mt-3 lg:-mt-5">
                 OF SCENT
               </span>
             </motion.h2>

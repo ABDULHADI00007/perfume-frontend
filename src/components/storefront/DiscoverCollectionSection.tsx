@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { cartStore } from "@/features/cart/store/cartStore";
+import { ShoppingBag } from "lucide-react";
 
 interface CollectionProduct {
   id: string;
@@ -20,53 +21,53 @@ interface CollectionProduct {
 
 const collectionProducts: CollectionProduct[] = [
   {
-    id: "col-01",
-    title: "Crimson Bloom",
-    slug: "crimson-bloom",
-    price: "$495.00",
-    numericPrice: 13500,
-    image: "/images/perfumes/collection_crimson_bloom.jpg",
-    notes: "Centifolia Scarlet Rose · Pink Pepper · Crystalline Amber",
+    id: "prod-05",
+    title: "Velvet Orchid",
+    slug: "velvet-orchid",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_velvet_orchid.jpg",
+    notes: "Bright Orange · Turkish Rose · Bourbon Vanilla",
     colDesktop: "lg:col-start-1 lg:row-start-1",
   },
   {
-    id: "col-02",
-    title: "Midnight Rose",
-    slug: "midnight-rose",
-    price: "$495.00",
-    numericPrice: 13500,
-    image: "/images/perfumes/collection_midnight_rose.jpg",
-    notes: "Nocturnal Damask Rose · Smoked Plum · Bourbon Vanilla",
+    id: "prod-04",
+    title: "Blue Horizon",
+    slug: "blue-horizon",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_blue_horizon.jpg",
+    notes: "Green Apple · Aquatic Lotus · Cedarwood",
     colDesktop: "lg:col-start-3 lg:row-start-1",
   },
   {
-    id: "col-03",
-    title: "Velvet Amber",
-    slug: "velvet-amber",
-    price: "$495.00",
-    numericPrice: 13500,
-    image: "/images/perfumes/collection_velvet_amber.jpg",
-    notes: "Molten Liquid Amber · Cinnamon Bark · Smoked Labdanum",
+    id: "prod-03",
+    title: "Sultan's Veil",
+    slug: "sultans-veil",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_sultans_veil.jpg",
+    notes: "Pink Pepper · Cedar · Noble Oud",
     colDesktop: "lg:col-start-4 lg:row-start-1",
   },
   {
-    id: "col-04",
-    title: "Moonlit Orchid",
-    slug: "moonlit-orchid",
-    price: "$495.00",
-    numericPrice: 13500,
-    image: "/images/perfumes/collection_moonlit_orchid.jpg",
-    notes: "Night-Blooming Black Orchid · Tuberose · Dark Patchouli",
+    id: "prod-02",
+    title: "Crown Legacy",
+    slug: "crown-legacy",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_crown_legacy.jpg",
+    notes: "Sicilian Bergamot · Rich Oud · Smoky Leather",
     colDesktop: "lg:col-start-2 lg:row-start-2",
   },
   {
-    id: "col-05",
-    title: "Noir Essence",
-    slug: "noir-essence",
-    price: "$495.00",
-    numericPrice: 13500,
-    image: "/images/perfumes/collection_noir_essence.jpg",
-    notes: "Cambodian Agarwood · Russian Leather · Royal Saffron",
+    id: "prod-01",
+    title: "Elite Fusion",
+    slug: "elite-fusion",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_elite_fusion.jpg",
+    notes: "Fresh Bergamot · Rich Ambroxan · Woody Patchouli",
     colDesktop: "lg:col-start-4 lg:row-start-2",
   },
 ];
@@ -110,7 +111,7 @@ export function DiscoverCollectionSection() {
               className="text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
-                fontSize: "clamp(1.85rem, 3.2vw, 3rem)",
+                fontSize: "clamp(2.4rem, 4.5vw, 4.25rem)",
               }}
             >
               DISCOVER THE
@@ -119,7 +120,7 @@ export function DiscoverCollectionSection() {
             </h2>
 
             {/* Subtle luxury accent line */}
-            <div className="w-16 h-[1.5px] bg-[#590B16]/30 mt-3" />
+            <div className="w-20 sm:w-24 h-[2px] bg-[#590B16]/30 mt-3.5" />
           </motion.div>
         </div>
 
@@ -170,9 +171,11 @@ export function DiscoverCollectionSection() {
                 <div className="absolute inset-x-0 bottom-4 px-4 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform translate-y-3 group-hover:translate-y-0 z-30">
                   <button
                     onClick={(e) => handleQuickAdd(product, e)}
-                    className="flex-1 py-2 px-3 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-medium transition-all duration-300 hover:bg-[#42060F] hover:shadow-md active:scale-95 text-center"
+                    className="flex-1 py-2 px-3 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-medium transition-all duration-300 hover:bg-[#42060F] hover:shadow-md active:scale-95 text-center flex items-center justify-center gap-1.5 font-serif"
+                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
-                    Quick Add
+                    <ShoppingBag size={13} />
+                    <span>Quick Add</span>
                   </button>
                   <button
                     onClick={(e) => {
@@ -180,7 +183,8 @@ export function DiscoverCollectionSection() {
                       e.stopPropagation();
                       setQuickViewProduct(product);
                     }}
-                    className="py-2 px-3 bg-white/95 backdrop-blur-sm text-[#590B16] border border-[#590B16]/30 text-[10px] sm:text-[11px] uppercase tracking-[0.14em] font-medium transition-all duration-300 hover:bg-white hover:border-[#590B16] active:scale-95 text-center"
+                    className="py-2 px-3 bg-white/95 backdrop-blur-sm text-[#590B16] border border-[#590B16]/30 text-[10px] sm:text-[11px] uppercase tracking-[0.14em] font-medium transition-all duration-300 hover:bg-white hover:border-[#590B16] active:scale-95 text-center font-serif"
+                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                     aria-label={`Quick details for ${product.title}`}
                   >
                     Details
@@ -191,11 +195,17 @@ export function DiscoverCollectionSection() {
               {/* Text Details below the white box */}
               <div className="mt-2.5 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
                 <Link href={`/perfumes/${product.slug}`}>
-                  <h3 className="text-[#590B16] text-[13.5px] sm:text-[14.5px] font-medium tracking-[0.01em] font-serif hover:text-[#42060F] transition-colors">
+                  <h3
+                    className="text-[#590B16] text-[13.5px] sm:text-[14.5px] font-semibold tracking-[0.04em] font-serif hover:text-[#42060F] transition-colors uppercase"
+                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                  >
                     {product.title}
                   </h3>
                 </Link>
-                <p className="text-[#590B16]/75 text-xs sm:text-[13px] font-normal tracking-wide mt-0.5">
+                <p
+                  className="text-[#590B16]/80 text-xs sm:text-[13px] font-semibold tracking-wider mt-0.5 font-serif"
+                  style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                >
                   {product.price}
                 </p>
               </div>
@@ -240,19 +250,25 @@ export function DiscoverCollectionSection() {
 
               {/* Details Column */}
               <div className="w-full md:w-1/2 flex flex-col text-left space-y-4">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-[#590B16]/70">
+                <div
+                  className="text-[11px] uppercase tracking-[0.22em] text-[#590B16]/70 font-serif"
+                  style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                >
                   Extrait de Parfum · 100ml
                 </div>
                 <h3
-                  className="text-2xl sm:text-3xl text-[#590B16] font-normal"
+                  className="text-2xl sm:text-3xl text-[#590B16] font-normal font-serif uppercase tracking-[0.04em]"
                   style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                 >
                   {quickViewProduct.title}
                 </h3>
-                <p className="text-lg font-medium text-[#590B16]">
+                <p
+                  className="text-lg font-semibold text-[#590B16] font-serif tracking-wider"
+                  style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                >
                   {quickViewProduct.price}
                 </p>
-                <p className="text-xs sm:text-sm text-[#590B16]/80 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#590B16]/80 leading-relaxed font-sans">
                   {quickViewProduct.notes}
                 </p>
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">
@@ -261,13 +277,16 @@ export function DiscoverCollectionSection() {
                       handleQuickAdd(quickViewProduct, e);
                       setQuickViewProduct(null);
                     }}
-                    className="w-full py-3 bg-[#590B16] text-[#FAF7EE] text-xs uppercase tracking-[0.2em] font-medium hover:bg-[#42060F] transition-colors"
+                    className="w-full py-3 bg-[#590B16] text-[#FAF7EE] text-xs uppercase tracking-[0.2em] font-medium hover:bg-[#42060F] transition-colors flex items-center justify-center gap-2 font-serif"
+                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
-                    Add to Bag
+                    <ShoppingBag size={14} />
+                    <span>Add to Bag</span>
                   </button>
                   <Link
                     href={`/perfumes/${quickViewProduct.slug}`}
-                    className="w-full py-3 text-center border border-[#590B16] text-[#590B16] text-xs uppercase tracking-[0.2em] font-medium hover:bg-white transition-colors"
+                    className="w-full py-3 text-center border border-[#590B16] text-[#590B16] text-xs uppercase tracking-[0.2em] font-medium hover:bg-white transition-colors font-serif"
+                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
                     View Story
                   </Link>

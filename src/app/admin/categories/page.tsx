@@ -52,7 +52,7 @@ export default function AdminCategoriesPage() {
     try {
       if (!isSilent) setIsLoading(true);
       setError(null);
-      const data = await adminService.getCategories();
+      const data = await adminService.getCategories(true);
       setCategories(data);
     } catch (err: unknown) {
       if (!isSilent) {

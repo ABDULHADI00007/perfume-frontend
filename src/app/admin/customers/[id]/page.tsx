@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
+import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -80,14 +81,7 @@ export default function AdminCustomerDetailPage({
   }
 
   if (isLoading) {
-    return (
-      <div className="py-24 text-center font-sans">
-        <Spinner size="lg" className="mx-auto mb-3 text-foreground-muted" />
-        <p className="text-xs font-semibold text-foreground-muted uppercase tracking-[0.2em]">
-          Loading Customer Profile...
-        </p>
-      </div>
-    );
+    return <AdminDetailSkeleton category="CLIENT RELATIONS" />;
   }
 
   if (!customer) {

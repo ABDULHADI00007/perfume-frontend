@@ -264,9 +264,9 @@ export default function AdminCouponsPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="PROMOTIONS & MARKETING"
+        category="MARKETING"
         title="Discount Coupons"
-        description="Configure promotional vouchers, percentage discounts, minimum thresholds, and redemption caps."
+        description="Configure promotional vouchers, percentage discounts, minimum order thresholds, and redemption limits."
         count={coupons.length}
         breadcrumbs={[{ label: "Coupons" }]}
         actions={
@@ -285,12 +285,12 @@ export default function AdminCouponsPage() {
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
           {successMessage}
         </div>
       )}
@@ -307,13 +307,13 @@ export default function AdminCouponsPage() {
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          title={editingCoupon ? "Edit Coupon" : "Create Promotional Coupon"}
+          title={editingCoupon ? `Edit Coupon: ${editingCoupon.code}` : "Create Promotional Coupon"}
           maxWidth="md"
         >
           <form onSubmit={handleSaveCoupon} className="space-y-4 font-sans">
             <Input
-              label="Promo Code *"
-              placeholder="e.g. MAISON20"
+              label="Coupon Code *"
+              placeholder="e.g. EID2026 or SOULMATE10"
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               required
@@ -326,16 +326,16 @@ export default function AdminCouponsPage() {
                 onChange={(e) => setDiscountType(e.target.value as "percentage" | "fixed")}
                 options={[
                   { label: "Percentage (%)", value: "percentage" },
-                  { label: "Fixed Amount ($)", value: "fixed" },
+                  { label: "Fixed Amount (Rs.)", value: "fixed" },
                 ]}
               />
 
               <Input
-                label="Discount Value *"
+                label={discountType === "percentage" ? "Discount Percentage (%) *" : "Discount Amount (Rs.) *"}
                 type="number"
-                step="0.01"
-                min="0.01"
-                placeholder={discountType === "percentage" ? "20" : "50.00"}
+                step={discountType === "percentage" ? "1" : "50"}
+                min="1"
+                placeholder={discountType === "percentage" ? "15" : "1000"}
                 value={discountValue}
                 onChange={(e) => setDiscountValue(e.target.value)}
                 required
@@ -344,17 +344,17 @@ export default function AdminCouponsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Min Order Amount ($)"
+                label="Minimum Order Amount (Rs.)"
                 type="number"
-                placeholder="100.00"
+                placeholder="e.g. 5000"
                 value={minimumOrderAmount}
                 onChange={(e) => setMinimumOrderAmount(e.target.value)}
               />
 
               <Input
-                label="Max Discount ($)"
+                label="Maximum Discount Cap (Rs.)"
                 type="number"
-                placeholder="50.00"
+                placeholder="e.g. 2500"
                 value={maximumDiscountAmount}
                 onChange={(e) => setMaximumDiscountAmount(e.target.value)}
               />
@@ -362,15 +362,15 @@ export default function AdminCouponsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Usage Limit"
+                label="Total Usage Limit"
                 type="number"
-                placeholder="e.g. 100"
+                placeholder="e.g. 100 (leave blank for unlimited)"
                 value={usageLimit}
                 onChange={(e) => setUsageLimit(e.target.value)}
               />
 
               <Input
-                label="Expires On *"
+                label="Expiration Date *"
                 type="date"
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
@@ -389,8 +389,8 @@ export default function AdminCouponsPage() {
             />
 
             <Textarea
-              label="Description (optional)"
-              placeholder="Campaign notes or terms..."
+              label="Description / Campaign Notes (optional)"
+              placeholder="e.g. Exclusive newsletter welcome voucher, valid across all collections."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
@@ -427,7 +427,7 @@ export default function AdminCouponsPage() {
         onClose={() => setCouponToDelete(null)}
         onConfirm={handleDelete}
         title="Delete Coupon"
-        message={`Are you sure you want to delete coupon "${couponToDelete?.code}"?`}
+        message={`Are you sure you want to delete coupon "${couponToDelete?.code}"? This action cannot be undone.`}
         confirmLabel="Delete Coupon"
         isDestructive
         isLoading={isDeleteLoading}

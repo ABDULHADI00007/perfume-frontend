@@ -24,11 +24,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     images && images.length > 0
       ? images
       : [
-          "/images/perfumes/oyd_royal.png",
-          "/images/perfumes/sultan-veils.png",
-          "/images/perfumes/amber-rivera.png",
-          "/images/perfumes/noir_external.png",
-        ];
+        "/images/perfumes/oyd_royal.png",
+        "/images/perfumes/sultan-veils.png",
+        "/images/perfumes/amber-rivera.png",
+        "/images/perfumes/noir_external.png",
+      ];
 
   const currentImage = displayImages[selectedImageIndex] || displayImages[0];
 
@@ -63,11 +63,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               type="button"
               onClick={() => setSelectedImageIndex(idx)}
               aria-label={`Select view ${idx + 1} for ${title}`}
-              className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 flex-shrink-0 bg-[#0D1424] ${
-                isSelected
-                  ? "border-[#0D1424] ring-2 ring-[#0D1424]/20 scale-95 shadow-md"
-                  : "border-transparent opacity-70 hover:opacity-100"
-              }`}
+              className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 flex-shrink-0 bg-[#0D1424] ${isSelected
+                ? "border-[#0D1424] ring-2 ring-[#0D1424]/20 scale-95 shadow-md"
+                : "border-transparent opacity-70 hover:opacity-100"
+                }`}
             >
               <Image
                 src={img}
@@ -159,11 +158,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                     key={`modal-thumb-${idx}`}
                     type="button"
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      isSelected
-                        ? "border-white ring-2 ring-white/30 scale-95"
-                        : "border-transparent opacity-50 hover:opacity-100"
-                    }`}
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${isSelected
+                      ? "border-white ring-2 ring-white/30 scale-95"
+                      : "border-transparent opacity-50 hover:opacity-100"
+                      }`}
                   >
                     <Image src={img} alt={`Thumb ${idx + 1}`} fill sizes="80px" className="object-cover" />
                   </button>

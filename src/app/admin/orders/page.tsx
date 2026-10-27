@@ -130,7 +130,7 @@ export default function AdminOrdersPage() {
       align: "right",
       cell: (row) => (
         <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
-          {formatCurrency(row.totalAmount, row.currency || "USD")}
+          {formatCurrency(row.totalAmount, "PKR")}
         </span>
       ),
     },
@@ -153,9 +153,9 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="STORE OPERATIONS"
+        category="STORE MANAGEMENT"
         title="Orders Management"
-        description="Monitor customer orders, review wire transfer slips, and track dispatch fulfillment."
+        description="Monitor customer orders, verify bank wire transfer slips, and manage fulfillment dispatch."
         count={totalCount}
         breadcrumbs={[{ label: "Orders" }]}
       />

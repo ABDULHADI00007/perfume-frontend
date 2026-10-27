@@ -142,9 +142,18 @@
     scroll-behavior: smooth;
   }
 
+  /* Lenis Smooth Scroll Compatibility — prevents fighting between native smooth scroll & Lenis */
+  html.lenis,
+  html.lenis body,
+  html.lenis-smooth,
+  .lenis.lenis-smooth {
+    height: auto;
+    scroll-behavior: auto !important;
+  }
+
   /* Smooth Scroll Container Rules for Storefront Composition */
   .cinematic-scroll-container {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   .cinematic-section-snap {
@@ -164,6 +173,29 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* ==========================================================================
+     Storefront vs Admin Typography Architecture
+     - Storefront Headings & Serif: Cinzel (Luxury Inscriptional Roman Serif)
+     - Storefront Body & Details: Plus Jakarta Sans / Inter (Clean Modern Sans)
+     - Admin Portal: Strictly isolated to pure clean UI sans-serif
+     ========================================================================== */
+
+  .storefront-theme h1,
+  .storefront-theme h2,
+  .storefront-theme h3,
+  .storefront-theme .font-serif,
+  .storefront-theme .font-cinzel,
+  .font-serif,
+  .font-cinzel {
+    font-family: 'Cinzel', 'Marcellus', serif;
+  }
+
+  /* Strictly isolate Admin Portal to pure clean UI sans-serif */
+  [data-admin-portal],
+  [data-admin-portal] * {
+    font-family: var(--font-sans), 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif !important;
   }
 
   /* Luxury Text Selection */
@@ -417,6 +449,16 @@
 
 .animate-fade-in {
   animation: fade-in 0.25s ease-out forwards;
+}
+
+/* 21st.dev Shimmer Skeleton Animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* 21st.dev Luxury Admin Portal Utilities */

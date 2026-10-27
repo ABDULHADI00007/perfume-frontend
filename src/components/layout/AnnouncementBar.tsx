@@ -1,35 +1,54 @@
 "use client";
 
 import React from "react";
-import { Container } from "./Container";
+import { motion } from "framer-motion";
 
 export interface AnnouncementBarProps {
   className?: string;
 }
 
+const announcements = [
+  "FREE DELIVERY ALL OVER PAKISTAN",
+  "100% AUTHENTIC & LUXURY EXTRAIT DE PARFUM",
+  "CASH ON DELIVERY AVAILABLE NATIONWIDE",
+  "COMPLIMENTARY TESTER WITH EVERY ORDER",
+  "DISCOVER SCENTS THAT STAY WITH YOU",
+  "HANDCRAFTED ARTISANAL PERFUMERY",
+];
+
 export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   className = "",
 }) => {
+  // Duplicate list to guarantee seamless 50% infinite translation loop
+  const tickerItems = [...announcements, ...announcements];
+
   return (
     <aside
-      aria-label="Announcement"
-      className={`w-full bg-[#0D1424] text-white py-2.5 px-4 text-xs z-40 border-b border-white/10 ${className}`}
+      aria-label="Announcement Marquee"
+      className={`w-full bg-[#3E060E] text-white py-2 sm:py-2.5 overflow-hidden z-40 border-b border-[#280409]/60 select-none ${className}`}
     >
-      <Container size="wide" className="flex items-center justify-between text-[11px] sm:text-[12px] font-sans tracking-[0.14em] uppercase font-medium">
-        {/* Left Announcement Message */}
-        <div className="flex items-center gap-2">
-          <span>DISCOVER SCENTS THAT STAY WITH YOU</span>
-        </div>
-
-        {/* Right Info Badges */}
-        <div className="hidden md:flex items-center space-x-4 text-white/80 font-normal tracking-[0.16em]">
-          <span>WORLDWIDE DELIVERY</span>
-          <span className="text-white/40">|</span>
-          <span>AUTHENTIC & PREMIUM</span>
-          <span className="text-white/40">|</span>
-          <span>EXCLUSIVE COLLECTIONS</span>
-        </div>
-      </Container>
+      <div className="relative w-full flex overflow-hidden">
+        <motion.div
+          className="flex items-center whitespace-nowrap will-change-transform"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            ease: "linear",
+            duration: 26,
+            repeat: Infinity,
+          }}
+        >
+          {tickerItems.map((item, index) => (
+            <div
+              key={index}
+              className="inline-flex items-center mx-4 sm:mx-6 text-[10.5px] sm:text-[11.5px] font-sans tracking-[0.2em] uppercase font-medium text-white/95"
+            >
+              <span>{item}</span>
+              <span className="ml-8 sm:ml-12 text-[#FAF7EE]/45 text-[9px]">✦</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </aside>
   );
 };
+

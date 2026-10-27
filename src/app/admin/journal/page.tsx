@@ -7,6 +7,7 @@ import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DataTable, Column } from "@/components/admin/DataTable";
+import { AdminFilterBar } from "@/components/admin/AdminFilterBar";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { TableActionButton, TableActionGroup } from "@/components/admin/TableAction";
@@ -18,13 +19,16 @@ import { Modal } from "@/components/ui/modal";
 import { Icons } from "@/components/ui/icons";
 import { formatDate } from "@/lib/utils";
 
-
 export default function AdminJournalPage() {
   const { hasPermission } = useAdminAuth();
   const [posts, setPosts] = useState<AdminBlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Filters
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -270,10 +274,22 @@ export default function AdminJournalPage() {
     },
   ];
 
+  const filteredPosts = posts.filter((p) => {
+    if (statusFilter && p.status !== statusFilter) return false;
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      const matchTitle = p.title?.toLowerCase().includes(q);
+      const matchSlug = p.slug?.toLowerCase().includes(q);
+      const matchCategory = p.category?.toLowerCase().includes(q);
+      return Boolean(matchTitle || matchSlug || matchCategory);
+    }
+    return true;
+  });
+
   return (
     <div className="space-y-6 font-sans">
       <AdminPageHeader
-        category="EDITORIAL & STORIES"
+        category="MARKETING"
         title="Journal Management"
         description="Craft olfactory storytelling, fragrance guides, and brand heritage articles."
         count={posts.length}
@@ -292,19 +308,48 @@ export default function AdminJournalPage() {
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium">
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium">
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
           {successMessage}
         </div>
       )}
 
+      {/* Filter Bar */}
+      <AdminFilterBar
+        hasActiveFilters={Boolean(search || statusFilter)}
+        resetLabel="RESET FILTERS"
+        onReset={() => {
+          setSearch("");
+          setStatusFilter("");
+        }}
+      >
+        <Input
+          placeholder="Search by article title, slug, or category..."
+          value={search}
+          leftIcon={<Icons.Search size={15} className="text-[#64748B]" />}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full text-xs"
+        />
+
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={[
+            { label: "All Publication Statuses", value: "" },
+            { label: "Published", value: "published" },
+            { label: "Draft", value: "draft" },
+            { label: "Archived", value: "archived" },
+          ]}
+        />
+      </AdminFilterBar>
+
       <DataTable
         columns={columns}
-        data={posts}
+        data={filteredPosts}
         isLoading={isLoading}
         emptyMessage="No journal articles found."
       />

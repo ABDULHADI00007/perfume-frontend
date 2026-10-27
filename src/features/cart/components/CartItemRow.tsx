@@ -47,15 +47,15 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
 
         {/* Text Info */}
         <div className="flex flex-col items-start justify-center space-y-1">
-          <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0B1938] leading-tight">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-black leading-tight">
             <Link
               href={`/perfumes/${productSlug}`}
-              className="hover:text-[#C5A880] transition-colors"
+              className="hover:text-[#590B16] transition-colors"
             >
               {item.title}
             </Link>
           </h3>
-          <span className="text-xs text-[#8E95A2] font-sans font-normal">
+          <span className="text-xs text-stone-500 font-sans font-normal">
             Extrait De Parfum (30% Concentration)
           </span>
 
@@ -68,7 +68,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
           <button
             type="button"
             onClick={() => setIsWishlisted(!isWishlisted)}
-            className="text-xs text-[#64748B] hover:text-[#0B1938] font-sans font-normal flex items-center gap-1.5 transition-colors cursor-pointer pt-0.5"
+            className="text-xs text-stone-500 hover:text-black font-sans font-normal flex items-center gap-1.5 transition-colors cursor-pointer pt-0.5"
           >
             <Icons.Heart
               className={`w-3.5 h-3.5 ${isWishlisted ? "fill-red-600 stroke-red-600 text-red-600" : "stroke-current"}`}
@@ -80,28 +80,28 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
 
       {/* Col 2: Unit Price (Col span 2 on desktop) */}
       <div className="sm:col-span-2 text-left sm:text-center flex sm:block items-center justify-between">
-        <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Price:</span>
-        <span className="font-serif font-bold text-[#0B1938] text-sm sm:text-base">
+        <span className="sm:hidden text-xs text-stone-500 font-sans">Price:</span>
+        <span className="font-serif font-bold text-black text-sm sm:text-base">
           {formatCurrency(item.price)}
         </span>
       </div>
 
       {/* Col 3: Quantity Stepper (Col span 2 on desktop) */}
       <div className="sm:col-span-2 flex sm:justify-center items-center justify-between">
-        <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Quantity:</span>
+        <span className="sm:hidden text-xs text-stone-500 font-sans">Quantity:</span>
         <div className="flex items-center border border-[#E2DED6] rounded-xl bg-white shadow-2xs overflow-hidden">
           <button
             type="button"
             onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
             disabled={item.quantity <= 1}
             aria-label={`Decrease quantity of ${item.title}`}
-            className="p-2 text-[#0B1938] hover:bg-[#FAF8F5] disabled:opacity-30 transition-colors cursor-pointer"
+            className="p-2 text-black hover:bg-[#FAF8F5] disabled:opacity-30 transition-colors cursor-pointer"
           >
             <Icons.Minus className="w-3 h-3" />
           </button>
           <span
             aria-live="polite"
-            className="px-3 text-xs font-bold font-sans select-none text-[#0B1938]"
+            className="px-3 text-xs font-bold font-sans select-none text-black"
           >
             {item.quantity}
           </span>
@@ -109,7 +109,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
             type="button"
             onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
             aria-label={`Increase quantity of ${item.title}`}
-            className="p-2 text-[#0B1938] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+            className="p-2 text-black hover:bg-[#FAF8F5] transition-colors cursor-pointer"
           >
             <Icons.Plus className="w-3 h-3" />
           </button>
@@ -118,8 +118,8 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
 
       {/* Col 4: Line Total & Remove Action (Col span 2 on desktop) */}
       <div className="sm:col-span-2 flex items-center justify-between sm:justify-end gap-3 text-right">
-        <span className="sm:hidden text-xs text-[#8E95A2] font-sans">Total:</span>
-        <span className="font-serif font-bold text-[#0B1938] text-sm sm:text-base">
+        <span className="sm:hidden text-xs text-stone-500 font-sans">Total:</span>
+        <span className="font-serif font-bold text-black text-sm sm:text-base">
           {formatCurrency(lineTotal)}
         </span>
         <Button

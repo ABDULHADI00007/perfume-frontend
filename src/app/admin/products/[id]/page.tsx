@@ -7,10 +7,10 @@ import { AdminProduct } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
 import { ProductForm } from "@/features/admin/products/ProductForm";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { Icons } from "@/components/ui/icons";
 import { formatCurrency } from "@/lib/utils";
 
@@ -51,14 +51,7 @@ export default function AdminEditProductPage({
   }
 
   if (isLoading) {
-    return (
-      <div className="py-24 text-center font-sans">
-        <Spinner size="lg" className="mx-auto mb-3 text-[#0C134F]" />
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
-          Loading Fragrance Details...
-        </p>
-      </div>
-    );
+    return <AdminDetailSkeleton category="PRODUCT FORMULATION" />;
   }
 
   if (!product) {
@@ -88,7 +81,7 @@ export default function AdminEditProductPage({
   return (
     <div className="space-y-6 font-sans pb-10">
       <AdminPageHeader
-        category="CATALOG SPECIFICATION"
+        category="STORE MANAGEMENT"
         title={product.name}
         description={`SKU: ${product.sku} • Category: ${categoryName}`}
         breadcrumbs={[
@@ -127,7 +120,7 @@ export default function AdminEditProductPage({
         }
       />
 
-      {/* Product Hero Header Summary Card - 21st.dev Luxury Card */}
+      {/* Product Hero Header Summary Card - Luxury Card */}
       <div className="relative overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_4px_24px_-4px_rgba(12,19,79,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#0C134F]/5 via-transparent to-transparent pointer-events-none rounded-full blur-2xl" />
         <div className="relative flex items-start sm:items-center gap-5">
@@ -161,7 +154,7 @@ export default function AdminEditProductPage({
               </span>
               <span className="text-slate-300">•</span>
               <span className="font-mono font-bold text-base text-[#0C134F] tabular-nums">
-                {formatCurrency(product.price, product.currency || "USD")}
+                {formatCurrency(product.price, product.currency || "PKR")}
               </span>
             </div>
           </div>

@@ -59,7 +59,7 @@ const cascadePerfumes: PerfumeCascadeItem[] = [
   },
   {
     title: "Whispers of Bloom",
-    src: "/images/perfumes/whisper-blosem.png",
+    src: "/images/perfumes/whispers-bloom.jpg",
     alt: "Whispers of Bloom Flacon",
     slug: "whispers-of-bloom",
   },
