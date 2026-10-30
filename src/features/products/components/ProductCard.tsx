@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Product, ProductVariant } from "../types";
 import { InteractiveTravelCard } from "@/components/ui/InteractiveTravelCard";
+import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 
 export interface ProductCardProps {
   product: Product;
@@ -18,11 +19,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onQuickAdd,
   onWishlistToggle,
-  isWishlisted,
+  isWishlisted: propIsWishlisted,
   className = "",
   titleClassName,
 }) => {
   const [added, setAdded] = useState(false);
+  const { hasItem, toggleItem } = useWishlist();
+
+  const isWishlisted =
+    propIsWishlisted !== undefined ? propIsWishlisted : hasItem(product.id) || hasItem(product.slug);
 
   const selectedVariant: ProductVariant | undefined =
     product.variants && product.variants.length > 0
@@ -30,8 +35,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       : undefined;
 
   const currentPrice = selectedVariant ? selectedVariant.price : 3000;
-  const originalPrice = selectedVariant?.compareAtPrice || 3500;
-  const primaryImage = product.images?.[0] || "/images/perfumes/elite-fusion.png";
+  const originalPrice =
+    selectedVariant?.compareAtPrice && selectedVariant.compareAtPrice > currentPrice
+      ? selectedVariant.compareAtPrice
+      : Math.round(currentPrice * 1.16);
+  const rawImage = product.images?.[0];
+  const primaryImage =
+    typeof rawImage === "string"
+      ? rawImage
+      : (rawImage as { url?: string } | undefined)?.url || "/images/perfumes/vivid-desire-still-life.png";
 
   const handleAddToCart = () => {
     if (onQuickAdd && selectedVariant) {
@@ -48,6 +60,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       : "Signature";
 
   const stockText = `${selectedVariant?.stock || 9} left`;
+
+  const isLuxuryFramed = [
+    "whispers-bloom",
+    "pulse",
+    "dusk",
+    "vivid-desire",
+    "noble-ocean",
+    "infinite-boss",
+    "eternal-blaze",
+    "secret-garden",
+    "suroor",
+    "gentle-man",
+    "elite-fusion",
+    "crown-legacy",
+    "sultans-veil",
+    "velvet-orchid",
+    "blue-horizon",
+  ].includes(product.slug);
 
   return (
     <article className={`flex justify-center w-full ${className}`}>
@@ -70,11 +100,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         onActionClick={handleAddToCart}
         isAdded={added}
         isWishlisted={isWishlisted}
-        onWishlistToggle={onWishlistToggle ? () => onWishlistToggle(product) : undefined}
+        onWishlistToggle={() => {
+          if (onWishlistToggle) {
+            onWishlistToggle(product);
+          } else {
+            toggleItem({
+              id: product.id,
+              title: product.title,
+              slug: product.slug,
+              price: currentPrice,
+              originalPrice: originalPrice,
+              size: selectedVariant?.size || "50ml",
+              image: primaryImage,
+              description: product.shortDescription || product.description,
+            });
+          }
+        }}
         imageClassName={
-          ["whispers-bloom", "pulse", "dusk", "vivid-desire"].includes(product.slug)
-            ? "!h-[108%] !object-cover !object-top !-translate-y-6 sm:!-translate-y-8"
-            : "!h-[112%] !object-cover !object-top !-translate-y-6 sm:!-translate-y-8"
+          isLuxuryFramed
+            ? "!h-[110%] !object-cover !object-top !-translate-y-4 min-[380px]:!-translate-y-5 sm:!-translate-y-8"
+            : "!h-[114%] !object-cover !object-top !-translate-y-4 min-[380px]:!-translate-y-5 sm:!-translate-y-8"
         }
       />
     </article>

@@ -7,35 +7,35 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function ProductCatalogSkeleton({ cardCount = 8 }: { cardCount?: number }) {
   return (
     <div className="w-full font-sans bg-white min-h-screen animate-in fade-in duration-300 select-none">
-      <Container size="wide" className="pt-8 pb-12">
+      <Container size="wide" className="pt-6 sm:pt-8 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
         {/* ================= 1. CIRCULAR CATEGORY FILTER ICONS SKELETON ================= */}
-        <div className="w-full mb-10 overflow-x-auto scrollbar-none py-2 relative">
-          <div className="flex items-center justify-start lg:justify-between gap-8 sm:gap-12 lg:gap-14 min-w-max">
+        <div className="w-full mb-6 sm:mb-10 overflow-x-auto scrollbar-none py-1 sm:py-2 relative">
+          <div className="flex items-center justify-start lg:justify-between gap-4 min-[380px]:gap-6 sm:gap-10 lg:gap-14 min-w-max px-1">
             {[1, 2, 3, 4, 5, 6, 7].map((catIndex) => (
-              <div key={catIndex} className="flex flex-col items-center gap-3">
+              <div key={catIndex} className="flex flex-col items-center gap-2 sm:gap-3">
                 {/* Circular Category Icon Pill */}
                 <Skeleton
                   variant="circular"
-                  className="w-16 h-16 sm:w-18 sm:h-18 bg-[#F0ECE5] border border-stone-200/60"
+                  className="w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 bg-[#F0ECE5] border border-stone-200/60"
                 />
                 {/* Category Label */}
-                <Skeleton className="h-3 w-16 sm:w-20 rounded-md" />
+                <Skeleton className="h-2.5 sm:h-3 w-14 sm:w-20 rounded-md" />
               </div>
             ))}
           </div>
         </div>
 
         {/* ================= 2. PRODUCTS COUNT TEXT SKELETON ================= */}
-        <div className="flex items-center justify-between mb-6">
-          <Skeleton className="h-3.5 w-44 rounded-md" />
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <Skeleton className="h-3 sm:h-3.5 w-36 sm:w-44 rounded-md" />
         </div>
 
         {/* ================= 3. 4-COLUMN PRODUCT CARDS SKELETON GRID ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
           {[...Array(cardCount)].map((_, i) => (
             <div key={i} className="flex justify-center w-full">
               {/* Card Outer Shell - 1:1 match with InteractiveTravelCard */}
-              <div className="relative h-[29.5rem] w-full max-w-[340px] rounded-[30px] overflow-hidden bg-[#ECE7DF] border border-stone-200/70 p-4 sm:p-5 flex flex-col justify-between shadow-md">
+              <div className="relative h-[18.5rem] min-[380px]:h-[19.5rem] min-[440px]:h-[21.5rem] sm:h-[25rem] lg:h-[29.5rem] w-full max-w-[340px] rounded-[18px] min-[380px]:rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#ECE7DF] border border-stone-200/70 p-2 min-[380px]:p-2.5 sm:p-5 flex flex-col justify-between shadow-md">
                 {/* Shimmer background on the card itself */}
                 <Skeleton className="absolute inset-0 w-full h-full rounded-none -z-0 bg-[#ECE8E1]/60" />
 

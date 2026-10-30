@@ -34,6 +34,8 @@ export interface Product extends Timestamps {
   isPlatinum?: boolean;
   gender?: "all" | "men" | "women" | "unisex";
   categoryId: ID;
+  categoryName?: string;
+  categorySlug?: string;
   collectionId?: ID;
   rating?: number;
   ratingCount?: number;

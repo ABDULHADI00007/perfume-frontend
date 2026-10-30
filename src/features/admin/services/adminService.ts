@@ -172,6 +172,17 @@ export const adminService = {
     return response.data;
   },
 
+  async updatePaymentStatus(orderId: string, paymentStatus: string, notes?: string): Promise<AdminOrder> {
+    clearAdminCache("orders");
+    clearAdminCache(`order:${orderId}`);
+    clearAdminCache("dashboard");
+    const response = await apiClient<ApiResponse<AdminOrder>>(`/orders/${orderId}/payment-status`, {
+      method: "PATCH",
+      body: JSON.stringify({ paymentStatus, notes }),
+    });
+    return response.data;
+  },
+
   async updateShippingInfo(
     orderId: string,
     shippingData: {

@@ -59,7 +59,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start w-full">
       {/* Left: Product Gallery (Desktop: 7 cols - Full width, exact height to match right panel) */}
-      <div className="lg:col-span-7 sticky top-28">
+      <div className="lg:col-span-7 lg:sticky lg:top-28">
         <ProductGallery
           images={product.images}
           title={product.title}

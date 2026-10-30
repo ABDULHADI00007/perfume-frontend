@@ -334,19 +334,8 @@ void main(){
 
   vec3 baseMat = uAlphaMode > 0.5 ? col : col*(uBg/max(uImgBg, vec3(0.001)));
 
-  // Weave royal #590B16 crimson red threads through the white and golden filaments
-  float dev = length(tx.rgb - uImgBg);
-  float matMask = smoothstep(0.04, 0.32, dev);
-  float ribbon = sin(suv.x*16.0 - suv.y*11.0 + (tx.r*3.2 - tx.b*2.0))*0.5 + 0.5;
-  ribbon += sin(suv.x*32.0 + suv.y*22.0)*0.25;
-  float redThread = smoothstep(0.38, 0.76, ribbon) * matMask;
-
-  // Exact #590B16 deep crimson red (rgb: 89, 11, 22)
-  vec3 crimson = vec3(89.0/255.0, 11.0/255.0, 22.0/255.0);
-  float luminance = dot(col, vec3(0.299, 0.587, 0.114));
-  vec3 shadedCrimson = mix(crimson * 0.70, crimson * 1.55, smoothstep(0.2, 0.8, luminance));
-
-  vec3 mat = mix(baseMat, shadedCrimson, redThread * 0.95);
+  // Natural true colors of the perfume bottles, flowers, amber, and ruby wine splash
+  vec3 mat = baseMat;
 
   // premultiplied: empty areas stay transparent so the page (and the backdrop word) shows through
   float A = k*show;
@@ -655,23 +644,8 @@ class LiquidEngine {
         const jy = (Math.random() - 0.5) * 0.6
         home.push((x + 0.5 + jx) / gw, (y + 0.5 + jy) / gh, Math.random(), 0.85 + Math.random() * 0.3)
 
-        // Weave royal #590B16 crimson particles into the white and golden strands
-        const u = x / gw
-        const v = y / gh
-        const ribbon = Math.sin(u * 16.0 - v * 11.0 + (r * 3.2 - b * 2.0)) * 0.5 + 0.5
-        const isCrimson = ribbon > 0.40 && Math.random() < 0.72
-        let pr = data[i]
-        let pg = data[i + 1]
-        let pb = data[i + 2]
-        if (isCrimson) {
-          // Exact #590B16 crimson red (rgb: 89, 11, 22) with subtle luminance shading
-          const lum = (pr * 0.299 + pg * 0.587 + pb * 0.114) / 255
-          const factor = 0.75 + lum * 0.55
-          pr = Math.min(255, Math.round(89 * factor))
-          pg = Math.min(255, Math.round(11 * factor))
-          pb = Math.min(255, Math.round(22 * factor))
-        }
-        col.push(pr, pg, pb, 255)
+        // Natural true colors of the perfume artwork (bottles, flowers, amber, wine splash)
+        col.push(data[i], data[i + 1], data[i + 2], 255)
       }
     }
     const n = home.length / 4
@@ -1103,6 +1077,7 @@ export interface SculptureHeroProps {
   /** Offset in % of the hero width / height. */
   sculptureX?: number
   sculptureY?: number
+  mobileSculptureY?: number
 
   interactive?: boolean
   /** 0 – 2 */
@@ -1143,35 +1118,35 @@ export interface SculptureHeroProps {
 }
 
 const DEFAULTS = {
-  src: "https://cdn.21st.dev/assets/mirror/ae/ae8c3de9003460e59182e950ccd345f68f27f9d0e4808b64c92c962a4eca7120.webp",
-  darkSrc: "https://cdn.21st.dev/assets/mirror/a1/a1fa387b6e417b26a25f317559c87cce4d241c1052c52a2b3bc2966b2aaf9b65.webp",
-  mobileSrc: "https://cdn.21st.dev/assets/mirror/b0/b0c8d8e5d64b8cec906a3b390e3dc7c9a5af08334bf0632873c601782cb4bc46.webp",
-  mobileDarkSrc: "https://cdn.21st.dev/assets/mirror/9a/9a82cb59be1bfde59855b79d7a565e487155a89f4d52eac74dcc10e267b2b6d1.webp",
-  imageAlt: "Abstract sculpture of interwoven metallic filaments and particles",
-  imageBackground: "#EAE9E7",
-  brand: "Forma®",
+  src: "/images/hero/perfume_splash_center_nobg.png",
+  darkSrc: "/images/hero/perfume_splash_center_nobg.png",
+  mobileSrc: "/images/hero/perfume_splash_center_mobile.png",
+  mobileDarkSrc: "/images/hero/perfume_splash_center_mobile.png",
+  imageAlt: "Soulmate Scents luxury perfumes encircled by a ruby wine splash swirl and rare botanicals",
+  imageBackground: "#FAF6EB",
+  brand: "SOULMATE SCENTS",
   navLinks: [
-    { label: "Work", href: "#" },
-    { label: "Studio", href: "#" },
-    { label: "Approach", href: "#" },
-    { label: "Journal", href: "#" },
+    { label: "Creations", href: "/perfumes" },
+    { label: "Discovery", href: "/perfumes" },
+    { label: "Maison", href: "/about" },
+    { label: "Journal", href: "/journal" },
   ],
-  navCta: { label: "Contact", href: "#" },
-  eyebrow: "Haute Parfumerie — Paris & Grasse",
-  headline: "Soulmate\nScents.",
-  headlineAccent: "Scents.",
+  navCta: { label: "Bespoke", href: "/perfumes" },
+  eyebrow: "HAUTE PARFUMERIE — PARIS & GRASSE",
+  headline: "SOULMATE\nSCENTS.",
+  headlineAccent: "SCENTS.",
   body: "An olfactory signature crafted with rare botanicals, aged sandalwood, and precious amber resins — bespoke extraits de parfum composed to become your indelible aura.",
-  primaryCta: { label: "Explore Creations", href: "/perfumes" },
-  secondaryCta: { label: "Discovery Set", href: "/perfumes" },
+  primaryCta: { label: "EXPLORE CREATIONS", href: "/perfumes" },
+  secondaryCta: { label: "DISCOVERY SET", href: "/perfumes" },
   hint: "Move across the essence",
   hintTouch: "Touch the essence",
   background: "#FAF7EE",
   darkBackground: "#111110",
   textColor: "#151514",
   accentColor: "#590B16",
-  headingFont: "'Geist', 'Helvetica Neue', Arial, sans-serif",
-  accentFont: "'Instrument Serif', 'Times New Roman', serif",
-  bodyFont: "'Geist', 'Helvetica Neue', Arial, sans-serif",
+  headingFont: "'Cinzel', 'Marcellus', serif",
+  accentFont: "'Cinzel', 'Marcellus', serif",
+  bodyFont: "'Inter', sans-serif",
 }
 
 /* ────────────────────────────────────────────────────────────────────
@@ -1179,30 +1154,57 @@ const DEFAULTS = {
    ──────────────────────────────────────────────────────────────────── */
 
 /** The sculpture sits centred in the band between the nav and the copy,
- *  as wide as the hero (it may bleed off the sides on small screens). */
+ *  scaled comfortably so it never overflows or overlaps the copy text. */
 function computeRect(
   w: number,
   h: number,
   aspect: number,
   band: { top: number; bottom: number },
-  p: { scale: number; mobileScale: number; x: number; y: number }
+  p: { scale: number; mobileScale: number; x: number; y: number; mobileY?: number }
 ): Rect & { baseCy: number } {
+  const isMobile = w < 768
+  const isTablet = w >= 768 && w < 1024
+  const currentScale = (isMobile ? p.mobileScale : p.scale) || 1
+
   let rw: number
-  if (w >= 1024) {
-    rw = w * 1.02 * p.scale
-  } else if (w >= 640) {
-    rw = w * 1.18 * p.scale
-  } else if (aspect < 1.3) {
-    rw = w * 1.0 * p.mobileScale
+  if (isMobile) {
+    if (aspect < 1.3) {
+      // Bold, large diagonal rotated sculpture on mobile: spans the screen generously
+      rw = Math.min(w * 1.30 * currentScale, h * 0.85 * aspect)
+    } else {
+      rw = Math.min(w * 1.25 * currentScale, h * 0.88 * aspect)
+    }
+  } else if (isTablet) {
+    // On tablet, scale sculpture so it fits comfortably within the open space above the copy text
+    const availH = Math.max(180, band.bottom - band.top)
+    const maxRh = availH * 0.88 * currentScale
+    const maxRw = w * 1.12 * currentScale
+    rw = Math.min(maxRw, maxRh * aspect)
   } else {
-    rw = w * 1.5 * p.mobileScale
+    const maxRh = h * 0.98 * currentScale
+    const maxRw = w * 1.20 * currentScale
+    rw = Math.min(maxRw, maxRh * aspect)
   }
   const rh = rw / aspect
   const cx = w * (0.5 + p.x / 100)
-  // Position the sculpture so it spans edge-to-edge in the upper-middle region
-  const baseCy = Math.max(band.top + rh * 0.36, h * 0.37)
-  const cy = baseCy + h * (p.y / 100)
-  return { x: cx - rw / 2, y: cy - rh / 2, w: rw, h: rh, baseCy }
+
+  let cy: number
+  if (isMobile) {
+    // Vertically center in the open white space between the top navbar and the bottom text
+    const spaceTop = band.top
+    const spaceBottom = Math.min(band.bottom, h * 0.65)
+    const mid = (spaceTop + spaceBottom) / 2
+    const mobY = p.mobileY !== undefined ? p.mobileY : 2.5
+    cy = mid + h * (mobY / 100)
+  } else if (isTablet) {
+    // On tablet, center sculpture cleanly in the open space between top and copy text, never crossing band.bottom
+    const mid = (band.top + band.bottom) / 2
+    const maxCy = band.bottom - rh * 0.52
+    cy = Math.min(mid + h * ((p.y || 0) / 100), maxCy)
+  } else {
+    cy = Math.max(band.top + rh * 0.35, h * 0.35) + h * (p.y / 100)
+  }
+  return { x: cx - rw / 2, y: cy - rh / 2, w: rw, h: rh, baseCy: cy }
 }
 
 /* ────────────────────────────────────────────────────────────────────
@@ -1223,7 +1225,7 @@ const CSS = `
 .sh-root[data-swap="1"] .sh-canvas{opacity:0;transition-duration:.25s}
 .sh-root[data-swap="1"] .sh-fallback{opacity:0;transition-duration:.25s}
 .sh-backdrop{position:absolute;left:50%;top:42%;z-index:0;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;user-select:none;
-  font-size:min(52svh,25.4vw);font-size:min(52cqh,25.4cqw);font-family:var(--sh-head);font-weight:600;letter-spacing:.02em;text-transform:uppercase;line-height:.8;color:color-mix(in srgb,#590B16 28%,transparent)}
+  font-size:min(52svh,25.4vw);font-size:min(52cqh,25.4cqw);font-family:var(--sh-head);font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:.8;color:color-mix(in srgb,#590B16 16%,transparent)}
 .sh-nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px;
   padding:26px clamp(20px,3.2cqw,48px) 0}
 .sh-brand{font-family:var(--sh-head);font-weight:600;font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:inherit;text-decoration:none}
@@ -1269,9 +1271,11 @@ const CSS = `
   color:inherit;opacity:.38;text-decoration:none}
 .sh-credit:hover{opacity:.8}
 @container (max-width:1023px){
-  .sh-content{grid-template-columns:1fr;gap:20px;padding-bottom:clamp(30px,4.5cqh,48px)}
-  .sh-aside{justify-self:start;max-width:520px;padding-bottom:0}
-  .sh-h1{font-size:clamp(36px,min(8.5cqw,9cqh),84px)}
+  .sh-content{grid-template-columns:1fr;gap:clamp(12px,1.8cqh,18px);padding-bottom:clamp(20px,3cqh,34px)}
+  .sh-aside{justify-self:start;max-width:560px;padding-bottom:0}
+  .sh-h1{font-size:clamp(34px,min(8cqw,7.2cqh),66px);line-height:.95}
+  .sh-body{font-size:clamp(14px,1.15cqw,16px);line-height:1.48;margin:0 0 clamp(12px,1.6cqh,18px)}
+  .sh-ctas{gap:16px}
 }
 @container (max-width:767px){
   .sh-links li:not(.sh-keep){display:none}
@@ -1391,6 +1395,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     mobileSculptureScale = 1,
     sculptureX = 0,
     sculptureY = 6,
+    mobileSculptureY = 0,
     interactive = true,
     strength = 1,
     radius = 220,
@@ -1407,7 +1412,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     speed = 1,
     intro = false,
     height = "100svh",
-    backdropText = "Perfume",
+    backdropText = "",
     showCredit = true,
     className,
     style,
@@ -1424,12 +1429,13 @@ export default function SculptureHero(props: SculptureHeroProps) {
   const aspectRef = React.useRef(1983 / 793)
   const [isTouch, setIsTouch] = React.useState(false)
 
-  const layout = React.useRef({ scale: sculptureScale, mobileScale: mobileSculptureScale, x: sculptureX, y: sculptureY })
+  const layout = React.useRef({ scale: sculptureScale, mobileScale: mobileSculptureScale, x: sculptureX, y: sculptureY, mobileY: mobileSculptureY })
   layout.current = {
     scale: clamp(sculptureScale, 0.3, 3),
     mobileScale: clamp(mobileSculptureScale, 0.3, 3),
     x: sculptureX,
     y: sculptureY,
+    mobileY: mobileSculptureY,
   }
 
   const [mode, setMode] = React.useState<"light" | "dark">(theme)
@@ -1485,7 +1491,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     if (!root) return
     const w = root.clientWidth
     const h = root.clientHeight
-    const mob = w < 640
+    const mob = w < 768
     if (mob !== mobileRef.current) {
       mobileRef.current = mob
       setIsMobile(mob)
@@ -1496,8 +1502,6 @@ export default function SculptureHero(props: SculptureHeroProps) {
       top: nav ? nav.offsetTop + nav.offsetHeight + 8 : 16,
       bottom: content ? content.offsetTop - 8 : h,
     }
-    // a portrait sculpture on phones dissolves into the top of the copy
-    if (mob && aspectRef.current < 1.3 && content) band.bottom += content.offsetHeight * 0.3
     const rect = computeRect(w, h, aspectRef.current, band, layout.current)
     const bd = backdropRef.current
     if (bd) {
@@ -1672,7 +1676,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
 
   React.useEffect(() => {
     relayout()
-  }, [sculptureScale, mobileSculptureScale, sculptureX, sculptureY, relayout])
+  }, [sculptureScale, mobileSculptureScale, sculptureX, sculptureY, mobileSculptureY, relayout])
 
   const vars = {
     "--sh-bg": background,

@@ -4,22 +4,27 @@ import React, { useEffect, useState } from "react";
 import SculptureHero, { SculptureHeroProps } from "@/components/ui/sculpture-hero";
 
 export const Hero: React.FC<SculptureHeroProps> = ({
+  src = "/images/hero/perfume_splash_center_nobg.png",
+  mobileSrc = "/images/hero/perfume_splash_center_mobile.png",
   showNav = false,
   showCredit = false,
   height,
   className = "",
-  backdropText = "Perfume",
-  eyebrow = "Haute Parfumerie — Paris & Grasse",
-  headline = "Soulmate\nScents.",
-  headlineAccent = "Scents.",
+  backdropText = "",
+  eyebrow = "HAUTE PARFUMERIE — PARIS & GRASSE",
+  headline = "SOULMATE\nSCENTS.",
+  headlineAccent = "SCENTS.",
   body = "An olfactory signature crafted with rare botanicals, aged sandalwood, and precious amber resins — bespoke extraits de parfum composed to become your indelible aura.",
-  primaryCta = { label: "Explore Creations", href: "/perfumes" },
-  secondaryCta = { label: "Discovery Set", href: "/perfumes" },
+  primaryCta = { label: "EXPLORE CREATIONS", href: "/perfumes" },
+  secondaryCta = { label: "DISCOVERY SET", href: "/perfumes" },
   hint = "Move across the essence",
   hintTouch = "Touch the essence",
   background = "#FAF7EE",
   accentColor = "#590B16",
-  sculptureY = 6,
+  sculptureScale = 1.18,
+  mobileSculptureScale = 1.15,
+  sculptureY = 3.5,
+  mobileSculptureY = 2.5,
   ...props
 }) => {
   // Dynamically compute hero height so the hero + announcement bar + header fit within viewport without scrolling
@@ -48,6 +53,8 @@ export const Hero: React.FC<SculptureHeroProps> = ({
   return (
     <div className={`w-full overflow-hidden ${className}`}>
       <SculptureHero
+        src={src}
+        mobileSrc={mobileSrc}
         showNav={showNav}
         showCredit={showCredit}
         height={computedHeight}
@@ -62,7 +69,10 @@ export const Hero: React.FC<SculptureHeroProps> = ({
         hintTouch={hintTouch}
         background={background}
         accentColor={accentColor}
+        sculptureScale={sculptureScale}
+        mobileSculptureScale={mobileSculptureScale}
         sculptureY={sculptureY}
+        mobileSculptureY={mobileSculptureY}
         headingFont="'Cinzel', 'Marcellus', serif"
         accentFont="'Cinzel', 'Marcellus', serif"
         {...props}

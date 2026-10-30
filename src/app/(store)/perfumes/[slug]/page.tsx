@@ -2,7 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
-import { allProducts } from "@/features/products/data/products";
+import { allProducts, legacyProducts } from "@/features/products/data/products";
 import { initialCollections } from "@/features/collections/data/collections";
 import { ProductBreadcrumbs } from "@/features/products/components/ProductBreadcrumbs";
 import { ProductDetailView } from "@/features/products/components/ProductDetailView";
@@ -25,7 +25,7 @@ async function getProduct(slug: string): Promise<Product | undefined> {
   } catch {
     // API endpoint unreachable or 404, fallback to local dataset
   }
-  return allProducts.find((p) => p.slug === slug);
+  return allProducts.find((p) => p.slug === slug) || legacyProducts.find((p) => p.slug === slug);
 }
 
 export async function generateStaticParams() {

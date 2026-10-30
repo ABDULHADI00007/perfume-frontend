@@ -45,32 +45,29 @@ export function NewCollectionSection() {
 
   return (
     <section
-      className="w-full bg-white overflow-hidden select-none"
+      id="new-collection"
+      className="w-full bg-white overflow-hidden select-none scroll-mt-28"
       style={{ paddingTop: "clamp(36px, 5vw, 68px)", paddingBottom: "clamp(36px, 5vw, 68px)" }}
     >
       <Container size="wide">
         <motion.div
-          className="relative w-full"
-          style={{ minHeight: "clamp(360px, 52vw, 660px)" }}
+          className="relative w-full flex flex-col items-center lg:block gap-8 sm:gap-12 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.12 }}
           variants={containerVariants}
         >
-          {/* ============ TYPOGRAPHY — left side, sits behind collage ============ */}
+          {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="absolute left-0 z-10"
-            style={{ width: "60%", top: "clamp(40px, 7vw, 90px)" }}
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[60%] lg:top-[clamp(40px,7vw,90px)] pl-2 sm:pl-6 lg:pl-0"
           >
             {/* ROW 1: NEW + Star Badge */}
-            <div className="flex items-center" style={{ gap: "clamp(6px, 1.2vw, 18px)", paddingLeft: "clamp(10px, 2.5vw, 40px)" }}>
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(6px,1.2vw,18px)] pl-2 sm:pl-4 lg:pl-[clamp(10px,2.5vw,40px)]">
               <h2
-                className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
+                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
-                  fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                  fontWeight: 700,
                 }}
               >
                 NEW
@@ -78,11 +75,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge */}
               <div
-                className="rounded-full border-[1.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45"
-                style={{
-                  width: "clamp(26px, 3.8vw, 54px)",
-                  height: "clamp(26px, 3.8vw, 54px)",
-                }}
+                className="rounded-full border-[1.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[34px] h-[34px] sm:w-[44px] sm:h-[44px] lg:w-[clamp(26px,3.8vw,54px)] lg:h-[clamp(26px,3.8vw,54px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
@@ -96,13 +89,9 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — indented */}
             <h2
-              className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-6 sm:pl-12 lg:pl-[clamp(24px,4.5vw,75px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
-                fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                fontWeight: 700,
-                paddingLeft: "clamp(24px, 4.5vw, 75px)",
-                marginTop: "clamp(18px, 2.8vw, 48px)",
               }}
             >
               PERFUME
@@ -110,26 +99,19 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION */}
             <h2
-              className="uppercase text-[#90C293] leading-[0.88] tracking-[0.02em] font-serif"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
-                fontSize: "clamp(3.4rem, 9.8vw, 10rem)",
-                fontWeight: 700,
-                marginTop: "clamp(18px, 2.8vw, 48px)",
               }}
             >
               COLLECTION
             </h2>
           </motion.div>
 
-          {/* ============ IMAGE COLLAGE — overlapping from center-right into text ============ */}
+          {/* ============ IMAGE COLLAGE — center-right on desktop, below on mobile ============ */}
           <motion.div
             variants={containerVariants}
-            className="absolute top-0 right-0 z-20"
-            style={{
-              width: "clamp(300px, 58vw, 700px)",
-              height: "clamp(360px, 52vw, 660px)",
-            }}
+            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto lg:mx-0 w-[340px] min-[400px]:w-[370px] min-[480px]:w-[440px] sm:w-[540px] md:w-[620px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[400px]:h-[400px] min-[480px]:h-[480px] sm:h-[580px] md:h-[660px] lg:h-[clamp(360px,52vw,660px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div

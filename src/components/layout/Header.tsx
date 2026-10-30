@@ -10,6 +10,8 @@ import { SearchModal } from "./SearchModal";
 import { MobileNav } from "./MobileNav";
 import { CartDrawer } from "@/features/cart/components/CartDrawer";
 import { useCart } from "@/features/cart/hooks/useCart";
+import { WishlistDrawer } from "@/features/wishlist/components/WishlistDrawer";
+import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 import { storefrontNavigation } from "@/config/navigation";
 
 export interface HeaderProps {
@@ -20,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { cart, isCartOpen, closeCart, toggleCart } = useCart();
+  const { itemCount: wishlistCount, toggleWishlist, closeWishlist } = useWishlist();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -27,18 +30,28 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
 
   const toggleSearch = () => {
     closeCart();
+    closeWishlist();
     setIsMobileNavOpen(false);
     setIsSearchOpen((prev) => !prev);
   };
 
   const handleToggleCart = () => {
     setIsSearchOpen(false);
+    closeWishlist();
     setIsMobileNavOpen(false);
     toggleCart();
   };
 
+  const handleToggleWishlist = () => {
+    setIsSearchOpen(false);
+    closeCart();
+    setIsMobileNavOpen(false);
+    toggleWishlist();
+  };
+
   const toggleMobileNav = () => {
     closeCart();
+    closeWishlist();
     setIsSearchOpen(false);
     setIsMobileNavOpen((prev) => !prev);
   };
@@ -78,18 +91,8 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
       >
         <Container size="wide">
           <div className="flex items-center justify-between gap-4 sm:gap-6">
-            {/* Left: Mobile Menu (Mobile) & Brand Wordmark Logo */}
+            {/* Left: Brand Wordmark Logo */}
             <div className="flex items-center space-x-3 sm:space-x-4">
-              {/* Mobile Menu Button */}
-              <button
-                type="button"
-                onClick={toggleMobileNav}
-                aria-label="Open navigation menu"
-                className="lg:hidden p-1 -ml-2 text-foreground hover:text-navy transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"
-              >
-                <Icons.Menu size={20} />
-              </button>
-
               {/* Brand Logo — Soulmate Scents */}
               <Link
                 href="/"
@@ -105,7 +108,6 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                     priority
                     className="h-9 sm:h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
                   />
-
                 </div>
               </Link>
             </div>
@@ -136,14 +138,14 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
               })}
             </nav>
 
-            {/* Right: Actions (Search, Account, Shopping Bag) */}
-            <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+            {/* Right: Actions (Search, Wishlist, Shopping Bag, Hamburger Menu) */}
+            <div className="flex items-center space-x-1.5 sm:space-x-3.5 flex-shrink-0">
               {/* Search Trigger */}
               <button
                 type="button"
                 onClick={toggleSearch}
                 aria-label="Search collection"
-                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider"
+                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider cursor-pointer"
               >
                 <Icons.Search size={18} />
                 <span className="hidden xl:inline-block text-[10px] tracking-[0.18em] font-medium">
@@ -151,29 +153,47 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 </span>
               </button>
 
-              {/* Account Link */}
-              <Link
-                href="/admin"
-                aria-label="Account and Administration"
-                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                title="Admin / Account"
+              {/* Wishlist Trigger (Replaces Admin / User Icon) */}
+              <button
+                type="button"
+                onClick={handleToggleWishlist}
+                aria-label={`Saved fragrances wishlist with ${wishlistCount} items`}
+                className="relative p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                title="Saved Fragrances"
               >
-                <Icons.User size={18} />
-              </Link>
+                <Icons.Heart
+                  size={19}
+                  className="stroke-current fill-none stroke-[2]"
+                />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#590B16] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
 
               {/* Shopping Bag Trigger */}
               <button
                 type="button"
-                onClick={toggleCart}
+                onClick={handleToggleCart}
                 aria-label={`Shopping bag with ${cart.itemCount} items`}
-                className="relative p-2 text-foreground hover:text-[#590B16] transition-colors flex items-center justify-center"
+                className="relative p-2 text-foreground hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
               >
                 <Icons.Bag size={20} />
-                <span className="absolute -top-1 -right-1 bg-[#590B16] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute -top-0.5 -right-0.5 bg-[#590B16] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {cart.itemCount}
                 </span>
               </button>
 
+              {/* Mobile Hamburger Menu Trigger (Placed after Add to Cart / Shopping Bag) */}
+              <button
+                type="button"
+                onClick={toggleMobileNav}
+                aria-label="Open navigation menu"
+                className="lg:hidden p-2 text-foreground hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+              >
+                <Icons.Menu size={22} />
+              </button>
             </div>
           </div>
         </Container>
@@ -191,6 +211,8 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
         onClose={() => setIsMobileNavOpen(false)}
         onOpenSearch={toggleSearch}
       />
+
+      <WishlistDrawer />
 
       <CartDrawer
         isOpen={isCartOpen}

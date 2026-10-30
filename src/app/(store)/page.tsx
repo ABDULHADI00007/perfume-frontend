@@ -3,14 +3,9 @@ import { siteConfig } from "@/config/site";
 import { Hero } from "@/components/storefront/Hero";
 import { NewCollectionSection } from "@/components/storefront/NewCollectionSection";
 import { DiscoverCollectionSection } from "@/components/storefront/DiscoverCollectionSection";
-import { BrandSavoirFaire } from "@/components/storefront/BrandSavoirFaire";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
-import { TiltCascadeSection } from "@/components/storefront/TiltCascadeSection";
-import { JournalPreview } from "@/components/storefront/JournalPreview";
-import { CircularTestimonialsSection } from "@/components/storefront/CircularTestimonialsSection";
 import { FinalCTA } from "@/components/storefront/FinalCTA";
 import { Skiper30 } from "@/components/storefront/ParallaxGallerySection";
-import { Skiper79 } from "@/components/storefront/Skiper79TeamScroll";
 
 export const metadata = constructMetadata({
   title: "Soulmate Scents",
@@ -69,21 +64,6 @@ export default function HomePage() {
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />
-
-      {/* 04 — BRAND PHILOSOPHY / SAVOIR-FAIRE: 45/55 editorial split */}
-      <BrandSavoirFaire />
-
-      {/* 04.8 — TEAM SHOWCASE SCROLL: Skiper 79 Master Noses & Artisan Collective */}
-      <Skiper79 />
-
-      {/* 06 — OLFACTORY JOURNAL: 3-story editorial magazine composition */}
-      <JournalPreview />
-
-      {/* 06.5 — VOICES OF DISTINCTION: Circular 3D Carousel Testimonials */}
-      <CircularTestimonialsSection />
-
-      {/* 06.8 — THE OLFACTORY CASCADE: Slanted tilt cascade spring-physics carousel */}
-      <TiltCascadeSection />
 
       {/* 07 — FINAL CLOSING CTA: Quiet cinematic closing section */}
       <FinalCTA />

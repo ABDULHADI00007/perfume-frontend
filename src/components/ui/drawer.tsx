@@ -76,7 +76,7 @@ export const Drawer: React.FC<DrawerProps> = ({
             className="fixed inset-0 bg-black/60 backdrop-blur-[2px]"
           />
 
-          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10">
             <motion.div
               variants={drawerVariants}
               initial="hidden"
@@ -85,12 +85,12 @@ export const Drawer: React.FC<DrawerProps> = ({
               className={`w-screen ${maxWidthMap[maxWidth]} bg-surface border-l border-border shadow-modal flex flex-col`}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-border-subtle">
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border-subtle">
                 <div>
                   {title && (
                     <h2
                       id={titleId}
-                      className="font-serif text-2xl font-bold text-black leading-tight"
+                      className="font-serif text-xl sm:text-2xl font-bold text-black leading-tight"
                     >
                       {title}
                     </h2>
@@ -115,11 +115,11 @@ export const Drawer: React.FC<DrawerProps> = ({
               </div>
 
               {/* Body */}
-              <div className="flex-1 overflow-y-auto p-6">{children}</div>
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</div>
 
               {/* Footer */}
               {footer && (
-                <div className="p-6 border-t border-border-subtle bg-surface-subtle/30">
+                <div className="p-4 sm:p-6 border-t border-border-subtle bg-surface-subtle/30">
                   {footer}
                 </div>
               )}

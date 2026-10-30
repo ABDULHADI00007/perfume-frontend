@@ -31,10 +31,10 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
   };
 
   return (
-    <Card variant="default" className={`border border-[#E2DED6] bg-white p-2 sm:p-4 shadow-xl ${className}`}>
-      <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+    <Card variant="default" className={`border border-[#E2DED6] bg-white p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl shadow-sm sm:shadow-md ${className}`}>
+      <CardHeader className="pb-3 border-b border-[#F0ECE1] px-0 pt-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-serif text-2xl font-bold text-black">
+          <CardTitle className="font-serif text-xl sm:text-2xl font-bold text-black">
             Summary
           </CardTitle>
           <Badge variant="accent" className="bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
@@ -43,10 +43,10 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         </div>
       </CardHeader>
 
-      <CardContent className="pt-4 space-y-5">
-        {/* Cart Items Snapshot (if items passed) */}
+      <CardContent className="pt-3 sm:pt-4 space-y-4 sm:space-y-5 px-0 pb-0">
+        {/* Cart Items Snapshot (Desktop Only - on mobile, full list is already shown right above) */}
         {items && items.length > 0 && (
-          <div className="divide-y divide-[#F0ECE1] max-h-56 overflow-y-auto pt-3 pb-1 px-2 custom-scrollbar">
+          <div className="hidden lg:block divide-y divide-[#F0ECE1] max-h-56 overflow-y-auto pt-2 pb-1 px-1 custom-scrollbar">
             {items.map((item) => (
               <div key={item.id} className="py-3.5 first:pt-2.5 last:pb-1 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
@@ -131,7 +131,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
             disabled={itemCount === 0}
             onClick={handleCheckout}
             leftIcon={<Icons.Lock className="w-4 h-4" />}
-            className="w-full tracking-[0.18em] font-bold text-xs uppercase py-4 rounded-xl bg-[#590B16] hover:bg-[#3E060E] text-white flex items-center justify-center gap-2 cursor-pointer shadow-md min-h-[48px] font-serif"
+            className="w-full tracking-[0.18em] font-bold text-xs uppercase py-4 rounded-xl !bg-[#590B16] hover:!bg-[#3E060E] active:!bg-[#30040A] focus:!bg-[#590B16] focus-visible:!bg-[#590B16] !text-white flex items-center justify-center gap-2 cursor-pointer shadow-md min-h-[48px] font-serif"
             style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
           >
             Proceed to Checkout

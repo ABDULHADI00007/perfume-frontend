@@ -10,17 +10,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] hover:border-[#121A4B] active:bg-[#070B30] shadow-xs",
+          "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#450811] hover:border-[#450811] active:bg-[#32050C] focus:bg-[#590B16] shadow-xs",
         primary:
-          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] hover:border-[#121A4B] active:bg-[#070B30] shadow-xs",
+          "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#450811] hover:border-[#450811] active:bg-[#32050C] focus:bg-[#590B16] shadow-xs",
         secondary:
-          "bg-[#FBF9F5] text-[#0C134F] border border-[#E6E2EA] hover:bg-[#FFFFFF] hover:border-[#C5A880] shadow-xs",
+          "bg-[#FBF9F5] text-[#590B16] border border-[#E6E2EA] hover:bg-[#FFFFFF] hover:border-[#C5A880] shadow-xs",
         outline:
-          "bg-white text-[#121735] border border-[#E6E2EA] hover:border-[#0C134F] hover:bg-[#FBF9F5] hover:text-[#0C134F] shadow-xs",
+          "bg-white text-[#121735] border border-[#E6E2EA] hover:border-[#590B16] hover:bg-[#FBF9F5] hover:text-[#590B16] shadow-xs",
         accent:
-          "bg-[#C5A880] text-[#0C134F] font-semibold border border-[#C5A880] hover:bg-[#B39266] shadow-xs",
+          "bg-[#C5A880] text-[#590B16] font-semibold border border-[#C5A880] hover:bg-[#B39266] shadow-xs",
         brand:
-          "bg-[#0C134F] text-white border border-[#0C134F] hover:bg-[#121A4B] active:bg-[#070B30] shadow-xs hover:shadow-[0_2px_10px_rgba(12,19,79,0.25)]",
+          "bg-[#590B16] text-white border border-[#590B16] hover:bg-[#450811] active:bg-[#32050C] focus:bg-[#590B16] shadow-xs hover:shadow-[0_2px_10px_rgba(89,11,22,0.25)]",
         tableAction:
           "bg-white/95 text-[#0C134F] border border-slate-200/90 hover:bg-slate-100 hover:text-[#0C134F] hover:border-slate-300 shadow-2xs hover:shadow-xs capitalize font-medium tracking-normal",
         tableActionDestructive:

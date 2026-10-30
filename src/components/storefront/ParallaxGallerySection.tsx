@@ -16,7 +16,7 @@ const perfumeImages = [
   "/images/perfumes/mediterrane_blu.png",
   "/images/perfumes/amber-rivera.png",
   "/images/perfumes/sultan-veils.png",
-  "/images/editorial/savoir-faire-botanical.jpg",
+  "/images/perfumes/collection_blue_horizon.jpg",
   "/images/perfumes/flowers_img.png",
 ];
 
@@ -86,9 +86,9 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
   const headlineX = useTransform(smoothProgress, [0, 1], ["2%", "-6%"]);
 
   return (
-    <section className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none">
+    <section id="parallax-gallery" className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none scroll-mt-20">
       {/* Giant SOULMATE SCENTS Header with exact brand color #590B16 */}
-      <div className="pt-20 pb-8 sm:pt-28 sm:pb-12 px-4 text-center overflow-hidden select-none relative z-10 flex flex-col items-center justify-center">
+      <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 px-4 text-center overflow-hidden select-none relative z-10 flex flex-col items-center justify-center">
         <motion.h2
           style={{
             x: headlineX,
@@ -102,18 +102,18 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
         </motion.h2>
       </div>
 
-      {/* 4-Column Parallax Gallery Container — Full Width Edge-to-Edge */}
+      {/* Responsive Parallax Gallery Container — 2 cols on mobile, 3 on tablet, 4 on desktop */}
       <div
         ref={gallery}
-        className="relative box-border flex h-[175vh] w-full gap-2 sm:gap-3 md:gap-4 overflow-hidden px-1 sm:px-2 md:px-3"
+        className="relative box-border flex h-[140vh] sm:h-[160vh] lg:h-[175vh] w-full gap-3 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-3"
       >
-        <Column images={[images[0], images[1], images[2]]} y={y} />
-        <Column images={[images[3], images[4], images[5]]} y={y2} />
-        <Column images={[images[6], images[7], images[8]]} y={y3} />
-        <Column images={[images[9], images[10], images[11]]} y={y4} />
+        <Column images={[images[0], images[1], images[2]]} y={y} className="flex" />
+        <Column images={[images[3], images[4], images[5]]} y={y2} className="flex" />
+        <Column images={[images[6], images[7], images[8]]} y={y3} className="hidden sm:flex" />
+        <Column images={[images[9], images[10], images[11]]} y={y4} className="hidden lg:flex" />
       </div>
 
-      <div className="pb-16 sm:pb-24" />
+      <div className="pb-12 sm:pb-24" />
     </section>
   );
 };
@@ -121,12 +121,13 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
 type ColumnProps = {
   images: string[];
   y: MotionValue<number>;
+  className?: string;
 };
 
-const Column = ({ images, y }: ColumnProps) => {
+const Column = ({ images, y, className = "" }: ColumnProps) => {
   return (
     <motion.div
-      className="relative -top-[45%] flex h-full flex-1 min-w-0 flex-col gap-2 sm:gap-3 md:gap-4 first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
+      className={`relative -top-[45%] flex h-full flex-1 min-w-0 flex-col gap-2 sm:gap-3 md:gap-4 first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%] ${className}`}
       style={{
         y,
         willChange: "transform",

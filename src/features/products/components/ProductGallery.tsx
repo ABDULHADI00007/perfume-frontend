@@ -50,9 +50,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
   };
 
   return (
-    <div className={`flex flex-col sm:flex-row gap-4 items-start ${className}`}>
-      {/* Vertical Stacked Thumbnails Strip (Left Column) */}
-      <div className="flex sm:flex-col gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-y-auto max-h-[580px] scrollbar-none flex-shrink-0">
+    <div className={`flex flex-col sm:flex-row gap-4 items-start w-full ${className}`}>
+      {/* Thumbnails Strip (Left Column on Desktop, Bottom Row on Mobile) */}
+      <div className="flex sm:flex-col gap-2.5 sm:gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-y-auto max-h-[580px] py-1 scrollbar-none flex-shrink-0 w-full sm:w-auto">
         {displayImages.map((img, idx) => {
           const isSelected = selectedImageIndex === idx;
           const isVideoThumb = idx === displayImages.length - 1 && displayImages.length > 3;
@@ -63,16 +63,16 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               type="button"
               onClick={() => setSelectedImageIndex(idx)}
               aria-label={`Select view ${idx + 1} for ${title}`}
-              className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 flex-shrink-0 bg-[#0D1424] ${isSelected
-                ? "border-[#0D1424] ring-2 ring-[#0D1424]/20 scale-95 shadow-md"
-                : "border-transparent opacity-70 hover:opacity-100"
+              className={`relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl overflow-hidden transition-all duration-200 flex-shrink-0 bg-[#0D1424] border-none outline-none focus:outline-none focus:ring-0 ${isSelected
+                ? "scale-95 shadow-md opacity-100"
+                : "opacity-60 hover:opacity-100"
                 }`}
             >
               <Image
                 src={img}
                 alt={`${title} thumbnail ${idx + 1}`}
                 fill
-                sizes="(max-width: 640px) 64px, 80px"
+                sizes="(max-width: 640px) 56px, 80px"
                 className="object-cover object-center"
               />
               {isVideoThumb && (
@@ -89,14 +89,14 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
         })}
       </div>
 
-      {/* Primary Flacon Display Area (Right Column) */}
-      <div className="relative order-1 sm:order-2 flex-1 w-full h-[520px] sm:h-[560px] lg:h-[580px] rounded-2xl overflow-hidden bg-[#0F1524] border border-black/10 shadow-lg group">
+      {/* Primary Flacon Display Area (Top on Mobile, Right Column on Desktop) */}
+      <div className="relative order-1 sm:order-2 sm:flex-1 w-full aspect-[4/4.5] sm:aspect-auto sm:h-[560px] lg:h-[580px] rounded-2xl overflow-hidden bg-[#0F1524] shadow-lg group border-none outline-none ring-0">
         {/* Fullscreen Expand Icon Button (Top-Right) */}
         <button
           type="button"
           onClick={() => setIsZoomOpen(true)}
           aria-label={`Enlarge image for ${title}`}
-          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200"
+          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none"
           title="Expand image"
         >
           <svg className="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
@@ -108,7 +108,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
         <button
           type="button"
           onClick={() => setIsZoomOpen(true)}
-          className="w-full h-full block cursor-zoom-in"
+          className="w-full h-full block cursor-zoom-in relative border-none outline-none focus:outline-none focus:ring-0 select-none"
           aria-label="Enlarge showcase image"
         >
           <Image
@@ -116,7 +116,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             alt={title}
             fill
             priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 50vw"
             className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
           />
         </button>
@@ -158,9 +158,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                     key={`modal-thumb-${idx}`}
                     type="button"
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${isSelected
-                      ? "border-white ring-2 ring-white/30 scale-95"
-                      : "border-transparent opacity-50 hover:opacity-100"
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden transition-all flex-shrink-0 border-none outline-none focus:outline-none ${isSelected
+                      ? "ring-2 ring-white/50 scale-95 opacity-100"
+                      : "opacity-50 hover:opacity-100"
                       }`}
                   >
                     <Image src={img} alt={`Thumb ${idx + 1}`} fill sizes="80px" className="object-cover" />

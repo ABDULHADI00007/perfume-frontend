@@ -21,34 +21,14 @@ interface CollectionProduct {
 
 const collectionProducts: CollectionProduct[] = [
   {
-    id: "prod-05",
-    title: "Velvet Orchid",
-    slug: "velvet-orchid",
+    id: "prod-01",
+    title: "Elite Fusion",
+    slug: "elite-fusion",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_velvet_orchid.jpg",
-    notes: "Bright Orange · Turkish Rose · Bourbon Vanilla",
+    image: "/images/perfumes/collection_elite_fusion.jpg",
+    notes: "Fresh Bergamot · Rich Ambroxan · Woody Patchouli",
     colDesktop: "lg:col-start-1 lg:row-start-1",
-  },
-  {
-    id: "prod-04",
-    title: "Blue Horizon",
-    slug: "blue-horizon",
-    price: "Rs. 3,000",
-    numericPrice: 3000,
-    image: "/images/perfumes/collection_blue_horizon.jpg",
-    notes: "Green Apple · Aquatic Lotus · Cedarwood",
-    colDesktop: "lg:col-start-3 lg:row-start-1",
-  },
-  {
-    id: "prod-03",
-    title: "Sultan's Veil",
-    slug: "sultans-veil",
-    price: "Rs. 3,000",
-    numericPrice: 3000,
-    image: "/images/perfumes/collection_sultans_veil.jpg",
-    notes: "Pink Pepper · Cedar · Noble Oud",
-    colDesktop: "lg:col-start-4 lg:row-start-1",
   },
   {
     id: "prod-02",
@@ -58,16 +38,36 @@ const collectionProducts: CollectionProduct[] = [
     numericPrice: 3000,
     image: "/images/perfumes/collection_crown_legacy.jpg",
     notes: "Sicilian Bergamot · Rich Oud · Smoky Leather",
+    colDesktop: "lg:col-start-3 lg:row-start-1",
+  },
+  {
+    id: "prod-04",
+    title: "Blue Horizon",
+    slug: "blue-horizon",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_blue_horizon.jpg",
+    notes: "Green Apple · Aquatic Lotus · Cedarwood",
+    colDesktop: "lg:col-start-4 lg:row-start-1",
+  },
+  {
+    id: "prod-03",
+    title: "Sultan's Veil",
+    slug: "sultans-veil",
+    price: "Rs. 3,000",
+    numericPrice: 3000,
+    image: "/images/perfumes/collection_sultans_veil.jpg",
+    notes: "Pink Pepper · Cedar · Noble Oud",
     colDesktop: "lg:col-start-2 lg:row-start-2",
   },
   {
-    id: "prod-01",
-    title: "Elite Fusion",
-    slug: "elite-fusion",
+    id: "prod-05",
+    title: "Velvet Orchid",
+    slug: "velvet-orchid",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_elite_fusion.jpg",
-    notes: "Fresh Bergamot · Rich Ambroxan · Woody Patchouli",
+    image: "/images/perfumes/collection_velvet_orchid.jpg",
+    notes: "Bright Orange · Turkish Rose · Bourbon Vanilla",
     colDesktop: "lg:col-start-4 lg:row-start-2",
   },
 ];
@@ -125,8 +125,8 @@ export function DiscoverCollectionSection() {
         </div>
 
         {/* ================= ASYMMETRICAL EDITORIAL MASONRY GRID ================= */}
-        {/* On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
+        {/* On mobile: 2 columns, On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
+        <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
           {collectionProducts.map((product, idx) => (
             <motion.article
               key={product.id}
@@ -143,67 +143,55 @@ export function DiscoverCollectionSection() {
               {/* Product Card Canvas (Crisp pure white box with shimmer & lift) */}
               <Link
                 href={`/perfumes/${product.slug}`}
-                className="relative w-full aspect-[4/4.3] bg-white rounded-none overflow-hidden flex items-center justify-center p-4 sm:p-5 lg:p-6 transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_22px_44px_rgba(89,11,22,0.12)] group-hover:-translate-y-2"
+                className="relative block w-full aspect-[4/4.3] bg-white rounded-none overflow-hidden transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_22px_44px_rgba(89,11,22,0.12)] group-hover:-translate-y-2"
                 aria-label={`Explore ${product.title}`}
               >
                 {/* Diagonal Glass Reflection Sheen Sweep on Hover */}
                 <div className="absolute inset-0 -translate-x-[120%] group-hover:translate-x-[120%] bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none z-20" />
 
-                {/* Perfume Bottle Image with Floating Zoom Animation */}
-                <div className="relative w-full h-full flex items-center justify-center z-10">
+                {/* Perfume Bottle Image Container - absolute inset-0 guarantees full visibility */}
+                <div className="absolute inset-0 p-3 sm:p-5 flex items-center justify-center z-10">
                   <motion.div
-                    className="relative w-full h-full"
-                    style={{ position: "relative", width: "100%", height: "100%" }}
+                    className="relative w-full h-full flex items-center justify-center"
                     whileHover={{ scale: 1.07, y: -4 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <Image
+                    <img
                       src={product.image}
                       alt={product.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-contain p-2 drop-shadow-[0_8px_16px_rgba(89,11,22,0.06)] group-hover:drop-shadow-[0_16px_28px_rgba(89,11,22,0.14)] transition-all duration-700"
+                      loading="eager"
+                      className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_16px_28px_rgba(89,11,22,0.16)] transition-all duration-700"
                     />
                   </motion.div>
                 </div>
 
-                {/* Hover Quick Action Buttons with Smooth Slide-Up Reveal */}
-                <div className="absolute inset-x-0 bottom-4 px-4 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform translate-y-3 group-hover:translate-y-0 z-30">
+                {/* Hover Quick Add Action Button with Smooth Slide-Up Reveal (Centered, Wider) */}
+                <div className="absolute inset-x-0 bottom-2.5 sm:bottom-4 px-2 sm:px-3 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-30">
                   <button
+                    type="button"
                     onClick={(e) => handleQuickAdd(product, e)}
-                    className="flex-1 py-2 px-3 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-medium transition-all duration-300 hover:bg-[#42060F] hover:shadow-md active:scale-95 text-center flex items-center justify-center gap-1.5 font-serif"
+                    className="w-full max-w-[240px] sm:max-w-[260px] py-2.5 sm:py-2.5 px-4 sm:px-6 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:bg-[#42060F] shadow-md hover:shadow-xl active:scale-95 text-center flex items-center justify-center gap-2 font-serif cursor-pointer"
                     style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                    aria-label={`Quick add ${product.title} to bag`}
                   >
-                    <ShoppingBag size={13} />
+                    <ShoppingBag size={13} className="shrink-0 text-[#FAF7EE]" />
                     <span>Quick Add</span>
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setQuickViewProduct(product);
-                    }}
-                    className="py-2 px-3 bg-white/95 backdrop-blur-sm text-[#590B16] border border-[#590B16]/30 text-[10px] sm:text-[11px] uppercase tracking-[0.14em] font-medium transition-all duration-300 hover:bg-white hover:border-[#590B16] active:scale-95 text-center font-serif"
-                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
-                    aria-label={`Quick details for ${product.title}`}
-                  >
-                    Details
                   </button>
                 </div>
               </Link>
 
               {/* Text Details below the white box */}
-              <div className="mt-2.5 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
+              <div className="mt-2 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
                 <Link href={`/perfumes/${product.slug}`}>
                   <h3
-                    className="text-[#590B16] text-[13.5px] sm:text-[14.5px] font-semibold tracking-[0.04em] font-serif hover:text-[#42060F] transition-colors uppercase"
+                    className="text-[#590B16] text-[12px] sm:text-[14.5px] font-semibold tracking-[0.03em] font-serif hover:text-[#42060F] transition-colors uppercase line-clamp-1"
                     style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
                     {product.title}
                   </h3>
                 </Link>
                 <p
-                  className="text-[#590B16]/80 text-xs sm:text-[13px] font-semibold tracking-wider mt-0.5 font-serif"
+                  className="text-[#590B16]/80 text-[11px] sm:text-[13px] font-semibold tracking-wider mt-0.5 font-serif"
                   style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                 >
                   {product.price}
@@ -237,14 +225,11 @@ export function DiscoverCollectionSection() {
               {/* Product Image Frame */}
               <div
                 className="relative w-full md:w-1/2 aspect-square min-h-[260px] bg-white flex items-center justify-center p-4 shadow-sm"
-                style={{ position: "relative" }}
               >
-                <Image
+                <img
                   src={quickViewProduct.image}
                   alt={quickViewProduct.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-contain p-3"
+                  className="w-full h-full object-contain p-2 drop-shadow-md"
                 />
               </div>
 

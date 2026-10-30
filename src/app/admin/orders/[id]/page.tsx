@@ -32,10 +32,9 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [statusNotes, setStatusNotes] = useState<string>("");
 
-  // Shipping Update State
-  const [carrier, setCarrier] = useState("");
-  const [trackingNumber, setTrackingNumber] = useState("");
-  const [trackingUrl, setTrackingUrl] = useState("");
+  // Payment Status Update State
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<string>("");
+  const [paymentNotes, setPaymentNotes] = useState<string>("");
 
   // Payment Proof Modal & Rejection
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
@@ -53,11 +52,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       const data = await adminService.getOrderById(orderId);
       setOrder(data);
       setSelectedStatus(data.orderStatus);
-      if (data.shippingInfo) {
-        setCarrier(data.shippingInfo.carrier || "");
-        setTrackingNumber(data.shippingInfo.trackingNumber || "");
-        setTrackingUrl(data.shippingInfo.trackingUrl || "");
-      }
+      setSelectedPaymentStatus(data.paymentStatus);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load order details");
     } finally {
@@ -110,21 +105,41 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
     }
   };
 
-  const handleUpdateShipping = async (e: React.FormEvent) => {
+  const handleUpdatePaymentStatus = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedPaymentStatus) return;
+
     try {
       setActionLoading(true);
       setError(null);
       setSuccessMessage(null);
-      const updated = await adminService.updateShippingInfo(orderId, {
-        carrier: carrier.trim() || undefined,
-        trackingNumber: trackingNumber.trim() || undefined,
-        trackingUrl: trackingUrl.trim() || undefined,
-      });
+      const updated = await adminService.updatePaymentStatus(orderId, selectedPaymentStatus, paymentNotes);
       setOrder(updated);
-      setSuccessMessage("Shipping tracking information saved successfully.");
+      setSelectedPaymentStatus(updated.paymentStatus);
+      setSuccessMessage(`Payment status updated to ${updated.paymentStatus.toUpperCase()} successfully.`);
+      setPaymentNotes("");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to update shipping info");
+      setError(err instanceof Error ? err.message : "Failed to update payment status");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleQuickPaymentToggle = async (targetStatus: "paid" | "pending") => {
+    try {
+      setActionLoading(true);
+      setError(null);
+      setSuccessMessage(null);
+      const updated = await adminService.updatePaymentStatus(
+        orderId,
+        targetStatus,
+        `Quick toggle by admin: Marked as ${targetStatus.toUpperCase()}`
+      );
+      setOrder(updated);
+      setSelectedPaymentStatus(updated.paymentStatus);
+      setSuccessMessage(`Payment status marked as ${targetStatus.toUpperCase()} successfully.`);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : `Failed to mark payment as ${targetStatus}`);
     } finally {
       setActionLoading(false);
     }
@@ -443,31 +458,72 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                 </form>
               </div>
 
-              {/* Shipping & Tracking Updater Card */}
+              {/* Payment Status & Settlement Card */}
               <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs flex flex-col justify-between h-full">
-                <form onSubmit={handleUpdateShipping} className="flex-1 flex flex-col justify-between">
+                <form onSubmit={handleUpdatePaymentStatus} className="flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F] border-b border-slate-100 pb-3 mb-4">
-                      Shipping & Tracking
-                    </h3>
-                    <div className="space-y-3">
-                      <Input
-                        label="Carrier"
-                        placeholder="e.g. DHL, FedEx, UPS"
-                        value={carrier}
-                        onChange={(e) => setCarrier(e.target.value)}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Icons.Cash size={15} className="text-[#0C134F]" />
+                        <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
+                          Payment Status
+                        </h3>
+                      </div>
+                      <StatusBadge status={order.paymentStatus} />
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* Payment Method & Quick Toggle Banner */}
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs">
+                        <div className="space-y-0.5">
+                          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Method</span>
+                          <span className="font-bold text-[#0C134F]">{order.paymentMethod?.replace(/_/g, " ").toUpperCase()}</span>
+                        </div>
+                        {order.paymentStatus !== "paid" ? (
+                          <Button
+                            type="button"
+                            variant="tableActionSuccess"
+                            size="sm"
+                            onClick={() => handleQuickPaymentToggle("paid")}
+                            disabled={actionLoading}
+                            className="h-8 px-3 text-xs rounded-lg gap-1.5 font-bold"
+                          >
+                            <Icons.Check size={14} />
+                            <span>Mark as Paid</span>
+                          </Button>
+                        ) : (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleQuickPaymentToggle("pending")}
+                            disabled={actionLoading}
+                            className="h-8 px-3 text-xs rounded-lg gap-1.5 text-slate-600 border-slate-300 hover:bg-slate-100 font-semibold"
+                          >
+                            <span>Mark as Pending</span>
+                          </Button>
+                        )}
+                      </div>
+
+                      <Select
+                        label="Payment Status"
+                        value={selectedPaymentStatus}
+                        onChange={(e) => setSelectedPaymentStatus(e.target.value)}
+                        options={[
+                          { label: "Paid (Payment Received)", value: "paid" },
+                          { label: "Pending (Payment Awaiting)", value: "pending" },
+                          { label: "Pending Verification", value: "pending_verification" },
+                          { label: "Failed / Rejected", value: "rejected" },
+                          { label: "Refunded", value: "refunded" },
+                          { label: "Partially Refunded", value: "partially_refunded" },
+                        ]}
                       />
+
                       <Input
-                        label="Tracking Number"
-                        placeholder="Tracking Code"
-                        value={trackingNumber}
-                        onChange={(e) => setTrackingNumber(e.target.value)}
-                      />
-                      <Input
-                        label="Tracking URL"
-                        placeholder="https://track.carrier.com/..."
-                        value={trackingUrl}
-                        onChange={(e) => setTrackingUrl(e.target.value)}
+                        label="Payment Notes / Reference"
+                        placeholder="e.g. Bank ref #, cash collected..."
+                        value={paymentNotes}
+                        onChange={(e) => setPaymentNotes(e.target.value)}
                       />
                     </div>
                   </div>
@@ -480,7 +536,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                       className="w-full shadow-xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl"
                       isLoading={actionLoading}
                     >
-                      Save Tracking
+                      Save Payment Status
                     </Button>
                   </div>
                 </form>

@@ -1,6 +1,6 @@
 import { Product } from "../types";
 
-export const allProducts: Product[] = [
+export const legacyProducts: Product[] = [
   {
     id: "prod-01",
     title: "Elite Fusion",
@@ -20,7 +20,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-01-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-EF-50" },
     ],
-    images: ["/images/perfumes/collection_elite_fusion.jpg", "/images/perfumes/elite-fusion.png", "/images/perfumes/elite_fusion_nobg.png"],
+    images: ["/images/perfumes/Elite Fusion at Golden Hour.png", "/images/perfumes/elite-fusion-luxury.jpg", "/images/perfumes/collection_elite_fusion.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -50,11 +50,11 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-02-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-CL-50" },
     ],
-    images: ["/images/perfumes/collection_crown_legacy.jpg", "/images/perfumes/oyd_royal.png", "/images/perfumes/oud-majesty.png"],
+    images: ["/images/perfumes/Crown Legacy_ Regal Golden Perfume Still Life.png", "/images/perfumes/crown-legacy-luxury.jpg", "/images/perfumes/collection_crown_legacy.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
-    gender: "men",
+    gender: "unisex",
     categoryId: "cat-amber",
     collectionId: "col-platinum",
     seoDescription: "Discover Crown Legacy EDP (50ml) by Soulmate Scents. A luxurious and commanding fragrance blending Bergamot, rich Oud, White Amber, and smoky Leather.",
@@ -80,7 +80,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-03-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 20, sku: "SS-SV-50" },
     ],
-    images: ["/images/perfumes/collection_sultans_veil.jpg", "/images/perfumes/sultan-veils.png", "/images/perfumes/oud-majesty.png"],
+    images: ["/images/perfumes/Sultan’s Veil by Lanternlight.png", "/images/perfumes/sultans-veil-luxury.jpg", "/images/perfumes/collection_sultans_veil.jpg"],
     featured: true,
     isBestSeller: false,
     isPlatinum: true,
@@ -110,7 +110,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-04-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 32, sku: "SS-BH-50" },
     ],
-    images: ["/images/perfumes/collection_blue_horizon.jpg", "/images/perfumes/cool-water.png", "/images/perfumes/mediterrane_blu.png"],
+    images: ["/images/perfumes/blue-horizon-luxury.jpg", "/images/perfumes/collection_blue_horizon.jpg"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -140,7 +140,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-05-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VO-50" },
     ],
-    images: ["/images/perfumes/collection_velvet_orchid.jpg", "/images/perfumes/lyce_blush.png", "/images/perfumes/flowers_img.png"],
+    images: ["/images/perfumes/Velvet Orchid at Golden Hour.png", "/images/perfumes/velvet-orchid-luxury.jpg", "/images/perfumes/collection_velvet_orchid.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -170,11 +170,11 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-06-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-SG-50" },
     ],
-    images: ["/images/perfumes/secret-garden.png", "/images/perfumes/flowers_img.png", "/images/perfumes/golden-senerity.png"],
+    images: ["/images/perfumes/Secret Garden in Sunlit Bloom.png", "/images/perfumes/Secret Garden Perfume at Golden Hour.png", "/images/perfumes/secret-garden-still-life.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
-    gender: "unisex",
+    gender: "men",
     categoryId: "cat-fresh",
     collectionId: "col-ethereal",
     seoDescription: "Explore Secret Garden EDP (50ml) by Soulmate Scents. A refreshing, sophisticated fragrance with Japanese Yuzu, Blue Lotus, Cinnamon, and Sandalwood.",
@@ -200,11 +200,11 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-07-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-EB-50" },
     ],
-    images: ["/images/perfumes/amber-rivera.png", "/images/perfumes/vanila_rev.png", "/images/perfumes/oyd_royal.png"],
+    images: ["/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png", "/images/perfumes/eternal-blaze-luxury.jpg", "/images/perfumes/amber-rivera.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
-    gender: "unisex",
+    gender: "men",
     categoryId: "cat-amber",
     collectionId: "col-platinum",
     seoDescription: "Turn heads with Eternal Blaze EDP (50ml) by Soulmate Scents. A bold, seductive scent blending cool Mint, Green Apple, Tonka Bean, and rich Vanilla.",
@@ -230,7 +230,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-08-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VD-50" },
     ],
-    images: ["/images/perfumes/vivid-desire-luxury.jpg", "/images/perfumes/vivid-desire.png", "/images/perfumes/vivid_desire_nobg.png"],
+    images: ["/images/perfumes/vivid-desire-still-life.png", "/images/perfumes/vivid-desire-luxury.jpg", "/images/perfumes/vivid-desire.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -260,7 +260,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-09-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-SR-50" },
     ],
-    images: ["/images/perfumes/surror.png", "/images/perfumes/flowers_img.png", "/images/perfumes/golden-senerity.png"],
+    images: ["/images/perfumes/Suroor Perfume in a Golden Zen Sanctuary.png", "/images/perfumes/suroor-still-life.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -280,7 +280,7 @@ export const allProducts: Product[] = [
     concentration: "Eau de Parfum",
     olfactoryFamily: "Citrus Woody Amber",
     notesSummary: "Ruby Grapefruit · Ginger · Ambroxan",
-    rating: 5,
+    rating: 4,
     ratingCount: 102,
     notes: {
       top: ["Ruby Grapefruit", "Citrus Accord"],
@@ -290,7 +290,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-10-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-GM-50" },
     ],
-    images: ["/images/perfumes/gentleman.png", "/images/perfumes/dusk.png", "/images/perfumes/noir_external.png"],
+    images: ["/images/perfumes/Golden Hour Gentle Man Perfume.png", "/images/perfumes/gentle-man-still-life.png"],
     featured: true,
     isPlatinum: true,
     gender: "men",
@@ -319,7 +319,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-11-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 35, sku: "SS-DK-50" },
     ],
-    images: ["/images/perfumes/dusk-luxury.jpg", "/images/perfumes/dusk.png", "/images/perfumes/gentleman.png"],
+    images: ["/images/perfumes/Soulmate Dusk in Golden Hour.png", "/images/perfumes/dusk-luxury.jpg", "/images/perfumes/dusk-still-life.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -349,7 +349,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-12-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-WB-50" },
     ],
-    images: ["/images/perfumes/whispers-bloom-luxury.jpg", "/images/perfumes/flowers_img.png", "/images/perfumes/lyce_blush.png"],
+    images: ["/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png", "/images/perfumes/whispers-bloom-still-life.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -379,10 +379,10 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-13-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 18, sku: "SS-NO-50" },
     ],
-    images: ["/images/perfumes/mediterrane_blu.png", "/images/perfumes/cool-water.png", "/images/perfumes/cirtus-revrie.png"],
+    images: ["/images/perfumes/noble-ocean-still-life.png", "/images/perfumes/noble-ocean-luxury.jpg", "/images/perfumes/Noble Ocean Perfume Still Life.png"],
     featured: true,
     isPlatinum: true,
-    gender: "unisex",
+    gender: "men",
     categoryId: "cat-fresh",
     collectionId: "col-platinum",
     seoDescription: "Experience pure luxury with Noble Ocean EDP (50ml) by Soulmate Scents. An ultra-refined blend of Sicilian Orange, Neroli, Ginger, and Chinese Black Tea.",
@@ -408,7 +408,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-14-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 25, sku: "SS-PL-50" },
     ],
-    images: ["/images/perfumes/pulse-luxury.jpg", "/images/perfumes/cirtus-revrie.png", "/images/perfumes/cool-water.png"],
+    images: ["/images/perfumes/pulse-luxury.jpg", "/images/perfumes/pulse-still-life.png", "/images/perfumes/cirtus-revrie.png"],
     featured: false,
     isNewArrival: true,
     isPlatinum: false,
@@ -438,7 +438,7 @@ export const allProducts: Product[] = [
     variants: [
       { id: "var-15-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-IB-50" },
     ],
-    images: ["/images/perfumes/duomo_bronze.png", "/images/perfumes/amber-rivera.png", "/images/perfumes/oyd_royal.png"],
+    images: ["/images/perfumes/Infinite Boss in Golden Stone Light.png", "/images/perfumes/infinite-boss-still-life.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -601,4 +601,25 @@ export const allProducts: Product[] = [
   },
 ];
 
+// Active catalog: 14 luxury perfumes with matching studio still-life photography
+export const luxuryProducts: Product[] = [
+  legacyProducts.find((p) => p.slug === "elite-fusion")!,
+  legacyProducts.find((p) => p.slug === "crown-legacy")!,
+  legacyProducts.find((p) => p.slug === "blue-horizon")!,
+  legacyProducts.find((p) => p.slug === "sultans-veil")!,
+  legacyProducts.find((p) => p.slug === "velvet-orchid")!,
+  legacyProducts.find((p) => p.slug === "infinite-boss")!,
+  legacyProducts.find((p) => p.slug === "pulse")!,
+  legacyProducts.find((p) => p.slug === "noble-ocean")!,
+  legacyProducts.find((p) => p.slug === "whispers-bloom")!,
+  legacyProducts.find((p) => p.slug === "vivid-desire")!,
+  legacyProducts.find((p) => p.slug === "dusk")!,
+  legacyProducts.find((p) => p.slug === "suroor")!,
+  legacyProducts.find((p) => p.slug === "gentle-man")!,
+  legacyProducts.find((p) => p.slug === "secret-garden")!,
+  legacyProducts.find((p) => p.slug === "eternal-blaze")!,
+].filter(Boolean);
+
+export const allProducts: Product[] = luxuryProducts;
 export const signatureProducts = allProducts.filter((p) => p.featured);
+

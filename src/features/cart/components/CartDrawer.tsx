@@ -65,7 +65,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           onClick={handleCheckout}
           disabled={cart.itemCount === 0}
           leftIcon={<Icons.Lock className="w-4 h-4" />}
-          className="w-full tracking-[0.18em] bg-[#590B16] hover:bg-[#3E060E] text-white font-bold py-3.5 rounded-xl shadow-md min-h-[48px] uppercase text-xs transition-all active:scale-[0.99] font-serif"
+          className="w-full tracking-[0.18em] !bg-[#590B16] hover:!bg-[#3E060E] active:!bg-[#30040A] focus:!bg-[#590B16] focus-visible:!bg-[#590B16] !text-white font-bold py-3.5 rounded-xl shadow-md min-h-[48px] uppercase text-xs transition-all active:scale-[0.99] font-serif"
           style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
         >
           Proceed to Checkout

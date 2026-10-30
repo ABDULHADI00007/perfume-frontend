@@ -55,8 +55,8 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
         </div>
       </div>
 
-      {/* 4-Column Product Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+      {/* 4-Column Product Cards Grid (2-col on mobile, 4-col on desktop) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
         {related.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

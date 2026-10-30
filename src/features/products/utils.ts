@@ -88,7 +88,12 @@ export function normalizeProduct(raw: any): Product {
     isNewArrival: Boolean(raw.newArrival || raw.isNewArrival),
     isBestSeller: Boolean(raw.bestseller || raw.isBestSeller),
     isLimitedEdition: Boolean(raw.isLimitedEdition),
+    gender: (raw.fragrance?.gender || raw.gender || "unisex").toLowerCase() as "men" | "women" | "unisex",
     categoryId,
+    categoryName:
+      typeof raw.category === "object" && raw.category ? raw.category.name : undefined,
+    categorySlug:
+      typeof raw.category === "object" && raw.category ? raw.category.slug : undefined,
     collectionId,
     createdAt: raw.createdAt || new Date().toISOString(),
     updatedAt: raw.updatedAt || new Date().toISOString(),

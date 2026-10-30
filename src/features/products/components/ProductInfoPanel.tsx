@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Product, ProductVariant } from "../types";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { Icons } from "@/components/ui/icons";
+import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 
 export interface ProductInfoPanelProps {
   product: Product;
@@ -29,9 +30,29 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
   isAdded = false,
   className = "",
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { hasItem, toggleItem } = useWishlist();
+  const isWishlisted = hasItem(product.id) || hasItem(product.slug);
   const ratingCount = product.ratingCount || 91;
   const currentPrice = selectedVariant ? selectedVariant.price * quantity : 13500;
+
+  const handleToggleWishlist = () => {
+    const rawImage = product.images?.[0];
+    const primaryImage =
+      typeof rawImage === "string"
+        ? rawImage
+        : (rawImage as { url?: string } | undefined)?.url || "/images/perfumes/vivid-desire-still-life.png";
+
+    toggleItem({
+      id: product.id,
+      title: product.title,
+      slug: product.slug,
+      price: selectedVariant ? selectedVariant.price : 3000,
+      originalPrice: selectedVariant?.compareAtPrice,
+      size: selectedVariant?.size || "50ml",
+      image: primaryImage,
+      description: product.shortDescription || product.description,
+    });
+  };
 
   const handleIncrement = () => {
     onQuantityChange(quantity + 1);
@@ -160,10 +181,10 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
         {/* Wishlist Heart Button */}
         <button
           type="button"
-          onClick={() => setIsWishlisted((prev) => !prev)}
+          onClick={handleToggleWishlist}
           className={`p-3 min-h-[46px] min-w-[46px] rounded-lg border flex items-center justify-center transition-all bg-white shadow-xs cursor-pointer active:scale-95 ${isWishlisted ? "text-[#590B16] border-[#590B16]/30 bg-[#590B16]/10" : "text-stone-700 border-[#E6E0D3] hover:border-[#590B16]"
             }`}
-          aria-label="Add to wishlist"
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
           <Icons.Heart
             size={18}
@@ -173,7 +194,7 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
       </div>
 
       {/* Trust Badges Strip */}
-      <div className="grid grid-cols-3 gap-2 pt-6 border-t border-stone-200 text-[11px] text-stone-600 font-sans">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 pt-6 border-t border-stone-200 text-[11px] text-stone-600 font-sans">
         <div className="flex items-center gap-2">
           <svg className="w-5 h-5 text-[#590B16] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
             <rect x="1" y="3" width="15" height="13" />
