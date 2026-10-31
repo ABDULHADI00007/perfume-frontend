@@ -116,7 +116,7 @@ export function ArtOfBloomSection() {
           </div>
 
           {/* Right Column: Exact Reference Typography (Desktop Right, Mobile Above) */}
-          <div className="order-1 lg:order-2 lg:col-span-7 space-y-3 sm:space-y-5 md:space-y-6 pt-0 sm:pt-0 lg:pt-0 mt-0.5 sm:-mt-2 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
+          <div className="order-1 lg:order-2 lg:col-span-7 space-y-3 sm:space-y-5 md:space-y-6 pt-0 sm:pt-0 lg:pt-0 mt-2.5 sm:mt-0 md:-mt-2 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
             <motion.h2
               variants={fadeInUpTitle}
               className="font-cinzel uppercase text-[clamp(3.8rem,14.8vw,5.8rem)] min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.88] sm:leading-[0.84] tracking-[0.05em]"
