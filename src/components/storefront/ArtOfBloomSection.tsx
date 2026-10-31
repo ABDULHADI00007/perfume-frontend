@@ -82,7 +82,7 @@ export function ArtOfBloomSection() {
           variants={containerVariants}
         >
           {/* Left Column: Overlapping Composite Cards (Desktop Left, Mobile Below) */}
-          <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start pl-0 sm:pl-6 lg:pl-10 pr-14 min-[360px]:pr-16 min-[400px]:pr-20 min-[480px]:pr-28 sm:pr-36 md:pr-48 lg:pr-0 pt-3 sm:pt-6 lg:pt-0">
+          <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start pl-0 sm:pl-6 lg:pl-10 pr-14 min-[360px]:pr-16 min-[400px]:pr-20 min-[480px]:pr-28 sm:pr-36 md:pr-48 lg:pr-0 pt-8 min-[360px]:pt-10 sm:pt-6 lg:pt-0">
             <div className="relative w-[270px] min-[360px]:w-[290px] min-[400px]:w-[320px] min-[480px]:w-[360px] sm:w-[400px] md:w-[440px] lg:w-[500px] h-[320px] min-[360px]:h-[350px] min-[400px]:h-[380px] min-[480px]:h-[430px] sm:h-[480px] md:h-[520px] lg:h-[590px]">
               {/* Main Black Perfume Image - Takes full space */}
               <motion.div
@@ -123,14 +123,14 @@ export function ArtOfBloomSection() {
               style={{ fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif" }}
             >
               <span className="block whitespace-nowrap">THE ART</span>
-              <span className="block pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 font-normal -mt-1 sm:-mt-3 lg:-mt-5 whitespace-nowrap">
+              <span className="block pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 font-normal mt-2 min-[360px]:mt-2.5 sm:mt-3 md:-mt-3 lg:-mt-5 whitespace-nowrap">
                 OF SCENT
               </span>
             </motion.h2>
 
             <motion.div
               variants={fadeInUpText}
-              className="pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-2.5 sm:pt-3 lg:pt-4"
+              className="pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-5 min-[360px]:pt-6 sm:pt-3 lg:pt-4"
             >
               <p className="text-[17px] min-[360px]:text-[18px] min-[390px]:text-[19px] sm:text-[18px] md:text-[17px] lg:text-[16px] xl:text-[17px] text-[#4A0A13]/90 font-sans leading-[1.65] sm:leading-relaxed font-normal max-w-[470px] sm:max-w-[495px] md:max-w-[520px] ml-1 min-[360px]:ml-2 sm:ml-16 md:ml-20 lg:ml-32 xl:ml-36">
                 Born where rare botanicals meet pure passion, this{" "}
