@@ -75,7 +75,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge — further enlarged and shifted right */}
               <div
-                className="rounded-full border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[54px] h-[54px] sm:w-[68px] sm:h-[68px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-8 sm:ml-16 md:ml-20 lg:ml-[clamp(48px,7.5vw,125px)]"
+                className="rounded-full border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[54px] h-[54px] sm:w-[68px] sm:h-[68px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-12 sm:ml-24 md:ml-28 lg:ml-[clamp(72px,10vw,170px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
