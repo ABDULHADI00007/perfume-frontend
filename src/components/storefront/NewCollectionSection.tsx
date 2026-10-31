@@ -119,7 +119,7 @@ export function NewCollectionSection() {
               className="absolute overflow-hidden"
               style={{
                 top: "3%",
-                left: "12%",
+                left: "16%",
                 width: "50%",
                 height: "61%",
                 backgroundColor: "#93C591",
@@ -169,8 +169,8 @@ export function NewCollectionSection() {
               variants={cardVariant(0.32)}
               className="absolute overflow-hidden"
               style={{
-                bottom: "1%",
-                left: "13%",
+                bottom: "6%",
+                left: "17%",
                 width: "36%",
                 height: "50%",
                 backgroundColor: "#FAF0D7",
