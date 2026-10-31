@@ -119,9 +119,9 @@ export function NewCollectionSection() {
               className="absolute overflow-hidden"
               style={{
                 top: "4%",
-                left: "9%",
-                width: "44%",
-                height: "52%",
+                left: "8%",
+                width: "48%",
+                height: "53%",
                 backgroundColor: "#93C591",
                 transform: "rotate(-6deg)",
                 zIndex: 22,
@@ -144,9 +144,9 @@ export function NewCollectionSection() {
               className="absolute overflow-hidden"
               style={{
                 top: "-4%",
-                right: "6%",
-                width: "38%",
-                height: "44%",
+                right: "5%",
+                width: "41%",
+                height: "45%",
                 backgroundColor: "#FAF0D7",
                 transform: "rotate(5deg)",
                 zIndex: 21,
@@ -195,9 +195,9 @@ export function NewCollectionSection() {
               className="absolute overflow-hidden"
               style={{
                 bottom: "0%",
-                right: "1%",
-                width: "45%",
-                height: "54%",
+                right: "0%",
+                width: "50%",
+                height: "56%",
                 backgroundColor: "#93C591",
                 transform: "rotate(4.5deg)",
                 zIndex: 23,
@@ -210,7 +210,7 @@ export function NewCollectionSection() {
                 alt="Fragrance Model with Perfume Bottle"
                 fill
                 className="object-cover object-[50%_20%] transition-transform duration-700 ease-out hover:scale-105"
-                sizes="(max-width: 768px) 45vw, 300px"
+                sizes="(max-width: 768px) 50vw, 320px"
               />
             </motion.div>
 
