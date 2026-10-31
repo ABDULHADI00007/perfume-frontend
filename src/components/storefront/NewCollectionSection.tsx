@@ -87,9 +87,9 @@ export function NewCollectionSection() {
               </div>
             </div>
 
-            {/* ROW 2: PERFUME — shifted right so 'U' is visible and entire 'M' & 'E' are completely under Card 1 */}
+            {/* ROW 2: PERFUME — shifted right and moved down */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-24 sm:pl-44 md:pl-56 lg:pl-[clamp(180px,21.5vw,320px)] mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-24 sm:pl-44 md:pl-56 lg:pl-[clamp(180px,21.5vw,320px)] mt-4 sm:mt-6 md:mt-8 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
