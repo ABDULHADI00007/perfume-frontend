@@ -97,9 +97,9 @@ export function NewCollectionSection() {
               PERFUME
             </h2>
 
-            {/* ROW 3: COLLECTION — flush left with NEW and PERFUME */}
+            {/* ROW 3: COLLECTION — shifted right so 'O' & 'N' tuck completely under the card */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-4 sm:pl-8 md:pl-12 lg:pl-[clamp(30px,4.5vw,75px)] mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
