@@ -87,9 +87,9 @@ export function NewCollectionSection() {
               </div>
             </div>
 
-            {/* ROW 2: PERFUME — shifted right so 'U' is visible and 'ME' tucks under the card */}
+            {/* ROW 2: PERFUME — shifted right so 'U' is visible and 'M' & 'E' are under Card 1 */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-12 sm:pl-24 md:pl-32 lg:pl-[clamp(75px,11vw,165px)] mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-20 sm:pl-36 md:pl-48 lg:pl-[clamp(140px,18vw,260px)] mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -113,14 +113,14 @@ export function NewCollectionSection() {
             variants={containerVariants}
             className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto lg:mx-0 w-[340px] min-[400px]:w-[370px] min-[480px]:w-[440px] sm:w-[540px] md:w-[620px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[400px]:h-[400px] min-[480px]:h-[480px] sm:h-[580px] md:h-[660px] lg:h-[clamp(360px,52vw,660px)]"
           >
-            {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW, covers ME ── */}
+            {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
               variants={cardVariant(0.08)}
               className="absolute overflow-hidden"
               style={{
                 top: "0%",
-                left: "6%",
-                width: "52%",
+                left: "14%",
+                width: "50%",
                 height: "60%",
                 backgroundColor: "#93C591",
                 transform: "rotate(-3.5deg)",
