@@ -89,7 +89,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — indented */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-6 sm:pl-12 lg:pl-[clamp(24px,4.5vw,75px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-12 sm:pl-24 md:pl-32 lg:pl-[clamp(60px,8vw,130px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -169,8 +169,8 @@ export function NewCollectionSection() {
               variants={cardVariant(0.32)}
               className="absolute overflow-hidden"
               style={{
-                bottom: "6%",
-                left: "17%",
+                bottom: "4%",
+                left: "24%",
                 width: "36%",
                 height: "50%",
                 backgroundColor: "#FAF0D7",
