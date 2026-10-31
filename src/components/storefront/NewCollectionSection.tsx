@@ -46,11 +46,11 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-[#FAF7EE] overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-6 sm:pt-8 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-8 sm:pb-10 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
+      className="w-full bg-[#FAF7EE] overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-6 sm:pt-8 md:pt-14 lg:pt-[clamp(48px,5.5vw,80px)] pb-8 sm:pb-10 md:pb-24 lg:pb-[clamp(48px,5.5vw,80px)]"
     >
       <Container size="wide" className="mt-3 mb-auto sm:my-auto md:my-0">
         <motion.div
-          className="relative w-full flex flex-col items-center lg:block gap-5 sm:gap-7 md:gap-10 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
+          className="relative w-full flex flex-col items-center lg:block gap-5 sm:gap-7 md:gap-10 lg:gap-0 lg:min-h-[clamp(340px,46vw,580px)]"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.12 }}
@@ -74,7 +74,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge — enlarged on desktop, refined on mobile, bold on tablet */}
               <div
-                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[64px] h-[64px] min-[360px]:w-[70px] min-[360px]:h-[70px] sm:w-[72px] sm:h-[72px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-7 min-[360px]:ml-9 min-[400px]:ml-12 sm:ml-8 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
+                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[64px] h-[64px] min-[360px]:w-[70px] min-[360px]:h-[70px] sm:w-[72px] sm:h-[72px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-3 sm:ml-4 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
@@ -110,7 +110,7 @@ export function NewCollectionSection() {
           {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
           <motion.div
             variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-5 min-[360px]:mt-7 min-[390px]:mt-8 sm:mt-6 md:mt-0 -translate-x-24 min-[360px]:-translate-x-28 min-[390px]:-translate-x-32 sm:-translate-x-24 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
+            className="order-2 lg:order-none relative lg:absolute lg:top-[clamp(16px,2vw,32px)] lg:right-0 z-20 mx-auto mt-5 min-[360px]:mt-7 min-[390px]:mt-8 sm:mt-6 md:mt-0 -translate-x-24 min-[360px]:-translate-x-28 min-[390px]:-translate-x-32 sm:-translate-x-24 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,50vw,620px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(340px,46vw,580px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
