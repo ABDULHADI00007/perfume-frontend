@@ -62,8 +62,8 @@ export function NewCollectionSection() {
             variants={fadeInUp}
             className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] pl-2 sm:pl-6 lg:pl-0"
           >
-            {/* ROW 1: NEW + Star Badge */}
-            <div className="flex items-center gap-3 sm:gap-4 lg:gap-[clamp(8px,1.5vw,20px)]">
+            {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-[clamp(8px,1.5vw,20px)] pl-4 sm:pl-8 md:pl-12 lg:pl-[clamp(30px,4.5vw,75px)]">
               <h2
                 className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
