@@ -46,11 +46,11 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-white overflow-hidden select-none scroll-mt-28 pt-6 sm:pt-8 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-12 sm:pb-16 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
+      className="w-full bg-white overflow-hidden select-none scroll-mt-28 min-h-screen min-h-[100svh] lg:min-h-0 flex flex-col justify-center pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-14 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
     >
-      <Container size="wide">
+      <Container size="wide" className="my-auto lg:my-0">
         <motion.div
-          className="relative w-full flex flex-col items-center lg:block gap-4 sm:gap-6 md:gap-10 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
+          className="relative w-full flex flex-col items-center lg:block gap-5 sm:gap-7 md:gap-10 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.12 }}
@@ -64,7 +64,7 @@ export function NewCollectionSection() {
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
               <h2
-                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
+                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 }}
@@ -88,7 +88,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-1.5 sm:mt-2 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-1.5 sm:mt-2 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -98,7 +98,7 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION — desktop indent & margin preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-1.5 sm:mt-2.5 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-1.5 sm:mt-2.5 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -110,7 +110,7 @@ export function NewCollectionSection() {
           {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
           <motion.div
             variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[290px] min-[360px]:w-[320px] min-[400px]:w-[350px] min-[480px]:w-[400px] sm:w-[480px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[290px] min-[360px]:h-[320px] min-[400px]:h-[350px] min-[480px]:h-[400px] sm:h-[480px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
+            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[300px] min-[360px]:w-[330px] min-[400px]:w-[360px] min-[480px]:w-[420px] sm:w-[480px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[300px] min-[360px]:h-[330px] min-[400px]:h-[360px] min-[480px]:h-[420px] sm:h-[480px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
