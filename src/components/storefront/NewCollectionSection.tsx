@@ -73,13 +73,13 @@ export function NewCollectionSection() {
                 NEW
               </h2>
 
-              {/* Gold star circle badge — enlarged and shifted further right */}
+              {/* Gold star circle badge — further enlarged and shifted right */}
               <div
-                className="rounded-full border-2 border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[46px] h-[46px] sm:w-[58px] sm:h-[58px] lg:w-[clamp(42px,5.2vw,78px)] lg:h-[clamp(42px,5.2vw,78px)] ml-6 sm:ml-12 md:ml-16 lg:ml-[clamp(32px,5.5vw,90px)]"
+                className="rounded-full border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[54px] h-[54px] sm:w-[68px] sm:h-[68px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-8 sm:ml-16 md:ml-20 lg:ml-[clamp(48px,7.5vw,125px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
-                  style={{ width: "56%", height: "56%" }}
+                  style={{ width: "58%", height: "58%" }}
                   viewBox="0 0 100 100"
                 >
                   <path d="M50 0 C50 27.614 72.386 50 100 50 C72.386 50 50 72.386 50 100 C50 72.386 27.614 50 0 50 C27.614 50 50 27.614 50 0 Z" />
