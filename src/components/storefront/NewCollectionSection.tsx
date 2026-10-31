@@ -118,10 +118,10 @@ export function NewCollectionSection() {
               variants={cardVariant(0.08)}
               className="absolute overflow-hidden"
               style={{
-                top: "4%",
+                top: "3%",
                 left: "8%",
-                width: "48%",
-                height: "53%",
+                width: "45%",
+                height: "62%",
                 backgroundColor: "#93C591",
                 transform: "rotate(-6deg)",
                 zIndex: 22,
@@ -145,8 +145,8 @@ export function NewCollectionSection() {
               style={{
                 top: "-4%",
                 right: "5%",
-                width: "41%",
-                height: "45%",
+                width: "39%",
+                height: "53%",
                 backgroundColor: "#FAF0D7",
                 transform: "rotate(5deg)",
                 zIndex: 21,
@@ -196,8 +196,8 @@ export function NewCollectionSection() {
               style={{
                 bottom: "0%",
                 right: "0%",
-                width: "50%",
-                height: "56%",
+                width: "46%",
+                height: "64%",
                 backgroundColor: "#93C591",
                 transform: "rotate(4.5deg)",
                 zIndex: 23,
