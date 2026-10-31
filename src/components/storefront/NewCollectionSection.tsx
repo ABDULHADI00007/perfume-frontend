@@ -59,7 +59,7 @@ export function NewCollectionSection() {
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 mt-1 sm:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 mt-5 min-[360px]:mt-7 sm:mt-4 md:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
           >
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
@@ -110,7 +110,7 @@ export function NewCollectionSection() {
           {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
           <motion.div
             variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-10 min-[360px]:mt-14 min-[390px]:mt-16 sm:mt-12 md:mt-0 -translate-x-20 min-[360px]:-translate-x-24 min-[390px]:-translate-x-28 sm:-translate-x-20 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
+            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-5 min-[360px]:mt-7 min-[390px]:mt-8 sm:mt-6 md:mt-0 -translate-x-24 min-[360px]:-translate-x-28 min-[390px]:-translate-x-32 sm:-translate-x-24 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
