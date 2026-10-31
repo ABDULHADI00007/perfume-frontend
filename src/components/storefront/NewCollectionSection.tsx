@@ -89,7 +89,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — indented */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-12 sm:pl-24 md:pl-32 lg:pl-[clamp(60px,8vw,130px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-20 sm:pl-36 md:pl-48 lg:pl-[clamp(110px,15vw,220px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
