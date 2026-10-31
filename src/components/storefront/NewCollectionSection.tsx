@@ -46,7 +46,7 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-white overflow-hidden select-none scroll-mt-28 min-h-screen min-h-[100svh] md:min-h-0 flex flex-col justify-center md:block pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-12 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
+      className="w-full bg-white overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-center md:block pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-12 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
     >
       <Container size="wide" className="my-auto md:my-0">
         <motion.div

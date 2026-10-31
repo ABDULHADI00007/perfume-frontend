@@ -71,7 +71,7 @@ export function ArtOfBloomSection() {
   return (
     <section
       id="art-of-scent"
-      className="w-full bg-white min-h-screen min-h-[100svh] md:min-h-0 flex flex-col justify-center md:block pt-8 sm:pt-12 md:pt-16 lg:pt-16 pb-10 sm:pb-16 md:pb-24 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
+      className="w-full bg-white min-h-[100svh] md:min-h-0 flex flex-col justify-center md:block pt-8 sm:pt-12 md:pt-16 lg:pt-16 pb-10 sm:pb-16 md:pb-24 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
     >
       <Container size="wide" className="my-auto md:my-0">
         <motion.div
