@@ -46,12 +46,11 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-white overflow-hidden select-none scroll-mt-28"
-      style={{ paddingTop: "clamp(36px, 5vw, 68px)", paddingBottom: "clamp(36px, 5vw, 68px)" }}
+      className="w-full bg-white overflow-hidden select-none scroll-mt-28 pt-12 sm:pt-16 md:pt-24 lg:pt-[clamp(36px,5vw,68px)] pb-16 sm:pb-24 md:pb-36 lg:pb-[clamp(36px,5vw,68px)]"
     >
       <Container size="wide">
         <motion.div
-          className="relative w-full flex flex-col items-center lg:block gap-4 sm:gap-6 md:gap-8 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
+          className="relative w-full flex flex-col items-center lg:block gap-6 sm:gap-8 md:gap-14 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.12 }}
@@ -60,7 +59,7 @@ export function NewCollectionSection() {
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 lg:px-0"
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 md:px-8 lg:px-0"
           >
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-2 lg:pl-[clamp(30px,4.5vw,75px)]">
