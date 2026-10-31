@@ -75,7 +75,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 className={`flex items-center justify-between py-3 px-2 border-b border-border-subtle transition-colors ${
                   isActive
                     ? "font-serif text-lg text-[#590B16] font-medium border-[#590B16]"
-                    : "font-serif text-lg text-foreground hover:text-[#590B16]"
+                    : "font-serif text-lg text-black hover:text-[#590B16]"
                 }`}
               >
                 <span>{item.title}</span>

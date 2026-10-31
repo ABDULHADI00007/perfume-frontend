@@ -26,61 +26,59 @@ export const BankTransferDetails: React.FC<BankTransferDetailsProps> = ({
     }, 2000);
   };
 
-  const bankName = settings?.bankName || "Standard Chartered Bank";
-  const accountTitle = settings?.accountTitle || "Maison de Parfum Ltd";
+  const bankName = settings?.bankName || "Meezan Bank / HBL";
+  const accountTitle = settings?.accountTitle || "Soulmate Scents";
   const accountNumber = settings?.accountNumber || "01029384756";
-  const iban = settings?.iban || "US93SCBL00000001029384756";
+  const iban = settings?.iban || "PK93MEZN00000001029384756";
   const instructions =
     settings?.instructions ||
     "Please transfer the exact order amount and reference your order number in the payment memo.";
 
   return (
     <div
-      className="p-6 sm:p-8 bg-gradient-to-br from-[#0B1938]/5 via-[#F8F6F0] to-[#D4AF37]/5 border border-[#0B1938]/15 rounded-xl space-y-5 shadow-sm relative overflow-hidden"
+      className="p-5 sm:p-6 bg-[#FAF7EE] border border-[#C5A880]/30 rounded-xl space-y-4 shadow-xs"
       role="region"
-      aria-label="Bank Wire Settlement Instructions"
+      aria-label="Bank Wire Transfer Instructions"
     >
-      <div className="flex items-center justify-between gap-4 flex-wrap pb-2 border-b border-[#0B1938]/10">
-        <div className="flex items-center gap-3 text-[#0B1938] font-serif uppercase tracking-[0.2em] text-xs sm:text-sm font-semibold">
-          <div className="w-8 h-8 rounded-full bg-[#0B1938] text-[#D4AF37] flex items-center justify-center shadow-md">
-            <Icons.Bank className="w-4 h-4 text-[#D4AF37]" />
+      <div className="flex items-center justify-between gap-4 flex-wrap pb-2 border-b border-[#C5A880]/20">
+        <div className="flex items-center gap-3 text-stone-900 font-serif text-sm sm:text-base font-semibold">
+          <div className="w-9 h-9 rounded-full bg-[#590B16]/10 text-[#590B16] flex items-center justify-center">
+            <Icons.Bank className="w-4 h-4 text-[#590B16]" />
           </div>
-          <span>Bank Wire Settlement Instructions</span>
+          <span>Bank Transfer Instructions</span>
         </div>
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-sans font-semibold tracking-widest uppercase bg-[#0B1938] text-[#D4AF37] border border-[#D4AF37]/30 shadow-sm">
-          Wire Transfer Required
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-sans font-semibold tracking-wider uppercase bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
+          Transfer Required
         </span>
       </div>
 
-      <p className="text-xs sm:text-sm text-[#334155] font-sans leading-relaxed">
-        Please initiate a direct bank wire transfer of{" "}
-        <strong className="text-[#0B1938] font-semibold font-serif text-base">{totalFormatted}</strong> to our treasury account details listed below. Kindly include your Order Reference{" "}
-        <strong className="font-mono text-[#0B1938] bg-[#0B1938]/10 px-2 py-0.5 rounded border border-[#0B1938]/20 font-semibold">{orderNumber}</strong> in the payment reference/memo.
+      <p className="text-xs sm:text-sm text-stone-600 font-sans leading-relaxed">
+        Please transfer <strong className="text-[#590B16] font-semibold font-serif text-base">{totalFormatted}</strong> to the account details below, using Order Reference <strong className="font-mono text-[#590B16] bg-[#590B16]/10 px-2 py-0.5 rounded font-semibold">{orderNumber}</strong> in the memo.
       </p>
 
       {instructions && (
-        <div className="text-xs text-[#475569] font-sans italic border-l-2 border-[#D4AF37] pl-3 py-1 bg-white/60 rounded-r">
+        <div className="text-xs text-stone-600 font-sans italic border-l-2 border-[#C5A880] pl-3 py-1 bg-white/70 rounded-r">
           {instructions}
         </div>
       )}
 
       {/* Account Details Table */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans bg-white/90 p-4 sm:p-5 rounded-lg border border-[#0B1938]/10 shadow-sm backdrop-blur-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans bg-white p-4 rounded-lg border border-stone-200">
         {accountTitle && (
-          <div className="p-3 bg-[#F8F6F0]/60 rounded border border-[#0B1938]/5">
-            <span className="text-[10px] uppercase text-[#64748B] tracking-widest font-medium block mb-1">
-              Beneficiary Title
+          <div className="p-2.5 bg-[#FAF8F5] rounded border border-stone-200/60">
+            <span className="text-[10px] uppercase text-stone-500 tracking-wider font-semibold block mb-0.5">
+              Account Title
             </span>
             <div className="flex items-center justify-between gap-2">
-              <span className="font-medium text-[#0B1938] truncate">{accountTitle}</span>
+              <span className="font-medium text-stone-900 truncate">{accountTitle}</span>
               <button
                 type="button"
                 onClick={() => handleCopy(accountTitle, "accountTitle")}
                 aria-label={`Copy account title: ${accountTitle}`}
-                className="text-[#64748B] hover:text-[#0B1938] transition-colors p-1"
+                className="text-stone-400 hover:text-[#590B16] transition-colors p-1"
               >
                 {copiedField === "accountTitle" ? (
-                  <span className="text-[10px] text-[#B89742] font-semibold uppercase tracking-wider">Copied</span>
+                  <span className="text-[10px] text-[#590B16] font-semibold uppercase tracking-wider">Copied</span>
                 ) : (
                   <Icons.Copy className="w-3.5 h-3.5" />
                 )}
@@ -90,29 +88,29 @@ export const BankTransferDetails: React.FC<BankTransferDetailsProps> = ({
         )}
 
         {bankName && (
-          <div className="p-3 bg-[#F8F6F0]/60 rounded border border-[#0B1938]/5">
-            <span className="text-[10px] uppercase text-[#64748B] tracking-widest font-medium block mb-1">
-              Banking Institution
+          <div className="p-2.5 bg-[#FAF8F5] rounded border border-stone-200/60">
+            <span className="text-[10px] uppercase text-stone-500 tracking-wider font-semibold block mb-0.5">
+              Bank Name
             </span>
-            <span className="font-medium text-[#0B1938] block">{bankName}</span>
+            <span className="font-medium text-stone-900 block">{bankName}</span>
           </div>
         )}
 
         {accountNumber && (
-          <div className="p-3 bg-[#F8F6F0]/60 rounded border border-[#0B1938]/5">
-            <span className="text-[10px] uppercase text-[#64748B] tracking-widest font-medium block mb-1">
+          <div className="p-2.5 bg-[#FAF8F5] rounded border border-stone-200/60">
+            <span className="text-[10px] uppercase text-stone-500 tracking-wider font-semibold block mb-0.5">
               Account Number
             </span>
             <div className="flex items-center justify-between gap-2">
-              <span className="font-mono font-semibold text-[#0B1938]">{accountNumber}</span>
+              <span className="font-mono font-semibold text-stone-900">{accountNumber}</span>
               <button
                 type="button"
                 onClick={() => handleCopy(accountNumber, "accountNumber")}
                 aria-label={`Copy account number: ${accountNumber}`}
-                className="text-[#64748B] hover:text-[#0B1938] transition-colors p-1"
+                className="text-stone-400 hover:text-[#590B16] transition-colors p-1"
               >
                 {copiedField === "accountNumber" ? (
-                  <span className="text-[10px] text-[#B89742] font-semibold uppercase tracking-wider">Copied</span>
+                  <span className="text-[10px] text-[#590B16] font-semibold uppercase tracking-wider">Copied</span>
                 ) : (
                   <Icons.Copy className="w-3.5 h-3.5" />
                 )}
@@ -122,22 +120,22 @@ export const BankTransferDetails: React.FC<BankTransferDetailsProps> = ({
         )}
 
         {iban && (
-          <div className="p-3 bg-[#F8F6F0]/60 rounded border border-[#0B1938]/5">
-            <span className="text-[10px] uppercase text-[#64748B] tracking-widest font-medium block mb-1">
-              IBAN / SWIFT Code
+          <div className="p-2.5 bg-[#FAF8F5] rounded border border-stone-200/60">
+            <span className="text-[10px] uppercase text-stone-500 tracking-wider font-semibold block mb-0.5">
+              IBAN
             </span>
             <div className="flex items-center justify-between gap-2">
-              <span className="font-mono font-semibold text-[#0B1938] text-[11px] truncate">
+              <span className="font-mono font-semibold text-stone-900 text-[11px] truncate">
                 {iban}
               </span>
               <button
                 type="button"
                 onClick={() => handleCopy(iban, "iban")}
                 aria-label={`Copy IBAN: ${iban}`}
-                className="text-[#64748B] hover:text-[#0B1938] transition-colors p-1"
+                className="text-stone-400 hover:text-[#590B16] transition-colors p-1"
               >
                 {copiedField === "iban" ? (
-                  <span className="text-[10px] text-[#B89742] font-semibold uppercase tracking-wider">Copied</span>
+                  <span className="text-[10px] text-[#590B16] font-semibold uppercase tracking-wider">Copied</span>
                 ) : (
                   <Icons.Copy className="w-3.5 h-3.5" />
                 )}

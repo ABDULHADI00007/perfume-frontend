@@ -568,7 +568,7 @@ export default function LycorisSpecimen({
   ligatureWord = "Essence",
   links = [
     { label: "EXPLORE THE PRIVATE CELLAR", href: "/perfumes" },
-    { label: "DISCOVER THE ATELIER", href: "/about" },
+    { label: "DISCOVER THE JOURNAL", href: "/journal" },
   ],
   fontFamily = DISPLAY,
   fontHref = FONT_HREF,

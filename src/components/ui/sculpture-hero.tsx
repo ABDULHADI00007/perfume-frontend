@@ -1128,7 +1128,7 @@ const DEFAULTS = {
   navLinks: [
     { label: "Creations", href: "/perfumes" },
     { label: "Discovery", href: "/perfumes" },
-    { label: "Maison", href: "/about" },
+    { label: "Contact", href: "/contact" },
     { label: "Journal", href: "/journal" },
   ],
   navCta: { label: "Bespoke", href: "/perfumes" },

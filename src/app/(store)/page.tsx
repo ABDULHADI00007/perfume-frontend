@@ -4,7 +4,6 @@ import { Hero } from "@/components/storefront/Hero";
 import { NewCollectionSection } from "@/components/storefront/NewCollectionSection";
 import { DiscoverCollectionSection } from "@/components/storefront/DiscoverCollectionSection";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
-import { FinalCTA } from "@/components/storefront/FinalCTA";
 import { Skiper30 } from "@/components/storefront/ParallaxGallerySection";
 
 export const metadata = constructMetadata({
@@ -64,9 +63,6 @@ export default function HomePage() {
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />
-
-      {/* 07 — FINAL CLOSING CTA: Quiet cinematic closing section */}
-      <FinalCTA />
     </div>
   );
 }

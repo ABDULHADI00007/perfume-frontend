@@ -3,7 +3,7 @@ import { CheckoutPageView } from "@/features/checkout/components/CheckoutPageVie
 
 export const metadata = constructMetadata({
   title: "Checkout",
-  description: "Complete your luxury fragrance order with Maison de Parfum.",
+  description: "Complete your luxury fragrance order with Soulmate Scents.",
   canonical: "/checkout",
   noIndex: true,
 });

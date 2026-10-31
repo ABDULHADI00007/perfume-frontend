@@ -33,7 +33,14 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
   const { hasItem, toggleItem } = useWishlist();
   const isWishlisted = hasItem(product.id) || hasItem(product.slug);
   const ratingCount = product.ratingCount || 91;
-  const currentPrice = selectedVariant ? selectedVariant.price * quantity : 13500;
+  const unitPrice = selectedVariant ? selectedVariant.price : 13500;
+  const currentPrice = unitPrice * quantity;
+  const unitOriginalPrice =
+    selectedVariant?.compareAtPrice && selectedVariant.compareAtPrice > unitPrice
+      ? selectedVariant.compareAtPrice
+      : Math.round(unitPrice * 1.16);
+  const originalPrice = unitOriginalPrice * quantity;
+  const discountPct = Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
 
   const handleToggleWishlist = () => {
     const rawImage = product.images?.[0];
@@ -88,21 +95,48 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
         )}
       </div>
 
-      {/* Star Ratings */}
-      <div className="flex items-center space-x-2">
-        <div className="flex items-center text-amber-500 text-sm">
-          {"★".repeat(product.rating || 5)}
+      {/* Star Ratings (Enlarged Luxury Stars) */}
+      <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1">
+          {[1, 2, 3, 4, 5].map((starNum) => {
+            const isFilled = starNum <= Math.round(Number(product.rating) || 5);
+            return (
+              <svg
+                key={starNum}
+                className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 transition-transform ${
+                  isFilled
+                    ? "fill-[#F97316] text-[#F97316] drop-shadow-[0_1px_2px_rgba(249,115,22,0.35)]"
+                    : "fill-[#D1C7BA] text-[#D1C7BA]"
+                }`}
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            );
+          })}
         </div>
-        <span className="text-xs text-stone-500 font-sans">
+        <span className="text-xs sm:text-sm text-stone-500 font-sans font-medium">
           ({ratingCount} reviews)
         </span>
       </div>
 
-      {/* Price */}
-      <div>
-        <span className="font-serif text-3xl sm:text-4xl font-bold text-black">
-          {formatCurrency(currentPrice)}
-        </span>
+      {/* Price Display with Compare Price below (matching card styling) */}
+      <div className="flex flex-col">
+        <div className="flex items-baseline gap-3">
+          <span className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight">
+            {formatCurrency(currentPrice)}
+          </span>
+          {originalPrice > currentPrice && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] sm:text-xs font-semibold bg-[#590B16]/10 text-[#590B16] font-sans">
+              {discountPct}% OFF
+            </span>
+          )}
+        </div>
+        {originalPrice > currentPrice && (
+          <span className="text-sm sm:text-base line-through text-[#6F655B] font-sans mt-0.5">
+            {formatCurrency(originalPrice)}
+          </span>
+        )}
       </div>
 
       {/* Description Paragraph */}

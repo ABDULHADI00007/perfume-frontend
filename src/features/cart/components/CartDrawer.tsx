@@ -129,18 +129,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             >
               Explore All Perfumes
             </Button>
-
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                router.push("/about");
-              }}
-              className="w-full tracking-[0.16em] font-semibold text-xs uppercase border border-black text-black hover:bg-black hover:text-white transition-all py-3 rounded-xl min-h-[44px] font-serif"
-              style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
-            >
-              Our Story & Craft
-            </button>
           </div>
         </div>
       ) : children ? (

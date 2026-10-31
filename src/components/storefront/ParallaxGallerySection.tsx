@@ -6,18 +6,18 @@ import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
 
 const perfumeImages = [
-  "/images/perfumes/collection_crimson_bloom.jpg",
-  "/images/perfumes/collection_midnight_rose.jpg",
-  "/images/perfumes/collection_moonlit_orchid.jpg",
-  "/images/perfumes/collection_noir_essence.jpg",
-  "/images/perfumes/collection_velvet_amber.jpg",
-  "/images/perfumes/golden-senerity.png",
-  "/images/perfumes/oud-majesty.png",
-  "/images/perfumes/mediterrane_blu.png",
-  "/images/perfumes/amber-rivera.png",
-  "/images/perfumes/sultan-veils.png",
-  "/images/perfumes/collection_blue_horizon.jpg",
-  "/images/perfumes/flowers_img.png",
+  "/images/perfumes/dusk-still-life.png",
+  "/images/perfumes/suroor-still-life.png",
+  "/images/perfumes/gentle-man-still-life.png",
+  "/images/perfumes/Secret Garden Perfume in Bloom.png",
+  "/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png",
+  "/images/perfumes/vivid-desire-still-life.png",
+  "/images/perfumes/Infinite Boss in Golden Stone Light.png",
+  "/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png",
+  "/images/perfumes/noble-ocean-luxury.png",
+  "/images/perfumes/pulse-luxury.jpg",
+  "/images/perfumes/dusk-still-life.png",
+  "/images/perfumes/suroor-still-life.png",
 ];
 
 export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {

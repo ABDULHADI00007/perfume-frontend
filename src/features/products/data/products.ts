@@ -170,7 +170,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-06-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-SG-50" },
     ],
-    images: ["/images/perfumes/Secret Garden in Sunlit Bloom.png", "/images/perfumes/Secret Garden Perfume at Golden Hour.png", "/images/perfumes/secret-garden-still-life.png"],
+    images: ["/images/perfumes/Secret Garden Perfume in Bloom.png", "/images/perfumes/Secret Garden in Sunlit Bloom.png", "/images/perfumes/Secret Garden Perfume at Golden Hour.png", "/images/perfumes/secret-garden-still-life.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -260,7 +260,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-09-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-SR-50" },
     ],
-    images: ["/images/perfumes/Suroor Perfume in a Golden Zen Sanctuary.png", "/images/perfumes/suroor-still-life.png"],
+    images: ["/images/perfumes/suroor-still-life.png", "/images/perfumes/Suroor Perfume in a Golden Zen Sanctuary.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -290,7 +290,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-10-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-GM-50" },
     ],
-    images: ["/images/perfumes/Golden Hour Gentle Man Perfume.png", "/images/perfumes/gentle-man-still-life.png"],
+    images: ["/images/perfumes/gentle-man-still-life.png", "/images/perfumes/Sunlit Gentle Man Perfume Still Life.png", "/images/perfumes/Golden Hour Gentle Man Perfume.png"],
     featured: true,
     isPlatinum: true,
     gender: "men",
@@ -319,7 +319,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-11-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 35, sku: "SS-DK-50" },
     ],
-    images: ["/images/perfumes/Soulmate Dusk in Golden Hour.png", "/images/perfumes/dusk-luxury.jpg", "/images/perfumes/dusk-still-life.png"],
+    images: ["/images/perfumes/dusk-still-life.png", "/images/perfumes/Soulmate Dusk in Golden Hour.png", "/images/perfumes/dusk-luxury.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,

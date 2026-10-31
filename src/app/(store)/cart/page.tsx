@@ -12,7 +12,7 @@ export const metadata = constructMetadata({
 
 export default function CartPage() {
   return (
-    <main className="pt-3 sm:pt-5 pb-12 sm:pb-16 bg-[#F8F6F0] min-h-screen">
+    <main className="pt-3 sm:pt-5 pb-12 sm:pb-16 bg-[#FAF8F5] min-h-screen">
       <Container size="wide">
         <CartPageView />
       </Container>

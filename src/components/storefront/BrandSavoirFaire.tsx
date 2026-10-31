@@ -90,10 +90,10 @@ export const BrandSavoirFaire: React.FC = () => {
           {/* CTA Button */}
           <motion.div variants={textItemVariants} className="mb-12 sm:mb-16">
             <Link
-              href="/about"
+              href="/perfumes"
               className="inline-flex items-center justify-center px-9 py-4 bg-navy text-white hover:bg-[#1D267D] active:bg-[#080d38] text-xs uppercase tracking-[0.22em] font-medium transition-all duration-300 group shadow-sm hover:shadow-md"
             >
-              <span>OUR PHILOSOPHY</span>
+              <span>EXPLORE FRAGRANCES</span>
               <Icons.ArrowRight
                 size={14}
                 className="ml-2.5 transition-transform duration-300 group-hover:translate-x-1"

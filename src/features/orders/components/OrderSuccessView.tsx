@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
-import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
@@ -94,77 +93,60 @@ export function OrderSuccessView() {
     setOrder(updatedOrder);
   };
 
-  // Helper for Order Status Badge
-  const getOrderStatusBadge = (status: OrderStatus): { label: string; variant: BadgeProps["variant"] } => {
+  // Minimal Status Helpers
+  const getOrderStatusLabel = (status: OrderStatus): string => {
     switch (status) {
       case "pending":
-        return { label: "Commission Registered", variant: "neutral" };
+        return "Order Received";
       case "awaiting_payment_verification":
-        return { label: "Awaiting Wire Verification", variant: "warning" };
+        return "Awaiting Verification";
       case "confirmed":
-        return { label: "Order Confirmed", variant: "success" };
+        return "Confirmed";
       case "processing":
-        return { label: "Artisanal Preparation", variant: "accent" };
+        return "Preparing";
       case "shipped":
-        return { label: "Courier Dispatched", variant: "dark" };
+        return "Dispatched";
       case "delivered":
-        return { label: "Handover Complete", variant: "success" };
+        return "Delivered";
       case "cancelled":
-        return { label: "Commission Cancelled", variant: "neutral" };
+        return "Cancelled";
       case "refunded":
-        return { label: "Refund Processed", variant: "neutral" };
-      case "payment_rejected":
-        return { label: "Payment Rejected", variant: "error" };
+        return "Refunded";
       default:
-        return { label: status, variant: "default" };
+        return status;
     }
   };
 
-  // Helper for Payment Status Badge
-  const getPaymentStatusBadge = (
-    payStatus: PaymentStatus,
-    method: string
-  ): { label: string; variant: BadgeProps["variant"] } => {
+  const getPaymentStatusLabel = (payStatus: PaymentStatus, method: string): string => {
     if (method === "cash_on_delivery" && payStatus === "pending") {
-      return { label: "Settlement Due Upon Handover", variant: "neutral" };
+      return "Cash on Delivery";
     }
     switch (payStatus) {
       case "pending":
-        return { label: "Settlement Pending", variant: "neutral" };
+        return "Pending";
       case "pending_verification":
-        return { label: "Proof Under Review", variant: "warning" };
+        return "Proof Under Review";
       case "paid":
-        return { label: "Payment Confirmed", variant: "success" };
+        return "Paid";
       case "rejected":
-        return { label: "Payment Rejected", variant: "error" };
-      case "failed":
-        return { label: "Payment Failed", variant: "error" };
-      case "refunded":
-        return { label: "Refunded", variant: "neutral" };
-      case "partially_refunded":
-        return { label: "Partially Refunded", variant: "neutral" };
+        return "Payment Rejected";
       default:
-        return { label: payStatus, variant: "default" };
+        return payStatus;
     }
   };
 
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F8F6F0] py-16 sm:py-20">
+      <div className="min-h-screen bg-[#FAF8F5] py-16 sm:py-24">
         <Container>
           <div className="max-w-3xl mx-auto space-y-6">
-            <Skeleton className="h-14 w-14 rounded-full mx-auto bg-[#0B1938]/10" />
-            <Skeleton className="h-8 w-72 mx-auto bg-[#0B1938]/10" />
-            <Skeleton className="h-4 w-96 mx-auto bg-[#0B1938]/10" />
-            <div className="border border-[#0B1938]/10 p-8 space-y-6 bg-white rounded-xl shadow-sm">
-              <div className="flex justify-between items-center">
-                <Skeleton className="h-6 w-40" />
-                <Skeleton className="h-6 w-28" />
-              </div>
-              <Skeleton className="h-28 w-full" />
-              <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-14 w-14 rounded-full mx-auto bg-stone-200" />
+            <Skeleton className="h-8 w-72 mx-auto bg-stone-200" />
+            <Skeleton className="h-4 w-96 mx-auto bg-stone-200" />
+            <div className="border border-stone-200 p-8 space-y-6 bg-white rounded-2xl shadow-xs">
               <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-32 w-full" />
             </div>
           </div>
         </Container>
@@ -172,32 +154,31 @@ export function OrderSuccessView() {
     );
   }
 
-  // Error / Invalid Order Reference State
+  // Error State
   if (error || !orderNumber || !order) {
     return (
-      <div className="min-h-screen bg-[#F8F6F0] py-16 sm:py-24">
+      <div className="min-h-screen bg-[#FAF8F5] py-16 sm:py-24">
         <Container>
-          <div className="max-w-md mx-auto text-center bg-white p-8 sm:p-10 rounded-2xl border border-[#0B1938]/10 shadow-lg">
-            <div className="w-16 h-16 rounded-full bg-[#0B1938]/5 border border-[#0B1938]/15 flex items-center justify-center mx-auto mb-6 text-[#0B1938]">
-              <Icons.AlertCircle className="w-8 h-8 text-[#B89742]" />
+          <div className="max-w-md mx-auto text-center bg-white p-8 sm:p-10 rounded-2xl border border-stone-200 shadow-sm">
+            <div className="w-14 h-14 rounded-full bg-[#590B16]/10 text-[#590B16] flex items-center justify-center mx-auto mb-5">
+              <Icons.AlertCircle className="w-7 h-7" />
             </div>
-            <h1 className="font-serif text-2xl sm:text-3xl text-[#0B1938] uppercase tracking-wider mb-3 font-bold">
+            <h1 className="font-serif text-2xl sm:text-3xl text-stone-900 tracking-tight mb-2 font-normal">
               Order Confirmation
             </h1>
-            <p className="text-xs sm:text-sm text-[#64748B] font-sans mb-8 leading-relaxed">
-              {error ||
-                "No valid order reference was provided. If you recently completed an order, please verify your email confirmation."}
+            <p className="text-xs sm:text-sm text-stone-500 font-sans mb-8 leading-relaxed">
+              {error || "No valid order reference was found. Please check your confirmation email."}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/perfumes">
-                <Button className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-sans font-semibold bg-[#0B1938] hover:bg-[#1E293B] text-white">
+              <Link href="/perfumes" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto px-7 py-3 text-xs tracking-wider uppercase font-sans font-semibold bg-[#590B16] hover:bg-[#720E1D] text-white rounded-full">
                   Explore Fragrances
                 </Button>
               </Link>
-              <Link href="/">
+              <Link href="/" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-sans font-semibold border-[#0B1938]/20 text-[#0B1938]"
+                  className="w-full sm:w-auto px-7 py-3 text-xs tracking-wider uppercase font-sans font-semibold border-stone-300 text-stone-700 hover:bg-stone-50 rounded-full"
                 >
                   Return to Home
                 </Button>
@@ -210,149 +191,132 @@ export function OrderSuccessView() {
   }
 
   const isBankTransfer = order.paymentMethod === "bank_transfer";
-  const orderStatusBadge = getOrderStatusBadge(order.orderStatus);
-  const paymentStatusBadge = getPaymentStatusBadge(order.paymentStatus, order.paymentMethod);
   const formattedTotal = formatCurrency(order.total);
 
+  // Stepper logic
+  const steps = [
+    { id: 1, label: "Order Placed", isDone: true, isCurrent: order.orderStatus === "pending" },
+    {
+      id: 2,
+      label: "Confirmed",
+      isDone: ["confirmed", "processing", "shipped", "delivered"].includes(order.orderStatus),
+      isCurrent: order.orderStatus === "confirmed",
+    },
+    {
+      id: 3,
+      label: "Dispatched",
+      isDone: ["shipped", "delivered"].includes(order.orderStatus),
+      isCurrent: order.orderStatus === "shipped",
+    },
+    {
+      id: 4,
+      label: "Delivered",
+      isDone: order.orderStatus === "delivered",
+      isCurrent: order.orderStatus === "delivered",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#F8F6F0] py-8 sm:py-12 lg:py-16">
+    <div className="min-h-screen bg-[#FAF8F5] py-10 sm:py-16">
       <Container>
-        <div className="max-w-4xl mx-auto space-y-8 print:space-y-4">
-          {/* Header Banner */}
-          <header className="text-center print:text-left space-y-3">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#0B1938] to-[#1E293B] text-[#D4AF37] flex items-center justify-center mx-auto shadow-xl border border-[#D4AF37]/30 ring-4 ring-[#D4AF37]/10 print:hidden">
-              <Icons.Check className="w-8 h-8 text-[#D4AF37]" />
+        <div className="max-w-3xl mx-auto space-y-8 print:space-y-4">
+
+          {/* Minimalist Hero Header */}
+          <header className="text-center space-y-3.5 print:text-left">
+            <div className="w-14 h-14 rounded-full bg-[#590B16] text-[#FAF8F5] flex items-center justify-center mx-auto shadow-md ring-4 ring-[#C5A880]/30 print:hidden">
+              <Icons.Check className="w-7 h-7" />
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#0B1938]/5 border border-[#D4AF37]/40 text-[#B89742] text-[10px] sm:text-[11px] tracking-[0.25em] uppercase font-sans font-semibold">
-              <span>◆</span>
-              <span>Acquisition Secured</span>
-              <span>◆</span>
-            </div>
+            <span className="inline-block text-[11px] uppercase tracking-[0.22em] text-[#590B16] font-sans font-semibold">
+              Order Confirmed
+            </span>
 
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] uppercase tracking-tight">
-              Thank You for Your Order
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-stone-900 tracking-tight">
+              Thank You For Your Order
             </h1>
 
-            <p className="text-xs sm:text-sm text-[#64748B] font-sans max-w-xl mx-auto leading-relaxed">
-              Your bespoke fragrance commission has been registered with Maison de Parfum. Confirmation details have been prepared for{" "}
-              <span className="inline-block bg-[#0B1938] text-white px-2.5 py-0.5 rounded-full text-xs font-mono font-medium shadow-sm">
+            <p className="text-xs sm:text-sm text-stone-600 font-sans max-w-lg mx-auto leading-relaxed">
+              We have received your order with <strong className="text-stone-900 font-medium">Soulmate Scents</strong>. A confirmation email has been sent to{" "}
+              <span className="font-medium text-stone-900 underline underline-offset-2">
                 {order.customerSnapshot?.email}
-              </span>
+              </span>.
             </p>
           </header>
 
-          {/* Luxury 4-Step Order Progress Tracker */}
-          <div className="bg-white border border-[#0B1938]/10 p-6 sm:p-8 rounded-2xl shadow-sm print:hidden">
-            <div className="text-center mb-6">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#B89742] font-semibold font-sans">
-                Order Fulfillment Journey
-              </span>
-              <h3 className="font-serif text-lg text-[#0B1938] font-bold uppercase tracking-wider">
-                Status & Fulfillment Lifecycle
-              </h3>
-            </div>
+          {/* Clean 4-Step Fulfillment Stepper */}
+          <div className="bg-white border border-stone-200/80 p-5 sm:p-7 rounded-2xl shadow-xs print:hidden">
+            <div className="flex items-center justify-between relative">
+              {/* Connecting Progress Line */}
+              <div className="absolute top-4 sm:top-5 left-6 right-6 h-[2px] bg-stone-200 z-0" />
+              <div
+                className="absolute top-4 sm:top-5 left-6 h-[2px] bg-[#590B16] z-0 transition-all duration-500"
+                style={{
+                  width:
+                    order.orderStatus === "delivered"
+                      ? "calc(100% - 3rem)"
+                      : order.orderStatus === "shipped"
+                      ? "calc(66% - 2rem)"
+                      : ["confirmed", "processing"].includes(order.orderStatus)
+                      ? "calc(33% - 1rem)"
+                      : "0%",
+                }}
+              />
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 relative">
-              {/* Step 1 */}
-              <div className="text-center space-y-2 relative">
-                <div className="w-10 h-10 rounded-full bg-[#0B1938] text-[#D4AF37] flex items-center justify-center mx-auto shadow-md ring-2 ring-[#D4AF37]/30">
-                  <Icons.Check className="w-5 h-5" />
+              {steps.map((step) => (
+                <div key={step.id} className="relative z-10 flex flex-col items-center text-center">
+                  <div
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-sans text-xs font-semibold transition-all ${
+                      step.isDone
+                        ? "bg-[#590B16] text-white shadow-xs"
+                        : "bg-white border-2 border-stone-300 text-stone-400"
+                    }`}
+                  >
+                    {step.isDone ? <Icons.Check className="w-4 h-4 sm:w-5 sm:h-5" /> : step.id}
+                  </div>
+                  <span
+                    className={`mt-2 text-[11px] sm:text-xs font-sans tracking-wide ${
+                      step.isDone || step.isCurrent ? "font-semibold text-stone-900" : "text-stone-400"
+                    }`}
+                  >
+                    {step.label}
+                  </span>
                 </div>
-                <span className="block text-xs font-serif font-bold text-[#0B1938] uppercase tracking-wider">
-                  01. Commission Placed
-                </span>
-                <span className="block text-[10px] text-[#64748B] font-sans">
-                  Registered in System
-                </span>
-              </div>
-
-              {/* Step 2 */}
-              <div className="text-center space-y-2 relative">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto shadow-md ${
-                  isBankTransfer && order.paymentStatus !== "paid"
-                    ? "bg-[#D4AF37]/20 border-2 border-[#D4AF37] text-[#B89742]"
-                    : "bg-[#0B1938] text-[#D4AF37] ring-2 ring-[#D4AF37]/30"
-                }`}>
-                  <Icons.Tag className="w-4 h-4" />
-                </div>
-                <span className="block text-xs font-serif font-bold text-[#0B1938] uppercase tracking-wider">
-                  02. Verification
-                </span>
-                <span className="block text-[10px] text-[#64748B] font-sans">
-                  {isBankTransfer ? "Wire Verification" : "Order Confirmed"}
-                </span>
-              </div>
-
-              {/* Step 3 */}
-              <div className="text-center space-y-2 relative">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto border ${
-                  ["processing", "shipped", "delivered"].includes(order.orderStatus)
-                    ? "bg-[#0B1938] text-[#D4AF37] ring-2 ring-[#D4AF37]/30"
-                    : "bg-[#F8F6F0] text-[#94A3B8] border-[#0B1938]/10"
-                }`}>
-                  <Icons.Package className="w-4 h-4" />
-                </div>
-                <span className="block text-xs font-serif font-bold text-[#0B1938] uppercase tracking-wider">
-                  03. Bottling & Packaging
-                </span>
-                <span className="block text-[10px] text-[#64748B] font-sans">
-                  Artisanal Curing
-                </span>
-              </div>
-
-              {/* Step 4 */}
-              <div className="text-center space-y-2 relative">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto border ${
-                  order.orderStatus === "delivered"
-                    ? "bg-[#0B1938] text-[#D4AF37] ring-2 ring-[#D4AF37]/30"
-                    : "bg-[#F8F6F0] text-[#94A3B8] border-[#0B1938]/10"
-                }`}>
-                  <Icons.Truck className="w-4 h-4" />
-                </div>
-                <span className="block text-xs font-serif font-bold text-[#0B1938] uppercase tracking-wider">
-                  04. White-Glove Delivery
-                </span>
-                <span className="block text-[10px] text-[#64748B] font-sans">
-                  Courier Handover
-                </span>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Main Confirmation Card */}
-          <div className="bg-white border border-[#0B1938]/15 rounded-2xl shadow-xl overflow-hidden divide-y divide-[#0B1938]/10">
-            {/* Top Bar: Order Reference & Status Badges */}
-            <div className="p-6 sm:p-8 bg-gradient-to-r from-[#0B1938] via-[#1E293B] to-[#0B1938] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {/* Main Order Card */}
+          <div className="bg-white border border-stone-200/80 rounded-2xl shadow-xs overflow-hidden">
+            
+            {/* Top Bar: Order Reference & Status */}
+            <div className="p-5 sm:p-6 bg-[#FAF7EE] border-b border-[#C5A880]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="block text-[10px] tracking-[0.2em] uppercase text-[#D4AF37] font-sans font-semibold mb-1">
-                  Official Order Reference
+                <span className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold block mb-1">
+                  Order Number
                 </span>
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-xl sm:text-2xl font-bold text-white tracking-widest">
+                <div className="flex items-center gap-2.5">
+                  <span className="font-mono text-lg sm:text-xl font-bold text-stone-900 tracking-wider">
                     {order.orderNumber}
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyOrderNumber}
-                    aria-label={`Copy order reference: ${order.orderNumber}`}
-                    className="text-[#D4AF37] hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded border border-[#D4AF37]/30 text-xs flex items-center gap-1.5 font-sans"
+                    aria-label={`Copy order number: ${order.orderNumber}`}
+                    className="text-stone-500 hover:text-[#590B16] bg-white border border-stone-200 hover:border-[#590B16]/30 px-2.5 py-1 rounded-md text-[11px] font-sans font-medium transition-colors flex items-center gap-1.5"
                   >
                     {copiedOrderNumber ? (
-                      <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider">
-                        Copied!
-                      </span>
+                      <span className="text-[#590B16] font-semibold">Copied!</span>
                     ) : (
                       <>
                         <Icons.Copy className="w-3.5 h-3.5" />
-                        <span className="text-[10px] uppercase tracking-wider font-semibold">Copy</span>
+                        <span>Copy</span>
                       </>
                     )}
                   </button>
                 </div>
                 {order.createdAt && (
-                  <span className="text-[11px] text-gray-300 font-sans block mt-1">
-                    Commissioned on{" "}
+                  <span className="text-xs text-stone-500 font-sans block mt-1">
+                    Placed on{" "}
                     {new Date(order.createdAt).toLocaleDateString(undefined, {
                       year: "numeric",
                       month: "long",
@@ -362,91 +326,63 @@ export function OrderSuccessView() {
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <Badge variant={orderStatusBadge.variant} size="sm">
-                  {orderStatusBadge.label}
-                </Badge>
-                <Badge variant={paymentStatusBadge.variant} size="sm">
-                  {paymentStatusBadge.label}
-                </Badge>
-                <button
-                  type="button"
-                  onClick={handlePrintReceipt}
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37]/30 text-xs font-sans font-semibold tracking-wider uppercase transition-colors print:hidden"
-                >
-                  <Icons.Printer className="w-3.5 h-3.5" />
-                  <span>Print Receipt</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Payment Method Workflow Section */}
-            {isBankTransfer ? (
-              <div>
-                <BankTransferDetails
-                  settings={storeSettings?.payment?.bankTransfer}
-                  orderNumber={order.orderNumber}
-                  totalFormatted={formattedTotal}
-                />
-                <PaymentProofSection
-                  order={order}
-                  onProofSubmitted={handleProofSubmitted}
-                />
-              </div>
-            ) : (
-              <CodConfirmationNotice totalFormatted={formattedTotal} />
-            )}
-
-            {/* Complimentary Luxury Perk Banner */}
-            <div className="p-4 sm:p-5 bg-[#F8F6F0] border-y border-[#D4AF37]/30 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#0B1938] text-[#D4AF37] flex items-center justify-center flex-shrink-0">
-                <Icons.Gift className="w-4 h-4" />
-              </div>
-              <p className="text-xs sm:text-sm text-[#0B1938] font-sans leading-relaxed">
-                <strong className="font-semibold">Complimentary Presentation:</strong> A complimentary 2ml discovery sample and signature luxury presentation box are included with your order.
-              </p>
-            </div>
-
-            {/* Purchased Items Snapshot */}
-            <div className="p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#0B1938]/10">
-                <h2 className="font-serif text-lg uppercase tracking-wider text-[#0B1938] font-bold">
-                  Fragrance Selection ({order.items?.length || 0})
-                </h2>
-                <span className="text-xs text-[#64748B] font-sans">
-                  Bespoke Formulations
+              {/* Status Badges */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 rounded-full text-xs font-sans font-medium bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
+                  {getOrderStatusLabel(order.orderStatus)}
+                </span>
+                <span className="px-3 py-1 rounded-full text-xs font-sans font-medium bg-[#C5A880]/15 text-[#8C6D37] border border-[#C5A880]/30">
+                  {getPaymentStatusLabel(order.paymentStatus, order.paymentMethod)}
                 </span>
               </div>
+            </div>
 
-              <div className="divide-y divide-[#0B1938]/10">
+            {/* Payment Method Details (COD or Bank Transfer) */}
+            <div className="p-5 sm:p-6 border-b border-stone-100">
+              {isBankTransfer ? (
+                <div className="space-y-4">
+                  <BankTransferDetails
+                    settings={storeSettings?.payment?.bankTransfer}
+                    orderNumber={order.orderNumber}
+                    totalFormatted={formattedTotal}
+                  />
+                  <PaymentProofSection
+                    order={order}
+                    onProofSubmitted={handleProofSubmitted}
+                  />
+                </div>
+              ) : (
+                <CodConfirmationNotice totalFormatted={formattedTotal} />
+              )}
+            </div>
+
+            {/* Purchased Items List */}
+            <div className="p-5 sm:p-6 border-b border-stone-100">
+              <h2 className="font-serif text-base sm:text-lg font-semibold text-stone-900 mb-4">
+                Items in Your Order ({order.items?.length || 0})
+              </h2>
+
+              <div className="divide-y divide-stone-100">
                 {order.items?.map((item, idx) => (
-                  <div key={item._id || item.sku || idx} className="py-5 first:pt-0 last:pb-0 flex items-center gap-4 sm:gap-6">
-                    <div className="w-16 h-20 bg-[#F8F6F0] border border-[#0B1938]/15 rounded-lg flex items-center justify-center p-2 flex-shrink-0 shadow-sm relative group overflow-hidden">
-                      <OrderItemImage src={item.image} alt={item.name} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-serif text-base sm:text-lg text-[#0B1938] font-bold truncate">
-                        {item.name}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className="px-2 py-0.5 rounded bg-[#0B1938]/5 text-[10px] font-sans font-semibold uppercase text-[#0B1938] border border-[#0B1938]/10">
-                          Size: {item.size}
-                        </span>
-                        <span className="text-xs text-[#64748B] font-sans">
-                          Qty: {item.quantity}
-                        </span>
-                        <span className="text-xs text-[#64748B] font-sans">
-                          • {formatCurrency(item.unitPrice)} each
-                        </span>
+                  <div
+                    key={item._id || item.sku || idx}
+                    className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-14 h-16 bg-[#FAF8F5] border border-stone-200 rounded-lg flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+                        <OrderItemImage src={item.image} alt={item.name} />
                       </div>
-                      {item.sku && (
-                        <span className="text-[10px] font-mono text-[#94A3B8] block mt-1">
-                          SKU: {item.sku}
-                        </span>
-                      )}
+                      <div className="min-w-0">
+                        <h3 className="font-serif text-sm sm:text-base font-medium text-stone-900 truncate">
+                          {item.name}
+                        </h3>
+                        <p className="text-xs text-stone-500 font-sans mt-0.5">
+                          {item.size} &nbsp;|&nbsp; Qty: {item.quantity} &nbsp;•&nbsp; {formatCurrency(item.unitPrice)} each
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="font-serif text-base sm:text-lg font-bold text-[#0B1938]">
+                    <div className="text-right shrink-0">
+                      <span className="font-serif text-sm sm:text-base font-semibold text-stone-900">
                         {formatCurrency(item.totalPrice)}
                       </span>
                     </div>
@@ -455,196 +391,118 @@ export function OrderSuccessView() {
               </div>
             </div>
 
-            {/* Customer, Shipping, and Authoritative Financials */}
-            <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs font-sans bg-[#F8F6F0]/40">
-              {/* Left Column: Customer & Delivery Address */}
-              <div className="space-y-6">
-                <div className="bg-white p-5 rounded-xl border border-[#0B1938]/10 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#0B1938]/10 text-[#0B1938]">
-                    <Icons.Truck className="w-4 h-4 text-[#B89742]" />
-                    <h3 className="text-xs font-serif font-bold tracking-[0.14em] uppercase">
-                      Delivery Destination
-                    </h3>
-                  </div>
-                  <p className="text-[#334155] leading-relaxed text-xs">
-                    <strong className="font-semibold text-[#0B1938] block text-sm mb-1 font-serif">
-                      {order.shippingAddress?.fullName}
-                    </strong>
-                    {order.shippingAddress?.addressLine1}
-                    {order.shippingAddress?.addressLine2 && (
-                      <>
-                        <br />
-                        {order.shippingAddress.addressLine2}
-                      </>
-                    )}
-                    <br />
-                    {order.shippingAddress?.city}, {order.shippingAddress?.state}{" "}
-                    {order.shippingAddress?.postalCode}
-                    <br />
-                    <span className="font-semibold text-[#0B1938]">{order.shippingAddress?.country}</span>
-                  </p>
+            {/* Delivery Address & Financial Breakdown */}
+            <div className="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#FAF8F5]/50">
+              
+              {/* Shipping Destination */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-stone-900 font-serif font-semibold text-sm">
+                  <Icons.Truck className="w-4 h-4 text-[#590B16]" />
+                  <span>Delivery Address</span>
                 </div>
-
-                <div className="bg-white p-5 rounded-xl border border-[#0B1938]/10 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#0B1938]/10 text-[#0B1938]">
-                    <Icons.User className="w-4 h-4 text-[#B89742]" />
-                    <h3 className="text-xs font-serif font-bold tracking-[0.14em] uppercase">
-                      Client Contact Information
-                    </h3>
-                  </div>
-                  <p className="text-[#334155] leading-relaxed text-xs">
-                    <span className="block text-[#64748B]">Email:</span>
-                    <strong className="text-[#0B1938] font-mono">{order.customerSnapshot?.email}</strong>
-                    {order.customerSnapshot?.phone && (
-                      <>
-                        <br />
-                        <span className="block text-[#64748B] mt-1">Phone:</span>
-                        <strong className="text-[#0B1938]">{order.customerSnapshot.phone}</strong>
-                      </>
-                    )}
+                <div className="text-xs text-stone-600 font-sans leading-relaxed pl-6">
+                  <p className="font-medium text-stone-900">{order.shippingAddress?.fullName}</p>
+                  <p>{order.shippingAddress?.addressLine1}</p>
+                  {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress.addressLine2}</p>}
+                  <p>
+                    {order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.postalCode}
                   </p>
+                  <p className="font-medium text-stone-800">{order.shippingAddress?.country}</p>
+                  {order.customerSnapshot?.phone && (
+                    <p className="pt-1 text-stone-500 font-mono">Ph: {order.customerSnapshot.phone}</p>
+                  )}
                 </div>
               </div>
 
-              {/* Right Column: Authoritative Financial Breakdown */}
-              <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#0B1938]/10 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#0B1938]/10 text-[#0B1938]">
-                    <Icons.Tag className="w-4 h-4 text-[#B89742]" />
-                    <h3 className="text-xs font-serif font-bold tracking-[0.14em] uppercase">
-                      Settlement Summary
-                    </h3>
-                  </div>
-
-                  <div className="space-y-3 text-xs text-[#475569]">
-                    <div className="flex justify-between items-center">
-                      <span>Subtotal:</span>
-                      <span className="text-[#0B1938] font-semibold">{formatCurrency(order.subtotal)}</span>
-                    </div>
-
-                    {order.discount > 0 && (
-                      <div className="flex justify-between items-center text-[#B89742]">
-                        <span>Privilege Coupon Discount:</span>
-                        <span className="font-semibold">-{formatCurrency(order.discount)}</span>
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-center">
-                      <span>White-Glove Courier Delivery:</span>
-                      <span className="text-[#0B1938] font-semibold">
-                        {order.shippingFee === 0 ? (
-                          <span className="text-emerald-700 font-bold uppercase tracking-wider text-[11px] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            Complimentary
-                          </span>
-                        ) : (
-                          formatCurrency(order.shippingFee)
-                        )}
-                      </span>
-                    </div>
-
-                    {order.tax > 0 && (
-                      <div className="flex justify-between items-center">
-                        <span>Estimated Tax:</span>
-                        <span className="text-[#0B1938] font-semibold">{formatCurrency(order.tax)}</span>
-                      </div>
-                    )}
-                  </div>
+              {/* Order Cost Breakdown */}
+              <div className="space-y-2.5 text-xs font-sans text-stone-600">
+                <div className="flex items-center gap-2 text-stone-900 font-serif font-semibold text-sm mb-2">
+                  <Icons.Tag className="w-4 h-4 text-[#590B16]" />
+                  <span>Payment Summary</span>
                 </div>
 
-                <div className="pt-4 mt-4 border-t-2 border-[#0B1938]/10 flex justify-between items-center">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-widest text-[#64748B] block font-sans">
-                      Final Amount {order.paymentStatus === "paid" ? "Paid" : "Due"}
+                <div className="space-y-2 pl-6">
+                  <div className="flex justify-between items-center">
+                    <span>Subtotal</span>
+                    <span className="font-medium text-stone-900">{formatCurrency(order.subtotal)}</span>
+                  </div>
+
+                  {order.discount > 0 && (
+                    <div className="flex justify-between items-center text-[#590B16]">
+                      <span>Discount</span>
+                      <span className="font-medium">-{formatCurrency(order.discount)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center">
+                    <span>Delivery</span>
+                    <span className="font-medium text-stone-900">
+                      {order.shippingFee === 0 ? (
+                        <span className="text-emerald-700 font-semibold">Free</span>
+                      ) : (
+                        formatCurrency(order.shippingFee)
+                      )}
                     </span>
-                    <span className="font-serif text-xl sm:text-2xl font-bold text-[#0B1938]">
+                  </div>
+
+                  <div className="pt-2 mt-2 border-t border-stone-200 flex justify-between items-baseline">
+                    <span className="font-serif font-semibold text-sm text-stone-900">Total</span>
+                    <span className="font-serif text-xl font-bold text-[#590B16]">
                       {formattedTotal}
                     </span>
                   </div>
-                  <span className="px-3 py-1 rounded bg-[#0B1938] text-[#D4AF37] font-mono font-bold text-xs uppercase tracking-wider">
-                    {order.currency || "PKR"}
-                  </span>
                 </div>
               </div>
+
             </div>
 
-            {/* Next Steps & Client Support Advisory */}
-            <div className="p-6 sm:p-8 bg-[#0B1938] text-white">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
-                <div>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
-                    Concierge Client Care
-                  </span>
-                  <h3 className="font-serif text-lg text-white font-bold uppercase tracking-wider">
-                    Need Assistance with Your Order?
-                  </h3>
-                </div>
-                <div className="text-xs font-sans text-gray-300">
-                  <span>Support Line: </span>
-                  <a href="mailto:concierge@maisonparfum.com" className="text-[#D4AF37] font-mono hover:underline font-bold">
-                    concierge@maisonparfum.com
-                  </a>
-                </div>
+          </div>
+
+          {/* Minimalist Concierge Care Note */}
+          <div className="p-4 sm:p-5 bg-white border border-stone-200/80 rounded-xl flex items-center justify-between gap-4 text-xs font-sans text-stone-600">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#590B16]/10 text-[#590B16] flex items-center justify-center shrink-0">
+                <Icons.Mail className="w-4 h-4" />
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-gray-300">
-                <div className="space-y-1.5 p-4 rounded-lg bg-white/5 border border-white/10">
-                  <span className="font-serif text-[#D4AF37] text-sm font-bold block">
-                    01. Order Registration
-                  </span>
-                  <p className="text-[11px] leading-relaxed text-gray-400">
-                    Your bespoke commission is officially registered in our master fulfillment registry.
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 p-4 rounded-lg bg-white/5 border border-white/10">
-                  <span className="font-serif text-[#D4AF37] text-sm font-bold block">
-                    02. Artisanal Curing
-                  </span>
-                  <p className="text-[11px] leading-relaxed text-gray-400">
-                    {isBankTransfer
-                      ? "Upon bank wire receipt verification, your flacons are hand-inspected and boxed."
-                      : "Our perfumers prepare your flacons and schedule authorized white-glove courier pickup."}
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 p-4 rounded-lg bg-white/5 border border-white/10">
-                  <span className="font-serif text-[#D4AF37] text-sm font-bold block">
-                    03. White-Glove Handover
-                  </span>
-                  <p className="text-[11px] leading-relaxed text-gray-400">
-                    {isBankTransfer
-                      ? "Direct courier delivery with tracking updates dispatched to your email."
-                      : `Parcel delivery with ${formattedTotal} collected upon physical handover.`}
-                  </p>
-                </div>
-              </div>
+              <p>
+                Have a question about your fragrance delivery? Our concierge is here to help at{" "}
+                <a
+                  href="mailto:concierge@soulmatescents.com"
+                  className="font-medium text-[#590B16] hover:underline"
+                >
+                  concierge@soulmatescents.com
+                </a>
+              </p>
             </div>
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 print:hidden">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 print:hidden">
             <Link href="/perfumes" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto px-8 py-4 text-xs tracking-[0.2em] uppercase font-sans font-bold bg-[#0B1938] hover:bg-[#1E293B] text-white shadow-md">
-                Explore Fragrance Library
+              <Button className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-wider uppercase font-sans font-semibold bg-[#590B16] hover:bg-[#720E1D] text-white rounded-full shadow-xs">
+                Continue Shopping
               </Button>
             </Link>
+
             <button
               type="button"
               onClick={handlePrintReceipt}
-              className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-sans font-bold border-2 border-[#0B1938] text-[#0B1938] hover:bg-[#0B1938] hover:text-white transition-colors rounded-lg flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3.5 text-xs tracking-wider uppercase font-sans font-semibold border border-stone-300 text-stone-700 hover:bg-stone-50 rounded-full transition-colors flex items-center justify-center gap-2"
             >
               <Icons.Printer className="w-4 h-4" />
-              <span>Print Official Receipt</span>
+              <span>Print Receipt</span>
             </button>
+
             <Link href="/" className="w-full sm:w-auto">
               <Button
                 variant="outline"
-                className="w-full sm:w-auto px-8 py-4 text-xs tracking-[0.2em] uppercase font-sans font-bold border-[#0B1938]/20 text-[#0B1938]"
+                className="w-full sm:w-auto px-6 py-3.5 text-xs tracking-wider uppercase font-sans font-semibold border-stone-200 text-stone-600 hover:bg-stone-50 rounded-full"
               >
                 Return to Home
               </Button>
             </Link>
           </div>
+
         </div>
       </Container>
     </div>
@@ -666,8 +524,8 @@ function OrderItemImage({ src, alt }: { src?: string; alt: string }) {
     <Image
       src={imgSrc}
       alt={alt}
-      width={64}
-      height={80}
+      width={56}
+      height={64}
       className="object-contain max-h-full transition-transform duration-300 group-hover:scale-105"
       onError={() => {
         setImgSrc(defaultSrc);

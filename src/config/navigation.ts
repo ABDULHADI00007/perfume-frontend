@@ -6,8 +6,7 @@ export interface NavItem {
 
 export const storefrontNavigation: NavItem[] = [
   { title: "Home", href: "/" },
-  { title: "Perfumes", href: "/perfumes" },
-  { title: "About", href: "/about" },
+  { title: "Collection", href: "/perfumes" },
   { title: "Contact", href: "/contact" },
 ];
 
@@ -33,7 +32,6 @@ export const footerNavigation = {
     { title: "New Arrivals", href: "/shop?sort=newest" },
   ],
   company: [
-    { title: "About Us", href: "/about" },
     { title: "Journal", href: "/journal" },
     { title: "Contact", href: "/contact" },
     { title: "FAQ", href: "/faq" },

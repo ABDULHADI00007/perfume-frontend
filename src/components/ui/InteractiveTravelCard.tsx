@@ -262,7 +262,7 @@ export const InteractiveTravelCard = React.forwardRef<
                     "w-3.5 h-3.5 min-[380px]:w-3.5 min-[380px]:h-3.5 sm:w-4.5 sm:h-4.5 drop-shadow-xs transition-all duration-200",
                     isFav
                       ? "fill-[#590B16] text-[#590B16] stroke-[#590B16]"
-                      : "fill-none stroke-[#590B16] text-[#590B16] stroke-[2.2] hover:scale-105"
+                      : "fill-none stroke-white text-white stroke-[2.2] hover:scale-105"
                   )}
                 />
               </motion.button>

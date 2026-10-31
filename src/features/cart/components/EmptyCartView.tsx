@@ -1,46 +1,44 @@
 import React from "react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 
 export const EmptyCartView: React.FC = () => {
   return (
-    <div className="py-12 sm:py-20 max-w-2xl mx-auto px-4 font-sans text-[#0B1938]">
-      <Card variant="default" className="border border-[#E2DED6] bg-white p-8 sm:p-14 text-center shadow-xl">
-        <CardContent className="space-y-6">
-          <div className="w-16 h-16 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center mx-auto text-[#0B1938] shadow-sm">
-            <Icons.Bag className="w-8 h-8 text-[#0B1938]" />
-          </div>
+    <div className="min-h-[70vh] flex items-center justify-center w-full px-4 font-sans text-stone-900 py-8 sm:py-12">
+      <div className="bg-white border border-stone-200/80 rounded-2xl p-8 sm:p-14 text-center shadow-xs max-w-lg w-full">
+        <div className="w-16 h-16 rounded-full bg-[#FAF7EE] border border-[#C5A880]/30 flex items-center justify-center mx-auto mb-6 text-[#590B16] shadow-xs">
+          <Icons.Bag className="w-7 h-7 text-[#590B16]" />
+        </div>
 
-          <Badge variant="accent">
-            MAISON DE PARFUM
-          </Badge>
+        <span className="inline-block text-[11px] uppercase tracking-[0.22em] text-[#590B16] font-sans font-semibold mb-2">
+          Soulmate Scents
+        </span>
 
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1938] leading-tight tracking-tight">
-            Your Shopping Bag is Empty
-          </h1>
+        <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-stone-900 font-normal tracking-tight mb-3">
+          Your Shopping Bag is Empty
+        </h1>
 
-          <p className="text-xs sm:text-sm text-[#64748B] font-sans max-w-md mx-auto leading-relaxed">
-            Discover handcrafted extraits de parfum, rare harvest distillations, and bespoke collections formulated for individual expression.
-          </p>
+        <p className="text-xs sm:text-sm text-stone-500 font-sans max-w-sm mx-auto mb-8 leading-relaxed">
+          Explore our curated collection of luxury perfumes and find the signature fragrance crafted for you.
+        </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link href="/perfumes" className="w-full sm:w-auto">
-              <Button variant="default" size="lg" className="w-full sm:w-auto bg-[#0B1938]">
-                Explore All Fragrances
-              </Button>
-            </Link>
-            <Link href="/about" className="w-full sm:w-auto">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                About Our Maison
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link href="/perfumes" className="w-full sm:w-auto">
+            <Button className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-wider uppercase font-sans font-semibold bg-[#590B16] hover:bg-[#720E1D] text-white rounded-full shadow-xs transition-colors">
+              Explore Fragrances
+            </Button>
+          </Link>
+          <Link href="/" className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto px-7 py-3.5 text-xs tracking-wider uppercase font-sans font-semibold text-stone-700 border-stone-300 hover:bg-stone-50 rounded-full transition-colors"
+            >
+              Return to Home
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
-

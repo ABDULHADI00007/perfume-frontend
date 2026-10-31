@@ -223,7 +223,7 @@ export function CheckoutPageView() {
   // If cart is empty, render refined luxury recovery state
   if (cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F8F6F0]">
+      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <Container>
           <CheckoutEmptyState />
         </Container>

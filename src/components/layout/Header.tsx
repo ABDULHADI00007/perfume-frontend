@@ -73,9 +73,23 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
       }
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        closeCart();
+        closeWishlist();
+        setIsMobileNavOpen(false);
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closeCart, closeWishlist]);
 
   return (
     <>
@@ -129,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                     href={item.href}
                     className={`text-[11px] uppercase tracking-[0.22em] transition-all relative py-1.5 font-sans ${isActive
                       ? "text-[#590B16] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-[#590B16]"
-                      : "text-[#6B6F80] hover:text-[#590B16] font-medium"
+                      : "text-black hover:text-[#590B16] font-medium"
                       }`}
                   >
                     {item.title}
@@ -145,10 +159,10 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={toggleSearch}
                 aria-label="Search collection"
-                className="p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider cursor-pointer"
+                className="p-2 text-black hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-wider cursor-pointer"
               >
                 <Icons.Search size={18} />
-                <span className="hidden xl:inline-block text-[10px] tracking-[0.18em] font-medium">
+                <span className="hidden xl:inline-block text-[10px] tracking-[0.18em] font-medium text-black group-hover:text-[#590B16]">
                   Search
                 </span>
               </button>
@@ -158,7 +172,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={handleToggleWishlist}
                 aria-label={`Saved fragrances wishlist with ${wishlistCount} items`}
-                className="relative p-2 text-[#6B6F80] hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                className="relative p-2 text-black hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
                 title="Saved Fragrances"
               >
                 <Icons.Heart
@@ -177,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={handleToggleCart}
                 aria-label={`Shopping bag with ${cart.itemCount} items`}
-                className="relative p-2 text-foreground hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                className="relative p-2 text-black hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
               >
                 <Icons.Bag size={20} />
                 <span className="absolute -top-0.5 -right-0.5 bg-[#590B16] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
@@ -190,7 +204,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 type="button"
                 onClick={toggleMobileNav}
                 aria-label="Open navigation menu"
-                className="lg:hidden p-2 text-foreground hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                className="lg:hidden p-2 text-black hover:text-[#590B16] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
               >
                 <Icons.Menu size={22} />
               </button>

@@ -89,13 +89,16 @@ export default async function PerfumeDetailPage({ params }: PageProps) {
           {/* Main Product Showcase: 2-Column Gallery & Info Panel */}
           <ProductDetailView product={product} collection={collection} />
 
-          {/* Tabbed Content: Description, Scent Notes, Details & Checklist */}
+          {/* Tabbed Content: Customer Reviews & Submission, Scent Notes, Details & Shipping */}
           <FragranceComposition
+            productId={product.id}
             notes={product.notes}
             concentration={product.concentration}
             olfactoryFamily={product.olfactoryFamily}
             productTitle={product.title}
             description={product.description}
+            rating={product.rating || 4.9}
+            ratingCount={product.ratingCount || 91}
           />
 
           {/* Curated Related Fragrances Slider */}

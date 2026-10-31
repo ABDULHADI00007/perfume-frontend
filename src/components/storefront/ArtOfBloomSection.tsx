@@ -127,10 +127,14 @@ export function ArtOfBloomSection() {
 
             <motion.div
               variants={fadeInUpText}
-              className="pl-6 min-[390px]:pl-10 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-2 sm:pt-3 lg:pt-4 max-w-[580px]"
+              className="pl-6 min-[390px]:pl-10 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-2 sm:pt-3 lg:pt-4"
             >
-              <p className="text-sm min-[390px]:text-[15px] sm:text-base md:text-[17px] lg:text-[16px] xl:text-[17px] text-[#4A0A13]/85 font-sans leading-relaxed font-normal">
-                Born where rare botanicals meet pure passion, this fragrance unfolds in layers of floral depth, warm woods, and lasting elegance.
+              <p className="text-sm min-[390px]:text-[15px] sm:text-base md:text-[17px] lg:text-[16px] xl:text-[17px] text-[#4A0A13]/85 font-sans leading-relaxed font-normal max-w-[470px] sm:max-w-[495px] md:max-w-[520px] ml-8 sm:ml-16 md:ml-20 lg:ml-32 xl:ml-36">
+                Born where rare botanicals meet pure passion, this{" "}
+                <br className="hidden min-[480px]:inline" />
+                fragrance unfolds in layers of floral depth, warm{" "}
+                <br className="hidden min-[480px]:inline" />
+                woods, and lasting elegance.
               </p>
             </motion.div>
           </div>
