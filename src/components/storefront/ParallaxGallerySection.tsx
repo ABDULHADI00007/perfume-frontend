@@ -88,7 +88,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
   return (
     <section id="parallax-gallery" className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none scroll-mt-20">
       {/* Giant SOULMATE SCENTS Header with exact brand color #590B16 */}
-      <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 px-4 text-center overflow-hidden select-none relative z-10 flex flex-col items-center justify-center">
+      <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 pl-10 min-[360px]:pl-14 min-[400px]:pl-16 sm:px-4 text-left sm:text-center overflow-hidden select-none relative z-10 flex flex-col items-start sm:items-center justify-center">
         <motion.h2
           style={{
             x: headlineX,
@@ -96,7 +96,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
             willChange: "transform",
             fontFamily: "'Cinzel', 'Marcellus', serif",
           }}
-          className="font-serif text-[11vw] sm:text-[12vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none relative left-16 min-[360px]:left-20 min-[400px]:left-24 md:left-0"
+          className="font-serif text-[10vw] sm:text-[12vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none"
         >
           SOULMATE SCENTS
         </motion.h2>
