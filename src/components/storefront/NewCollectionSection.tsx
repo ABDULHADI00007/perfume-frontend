@@ -110,7 +110,7 @@ export function NewCollectionSection() {
           {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
           <motion.div
             variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-24 min-[360px]:mt-28 min-[390px]:mt-32 sm:mt-20 md:mt-0 -translate-x-16 min-[360px]:-translate-x-20 min-[390px]:-translate-x-24 sm:-translate-x-16 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[385px] min-[360px]:w-[410px] min-[390px]:w-[440px] min-[420px]:w-[460px] min-[480px]:w-[490px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[385px] min-[360px]:h-[410px] min-[390px]:h-[440px] min-[420px]:h-[460px] min-[480px]:h-[490px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
+            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto -translate-x-[7%] md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[350px] min-[360px]:w-[380px] min-[400px]:w-[420px] min-[440px]:w-[450px] min-[480px]:w-[480px] sm:w-[520px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[350px] min-[360px]:h-[380px] min-[400px]:h-[420px] min-[440px]:h-[450px] min-[480px]:h-[480px] sm:h-[520px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
