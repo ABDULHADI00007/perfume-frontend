@@ -119,9 +119,9 @@ export function NewCollectionSection() {
               className="absolute overflow-hidden"
               style={{
                 top: "3%",
-                left: "8%",
-                width: "45%",
-                height: "62%",
+                left: "7%",
+                width: "50%",
+                height: "61%",
                 backgroundColor: "#93C591",
                 transform: "rotate(-6deg)",
                 zIndex: 22,
@@ -196,8 +196,8 @@ export function NewCollectionSection() {
               style={{
                 bottom: "0%",
                 right: "0%",
-                width: "46%",
-                height: "64%",
+                width: "51%",
+                height: "63%",
                 backgroundColor: "#93C591",
                 transform: "rotate(4.5deg)",
                 zIndex: 23,
