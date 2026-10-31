@@ -60,10 +60,10 @@ export function NewCollectionSection() {
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[60%] lg:top-[clamp(40px,7vw,90px)] pl-2 sm:pl-6 lg:pl-0"
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] pl-2 sm:pl-6 lg:pl-0"
           >
             {/* ROW 1: NEW + Star Badge */}
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(6px,1.2vw,18px)] pl-2 sm:pl-4 lg:pl-[clamp(10px,2.5vw,40px)]">
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-[clamp(8px,1.5vw,20px)]">
               <h2
                 className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
@@ -87,9 +87,9 @@ export function NewCollectionSection() {
               </div>
             </div>
 
-            {/* ROW 2: PERFUME — indented */}
+            {/* ROW 2: PERFUME — flush left with NEW and COLLECTION */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-20 sm:pl-36 md:pl-48 lg:pl-[clamp(110px,15vw,220px)] mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -97,9 +97,9 @@ export function NewCollectionSection() {
               PERFUME
             </h2>
 
-            {/* ROW 3: COLLECTION */}
+            {/* ROW 3: COLLECTION — flush left with NEW and PERFUME */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold mt-2 sm:mt-4 lg:mt-[clamp(18px,2.8vw,48px)]"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold mt-2 sm:mt-3 lg:mt-[clamp(10px,1.8vw,28px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -118,12 +118,12 @@ export function NewCollectionSection() {
               variants={cardVariant(0.08)}
               className="absolute overflow-hidden"
               style={{
-                top: "3%",
-                left: "16%",
+                top: "0%",
+                left: "14%",
                 width: "50%",
-                height: "61%",
+                height: "60%",
                 backgroundColor: "#93C591",
-                transform: "rotate(-6deg)",
+                transform: "rotate(-3.5deg)",
                 zIndex: 22,
                 borderRadius: "4px",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
