@@ -145,8 +145,8 @@ export function NewCollectionSection() {
               style={{
                 top: "-4%",
                 right: "5%",
-                width: "39%",
-                height: "53%",
+                width: "36%",
+                height: "48%",
                 backgroundColor: "#FAF0D7",
                 transform: "rotate(5deg)",
                 zIndex: 21,
@@ -169,10 +169,10 @@ export function NewCollectionSection() {
               variants={cardVariant(0.32)}
               className="absolute overflow-hidden"
               style={{
-                bottom: "0%",
-                left: "11%",
-                width: "43%",
-                height: "53%",
+                bottom: "2%",
+                left: "13%",
+                width: "36%",
+                height: "45%",
                 backgroundColor: "#FAF0D7",
                 transform: "rotate(-5deg)",
                 zIndex: 24,
@@ -185,7 +185,7 @@ export function NewCollectionSection() {
                 alt="Tom Ford Patchouli Absolu with Swirling Smoke"
                 fill
                 className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
-                sizes="(max-width: 768px) 45vw, 270px"
+                sizes="(max-width: 768px) 40vw, 240px"
               />
             </motion.div>
 
