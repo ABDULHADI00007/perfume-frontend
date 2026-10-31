@@ -64,7 +64,7 @@ export function NewCollectionSection() {
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
               <h2
-                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
+                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(5.4rem,13.5vw,8.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 }}
@@ -74,7 +74,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge — enlarged on desktop, refined on mobile, bold on tablet */}
               <div
-                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-2.5 sm:ml-4 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
+                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] md:w-[74px] md:h-[74px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-2.5 sm:ml-4 md:ml-10 lg:ml-[clamp(48px,7.5vw,125px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
@@ -88,7 +88,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-1.5 sm:mt-2 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(5.4rem,13.5vw,8.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-14 lg:pl-[clamp(180px,21.5vw,320px)] mt-1.5 sm:mt-2 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -98,7 +98,7 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION — desktop indent & margin preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-1.5 sm:mt-2.5 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.2rem,8.2vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(5.4rem,13.5vw,8.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-1.5 sm:mt-2.5 md:mt-5 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
