@@ -71,7 +71,7 @@ export function ArtOfBloomSection() {
   return (
     <section
       id="art-of-scent"
-      className="w-full bg-white min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-6 sm:pt-8 md:pt-16 lg:pt-16 pb-6 sm:pb-10 md:pb-20 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
+      className="w-full bg-white min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-8 sm:pt-10 md:pt-16 lg:pt-16 pb-6 sm:pb-10 md:pb-20 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
     >
       <Container size="wide" className="mt-3 mb-auto sm:my-auto md:my-0">
         <motion.div
@@ -82,7 +82,7 @@ export function ArtOfBloomSection() {
           variants={containerVariants}
         >
           {/* Left Column: Overlapping Composite Cards (Desktop Left, Mobile Below) */}
-          <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start pl-0 sm:pl-6 lg:pl-10 pr-14 min-[360px]:pr-16 min-[400px]:pr-20 min-[480px]:pr-28 sm:pr-36 md:pr-48 lg:pr-0 pt-8 min-[360px]:pt-10 sm:pt-6 lg:pt-0">
+          <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start pl-0 sm:pl-6 lg:pl-10 pr-14 min-[360px]:pr-16 min-[400px]:pr-20 min-[480px]:pr-28 sm:pr-36 md:pr-48 lg:pr-0 pt-11 min-[360px]:pt-14 sm:pt-6 lg:pt-0">
             <div className="relative w-[270px] min-[360px]:w-[290px] min-[400px]:w-[320px] min-[480px]:w-[360px] sm:w-[400px] md:w-[440px] lg:w-[500px] h-[320px] min-[360px]:h-[350px] min-[400px]:h-[380px] min-[480px]:h-[430px] sm:h-[480px] md:h-[520px] lg:h-[590px]">
               {/* Main Black Perfume Image - Takes full space */}
               <motion.div
@@ -116,7 +116,7 @@ export function ArtOfBloomSection() {
           </div>
 
           {/* Right Column: Exact Reference Typography (Desktop Right, Mobile Above) */}
-          <div className="order-1 lg:order-2 lg:col-span-7 space-y-3 sm:space-y-5 md:space-y-6 pt-0 sm:pt-0 lg:pt-0 mt-2.5 sm:mt-0 md:-mt-2 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
+          <div className="order-1 lg:order-2 lg:col-span-7 space-y-3 sm:space-y-5 md:space-y-6 pt-0 sm:pt-0 lg:pt-0 mt-4 sm:mt-0 md:-mt-2 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
             <motion.h2
               variants={fadeInUpTitle}
               className="font-cinzel uppercase text-[clamp(3.8rem,14.8vw,5.8rem)] min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.88] sm:leading-[0.84] tracking-[0.05em]"
