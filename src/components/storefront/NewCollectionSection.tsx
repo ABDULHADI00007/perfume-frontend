@@ -46,9 +46,9 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-[#FAF7EE] overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-center md:block pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-12 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
+      className="w-full bg-[#FAF7EE] overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-3 sm:pt-6 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-8 sm:pb-10 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
     >
-      <Container size="wide" className="my-auto md:my-0">
+      <Container size="wide" className="mt-2 mb-auto sm:my-auto md:my-0">
         <motion.div
           className="relative w-full flex flex-col items-center lg:block gap-5 sm:gap-7 md:gap-10 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
           initial="hidden"
@@ -59,7 +59,7 @@ export function NewCollectionSection() {
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 -mt-1 sm:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
           >
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
