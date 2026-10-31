@@ -59,12 +59,12 @@ export function NewCollectionSection() {
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
           <motion.div
             variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 mt-5 min-[360px]:mt-7 sm:mt-4 md:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
+            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,4.5vw,60px)] px-2 sm:px-4 mt-5 min-[360px]:mt-7 sm:mt-4 md:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
           >
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-0">
               <h2
-                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold whitespace-nowrap"
+                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.3rem,9.2vw,9.5rem)] font-bold whitespace-nowrap"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 }}
@@ -74,7 +74,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge — enlarged on desktop, refined on mobile, bold on tablet */}
               <div
-                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[64px] h-[64px] min-[360px]:w-[70px] min-[360px]:h-[70px] sm:w-[72px] sm:h-[72px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-3 sm:ml-4 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
+                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[64px] h-[64px] min-[360px]:w-[70px] min-[360px]:h-[70px] sm:w-[72px] sm:h-[72px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-3 sm:ml-4 md:ml-8 lg:ml-[clamp(40px,6vw,100px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
@@ -88,7 +88,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.3rem,9.2vw,9.5rem)] font-bold pl-0 sm:pl-1 md:pl-12 lg:pl-[clamp(260px,28vw,480px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(8px,1.2vw,20px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -98,7 +98,7 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION — desktop indent & margin preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.3rem,9.2vw,9.5rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-0 mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(8px,1.2vw,20px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
