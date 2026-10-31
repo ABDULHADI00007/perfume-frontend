@@ -88,7 +88,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
   return (
     <section id="parallax-gallery" className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none scroll-mt-20">
       {/* Giant SOULMATE SCENTS Header with exact brand color #590B16 */}
-      <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 pl-10 min-[360px]:pl-14 min-[400px]:pl-16 sm:pl-20 md:pl-24 lg:pl-32 pr-4 text-left overflow-hidden select-none relative z-10 flex flex-col items-start justify-center">
+      <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 pl-6 min-[360px]:pl-10 min-[400px]:pl-12 sm:pl-14 md:pl-16 lg:pl-20 pr-4 text-left overflow-hidden select-none relative z-10 flex flex-col items-start justify-center">
         <motion.h2
           style={{
             x: headlineX,
