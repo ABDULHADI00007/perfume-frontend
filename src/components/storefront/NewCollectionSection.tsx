@@ -46,7 +46,7 @@ export function NewCollectionSection() {
   return (
     <section
       id="new-collection"
-      className="w-full bg-white overflow-hidden select-none scroll-mt-28 min-h-screen min-h-[100svh] lg:min-h-0 flex flex-col justify-center pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-14 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
+      className="w-full bg-white overflow-hidden select-none scroll-mt-28 min-h-screen min-h-[100svh] lg:min-h-0 flex flex-col justify-center pt-8 sm:pt-10 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-10 sm:pb-12 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
     >
       <Container size="wide" className="my-auto lg:my-0">
         <motion.div
@@ -64,7 +64,7 @@ export function NewCollectionSection() {
             {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
               <h2
-                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
+                className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(3.2rem,11.5vw,4.8rem)] sm:text-[clamp(3.6rem,11vw,5.5rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 }}
@@ -74,7 +74,7 @@ export function NewCollectionSection() {
 
               {/* Gold star circle badge — enlarged on desktop, refined on mobile, bold on tablet */}
               <div
-                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-2.5 sm:ml-4 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
+                className="rounded-full border-[1.5px] md:border-2 lg:border-[2.5px] border-[#E2A84E] flex items-center justify-center bg-transparent shrink-0 transition-transform duration-500 hover:rotate-45 w-[46px] h-[46px] sm:w-[54px] sm:h-[54px] md:w-[60px] md:h-[60px] lg:w-[clamp(50px,6.5vw,96px)] lg:h-[clamp(50px,6.5vw,96px)] ml-3 sm:ml-4 md:ml-8 lg:ml-[clamp(48px,7.5vw,125px)]"
               >
                 <svg
                   className="text-[#E2A84E] fill-current"
@@ -88,7 +88,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-1.5 sm:mt-2 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(3.2rem,11.5vw,4.8rem)] sm:text-[clamp(3.6rem,11vw,5.5rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3.5 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-2 sm:mt-3 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -98,7 +98,7 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION — desktop indent & margin preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.4rem,8.6vw,3.6rem)] sm:text-[clamp(2.8rem,8vw,4.8rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-1.5 sm:mt-2.5 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(3.2rem,11.5vw,4.8rem)] sm:text-[clamp(3.6rem,11vw,5.5rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-2 sm:mt-3 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
@@ -110,7 +110,7 @@ export function NewCollectionSection() {
           {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
           <motion.div
             variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[300px] min-[360px]:w-[330px] min-[400px]:w-[360px] min-[480px]:w-[420px] sm:w-[480px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[300px] min-[360px]:h-[330px] min-[400px]:h-[360px] min-[480px]:h-[420px] sm:h-[480px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
+            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto -translate-x-[7%] md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[350px] min-[360px]:w-[380px] min-[400px]:w-[420px] min-[440px]:w-[450px] min-[480px]:w-[480px] sm:w-[520px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[350px] min-[360px]:h-[380px] min-[400px]:h-[420px] min-[440px]:h-[450px] min-[480px]:h-[480px] sm:h-[520px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
           >
             {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
             <motion.div
