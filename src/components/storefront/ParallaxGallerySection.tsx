@@ -96,7 +96,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
             willChange: "transform",
             fontFamily: "'Cinzel', 'Marcellus', serif",
           }}
-          className="font-serif text-[11vw] sm:text-[12vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none"
+          className="font-serif text-[11vw] sm:text-[12vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none pl-8 min-[360px]:pl-12 min-[400px]:pl-16 md:pl-0"
         >
           SOULMATE SCENTS
         </motion.h2>
