@@ -88,7 +88,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-20 min-[360px]:pl-24 min-[390px]:pl-28 sm:pl-28 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
