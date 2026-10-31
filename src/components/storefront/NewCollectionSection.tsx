@@ -97,9 +97,9 @@ export function NewCollectionSection() {
               PERFUME
             </h2>
 
-            {/* ROW 3: COLLECTION — shifted right and moved down for breathing room */}
+            {/* ROW 3: COLLECTION — shifted right and moved down slightly more */}
             <h2
-              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-4 sm:pl-8 md:pl-12 lg:pl-[clamp(30px,4.5vw,75px)] mt-4 sm:mt-6 md:mt-8 lg:mt-[clamp(24px,3.5vw,55px)] whitespace-nowrap"
+              className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(2.8rem,9vw,4.2rem)] sm:text-[clamp(3.6rem,8.5vw,5.5rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-4 sm:pl-8 md:pl-12 lg:pl-[clamp(30px,4.5vw,75px)] mt-6 sm:mt-8 md:mt-10 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
