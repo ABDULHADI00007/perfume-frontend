@@ -1144,13 +1144,13 @@ export default function StringTieFooter({
           <div className="stt-content">
             <div className="stt-contacts">
               {logo && (
-                <div className="stt-brand-logo mb-1 sm:mb-2 -ml-0.5">
+                <div className="stt-brand-logo mb-2 sm:mb-3 md:mb-4 -ml-0.5">
                   <Image
                     src={logo}
                     alt="Soulmate Scents"
-                    width={180}
-                    height={50}
-                    className="h-8 min-[360px]:h-9 sm:h-11 md:h-12 w-auto object-contain brightness-0 invert opacity-95 select-none pointer-events-none"
+                    width={280}
+                    height={85}
+                    className="h-12 min-[360px]:h-14 sm:h-16 md:h-20 lg:h-[84px] w-auto max-w-[220px] sm:max-w-[280px] md:max-w-[340px] object-contain object-left brightness-0 invert opacity-95 select-none pointer-events-none"
                     priority
                   />
                 </div>
