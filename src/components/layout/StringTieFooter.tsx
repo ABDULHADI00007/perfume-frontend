@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 
 /**
  * String Tie Footer — a closing "thank you" footer built like a string-and-button
@@ -357,6 +358,8 @@ export interface StringTieFooterProps {
   signature?: string[]
   /** Used instead of `signature` when set: your name, in the page's script face. */
   signatureText?: string
+  /** Brand logo shown above the contact details. */
+  logo?: string
   /** What a screen reader hears for the signature. */
   signatureLabel?: string
   /** What's on the note that slides out when the envelope is opened. */
@@ -623,6 +626,7 @@ const Arrow = () => (
 const SEGMENTS = 96
 
 export default function StringTieFooter({
+  logo = "/images/perfumes/soulmate_logo_transparent.png",
   meta = [],
   title = "Thank",
   titleAccent = "You",
@@ -1139,6 +1143,18 @@ export default function StringTieFooter({
 
           <div className="stt-content">
             <div className="stt-contacts">
+              {logo && (
+                <div className="stt-brand-logo mb-1 sm:mb-2 -ml-0.5">
+                  <Image
+                    src={logo}
+                    alt="Soulmate Scents"
+                    width={180}
+                    height={50}
+                    className="h-8 min-[360px]:h-9 sm:h-11 md:h-12 w-auto object-contain brightness-0 invert opacity-95 select-none pointer-events-none"
+                    priority
+                  />
+                </div>
+              )}
               {email && (
                 <div>
                   <span className="stt-k">Email</span>
