@@ -29,7 +29,8 @@ export const Footer: React.FC<FooterProps> = (props) => {
         cta: "Write to Hadi",
       }}
       height="100svh"
-      paper="#FAF8F5"
+      paper="#ffffff"
+      grain={0}
       ink="#000000"
       panelBg="#3E060E"
       bodyInk="#EBE3D7"
