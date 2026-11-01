@@ -7,7 +7,7 @@ export function generateOrganizationJsonLd() {
     name: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/images/logo.png`,
-    sameAs: [siteConfig.socials.instagram, siteConfig.socials.pinterest],
+    sameAs: [siteConfig.socials.instagram, siteConfig.socials.facebook, siteConfig.socials.pinterest],
     contactPoint: {
       "@type": "ContactPoint",
       telephone: siteConfig.contact.phone,

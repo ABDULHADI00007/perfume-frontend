@@ -15,12 +15,17 @@ export const Footer: React.FC<FooterProps> = (props) => {
       title="Thank"
       titleAccent="You"
       tapes={["Soulmate Scents", "Essence of Unbreakable Bonds"]}
-      email="hadi@soulmatescents.com"
-      phone="+92 300 1234567"
+      email="soulmatescents@gmail.com"
+      phone="+92 333 7615355"
       links={[
-        { label: "instagram.com/soulmatescents", href: "https://instagram.com" },
-        { label: "facebook.com/soulmatescents", href: "https://facebook.com" },
-        { label: "tiktok.com/@soulmatescents", href: "https://tiktok.com" },
+        {
+          label: "instagram.com/soulmatescents",
+          href: "https://www.instagram.com/soulmatescents?vrfl=MWc1YTY4MGVuNWpyaw==",
+        },
+        {
+          label: "facebook.com/soulmatescents",
+          href: "https://www.facebook.com/share/1EGXnZi5TC/",
+        },
       ]}
       regards="Warm Regards,"
       signatureLabel="Signed, Hadi"

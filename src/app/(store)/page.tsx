@@ -26,7 +26,7 @@ export default function HomePage() {
         "description": siteConfig.description,
         "email": siteConfig.contact.email,
         "telephone": siteConfig.contact.phone,
-        "sameAs": [siteConfig.socials.instagram, siteConfig.socials.pinterest],
+        "sameAs": [siteConfig.socials.instagram, siteConfig.socials.facebook, siteConfig.socials.pinterest],
       },
       {
         "@type": "WebSite",
