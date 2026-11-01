@@ -368,6 +368,8 @@ export interface StringTieFooterProps {
   paper?: string
   /** The body, and the text on the flap. */
   ink?: string
+  /** Bottom body panel background. Defaults to #3E060E or ink. */
+  panelBg?: string
   /** Text on the body. */
   bodyInk?: string
   /** Buttons and the first tape. */
@@ -464,7 +466,7 @@ const CSS =
   ".stt.is-open .stt-btn-top{opacity:0;pointer-events:none}" +
   // the body
   ".stt-body{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;color:var(--stt-body-ink)}" +
-  ".stt-panel{position:absolute;inset:0;z-index:2;background:var(--stt-ink)}" +
+  ".stt-panel{position:absolute;inset:0;z-index:2;background:var(--stt-panel-bg,var(--stt-ink))}" +
   ".stt-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:" + GRAIN + ";background-size:220px;opacity:calc(var(--stt-grain) * .7);mix-blend-mode:soft-light}" +
   ".stt-dock-b{position:relative;z-index:4;height:calc(var(--r) * 2.62);display:flex;justify-content:center;align-items:flex-start;padding-top:calc(var(--r) * .22)}" +
   ".stt-content{position:relative;z-index:3;flex:1;display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;padding:clamp(28px,5cqw,80px) clamp(16px,8cqw,140px) clamp(36px,6.5cqw,110px)}" +
@@ -576,7 +578,7 @@ function ButtonFace({ uid, accent }: { uid: string; accent: string }) {
         <circle r="26" fill={"url(#" + uid + "m)"} />
         <circle r="26" fill="none" stroke="rgba(0,0,0,.45)" strokeWidth="1" />
         <circle r="18.5" fill={"url(#" + uid + "n)"} />
-        <circle r="13" fill="none" stroke="#0b0d22" strokeWidth="2.2" />
+        <circle r="13" fill="none" stroke="#000000" strokeWidth="2.2" />
       </g>
     </svg>
   )
@@ -631,10 +633,11 @@ export default function StringTieFooter({
   copiedLabel = "Copied",
   height = "100svh",
   paper = "#ffffff",
-  ink = "#060B16",
+  ink = "#000000",
+  panelBg = "#3E060E",
   bodyInk = "#eef0f3",
   accent = "#590B16",
-  cord = "#8B1E2F",
+  cord = "#590B16",
   fontDisplay = "'Instrument Serif', 'Bodoni Moda', Didot, 'Bodoni 72', 'Bodoni MT', 'Times New Roman', Times, serif",
   fontSans = "'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
   fontScript = "'Snell Roundhand', 'Segoe Script', 'Brush Script MT', 'Apple Chancery', cursive",
@@ -999,6 +1002,7 @@ export default function StringTieFooter({
   const style = {
     "--stt-paper": paper,
     "--stt-ink": ink,
+    "--stt-panel-bg": panelBg,
     "--stt-body-ink": bodyInk,
     "--stt-accent": accent,
     "--stt-display": fontDisplay,

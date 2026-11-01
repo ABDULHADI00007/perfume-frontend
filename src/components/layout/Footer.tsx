@@ -30,10 +30,11 @@ export const Footer: React.FC<FooterProps> = (props) => {
       }}
       height="100svh"
       paper="#FAF8F5"
-      ink="#060B16"
+      ink="#000000"
+      panelBg="#3E060E"
       bodyInk="#EBE3D7"
       accent="#590B16"
-      cord="#7A0F1F"
+      cord="#590B16"
       fontDisplay="var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif"
       fontSans="var(--font-sans), 'Plus Jakarta Sans', sans-serif"
       fontScript="'Great Vibes', 'Playfair Display', 'Snell Roundhand', cursive"
