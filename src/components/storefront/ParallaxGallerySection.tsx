@@ -83,7 +83,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
     };
   }, []);
 
-  const headlineX = useTransform(smoothProgress, [0, 1], ["2%", "-6%"]);
+  const headlineX = useTransform(smoothProgress, [0, 1], ["2%", "-18%"]);
 
   return (
     <section id="parallax-gallery" className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none scroll-mt-20">
