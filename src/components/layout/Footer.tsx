@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
         text: "Crafting timeless memories through luxury perfumery. Have an inquiry, custom fragrance request, or wish to connect? Our concierge is always delighted to assist you.",
         cta: "Write to Hadi",
       }}
-      height="100svh"
+      height="clamp(580px, 88svh, 850px)"
       paper="#ffffff"
       grain={0}
       ink="#000000"

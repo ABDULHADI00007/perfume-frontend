@@ -429,7 +429,7 @@ const CSS =
   ".stt.is-open .stt-frame{--fold:calc(var(--r) * 2.46)}" +
   // the flap
   ".stt-flapwrap{position:relative;z-index:3;pointer-events:none;filter:drop-shadow(0 calc(var(--r) * .12) calc(var(--r) * .2) rgba(0,0,0,.28))}" +
-  ".stt-flap{position:relative;pointer-events:auto;background:var(--stt-paper);color:var(--stt-ink);clip-path:inset(0 0 var(--fold) 0 round 0 0 var(--R) var(--R));transition:clip-path .85s " + EASE + ";padding:clamp(26px,4.4cqw,64px) clamp(16px,6cqw,110px) 0}" +
+  ".stt-flap{position:relative;pointer-events:auto;background:var(--stt-paper);color:var(--stt-ink);clip-path:inset(0 0 var(--fold) 0 round 0 0 var(--R) var(--R));transition:clip-path .85s " + EASE + ";padding:clamp(16px,2.2cqw,36px) clamp(16px,6cqw,110px) 0}" +
   ".stt-flap::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:" + GRAIN + ";background-size:220px;opacity:calc(var(--stt-grain) * .9);mix-blend-mode:soft-light}" +
   ".stt-crease{position:absolute;left:0;right:0;bottom:var(--fold);height:calc(var(--r) * .5);pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.09),transparent);opacity:0;transition:opacity .5s,bottom .85s " + EASE + "}" +
   ".stt.is-open .stt-crease{opacity:1}" +
@@ -437,7 +437,7 @@ const CSS =
   ".stt-meta span{opacity:0;transform:translateY(-6px);transition:opacity .8s,transform .8s " + EASE + "}" +
   ".stt-meta span:nth-child(2){transition-delay:.08s}.stt-meta span:nth-child(3){transition-delay:.16s}" +
   ".stt.is-in .stt-meta span{opacity:1;transform:none}" +
-  ".stt-head{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:clamp(36px,7.5cqw,120px)}" +
+  ".stt-head{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:clamp(10px,2cqw,28px)}" +
   ".stt-title{font-family:var(--stt-display);font-weight:400;font-size:clamp(58px,13.4cqw,200px);line-height:.9;letter-spacing:-.045em;white-space:nowrap;text-align:center;clip-path:inset(-.25em -.4em -.02em -.4em)}" +
   ".stt-title em{font-style:italic;letter-spacing:-.06em;margin-left:.06em}" +
   ".stt-ch{display:inline-block;transform:translateY(105%);transition:transform 1.1s " + EASE + ";transition-delay:calc(.15s + var(--i) * .045s)}" +
