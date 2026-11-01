@@ -494,7 +494,7 @@ const CSS =
   ".stt-letter{position:absolute;z-index:1;left:50%;bottom:calc(100% - var(--tuck));--tuck:clamp(30px,4cqw,60px);width:min(620px,calc(100% - 32px));min-height:calc(var(--r) * 2.5 + var(--tuck));transform:translate(-50%,calc(var(--r) * 1.2));transition:transform .7s " + EASE + ";background:#f7f3ea;color:var(--stt-ink);border-radius:4px 4px 0 0;box-shadow:0 -1px 0 rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.25);padding:clamp(14px,2cqw,28px) clamp(16px,2.6cqw,36px) calc(var(--tuck) + 8px);display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.2cqw,14px);overflow:hidden}" +
   ".stt-letter::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 calc(1.7em - 1px),rgba(30,60,140,.07) calc(1.7em - 1px) 1.7em);opacity:.9}" +
   ".stt-letter::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:" + GRAIN + ";background-size:220px;opacity:calc(var(--stt-grain) * .8);mix-blend-mode:soft-light}" +
-  ".stt.is-open .stt-letter{transform:translate(-50%,calc(-1 * clamp(38px,5.5cqw,72px)));transition:transform .9s .3s " + EASE + "}" +
+  ".stt.is-open .stt-letter{transform:translate(-50%,calc(-1 * clamp(6px,1cqw,14px)));transition:transform .9s .3s " + EASE + "}" +
   ".stt-letter>*{position:relative;z-index:1}" +
   ".stt-letter>.stt-stamp{position:absolute;right:clamp(12px,2cqw,28px);top:clamp(10px,1.6cqw,22px);width:clamp(84px,10cqw,130px);height:auto;max-width:none;overflow:visible;color:var(--stt-accent);opacity:.5;transform:rotate(-9deg);fill:none;stroke:currentColor;stroke-width:1.4}" +
   ".stt-stamp text{fill:currentColor;stroke:none;font-family:var(--stt-sans);font-size:6.5px;font-weight:600;letter-spacing:.04em;text-anchor:middle}" +
@@ -518,7 +518,7 @@ const CSS =
   ".stt-regards{align-items:flex-start;padding-right:0}" +
   ".stt-regards-t{margin-right:0}" +
   ".stt-letter{min-height:220px;padding:16px 18px calc(var(--tuck) + 12px)}" +
-  ".stt.is-open .stt-letter{transform:translate(-50%,-42px)}" +
+  ".stt.is-open .stt-letter{transform:translate(-50%,-6px)}" +
   ".stt-note-t{font-size:14.5px;line-height:1.24}" +
   ".stt-meta span:nth-child(2){display:none}" +
   "}" +
