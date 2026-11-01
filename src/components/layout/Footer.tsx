@@ -10,7 +10,7 @@ export interface FooterProps extends Partial<StringTieFooterProps> {
 export const Footer: React.FC<FooterProps> = (props) => {
   return (
     <StringTieFooter
-      meta={["Soulmate Scents", "Artisanal Parfumerie", "Pure Luxury"]}
+      meta={[]}
       title="Thank"
       titleAccent="You"
       tapes={["Soulmate Scents", "Essence of Unbreakable Bonds"]}
@@ -33,8 +33,9 @@ export const Footer: React.FC<FooterProps> = (props) => {
       ink="#000000"
       panelBg="#3E060E"
       bodyInk="#EBE3D7"
-      accent="#590B16"
-      cord="#590B16"
+      accent="#3E060E"
+      buttonColor="#000000"
+      cord="#000000"
       fontDisplay="var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif"
       fontSans="var(--font-sans), 'Plus Jakarta Sans', sans-serif"
       fontScript="'Great Vibes', 'Playfair Display', 'Snell Roundhand', cursive"
