@@ -10,6 +10,7 @@ export const siteConfig = {
   socials: {
     instagram: "https://www.instagram.com/soulmatescents?vrfl=MWc1YTY4MGVuNWpyaw==",
     facebook: "https://www.facebook.com/share/1EGXnZi5TC/",
+    tiktok: "https://www.tiktok.com/@soulmatescent?_r=1&_t=ZS-9B2nSnXPVvL",
     pinterest: "https://pinterest.com/soulmatescents",
   },
 };

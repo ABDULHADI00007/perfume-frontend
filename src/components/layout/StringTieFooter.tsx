@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
+import Link from "next/link"
 
 /**
  * String Tie Footer — a closing "thank you" footer built like a string-and-button
@@ -334,8 +335,10 @@ export type EnvelopeNote = {
   /** Small line at the top of the note. */
   kicker?: string
   text?: string
-  /** The mail button. */
+  /** The CTA button text. */
   cta?: string
+  /** Destination link for the CTA button */
+  href?: string
 }
 
 export interface StringTieFooterProps {
@@ -474,27 +477,37 @@ const CSS =
   ".stt-panel{position:absolute;inset:0;z-index:2;background:var(--stt-panel-bg,var(--stt-ink))}" +
   ".stt-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:" + GRAIN + ";background-size:220px;opacity:calc(var(--stt-grain) * .7);mix-blend-mode:soft-light}" +
   ".stt-dock-b{position:relative;z-index:4;height:calc(var(--r) * 2.62);display:flex;justify-content:center;align-items:flex-start;padding-top:calc(var(--r) * .22)}" +
-  ".stt-content{position:relative;z-index:3;flex:1;display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;padding:clamp(28px,5cqw,80px) clamp(16px,8cqw,140px) clamp(36px,6.5cqw,110px)}" +
+  ".stt-brand-logo{opacity:0;transform:translateY(12px);transition:opacity .9s .4s " + EASE + ",transform .9s .4s " + EASE + "}" +
+  ".stt.is-in .stt-brand-logo{opacity:1;transform:none}" +
+  ".stt-content{position:relative;z-index:3;flex:1;display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;padding:clamp(20px,3cqw,50px) clamp(16px,8cqw,140px) clamp(26px,4.2cqw,65px)}" +
   ".stt-contacts{display:flex;flex-direction:column;gap:clamp(14px,1.6cqw,22px);font-size:clamp(14px,1.55cqw,20px);opacity:0;transform:translateY(14px);transition:opacity .9s .5s,transform .9s .5s " + EASE + "}" +
   ".stt.is-in .stt-contacts{opacity:1;transform:none}" +
   ".stt-k{display:block;font-size:.88em;opacity:.62;margin-bottom:.28em;font-weight:300;letter-spacing:.01em}" +
   ".stt-v{position:relative;display:inline-flex;align-items:center;gap:.5em;font-weight:500;letter-spacing:.005em;text-align:left;transition:color .25s}" +
   ".stt-v:hover{color:var(--stt-paper)}" +
+  ".stt-phone-icon{width:1.1em;height:1.1em;flex:none;opacity:.92;display:inline-block;vertical-align:middle;transition:transform .3s " + EASE + ",opacity .2s}" +
+  ".stt-v:hover .stt-phone-icon{opacity:1;transform:scale(1.15)}" +
   ".stt-copied{font-size:.68em;font-weight:500;padding:.25em .65em;border-radius:99px;background:var(--stt-accent);color:#fff;opacity:0;transform:translateX(-6px) scale(.9);transition:opacity .3s,transform .4s " + EASE + "}" +
   ".stt-copied.is-on{opacity:1;transform:none}" +
-  ".stt-links{display:flex;flex-direction:column;gap:.3em}" +
-  ".stt-link{position:relative;display:inline-flex;align-items:center;gap:.35em;width:fit-content;padding-bottom:.06em;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .5s " + EASE + ",color .25s}" +
+  ".stt-links{display:flex;flex-direction:column;gap:.35em}" +
+  ".stt-link{position:relative;display:inline-flex;align-items:center;gap:.5em;width:fit-content;padding-bottom:.06em;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .5s " + EASE + ",color .25s}" +
   ".stt-link:hover{background-size:0 1px;background-position:100% 100%;color:var(--stt-paper)}" +
-  ".stt-link svg{width:.7em;height:.7em;flex:none;max-width:none;opacity:0;transform:translate(-4px,4px);transition:opacity .3s,transform .4s " + EASE + "}" +
-  ".stt-link:hover svg{opacity:1;transform:none}" +
+  ".stt-link-icon{width:1.1em;height:1.1em;flex:none;opacity:.92;display:inline-block;vertical-align:middle;transition:transform .3s " + EASE + ",opacity .2s}" +
+  ".stt-link:hover .stt-link-icon{opacity:1;transform:scale(1.15)}" +
+  ".stt-link-arrow{width:.7em;height:.7em;flex:none;max-width:none;opacity:0;transform:translate(-4px,4px);transition:opacity .3s,transform .4s " + EASE + "}" +
+  ".stt-link:hover .stt-link-arrow{opacity:1;transform:none}" +
   ".stt-regards{display:flex;flex-direction:column;align-items:center;padding-right:clamp(0px,2cqw,40px);opacity:0;transform:translateY(14px);transition:opacity .9s .65s,transform .9s .65s " + EASE + "}" +
   ".stt.is-in .stt-regards{opacity:1;transform:none}" +
   ".stt-regards-t{font-family:var(--stt-display);font-size:clamp(22px,2.9cqw,40px);letter-spacing:-.035em;line-height:1;margin-right:-.4em}" +
   ".stt-sign{display:block;width:clamp(190px,24cqw,340px);height:auto;max-width:none;margin-top:-.2em;color:var(--stt-body-ink);overflow:visible}" +
   ".stt-sign path{fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--l,1200) var(--l,1200);stroke-dashoffset:var(--l,1200)}" +
   ".stt.is-signed .stt-sign path{transition:stroke-dashoffset var(--d,1s) cubic-bezier(.55,.1,.35,1) var(--w,0s);stroke-dashoffset:0}" +
-  ".stt-sign-text{display:block;font-family:var(--stt-script);font-size:clamp(40px,5.4cqw,76px);line-height:1.1;padding:0 .2em;clip-path:inset(-20% 100% -20% 0);transition:clip-path 1.6s cubic-bezier(.55,.1,.35,1)}" +
+  ".stt-sign-wrap{display:flex;flex-direction:column;align-items:center;position:relative}" +
+  ".stt-sign-text{display:block;font-family:var(--stt-script);font-size:clamp(32px,4.5cqw,64px);line-height:1.1;letter-spacing:0.02em;padding:0 .2em;clip-path:inset(-20% 100% -20% 0);transition:clip-path 1.5s cubic-bezier(.55,.1,.35,1)}" +
   ".stt.is-signed .stt-sign-text{clip-path:inset(-20% -10% -20% 0)}" +
+  ".stt-sign-underline{display:block;width:100%;max-width:clamp(180px,22cqw,280px);height:14px;margin-top:-.15em;color:var(--stt-body-ink);overflow:visible}" +
+  ".stt-sign-underline path{stroke-dasharray:320 320;stroke-dashoffset:320;transition:stroke-dashoffset 1s cubic-bezier(.55,.1,.35,1) .7s}" +
+  ".stt.is-signed .stt-sign-underline path{stroke-dashoffset:0}" +
   // the note
   ".stt-letter{position:absolute;z-index:1;left:50%;bottom:calc(100% - var(--tuck));--tuck:clamp(30px,4cqw,60px);width:min(620px,calc(100% - 32px));min-height:calc(var(--r) * 2.5 + var(--tuck));transform:translate(-50%,calc(var(--r) * 1.2));transition:transform .7s " + EASE + ";background:#f7f3ea;color:var(--stt-ink);border-radius:4px 4px 0 0;box-shadow:0 -1px 0 rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.25);padding:clamp(14px,2cqw,28px) clamp(16px,2.6cqw,36px) calc(var(--tuck) + 8px);display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.2cqw,14px);overflow:hidden}" +
   ".stt-letter::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 calc(1.7em - 1px),rgba(30,60,140,.07) calc(1.7em - 1px) 1.7em);opacity:.9}" +
@@ -519,11 +532,11 @@ const CSS =
   ".stt-cord.is-loose .stt-hit{pointer-events:stroke}" +
   ".stt-cord.is-drag .stt-hit{cursor:grabbing}" +
   "@container (max-width: 640px){" +
-  ".stt-content{grid-template-columns:1fr;align-items:start;gap:40px}" +
+  ".stt-content{grid-template-columns:1fr;align-items:start;gap:28px;padding:16px 20px 32px}" +
   ".stt-regards{align-items:flex-start;padding-right:0}" +
   ".stt-regards-t{margin-right:0}" +
-  ".stt-letter{min-height:220px;padding:16px 18px calc(var(--tuck) + 20px)}" +
-  ".stt.is-open .stt-letter{transform:translate(-50%,14px)}" +
+  ".stt-letter{--tuck:22px;min-height:200px;padding:14px 16px calc(var(--tuck) + 16px);transform:translate(-50%,calc(var(--r) * 3.1 + 8px))}" +
+  ".stt.is-open .stt-letter{transform:translate(-50%,clamp(24px,5cqw,36px))}" +
   ".stt-note-t{font-size:14.5px;line-height:1.24}" +
   ".stt-meta span:nth-child(2){display:none}" +
   "}" +
@@ -618,10 +631,51 @@ function ButtonGloss({ uid }: { uid: string }) {
 }
 
 const Arrow = () => (
-  <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+  <svg className="stt-link-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
     <path d="M2.5 9.5L9.5 2.5M4 2.5H9.5V8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 )
+
+function getSocialIcon(label: string, href?: string) {
+  const target = (label + " " + (href || "")).toLowerCase()
+  if (target.includes("instagram")) {
+    return (
+      <svg className="stt-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+      </svg>
+    )
+  }
+  if (target.includes("facebook")) {
+    return (
+      <svg className="stt-link-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    )
+  }
+  if (target.includes("tiktok")) {
+    return (
+      <svg className="stt-link-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.35 22a6.34 6.34 0 0 0 6.35-6.33V8.87a8.16 8.16 0 0 0 4.69 1.48v-3.5a4.85 4.85 0 0 1-.8-.16z"/>
+      </svg>
+    )
+  }
+  return null
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg
+      className="stt-link-icon"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.8 7.37 7.5 3.67 12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.05 20.15ZM16.57 14.39C16.32 14.27 15.1 13.67 14.87 13.58C14.65 13.5 14.48 13.46 14.32 13.71C14.15 13.96 13.67 14.52 13.52 14.69C13.38 14.85 13.23 14.88 12.98 14.75C12.73 14.63 11.93 14.36 10.98 13.52C10.24 12.86 9.74 12.05 9.6 11.8C9.45 11.55 9.58 11.42 9.71 11.29C9.82 11.18 9.96 11 10.08 10.86C10.21 10.72 10.25 10.62 10.33 10.45C10.41 10.29 10.37 10.14 10.31 10.02C10.25 9.9 9.75 8.68 9.55 8.17C9.35 7.68 9.14 7.74 8.99 7.73C8.84 7.72 8.67 7.72 8.51 7.72C8.34 7.72 8.07 7.78 7.84 8.03C7.62 8.28 6.98 8.87 6.98 10.08C6.98 11.29 7.86 12.46 7.99 12.62C8.11 12.79 9.73 15.28 12.21 16.35C12.8 16.61 13.26 16.76 13.62 16.87C14.21 17.06 14.75 17.03 15.18 16.97C15.66 16.9 16.65 16.37 16.86 15.79C17.06 15.2 17.06 14.71 17 14.6C16.94 14.49 16.82 14.42 16.57 14.39Z"/>
+    </svg>
+  )
+}
 
 const SEGMENTS = 96
 
@@ -1112,12 +1166,10 @@ export default function StringTieFooter({
             {note.kicker && <p className="stt-note-k">{note.kicker}</p>}
             {note.text && <p className="stt-note-t">{note.text}</p>}
             <div className="stt-note-row">
-              {email && (
-                <a className="stt-cta" href={mailHref}>
-                  {note.cta || "Write to me"}
-                  <Arrow />
-                </a>
-              )}
+              <Link className="stt-cta" href={note.href || "/collections"}>
+                {note.cta || "Discover"}
+                <Arrow />
+              </Link>
               <button type="button" className="stt-ghost" onClick={() => toggle(false)}>
                 Tie it back up
               </button>
@@ -1125,6 +1177,21 @@ export default function StringTieFooter({
           </div>
           <div className="stt-panel" aria-hidden="true" />
           <div className="stt-dock-b">
+            {logo && (
+              <div className="stt-brand-logo absolute inset-x-0 top-0 bottom-0 pointer-events-none select-none px-5 sm:px-8 md:px-[clamp(16px,8cqw,140px)] flex items-center">
+                <div className="ml-0 md:-ml-6 lg:-ml-16 translate-y-5 sm:translate-y-6 md:translate-y-6 lg:translate-y-7 flex items-center">
+                  <Image
+                    src={logo}
+                    alt="Soulmate Scents"
+                    width={832}
+                    height={345}
+                    style={{ objectPosition: "left" }}
+                    className="h-9 min-[360px]:h-10 sm:h-16 md:h-22 lg:h-28 w-auto object-contain object-left brightness-0 invert opacity-100 select-none pointer-events-none"
+                    priority
+                  />
+                </div>
+              </div>
+            )}
             <button
               ref={botRef}
               type="button"
@@ -1142,19 +1209,7 @@ export default function StringTieFooter({
           </div>
 
           <div className="stt-content">
-            <div className="stt-contacts">
-              {logo && (
-                <div className="stt-brand-logo mb-3 sm:mb-4 md:mb-6 -ml-1">
-                  <Image
-                    src={logo}
-                    alt="Soulmate Scents"
-                    width={500}
-                    height={150}
-                    className="h-16 min-[360px]:h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 w-auto max-w-[280px] min-[360px]:max-w-[320px] sm:max-w-[400px] md:max-w-[480px] lg:max-w-[540px] object-contain object-left brightness-0 invert opacity-95 select-none pointer-events-none"
-                    priority
-                  />
-                </div>
-              )}
+            <div className="stt-contacts relative ml-0 md:-ml-6 lg:-ml-16">
               {email && (
                 <div>
                   <span className="stt-k">Email</span>
@@ -1172,29 +1227,41 @@ export default function StringTieFooter({
               {phone && (
                 <div>
                   <span className="stt-k">Phone</span>
-                  <a className="stt-v" href={"tel:" + phone.replace(/[^\d+]/g, "")}>
-                    {phone}
+                  <a
+                    className="stt-link"
+                    href={"https://wa.me/" + phone.replace(/[^\d]/g, "")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Chat on WhatsApp"
+                  >
+                    <WhatsAppIcon />
+                    <span>{phone}</span>
+                    <Arrow />
                   </a>
                 </div>
               )}
               {links.length > 0 && (
-                <nav className="stt-links" aria-label="Elsewhere">
-                  {links.map((l, i) => (
-                    <a
-                      key={i}
-                      className="stt-link"
-                      href={l.href || "#"}
-                      target={external(l.href) ? "_blank" : undefined}
-                      rel={external(l.href) ? "noopener noreferrer" : undefined}
-                      onClick={(e) => {
-                        if (!l.href || l.href === "#") e.preventDefault()
-                      }}
-                    >
-                      {l.label}
-                      <Arrow />
-                    </a>
-                  ))}
-                </nav>
+                <div>
+                  <span className="stt-k">Social Media</span>
+                  <nav className="stt-links" aria-label="Social Media">
+                    {links.map((l, i) => (
+                      <a
+                        key={i}
+                        className="stt-link"
+                        href={l.href || "#"}
+                        target={external(l.href) ? "_blank" : undefined}
+                        rel={external(l.href) ? "noopener noreferrer" : undefined}
+                        onClick={(e) => {
+                          if (!l.href || l.href === "#") e.preventDefault()
+                        }}
+                      >
+                        {getSocialIcon(l.label, l.href)}
+                        <span>{l.label}</span>
+                        <Arrow />
+                      </a>
+                    ))}
+                  </nav>
+                </div>
               )}
             </div>
 
@@ -1202,9 +1269,14 @@ export default function StringTieFooter({
               <div className="stt-regards">
                 {regards && <p className="stt-regards-t">{regards}</p>}
                 {signatureText ? (
-                  <span className="stt-sign-text" role="img" aria-label={signatureLabel}>
-                    {signatureText}
-                  </span>
+                  <div className="stt-sign-wrap">
+                    <span className="stt-sign-text" role="img" aria-label={signatureLabel}>
+                      {signatureText}
+                    </span>
+                    <svg className="stt-sign-underline" viewBox="0 0 260 20" fill="none" aria-hidden="true">
+                      <path d="M 6 15 C 80 10, 160 8, 254 11" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                    </svg>
+                  </div>
                 ) : (
                   signature.length > 0 && (
                     <svg ref={signRef} className="stt-sign" viewBox="0 0 320 140" role="img" aria-label={signatureLabel}>
