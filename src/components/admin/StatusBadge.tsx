@@ -26,6 +26,12 @@ const statusStyles: Record<
     dot: "bg-emerald-500",
   },
   delivered: {
+    bg: "bg-sky-500/10",
+    text: "text-sky-700",
+    border: "border-sky-500/25",
+    dot: "bg-sky-500",
+  },
+  completed: {
     bg: "bg-emerald-500/10",
     text: "text-emerald-700",
     border: "border-emerald-500/25",

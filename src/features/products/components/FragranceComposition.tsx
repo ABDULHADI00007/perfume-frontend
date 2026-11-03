@@ -307,15 +307,22 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   {rating.toFixed(1)}
                 </span>
                 <div className="flex items-center gap-1 my-2">
-                  {[1, 2, 3, 4, 5].map((starNum) => (
-                    <svg
-                      key={starNum}
-                      className="w-5 h-5 sm:w-6 sm:h-6 fill-[#F97316] text-[#F97316] drop-shadow-[0_1px_2px_rgba(249,115,22,0.3)]"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+                  {[1, 2, 3, 4, 5].map((starNum) => {
+                    const isFilled = starNum <= Math.round(Number(rating) || 5);
+                    return (
+                      <svg
+                        key={starNum}
+                        className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 transition-transform ${
+                          isFilled
+                            ? "fill-[#F97316] text-[#F97316] drop-shadow-[0_1px_2px_rgba(249,115,22,0.35)]"
+                            : "fill-[#D1C7BA] text-[#D1C7BA]"
+                        }`}
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    );
+                  })}
                 </div>
                 <p className="text-xs sm:text-sm font-medium text-stone-600">
                   Based on {ratingCount + (reviews.length - DEFAULT_REVIEWS.length)} verified reviews
@@ -588,28 +595,22 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       {/* Reviewer Info */}
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-10 h-10 rounded-full bg-[#FAF4ED] border border-[#E7DCCE] text-[#590B16] flex items-center justify-center font-serif font-bold text-xs shrink-0 shadow-xs">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF4ED] border border-[#E7DCCE] text-[#590B16] flex items-center justify-center font-serif font-bold text-sm sm:text-base shrink-0 shadow-xs">
                           {initials}
                         </div>
                         <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-serif text-sm font-bold text-[#0D1424]">
+                          <div>
+                            <span className="font-serif text-base sm:text-lg font-bold text-[#0D1424] tracking-wide">
                               {rev.name}
                             </span>
-                            {rev.isVerified && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                                <span>✓</span>
-                                <span>Verified Buyer</span>
-                              </span>
-                            )}
                           </div>
                           {/* Stars */}
-                          <div className="flex items-center gap-1 mt-1">
+                          <div className="flex items-center gap-1 mt-1.5">
                             {[1, 2, 3, 4, 5].map((starNum) => (
                               <svg
                                 key={starNum}
-                                className={`w-3.5 h-3.5 ${
+                                className={`w-4.5 h-4.5 sm:w-5 sm:h-5 ${
                                   starNum <= rev.rating
                                     ? "fill-[#F97316] text-[#F97316]"
                                     : "fill-[#D1C7BA] text-[#D1C7BA]"
@@ -630,7 +631,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                     </div>
 
                     {/* Review Body */}
-                    <div className="mt-3.5 pl-0 sm:pl-[50px]">
+                    <div className="mt-3.5 pl-0 sm:pl-[72px]">
                       <h4 className="text-sm font-bold text-stone-900 font-sans mb-1">
                         {rev.title}
                       </h4>

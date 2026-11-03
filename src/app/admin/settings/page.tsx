@@ -21,40 +21,28 @@ export default function AdminSettingsPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Store Identity
-  const [storeName, setStoreName] = useState("");
-  const [slogan, setSlogan] = useState("");
-  const [supportEmail, setSupportEmail] = useState("");
-  const [supportPhone, setSupportPhone] = useState("");
-  const [address, setAddress] = useState("");
+  // 1. Store Identity & Concierge Contacts
+  const [storeName, setStoreName] = useState("Soulmate Scents");
+  const [slogan, setSlogan] = useState("Artisanal Fragrance House & Haute Parfumerie");
+  const [supportEmail, setSupportEmail] = useState("soulmatescents@gmail.com");
+  const [supportPhone, setSupportPhone] = useState("+92 333 7615355");
+  const [address, setAddress] = useState("Karachi, Pakistan");
+  const [instagram, setInstagram] = useState("https://instagram.com/soulmatescents");
 
-  // Currency
-  const [currencyCode, setCurrencyCode] = useState("USD");
-  const [currencySymbol, setCurrencySymbol] = useState("$");
+  // 2. Shipping & Delivery Rates (PKR)
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState<string>("20000");
+  const [flatRateFee, setFlatRateFee] = useState<string>("250");
 
-  // Shipping
-  const [freeShippingThreshold, setFreeShippingThreshold] = useState<string>("150");
-  const [flatRateFee, setFlatRateFee] = useState<string>("15");
-  const [defaultCarrier, setDefaultCarrier] = useState("DHL Express");
-
-  // Tax
-  const [enableTax, setEnableTax] = useState(false);
-  const [defaultTaxPercentage, setDefaultTaxPercentage] = useState<string>("0");
-  const [taxIncludedInPrice, setTaxIncludedInPrice] = useState(false);
-
-  // Payment Methods: COD & Bank Transfer
+  // 3. Payment Methods: COD & Bank Transfer
   const [codEnabled, setCodEnabled] = useState(true);
   const [bankTransferEnabled, setBankTransferEnabled] = useState(true);
-  const [bankName, setBankName] = useState("");
-  const [accountTitle, setAccountTitle] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [iban, setIban] = useState("");
-  const [bankInstructions, setBankInstructions] = useState("");
-
-  // Social Links
-  const [instagram, setInstagram] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [twitter, setTwitter] = useState("");
+  const [bankName, setBankName] = useState("Meezan Bank");
+  const [accountTitle, setAccountTitle] = useState("Soulmate Scents");
+  const [accountNumber, setAccountNumber] = useState("02010101234567");
+  const [iban, setIban] = useState("PK36MEZN0000000000000000");
+  const [bankInstructions, setBankInstructions] = useState(
+    "Please transfer the exact amount via your mobile banking app or ATM and quote your Order Reference # in the remarks. Upload transfer screenshot confirmation upon checkout."
+  );
 
   const loadSettings = useCallback(async () => {
     try {
@@ -64,42 +52,33 @@ export default function AdminSettingsPage() {
 
       if (data.store) {
         setStoreName(data.store.name || "Soulmate Scents");
-        setSlogan(data.store.slogan || "");
-        setSupportEmail(data.store.supportEmail || "");
-        setSupportPhone(data.store.supportPhone || "");
-        setAddress(data.store.address || "");
-      }
-      if (data.currency) {
-        setCurrencyCode(data.currency.code || "USD");
-        setCurrencySymbol(data.currency.symbol || "$");
+        setSlogan(data.store.slogan || "Artisanal Fragrance House & Haute Parfumerie");
+        setSupportEmail(data.store.supportEmail || "soulmatescents@gmail.com");
+        setSupportPhone(data.store.supportPhone || "+92 333 7615355");
+        setAddress(data.store.address || "Karachi, Pakistan");
       }
       if (data.shipping) {
-        setFreeShippingThreshold(String(data.shipping.freeShippingThreshold ?? 150));
-        setFlatRateFee(String(data.shipping.flatRateFee ?? 15));
-        setDefaultCarrier(data.shipping.defaultCarrier || "DHL Express");
-      }
-      if (data.tax) {
-        setEnableTax(Boolean(data.tax.enableTax));
-        setDefaultTaxPercentage(String(data.tax.defaultTaxPercentage ?? 0));
-        setTaxIncludedInPrice(Boolean(data.tax.taxIncludedInPrice));
+        setFreeShippingThreshold(String(data.shipping.freeShippingThreshold ?? 20000));
+        setFlatRateFee(String(data.shipping.flatRateFee ?? 250));
       }
       if (data.payment) {
         if (data.payment.cod) {
-          setCodEnabled(Boolean(data.payment.cod.enabled));
+          setCodEnabled(data.payment.cod.enabled !== false);
         }
         if (data.payment.bankTransfer) {
-          setBankTransferEnabled(Boolean(data.payment.bankTransfer.enabled));
-          setBankName(data.payment.bankTransfer.bankName || "");
-          setAccountTitle(data.payment.bankTransfer.accountTitle || "");
-          setAccountNumber(data.payment.bankTransfer.accountNumber || "");
-          setIban(data.payment.bankTransfer.iban || "");
-          setBankInstructions(data.payment.bankTransfer.instructions || "");
+          setBankTransferEnabled(data.payment.bankTransfer.enabled !== false);
+          setBankName(data.payment.bankTransfer.bankName || "Meezan Bank");
+          setAccountTitle(data.payment.bankTransfer.accountTitle || "Soulmate Scents");
+          setAccountNumber(data.payment.bankTransfer.accountNumber || "02010101234567");
+          setIban(data.payment.bankTransfer.iban || "PK36MEZN0000000000000000");
+          setBankInstructions(
+            data.payment.bankTransfer.instructions ||
+              "Please transfer the exact amount via your mobile banking app or ATM and quote your Order Reference # in the remarks. Upload transfer screenshot confirmation upon checkout."
+          );
         }
       }
-      if (data.socialLinks) {
-        setInstagram(data.socialLinks.instagram || "");
-        setFacebook(data.socialLinks.facebook || "");
-        setTwitter(data.socialLinks.twitter || "");
+      if (data.socialLinks?.instagram) {
+        setInstagram(data.socialLinks.instagram);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load store settings");
@@ -127,25 +106,26 @@ export default function AdminSettingsPage() {
 
     const payload: Partial<AdminSettings> = {
       store: {
-        name: storeName.trim() || undefined,
+        name: storeName.trim() || "Soulmate Scents",
         slogan: slogan.trim() || undefined,
         supportEmail: supportEmail.trim() || undefined,
         supportPhone: supportPhone.trim() || undefined,
         address: address.trim() || undefined,
       },
       currency: {
-        code: currencyCode.trim().toUpperCase() || "USD",
-        symbol: currencySymbol.trim() || "$",
+        code: "PKR",
+        symbol: "Rs.",
+        format: "Rs. {amount}",
       },
       shipping: {
-        freeShippingThreshold: freeShippingThreshold ? Number(freeShippingThreshold) : 0,
-        flatRateFee: flatRateFee ? Number(flatRateFee) : 0,
-        defaultCarrier: defaultCarrier.trim() || undefined,
+        freeShippingThreshold: freeShippingThreshold ? Number(freeShippingThreshold) : 20000,
+        flatRateFee: flatRateFee ? Number(flatRateFee) : 250,
+        defaultCarrier: "Express Courier Logistics (Nationwide)",
       },
       tax: {
-        enableTax,
-        defaultTaxPercentage: defaultTaxPercentage ? Number(defaultTaxPercentage) : 0,
-        taxIncludedInPrice,
+        enableTax: false,
+        defaultTaxPercentage: 0,
+        taxIncludedInPrice: true,
       },
       payment: {
         cod: {
@@ -162,8 +142,6 @@ export default function AdminSettingsPage() {
       },
       socialLinks: {
         instagram: instagram.trim() || undefined,
-        facebook: facebook.trim() || undefined,
-        twitter: twitter.trim() || undefined,
       },
     };
 
@@ -172,7 +150,7 @@ export default function AdminSettingsPage() {
       setError(null);
       setSuccessMessage(null);
       await adminService.updateSettings(payload);
-      setSuccessMessage("Storefront configuration saved successfully.");
+      setSuccessMessage("Settings saved successfully. All changes are active on the storefront.");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save settings");
     } finally {
@@ -187,11 +165,11 @@ export default function AdminSettingsPage() {
   const canEdit = hasPermission("settings.update");
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-sans max-w-5xl">
       <AdminPageHeader
         category="CONFIGURATION"
         title="Storefront Settings"
-        description="Configure bank wire transfer credentials, shipping fee thresholds, COD options, and store identity."
+        description="Manage store identity, concierge contact details, nationwide shipping rules, and checkout payment methods."
         breadcrumbs={[{ label: "Settings" }]}
         actions={
           !canEdit ? (
@@ -203,40 +181,46 @@ export default function AdminSettingsPage() {
       />
 
       {error && (
-        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-lg">
-          {error}
+        <div className="p-4 bg-status-error/10 border border-status-error/20 text-status-error text-xs font-medium rounded-xl flex items-center gap-2">
+          <Icons.AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
       {successMessage && (
-        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-lg">
-          {successMessage}
+        <div className="p-4 bg-status-success/10 border border-status-success/20 text-status-success text-xs font-medium rounded-xl flex items-center gap-2">
+          <Icons.Check className="w-4 h-4 shrink-0 text-emerald-600" />
+          <span>{successMessage}</span>
         </div>
       )}
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* 1. Store Identity */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
-            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-              <Icons.Package size={18} />
+        {/* 1. Store Identity & Concierge Details */}
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-5">
+          <div className="flex items-center gap-3 border-b border-[#EFECE6] pb-4">
+            <div className="w-9 h-9 rounded-xl bg-[#FAF8F5] text-[#0C134F] flex items-center justify-center border border-[#EFECE6]">
+              <Icons.Package className="w-4.5 h-4.5 text-[#0C134F]" />
             </div>
             <div>
-              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                Store Profile & Identity
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F]">
+                Store Profile & Brand Contacts
               </h3>
-              <p className="text-[11px] text-[#64748B]">General store branding & support contacts</p>
+              <p className="text-[12px] text-[#64748B]">
+                Public brand identity and concierge support information shown on footer and contact pages
+              </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="Store Name"
+              label="Store / Brand Name"
+              placeholder="Soulmate Scents"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
               disabled={!canEdit}
             />
             <Input
-              label="Tagline / Slogan"
+              label="Brand Tagline / Slogan"
+              placeholder="Artisanal Fragrance House & Haute Parfumerie"
               value={slogan}
               onChange={(e) => setSlogan(e.target.value)}
               disabled={!canEdit}
@@ -245,248 +229,196 @@ export default function AdminSettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="Support Email"
+              label="Concierge Support Email"
               type="email"
+              placeholder="soulmatescents@gmail.com"
               value={supportEmail}
               onChange={(e) => setSupportEmail(e.target.value)}
               disabled={!canEdit}
             />
             <Input
-              label="Support Phone"
+              label="WhatsApp / Support Phone"
+              placeholder="+92 333 7615355"
               value={supportPhone}
               onChange={(e) => setSupportPhone(e.target.value)}
               disabled={!canEdit}
             />
           </div>
 
-          <Input
-            label="Flagship Physical Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            disabled={!canEdit}
-          />
-        </Card>
-
-        {/* 2. Bank Transfer Payment Configuration */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-                <Icons.ShieldCheck size={18} />
-              </div>
-              <div>
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                  Bank Transfer & Manual Checkout Configuration
-                </h3>
-                <p className="text-[11px] text-[#64748B]">Credentials shown to customers on checkout</p>
-              </div>
-            </div>
-            <Checkbox
-              label="Enable Bank Transfer"
-              checked={bankTransferEnabled}
-              onChange={(e) => setBankTransferEnabled(e.target.checked)}
-              disabled={!canEdit}
-            />
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="Bank Name"
-              placeholder="e.g. Meezan Bank, HBL, Bank Alfalah"
-              value={bankName}
-              onChange={(e) => setBankName(e.target.value)}
+              label="Flagship Physical Studio / City"
+              placeholder="Karachi, Pakistan"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               disabled={!canEdit}
             />
             <Input
-              label="Account Title / Beneficiary"
-              placeholder="e.g. Soulmate Scents (Pvt) Ltd"
-              value={accountTitle}
-              onChange={(e) => setAccountTitle(e.target.value)}
+              label="Official Instagram Link"
+              placeholder="https://instagram.com/soulmatescents"
+              value={instagram}
+              onChange={(e) => setInstagram(e.target.value)}
               disabled={!canEdit}
             />
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              label="Account Number"
-              placeholder="e.g. 02010101234567"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
-              disabled={!canEdit}
-            />
-            <Input
-              label="IBAN / Swift Code"
-              placeholder="e.g. PK36MEZN0000000000000000"
-              value={iban}
-              onChange={(e) => setIban(e.target.value)}
-              disabled={!canEdit}
-            />
-          </div>
-
-          <Textarea
-            label="Payment Instructions for Customers"
-            placeholder="Please quote your Order Reference # in your mobile banking transfer remarks. Upload screenshot proof upon completion."
-            value={bankInstructions}
-            onChange={(e) => setBankInstructions(e.target.value)}
-            disabled={!canEdit}
-            rows={3}
-          />
         </Card>
 
-        {/* 3. Cash on Delivery */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-                <Icons.Delivery size={18} />
-              </div>
-              <div>
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                  Cash on Delivery (COD)
-                </h3>
-                <p className="text-[11px] text-[#64748B]">Pay cash upon delivery confirmation</p>
-              </div>
+        {/* 2. Shipping & Delivery Rates (PKR) */}
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-5">
+          <div className="flex items-center gap-3 border-b border-[#EFECE6] pb-4">
+            <div className="w-9 h-9 rounded-xl bg-[#FAF8F5] text-[#0C134F] flex items-center justify-center border border-[#EFECE6]">
+              <Icons.Truck className="w-4.5 h-4.5 text-[#0C134F]" />
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F]">
+                Nationwide Delivery & Shipping Rules (PKR)
+              </h3>
+              <p className="text-[12px] text-[#64748B]">
+                Configure flat courier charges and free delivery threshold for orders across Pakistan
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <Input
+              label="Free Delivery Order Minimum (Rs.)"
+              type="number"
+              placeholder="20000"
+              value={freeShippingThreshold}
+              onChange={(e) => setFreeShippingThreshold(e.target.value)}
+              helperText="Orders equal to or above this cart value receive 100% complimentary delivery."
+              disabled={!canEdit}
+            />
+            <Input
+              label="Standard Nationwide Delivery Fee (Rs.)"
+              type="number"
+              placeholder="250"
+              value={flatRateFee}
+              onChange={(e) => setFlatRateFee(e.target.value)}
+              helperText="Flat courier fee charged for orders below the free shipping minimum."
+              disabled={!canEdit}
+            />
+          </div>
+
+          <div className="p-3.5 bg-[#FAF8F5] border border-[#EFECE6] rounded-xl flex items-center gap-3 text-xs text-[#52525B]">
+            <Icons.Sparkles className="w-4 h-4 text-[#C5A880] shrink-0" />
+            <span>
+              <strong>Smart Checkout Automation:</strong> Customers ordering Rs. {Number(freeShippingThreshold || 0).toLocaleString()} or more automatically receive <strong>Free Delivery</strong>.
+            </span>
+          </div>
+        </Card>
+
+        {/* 3. Payment Methods: COD & Bank Wire Transfer */}
+        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-5">
+          <div className="flex items-center gap-3 border-b border-[#EFECE6] pb-4">
+            <div className="w-9 h-9 rounded-xl bg-[#FAF8F5] text-[#0C134F] flex items-center justify-center border border-[#EFECE6]">
+              <Icons.ShieldCheck className="w-4.5 h-4.5 text-[#0C134F]" />
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F]">
+                Payment Methods & Checkout Configuration
+              </h3>
+              <p className="text-[12px] text-[#64748B]">
+                Enable payment methods and customize bank deposit instructions shown to customers
+              </p>
+            </div>
+          </div>
+
+          {/* Method A: Cash on Delivery */}
+          <div className="p-4 rounded-xl border border-[#EFECE6] bg-[#FAF8F5]/50 flex items-center justify-between gap-4">
+            <div className="space-y-0.5">
+              <span className="text-xs font-bold text-[#0B1938] uppercase tracking-wider block">
+                Cash on Delivery (COD)
+              </span>
+              <p className="text-[11px] text-[#64748B]">
+                Permit customers to settle order payment in cash upon courier doorstep delivery
+              </p>
             </div>
             <Checkbox
-              label="Enable COD at Checkout"
+              label="Active"
               checked={codEnabled}
               onChange={(e) => setCodEnabled(e.target.checked)}
               disabled={!canEdit}
             />
           </div>
-        </Card>
 
-        {/* 4. Shipping & Rates */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
-            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-              <Icons.Delivery size={18} />
-            </div>
-            <div>
-              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                Shipping Rates & Logistics
-              </h3>
-              <p className="text-[11px] text-[#64748B]">Free shipping thresholds and delivery carriers</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Input
-              label="Free Shipping Minimum (Rs.)"
-              type="number"
-              placeholder="e.g. 5000"
-              value={freeShippingThreshold}
-              onChange={(e) => setFreeShippingThreshold(e.target.value)}
-              disabled={!canEdit}
-            />
-            <Input
-              label="Flat Rate Shipping Fee (Rs.)"
-              type="number"
-              placeholder="e.g. 250"
-              value={flatRateFee}
-              onChange={(e) => setFlatRateFee(e.target.value)}
-              disabled={!canEdit}
-            />
-            <Input
-              label="Default Logistics Partner"
-              placeholder="e.g. TCS Express / Leopard"
-              value={defaultCarrier}
-              onChange={(e) => setDefaultCarrier(e.target.value)}
-              disabled={!canEdit}
-            />
-          </div>
-        </Card>
-
-        {/* 5. Tax Configuration */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-                <Icons.Dollar size={18} />
+          {/* Method B: Direct Bank Wire Transfer */}
+          <div className="p-4 rounded-xl border border-[#EFECE6] bg-[#FAF8F5]/50 space-y-4">
+            <div className="flex items-center justify-between gap-4 pb-2 border-b border-[#EFECE6]">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-[#0B1938] uppercase tracking-wider block">
+                  Direct Bank Wire Transfer / Mobile Banking
+                </span>
+                <p className="text-[11px] text-[#64748B]">
+                  Display official banking details at checkout for direct IBFT / mobile transfer
+                </p>
               </div>
-              <div>
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                  Tax Calculation
-                </h3>
-                <p className="text-[11px] text-[#64748B]">Default tax rate settings</p>
-              </div>
-            </div>
-            <Checkbox
-              label="Enable Tax Calculation"
-              checked={enableTax}
-              onChange={(e) => setEnableTax(e.target.checked)}
-              disabled={!canEdit}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              label="Default Tax Rate (%)"
-              type="number"
-              step="0.1"
-              value={defaultTaxPercentage}
-              onChange={(e) => setDefaultTaxPercentage(e.target.value)}
-              disabled={!canEdit || !enableTax}
-            />
-            <div className="flex items-center pt-6">
               <Checkbox
-                label="Prices Already Include Tax"
-                checked={taxIncludedInPrice}
-                onChange={(e) => setTaxIncludedInPrice(e.target.checked)}
-                disabled={!canEdit || !enableTax}
+                label="Active"
+                checked={bankTransferEnabled}
+                onChange={(e) => setBankTransferEnabled(e.target.checked)}
+                disabled={!canEdit}
               />
             </div>
-          </div>
-        </Card>
 
-        {/* 6. Social Links */}
-        <Card className="bg-white rounded-2xl border border-[#E6E2EA] p-6 shadow-xs space-y-4">
-          <div className="flex items-center gap-2.5 border-b border-[#EFECE6] pb-3.5">
-            <div className="p-2 rounded-lg bg-[#FAF8F5] text-[#0B1938]">
-              <Icons.ExternalLink size={18} />
-            </div>
-            <div>
-              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0B1938]">
-                Social Media Channels
-              </h3>
-              <p className="text-[11px] text-[#64748B]">Official social URLs in storefront footer</p>
-            </div>
-          </div>
+            {bankTransferEnabled && (
+              <div className="space-y-4 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Input
+                    label="Bank Name"
+                    placeholder="e.g. Meezan Bank / HBL / Bank Alfalah"
+                    value={bankName}
+                    onChange={(e) => setBankName(e.target.value)}
+                    disabled={!canEdit}
+                  />
+                  <Input
+                    label="Account Title / Beneficiary"
+                    placeholder="e.g. Soulmate Scents"
+                    value={accountTitle}
+                    onChange={(e) => setAccountTitle(e.target.value)}
+                    disabled={!canEdit}
+                  />
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Input
-              label="Instagram URL"
-              placeholder="https://instagram.com/..."
-              value={instagram}
-              onChange={(e) => setInstagram(e.target.value)}
-              disabled={!canEdit}
-            />
-            <Input
-              label="Facebook URL"
-              placeholder="https://facebook.com/..."
-              value={facebook}
-              onChange={(e) => setFacebook(e.target.value)}
-              disabled={!canEdit}
-            />
-            <Input
-              label="Twitter / X URL"
-              placeholder="https://x.com/..."
-              value={twitter}
-              onChange={(e) => setTwitter(e.target.value)}
-              disabled={!canEdit}
-            />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Input
+                    label="Account Number"
+                    placeholder="e.g. 02010101234567"
+                    value={accountNumber}
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    disabled={!canEdit}
+                  />
+                  <Input
+                    label="IBAN / Swift Code"
+                    placeholder="e.g. PK36MEZN0000000000000000"
+                    value={iban}
+                    onChange={(e) => setIban(e.target.value)}
+                    disabled={!canEdit}
+                  />
+                </div>
+
+                <Textarea
+                  label="Customer Payment Instructions (shown on checkout confirmation)"
+                  placeholder="Please transfer the exact amount via your mobile banking app or ATM and quote your Order Reference # in the remarks. Upload transfer screenshot confirmation upon checkout."
+                  value={bankInstructions}
+                  onChange={(e) => setBankInstructions(e.target.value)}
+                  disabled={!canEdit}
+                  rows={3}
+                />
+              </div>
+            )}
           </div>
         </Card>
 
         {/* Submit Actions */}
         {canEdit && (
-          <div className="flex justify-end pt-4 border-t border-[#EFECE6]">
+          <div className="flex flex-col sm:flex-row justify-end pt-2">
             <Button
               type="submit"
               variant="primary"
               size="lg"
               isLoading={isSaving}
-              className="bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-8 py-3 text-xs font-bold tracking-[0.18em] uppercase shadow-md hover:shadow-lg transition-all cursor-pointer"
+              className="w-full sm:w-auto bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-9 py-3.5 text-xs font-bold tracking-[0.18em] uppercase shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
               Save Storefront Settings
             </Button>

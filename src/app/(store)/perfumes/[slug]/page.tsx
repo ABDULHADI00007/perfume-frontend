@@ -12,6 +12,9 @@ import { ProductJsonLd } from "@/features/products/components/ProductJsonLd";
 import { productService } from "@/features/products/services/productService";
 import { Product } from "@/features/products/types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Icons } from "@/components/ui/icons";
 import { staggerContainer, staggerItem, defaultViewport } from "@/lib/motion";
+import { newsletterService } from "@/features/newsletter/services/newsletterService";
 
 export const NewsletterSection: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export const NewsletterSection: React.FC = () => {
     }
     setStatus("loading");
     try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
+      await newsletterService.subscribe(email.trim());
       setStatus("success");
       setEmail("");
     } catch {

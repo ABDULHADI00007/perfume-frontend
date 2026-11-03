@@ -207,3 +207,21 @@ export const drawerVariants: Variants = {
   },
 };
 
+export const drawerLeftVariants: Variants = {
+  hidden: { x: "-100%" },
+  visible: {
+    x: 0,
+    transition: {
+      duration: DURATION_NORMAL,
+      ease: EASING_LUXURY,
+    },
+  },
+  exit: {
+    x: "-100%",
+    transition: {
+      duration: DURATION_FAST,
+      ease: EASING_SMOOTH,
+    },
+  },
+};
+

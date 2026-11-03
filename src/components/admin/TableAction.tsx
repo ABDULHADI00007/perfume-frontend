@@ -50,7 +50,7 @@ export const TableActionButton = React.forwardRef<
     ref
   ) => {
     const baseClasses = cn(
-      "inline-flex items-center justify-center font-sans font-medium rounded-lg transition-all duration-200 select-none cursor-pointer tracking-normal",
+      "inline-flex items-center justify-center font-sans font-medium rounded-lg transition-all duration-200 select-none cursor-pointer tracking-normal whitespace-nowrap",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C134F]/30 focus-visible:ring-offset-1",
       "disabled:pointer-events-none disabled:opacity-40 active:scale-[0.97]",
       variantStyles[variant],

@@ -43,7 +43,7 @@ export const Modal: React.FC<ModalProps> = ({
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent
         hideCloseButton={!showCloseButton}
-        className={`w-full ${maxWidthMap[maxWidth]} bg-white border border-[#E6E2EA] shadow-2xl font-sans flex flex-col max-h-[85vh] p-6 sm:p-7 rounded-2xl`}
+        className={`w-[calc(100%-1.5rem)] sm:w-full ${maxWidthMap[maxWidth]} bg-white border border-[#E6E2EA] shadow-2xl font-sans flex flex-col max-h-[90vh] p-5 sm:p-7 rounded-2xl mx-auto`}
       >
         {(title || description) && (
           <DialogHeader className="shrink-0 mb-3 pr-6">
@@ -58,4 +58,3 @@ export const Modal: React.FC<ModalProps> = ({
     </Dialog>
   );
 };
-

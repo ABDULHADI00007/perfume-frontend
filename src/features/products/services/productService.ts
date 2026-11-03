@@ -8,7 +8,10 @@ import { normalizeProduct } from "../utils";
 export const productService = {
   async getProducts(params?: Record<string, string | number>): Promise<ApiResponse<Product[]>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.list, { params });
+    const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.list, {
+      params,
+      cache: "no-store",
+    });
     if (res.success && Array.isArray(res.data)) {
       return {
         ...res,
@@ -20,7 +23,9 @@ export const productService = {
 
   getProductBySlug: cache(async (slug: string): Promise<ApiResponse<Product>> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const res = await apiClient<ApiResponse<any>>(API_ENDPOINTS.products.detail(slug));
+    const res = await apiClient<ApiResponse<any>>(API_ENDPOINTS.products.detail(slug), {
+      cache: "no-store",
+    });
     if (res.success && res.data) {
       return {
         ...res,
@@ -32,7 +37,9 @@ export const productService = {
 
   getFeaturedProducts: cache(async (): Promise<ApiResponse<Product[]>> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.featured);
+    const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.featured, {
+      cache: "no-store",
+    });
     if (res.success && Array.isArray(res.data)) {
       return {
         ...res,

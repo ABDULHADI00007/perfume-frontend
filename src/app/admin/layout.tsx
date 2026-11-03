@@ -1,6 +1,7 @@
 import React from "react";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { AdminAuthProvider } from "@/features/admin/context/AdminAuthContext";
+import { AdminNotificationProvider } from "@/features/admin/context/AdminNotificationContext";
 import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell";
 
 export const metadata = constructMetadata({
@@ -17,7 +18,9 @@ export default function AdminLayout({
   return (
     <div data-admin-portal="true" className="font-sans antialiased text-slate-900 bg-[#F8F9FA]">
       <AdminAuthProvider>
-        <AdminLayoutShell>{children}</AdminLayoutShell>
+        <AdminNotificationProvider>
+          <AdminLayoutShell>{children}</AdminLayoutShell>
+        </AdminNotificationProvider>
       </AdminAuthProvider>
     </div>
   );

@@ -32,14 +32,14 @@ export const AdminFilterBar: React.FC<AdminFilterBarProps> = ({
       </div>
 
       {onReset && (
-        <div className="flex items-center justify-end shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+        <div className="flex items-center justify-end sm:justify-start md:justify-end shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
           <Button
             variant="outline"
             size="sm"
             onClick={onReset}
             disabled={!hasActiveFilters}
             className={cn(
-              "h-10 px-4 text-[10px] font-bold tracking-[0.16em] uppercase rounded-xl gap-2 transition-all duration-200 cursor-pointer border-slate-200 text-[#0C134F] hover:bg-slate-50",
+              "w-full sm:w-auto h-10 px-4 text-[10px] font-bold tracking-[0.16em] uppercase rounded-xl gap-2 transition-all duration-200 cursor-pointer border-slate-200 text-[#0C134F] hover:bg-slate-50 justify-center",
               !hasActiveFilters && "opacity-40 cursor-not-allowed hover:bg-transparent"
             )}
           >

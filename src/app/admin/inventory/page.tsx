@@ -168,27 +168,32 @@ export default function AdminInventoryPage() {
   const columns: Column<AdminInventoryItem>[] = [
     {
       header: "Product / Fragrance",
+      className: "min-w-[150px] sm:min-w-[200px]",
       cell: (row) => (
-        <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 bg-surface-subtle border border-border flex items-center justify-center font-serif text-foreground-muted rounded-md shrink-0">
-            <Icons.Package size={16} />
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-100 border border-slate-200/80 flex items-center justify-center font-serif text-slate-400 rounded-lg shrink-0">
+            <Icons.Package size={15} />
           </div>
-          <div>
-            <span className="font-semibold text-xs text-foreground block">
+          <div className="min-w-0">
+            <span className="font-semibold text-xs text-[#0C134F] block truncate max-w-[130px] sm:max-w-none">
               {row.product?.name || "Product"}
             </span>
-            <p className="text-[11px] text-foreground-muted font-mono">
-              SKU: {row.variantSku} {row.size ? `• ${row.size}` : ""}
+            <p className="text-[10.5px] sm:text-[11px] text-slate-400 font-mono truncate">
+              {row.variantSku} {row.size ? `• ${row.size}` : ""}
             </p>
+            <span className="lg:hidden text-[9.5px] text-slate-400 block font-mono mt-0.5">
+              Min: {row.lowStockThreshold ?? 5} units
+            </span>
           </div>
         </div>
       ),
     },
     {
-      header: "Available Stock",
+      header: "Stock",
+      className: "whitespace-nowrap",
       cell: (row) => (
         <div>
-          <span className="font-bold text-xs font-mono text-foreground">
+          <span className="font-bold text-xs font-mono text-[#0C134F] block">
             {row.quantity} units
           </span>
           {row.quantity <= (row.lowStockThreshold ?? 5) && row.quantity > 0 && (
@@ -197,27 +202,35 @@ export default function AdminInventoryPage() {
           {row.quantity === 0 && (
             <span className="block text-[10px] text-rose-600 font-medium">Out of stock</span>
           )}
+          {row.reservedQuantity ? (
+            <span className="md:hidden block text-[9.5px] text-slate-400 font-mono mt-0.5">
+              ({row.reservedQuantity} reserved)
+            </span>
+          ) : null}
         </div>
       ),
     },
     {
       header: "Reserved",
+      className: "hidden md:table-cell",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted font-mono">
+        <span className="text-xs text-slate-500 font-mono">
           {row.reservedQuantity || 0}
         </span>
       ),
     },
     {
       header: "Threshold",
+      className: "hidden lg:table-cell",
       cell: (row) => (
-        <span className="text-xs text-foreground-muted font-mono">
+        <span className="text-xs text-slate-500 font-mono">
           {row.lowStockThreshold ?? 5}
         </span>
       ),
     },
     {
       header: "Status",
+      className: "whitespace-nowrap",
       cell: (row) => {
         const computedStatus =
           row.quantity === 0
@@ -225,17 +238,19 @@ export default function AdminInventoryPage() {
             : row.quantity <= (row.lowStockThreshold ?? 5)
               ? "low_stock"
               : "in_stock";
-        return <StatusBadge status={row.status || computedStatus} />;
+        return <StatusBadge status={row.status || computedStatus} size="sm" />;
       },
     },
     {
       header: "Actions",
       align: "right",
+      className: "whitespace-nowrap text-right",
       cell: (row) => (
         <TableActionGroup>
           {hasPermission("inventory.adjust") && (
             <TableActionButton
               variant="outline"
+              size="xs"
               onClick={() => handleOpenManageStock(row)}
             >
               Manage Stock
@@ -347,31 +362,31 @@ export default function AdminInventoryPage() {
         >
           <form onSubmit={handleSaveStock} className="space-y-5 font-sans">
             {/* Item Overview Banner */}
-            <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-800">
+            <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-slate-800 truncate">
                   {selectedItem.product?.name || "Product"}
                 </p>
-                <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5 truncate">
                   SKU: <span className="font-semibold text-slate-700">{selectedItem.variantSku}</span>
                   {selectedItem.size ? ` • Size: ${selectedItem.size}` : ""}
                 </p>
               </div>
-              <div className="text-right">
+              <div className="flex sm:block items-center justify-between sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-200/60">
                 <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">Current Stock</span>
                 <span className="text-sm font-bold font-mono text-slate-900">{selectedItem.quantity} units</span>
                 {selectedItem.reservedQuantity ? (
-                  <span className="text-[10px] text-amber-600 block">({selectedItem.reservedQuantity} reserved)</span>
+                  <span className="text-[10px] text-amber-600 block sm:inline">({selectedItem.reservedQuantity} reserved)</span>
                 ) : null}
               </div>
             </div>
 
             {/* Mode Selector Tabs */}
-            <div className="flex rounded-lg bg-slate-100 p-1 border border-slate-200">
+            <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200 gap-1">
               <button
                 type="button"
                 onClick={() => setMode("adjust")}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                className={`flex-1 py-2 sm:py-1.5 px-2 text-[11px] sm:text-xs font-semibold rounded-lg transition-all text-center ${
                   mode === "adjust"
                     ? "bg-white text-[#0C134F] shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -382,7 +397,7 @@ export default function AdminInventoryPage() {
               <button
                 type="button"
                 onClick={() => setMode("direct")}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                className={`flex-1 py-2 sm:py-1.5 px-2 text-[11px] sm:text-xs font-semibold rounded-lg transition-all text-center ${
                   mode === "direct"
                     ? "bg-white text-[#0C134F] shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -449,14 +464,14 @@ export default function AdminInventoryPage() {
               </div>
             )}
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 pt-4 border-t border-slate-100">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={handleCloseModal}
                 disabled={isSubmitting}
-                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs h-9 px-4"
+                className="w-full sm:w-auto border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs h-10 sm:h-9 px-4 justify-center"
               >
                 Cancel
               </Button>
@@ -465,7 +480,7 @@ export default function AdminInventoryPage() {
                 variant="brand"
                 size="sm"
                 isLoading={isSubmitting}
-                className="rounded-xl text-xs font-bold uppercase tracking-wider h-9 px-5 shadow-xs"
+                className="w-full sm:w-auto rounded-xl text-xs font-bold uppercase tracking-wider h-10 sm:h-9 px-5 shadow-xs bg-[#590B16] hover:bg-[#6e0e1c] text-white justify-center"
               >
                 {mode === "adjust" ? "Apply Adjustment" : "Set Quantity"}
               </Button>

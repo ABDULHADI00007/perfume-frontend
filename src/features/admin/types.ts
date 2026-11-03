@@ -105,8 +105,15 @@ export interface AdminOrder {
   _id: string;
   orderNumber: string;
   customer: {
-    name: string;
-    email: string;
+    firstName?: string;
+    lastName?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
+  customerSnapshot?: {
+    name?: string;
+    email?: string;
     phone?: string;
   };
   items: AdminOrderItem[];
@@ -128,15 +135,19 @@ export interface AdminOrder {
     | "processing"
     | "shipped"
     | "delivered"
+    | "completed"
     | "cancelled"
     | "refunded"
     | "payment_rejected";
   paymentProof?: AdminPaymentProof;
   subtotal: number;
   discountAmount?: number;
+  discount?: number;
   shippingFee: number;
   taxAmount?: number;
-  totalAmount: number;
+  tax?: number;
+  totalAmount?: number;
+  total?: number;
   currency?: string;
   couponCode?: string;
   shippingInfo?: {

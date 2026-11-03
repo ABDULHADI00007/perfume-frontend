@@ -6,8 +6,8 @@ export interface RequestOptions extends RequestInit {
   timeout?: number;
 }
 
-/** Default timeout: 1000ms for SSR (to prevent page render blocking), 10000ms for client */
-const DEFAULT_TIMEOUT_MS = typeof window === "undefined" ? 1000 : 10000;
+/** Default timeout: 5000ms for SSR, 10000ms for client */
+const DEFAULT_TIMEOUT_MS = typeof window === "undefined" ? 5000 : 10000;
 
 export async function apiClient<T>(
   endpoint: string,

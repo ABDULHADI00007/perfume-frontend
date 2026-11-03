@@ -24,7 +24,7 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: "Do you offer gift packaging?",
-    answer: "Yes, every order includes complimentary signature Maison packaging, a travel pouch, and handwritten gift notes upon request.",
+    answer: "Yes, every order includes complimentary signature Soulmate Scents packaging, a travel pouch, and handwritten gift notes upon request.",
   },
   {
     question: "Do you offer international shipping?",
@@ -189,7 +189,7 @@ export default function ContactPage() {
                       name="phone"
                       value={form.phone}
                       onChange={handleChange}
-                      placeholder="+92 300 1234567"
+                      placeholder="+92 333 7615355"
                     />
 
                     <Select
@@ -260,7 +260,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-serif text-base font-bold text-black">Email Concierge</h3>
-                  <p className="text-xs font-semibold text-black mt-0.5">support@soulmatescents.com</p>
+                  <a href="mailto:soulmatescents@gmail.com" className="text-xs font-semibold text-black hover:text-[#590B16] transition-colors mt-0.5 block">
+                    soulmatescents@gmail.com
+                  </a>
                   <p className="text-[11px] text-stone-500 font-sans mt-0.5">Replies within 24 hours</p>
                 </div>
               </div>
@@ -272,7 +274,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-serif text-base font-bold text-black">Call Us</h3>
-                  <p className="text-xs font-semibold text-black mt-0.5">+92 300 1234567</p>
+                  <a href="tel:+923337615355" className="text-xs font-semibold text-black hover:text-[#590B16] transition-colors mt-0.5 block">
+                    +92 333 7615355
+                  </a>
                   <p className="text-[11px] text-stone-500 font-sans mt-0.5">Mon – Sat, 10:00 AM – 7:00 PM</p>
                 </div>
               </div>
@@ -283,8 +287,8 @@ export default function ContactPage() {
                   <Icons.MapPin className="w-5 h-5 text-[#590B16]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-black">Maison Studio</h3>
-                  <p className="text-xs font-semibold text-black mt-0.5">Lahore, Pakistan</p>
+                  <h3 className="font-serif text-base font-bold text-black">Soulmate Scents Studio</h3>
+                  <p className="text-xs font-semibold text-black mt-0.5">Karachi, Pakistan</p>
                   <p className="text-[11px] text-stone-500 font-sans mt-0.5">By appointment only</p>
                 </div>
               </div>
@@ -292,11 +296,20 @@ export default function ContactPage() {
               {/* 4. Live Chat */}
               <div className="flex items-start gap-4">
                 <div className="w-11 h-11 rounded-full bg-[#FAF4E8] border border-[#F5EAD4] flex items-center justify-center flex-shrink-0 text-[#590B16]">
-                  <Icons.MessageSquare className="w-5 h-5 text-[#590B16]" />
+                  <svg className="w-5 h-5 text-[#590B16]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.8 7.37 7.5 3.67 12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.05 20.15ZM16.57 14.39C16.32 14.27 15.1 13.67 14.87 13.58C14.65 13.5 14.48 13.46 14.32 13.71C14.15 13.96 13.67 14.52 13.52 14.69C13.38 14.85 13.23 14.88 12.98 14.75C12.73 14.63 11.93 14.36 10.98 13.52C10.24 12.86 9.74 12.05 9.6 11.8C9.45 11.55 9.58 11.42 9.71 11.29C9.82 11.18 9.96 11 10.08 10.86C10.21 10.72 10.25 10.62 10.33 10.45C10.41 10.29 10.37 10.14 10.31 10.02C10.25 9.9 9.75 8.68 9.55 8.17C9.35 7.68 9.14 7.74 8.99 7.73C8.84 7.72 8.67 7.72 8.51 7.72C8.34 7.72 8.07 7.78 7.84 8.03C7.62 8.28 6.98 8.87 6.98 10.08C6.98 11.29 7.86 12.46 7.99 12.62C8.11 12.79 9.73 15.28 12.21 16.35C12.8 16.61 13.26 16.76 13.62 16.87C14.21 17.06 14.75 17.03 15.18 16.97C15.66 16.9 16.65 16.37 16.86 15.79C17.06 15.2 17.06 14.71 17 14.6C16.94 14.49 16.82 14.42 16.57 14.39Z"/>
+                  </svg>
                 </div>
                 <div>
                   <h3 className="font-serif text-base font-bold text-black">Instant Live Chat</h3>
-                  <p className="text-xs font-semibold text-black mt-0.5">Available on website</p>
+                  <a
+                    href="https://wa.me/923337615355"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-black hover:text-[#590B16] transition-colors mt-0.5 block"
+                  >
+                    Available on WhatsApp
+                  </a>
                   <p className="text-[11px] text-stone-500 font-sans mt-0.5">Instant olfactory assistance</p>
                 </div>
               </div>

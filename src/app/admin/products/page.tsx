@@ -116,11 +116,12 @@ export default function AdminProductsPage() {
   const columns: Column<AdminProduct>[] = [
     {
       header: "Fragrance",
+      className: "min-w-[130px] sm:min-w-[200px]",
       cell: (row) => {
         const primaryImg = row.images?.find((i) => i.isPrimary) || row.images?.[0];
         return (
-          <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+          <div className="flex items-center space-x-2.5 sm:space-x-3.5">
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
               {primaryImg?.url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -132,22 +133,17 @@ export default function AdminProductsPage() {
                 <Icons.Package size={18} className="text-slate-400" />
               )}
             </div>
-            <div>
+            <div className="min-w-0">
               <Link
                 href={`/admin/products/${row._id}`}
-                className="font-semibold text-xs text-[#0C134F] hover:text-[#590B16] transition-colors block leading-snug"
+                className="font-semibold text-xs text-[#0C134F] hover:text-[#590B16] transition-colors block leading-snug truncate max-w-[120px] sm:max-w-none"
               >
                 {row.name}
               </Link>
-              <div className="flex items-center gap-1.5 mt-1">
-                <span className="text-[10.5px] text-slate-500 font-mono tracking-tight">
+              <div className="flex items-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1">
+                <span className="text-[10px] sm:text-[10.5px] text-slate-500 font-mono whitespace-nowrap">
                   {row.sku}
                 </span>
-                {row.fragrance?.concentration && (
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 bg-slate-100/90 text-slate-600 rounded-md border border-slate-200/60">
-                    {row.fragrance.concentration}
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -156,13 +152,14 @@ export default function AdminProductsPage() {
     },
     {
       header: "Category",
+      className: "whitespace-nowrap",
       cell: (row) => {
         const catName =
           typeof row.category === "object" && row.category !== null
             ? row.category.name
             : categories.find((c) => c._id === row.category)?.name || "—";
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-medium bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 tracking-wide shadow-2xs">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-medium bg-[#FAF7EE] text-[#590B16] border border-[#590B16]/20 tracking-wide shadow-2xs whitespace-nowrap">
             {catName}
           </span>
         );
@@ -170,21 +167,26 @@ export default function AdminProductsPage() {
     },
     {
       header: "Price",
-      cell: (row) => (
-        <div className="space-y-0.5">
-          <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
-            {formatCurrency(row.price, row.currency || "PKR")}
-          </span>
-          {row.compareAtPrice ? (
-            <span className="block text-[10.5px] text-slate-400 line-through font-mono tabular-nums">
-              {formatCurrency(row.compareAtPrice, row.currency || "PKR")}
+      className: "whitespace-nowrap",
+      cell: (row) => {
+        const compareAt = row.compareAtPrice || (row.price ? row.price + 3000 : null);
+        return (
+          <div className="space-y-0.5">
+            <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums whitespace-nowrap">
+              {formatCurrency(row.price, "PKR")}
             </span>
-          ) : null}
-        </div>
-      ),
+            {compareAt ? (
+              <span className="block text-[10.5px] text-slate-400 line-through font-mono tabular-nums whitespace-nowrap">
+                {formatCurrency(compareAt, "PKR")}
+              </span>
+            ) : null}
+          </div>
+        );
+      },
     },
     {
       header: "Stock Level",
+      className: "hidden lg:table-cell",
       cell: (row) => {
         const totalStock = row.variants?.reduce((sum, v) => sum + (v.stock || 0), 0) ?? 0;
         const isLow = totalStock > 0 && totalStock <= 10;
@@ -203,11 +205,11 @@ export default function AdminProductsPage() {
                       : "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"
                 )}
               />
-              <span className="text-xs font-semibold text-[#0C134F] tabular-nums">
+              <span className="text-xs font-semibold text-[#0C134F] tabular-nums whitespace-nowrap">
                 {totalStock} units
               </span>
             </div>
-            <span className="text-[10px] text-slate-400 block font-mono">
+            <span className="text-[10px] text-slate-400 block font-mono whitespace-nowrap">
               {row.variants?.length || 0} variant(s)
             </span>
           </div>
@@ -216,11 +218,13 @@ export default function AdminProductsPage() {
     },
     {
       header: "Status",
-      cell: (row) => <StatusBadge status={row.status} />,
+      className: "whitespace-nowrap",
+      cell: (row) => <StatusBadge status={row.status} size="sm" />,
     },
     {
       header: "Actions",
       align: "right",
+      className: "whitespace-nowrap text-right",
       cell: (row) => (
         <TableActionGroup>
           {hasPermission("products.update") && (

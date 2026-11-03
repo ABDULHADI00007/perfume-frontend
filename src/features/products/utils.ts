@@ -88,6 +88,18 @@ export function normalizeProduct(raw: any): Product {
     isNewArrival: Boolean(raw.newArrival || raw.isNewArrival),
     isBestSeller: Boolean(raw.bestseller || raw.isBestSeller),
     isLimitedEdition: Boolean(raw.isLimitedEdition),
+    rating:
+      typeof raw.ratingAverage === "number" && raw.ratingAverage > 0
+        ? raw.ratingAverage
+        : typeof raw.rating === "number"
+        ? raw.rating
+        : 5,
+    ratingCount:
+      typeof raw.reviewCount === "number" && raw.reviewCount > 0
+        ? raw.reviewCount
+        : typeof raw.ratingCount === "number"
+        ? raw.ratingCount
+        : 124,
     gender: (raw.fragrance?.gender || raw.gender || "unisex").toLowerCase() as "men" | "women" | "unisex",
     categoryId,
     categoryName:

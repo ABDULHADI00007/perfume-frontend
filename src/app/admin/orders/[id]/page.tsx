@@ -5,6 +5,7 @@ import Link from "next/link";
 import { adminService } from "@/features/admin/services/adminService";
 import { AdminOrder } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
+import { useAdminNotification } from "@/features/admin/context/AdminNotificationContext";
 import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
@@ -13,14 +14,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
-import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+// 1 Unified, Simple Status Dropdown
+const UNIFIED_ORDER_STATUSES = [
+  { label: "Pending (New Order)", value: "pending" },
+  { label: "Confirmed (Verified / Packing)", value: "confirmed" },
+  { label: "Delivered (Parcel Delivered)", value: "delivered" },
+  { label: "Completed (Payment Received & Closed)", value: "completed" },
+  { label: "Cancelled", value: "cancelled" },
+];
 
 export default function AdminOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const orderId = resolvedParams.id;
   const { hasPermission } = useAdminAuth();
+  const { markAsRead } = useAdminNotification();
+
+  useEffect(() => {
+    if (orderId) {
+      markAsRead(orderId);
+    }
+  }, [orderId, markAsRead]);
 
   const [order, setOrder] = useState<AdminOrder | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,22 +44,13 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Status Update State
+  // Single Unified Status State
   const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [statusNotes, setStatusNotes] = useState<string>("");
 
-  // Payment Status Update State
-  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<string>("");
-  const [paymentNotes, setPaymentNotes] = useState<string>("");
-
-  // Payment Proof Modal & Rejection
+  // Modals
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
-
-  // Cancel Order Modal
-  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const [cancelReason, setCancelReason] = useState("");
 
   const loadOrder = useCallback(async () => {
     try {
@@ -52,7 +59,6 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       const data = await adminService.getOrderById(orderId);
       setOrder(data);
       setSelectedStatus(data.orderStatus);
-      setSelectedPaymentStatus(data.paymentStatus);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load order details");
     } finally {
@@ -76,7 +82,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
 
   if (!order) {
     return (
-      <div className="bg-white border border-[#E6E2EA] p-8 text-center max-w-md mx-auto my-12 rounded-2xl shadow-xs space-y-4">
+      <div className="bg-white border border-[#E6E2EA] p-8 text-center max-w-md mx-auto my-12 rounded-2xl shadow-xs space-y-4 font-sans">
         <p className="text-sm text-[#6B6F80]">Order not found.</p>
         <Link href="/admin/orders">
           <Button variant="outline" size="sm">
@@ -87,7 +93,51 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
     );
   }
 
-  const handleUpdateStatus = async (e: React.FormEvent) => {
+  // Calculate Accurate Financial Totals
+  const rawTotal = (order as unknown as { total?: number }).total;
+  const rawDiscount = (order as unknown as { discount?: number }).discount;
+  const calculatedDiscount = typeof order.discountAmount === "number" ? order.discountAmount : rawDiscount ?? 0;
+  const finalTotalAmount =
+    typeof order.totalAmount === "number" && order.totalAmount > 0
+      ? order.totalAmount
+      : typeof rawTotal === "number" && rawTotal > 0
+      ? rawTotal
+      : Math.max(0, (order.subtotal || 0) - calculatedDiscount + (order.shippingFee || 0));
+
+  const isOrderCompleted = order.orderStatus === "completed";
+
+  // Resolved Customer Details
+  const customerName =
+    order.customerSnapshot?.name ||
+    order.shippingAddress?.fullName ||
+    (order.customer?.firstName
+      ? `${order.customer.firstName} ${order.customer.lastName || ""}`.trim()
+      : null) ||
+    order.customer?.name ||
+    "Customer";
+
+  const customerEmail =
+    order.customerSnapshot?.email ||
+    order.customer?.email ||
+    "";
+
+  const customerPhone =
+    order.customerSnapshot?.phone ||
+    order.shippingAddress?.phone ||
+    order.customer?.phone ||
+    "";
+
+  const customerInitials =
+    customerName
+      .split(" ")
+      .map((w) => w[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join("")
+      .toUpperCase() || "C";
+
+  // Single Unified Status Update
+  const handleSaveOrderStatus = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedStatus) return;
 
@@ -95,51 +145,44 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       setActionLoading(true);
       setError(null);
       setSuccessMessage(null);
-      const updated = await adminService.updateOrderStatus(orderId, selectedStatus, statusNotes);
-      setOrder(updated);
-      setSuccessMessage("Order status updated successfully.");
+
+      let updated: AdminOrder;
+
+      if (selectedStatus === "completed") {
+        try {
+          updated = await adminService.updateOrderStatus(orderId, "completed");
+        } catch {
+          updated = await adminService.updateOrderStatus(orderId, "delivered");
+        }
+
+        if (updated.paymentStatus !== "paid") {
+          updated = await adminService.updatePaymentStatus(
+            orderId,
+            "paid",
+            "Auto-marked as Paid upon order completion"
+          );
+        }
+
+        setOrder(updated);
+        setSelectedStatus("completed");
+        setSuccessMessage("Success: Order marked as Completed & Payment marked as Paid!");
+      } else if (selectedStatus === "cancelled") {
+        try {
+          updated = await adminService.cancelOrder(orderId, "Cancelled by Admin");
+        } catch {
+          updated = await adminService.updateOrderStatus(orderId, "cancelled");
+        }
+        setOrder(updated);
+        setSelectedStatus(updated.orderStatus);
+        setSuccessMessage("Order has been cancelled.");
+      } else {
+        updated = await adminService.updateOrderStatus(orderId, selectedStatus);
+        setOrder(updated);
+        setSelectedStatus(updated.orderStatus);
+        setSuccessMessage(`Order status updated to ${selectedStatus.toUpperCase()} successfully.`);
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to update order status");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleUpdatePaymentStatus = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedPaymentStatus) return;
-
-    try {
-      setActionLoading(true);
-      setError(null);
-      setSuccessMessage(null);
-      const updated = await adminService.updatePaymentStatus(orderId, selectedPaymentStatus, paymentNotes);
-      setOrder(updated);
-      setSelectedPaymentStatus(updated.paymentStatus);
-      setSuccessMessage(`Payment status updated to ${updated.paymentStatus.toUpperCase()} successfully.`);
-      setPaymentNotes("");
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to update payment status");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleQuickPaymentToggle = async (targetStatus: "paid" | "pending") => {
-    try {
-      setActionLoading(true);
-      setError(null);
-      setSuccessMessage(null);
-      const updated = await adminService.updatePaymentStatus(
-        orderId,
-        targetStatus,
-        `Quick toggle by admin: Marked as ${targetStatus.toUpperCase()}`
-      );
-      setOrder(updated);
-      setSelectedPaymentStatus(updated.paymentStatus);
-      setSuccessMessage(`Payment status marked as ${targetStatus.toUpperCase()} successfully.`);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : `Failed to mark payment as ${targetStatus}`);
     } finally {
       setActionLoading(false);
     }
@@ -152,7 +195,8 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       setSuccessMessage(null);
       const updated = await adminService.approvePayment(orderId);
       setOrder(updated);
-      setSuccessMessage("Payment proof approved! Order verified.");
+      setSelectedStatus(updated.orderStatus);
+      setSuccessMessage("Payment proof approved successfully! Order verified.");
       setIsProofModalOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to approve payment");
@@ -173,7 +217,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       setSuccessMessage(null);
       const updated = await adminService.rejectPayment(orderId, rejectReason.trim());
       setOrder(updated);
-      setSuccessMessage("Payment proof rejected with reason recorded.");
+      setSuccessMessage("Payment proof rejected.");
       setIsRejectModalOpen(false);
       setIsProofModalOpen(false);
       setRejectReason("");
@@ -184,27 +228,10 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
     }
   };
 
-  const handleCancelOrder = async () => {
-    try {
-      setActionLoading(true);
-      setError(null);
-      setSuccessMessage(null);
-      const updated = await adminService.cancelOrder(orderId, cancelReason.trim() || undefined);
-      setOrder(updated);
-      setSuccessMessage("Order has been cancelled.");
-      setIsCancelModalOpen(false);
-      setCancelReason("");
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to cancel order");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const proofUrl = order.paymentProof?.url || order.paymentProof?.proofUrl;
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-sans max-w-7xl">
       <AdminPageHeader
         category="STORE MANAGEMENT"
         title={`Order #${order.orderNumber}`}
@@ -214,26 +241,14 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
           { label: `#${order.orderNumber}` },
         ]}
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto">
             <StatusBadge status={order.orderStatus} />
-            <StatusBadge status={order.paymentStatus} />
-            {hasPermission("orders.cancel") && order.orderStatus !== "cancelled" && (
-              <Button
-                variant="tableActionDestructive"
-                size="sm"
-                onClick={() => setIsCancelModalOpen(true)}
-                disabled={actionLoading}
-                className="h-8.5 px-3.5 text-xs rounded-xl shadow-2xs gap-1.5"
-              >
-                <Icons.Trash size={13} />
-                <span>Cancel Order</span>
-              </Button>
-            )}
-            <Link href="/admin/orders">
+
+            <Link href="/admin/orders" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8.5 px-3.5 text-xs text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-100 rounded-xl shadow-2xs transition-all gap-1.5"
+                className="w-full sm:w-auto h-8.5 px-3.5 text-xs text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-100 rounded-xl shadow-2xs transition-all gap-1.5 justify-center"
               >
                 <Icons.ArrowLeft size={13} className="text-slate-400" />
                 <span>Back to Orders</span>
@@ -245,129 +260,111 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
 
       {/* Feedback Alerts */}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2.5 shadow-2xs">
-          <Icons.AlertCircle size={16} className="shrink-0 text-rose-600" />
-          <span>{error}</span>
+        <div className="p-3.5 px-4 rounded-xl bg-rose-50/90 border border-rose-200 text-rose-700 text-xs font-medium flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <Icons.AlertCircle size={15} className="shrink-0 text-rose-600" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="text-rose-600 hover:text-rose-800 text-xs font-bold px-1"
+          >
+            ✕
+          </button>
         </div>
       )}
       {successMessage && (
-        <div className="p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2.5 shadow-2xs">
-          <Icons.Check size={16} className="shrink-0 text-emerald-600" />
-          <span>{successMessage}</span>
+        <div className="p-3.5 px-4 rounded-xl bg-emerald-50/90 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <Icons.Check size={15} className="shrink-0 text-emerald-600" />
+            <span>{successMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSuccessMessage(null)}
+            className="text-emerald-600 hover:text-emerald-800 text-xs font-bold px-1"
+          >
+            ✕
+          </button>
         </div>
       )}
 
-      {/* Payment Proof Banner / Review Card if Bank Transfer */}
-      {order.paymentMethod === "bank_transfer" && (
-        <div className="border border-slate-200/80 bg-white rounded-2xl p-6 space-y-4 shadow-2xs relative overflow-hidden">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="size-8 rounded-lg bg-[#0C134F]/5 text-[#0C134F] flex items-center justify-center border border-[#0C134F]/15">
-                <Icons.ShieldCheck size={16} />
-              </div>
-              <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
-                Bank Transfer Payment Proof
-              </h3>
+      {/* Bank Transfer Payment Proof Review Alert (if uploaded) */}
+      {order.paymentMethod === "bank_transfer" && proofUrl && (
+        <div className="border border-slate-200/80 bg-white rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#FAF8F5] text-[#0C134F] flex items-center justify-center border border-[#EFECE6] shrink-0">
+              <Icons.ShieldCheck size={18} />
             </div>
-            <StatusBadge status={order.paymentStatus} />
+            <div>
+              <p className="text-xs font-bold text-[#0C134F] uppercase tracking-wider">
+                Bank Transfer Receipt Uploaded
+              </p>
+              <p className="text-[12px] text-slate-500 mt-0.5">
+                Customer submitted payment verification proof.
+              </p>
+            </div>
           </div>
 
-          {proofUrl ? (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-4.5 rounded-xl border border-slate-200">
-              <div>
-                <p className="text-xs font-semibold text-[#0C134F]">
-                  Proof File: {order.paymentProof?.originalName || "Payment Receipt"}
-                </p>
-                {order.paymentProof?.submittedAt && (
-                  <p className="text-[11px] text-slate-500 mt-1 font-mono">
-                    Submitted: {formatDate(order.paymentProof.submittedAt)}
-                  </p>
-                )}
-                {order.paymentProof?.rejectionReason && (
-                  <p className="text-xs text-rose-600 mt-1.5 font-medium">
-                    Rejection Reason: {order.paymentProof.rejectionReason}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsProofModalOpen(true)}
-                  className="bg-white hover:bg-slate-100 text-[#0C134F] hover:text-[#0C134F] border-slate-200 hover:border-slate-300 rounded-xl px-3 h-8.5 text-xs shadow-2xs gap-1.5"
-                >
-                  <Icons.ExternalLink size={13} className="text-slate-400" />
-                  <span>View Receipt</span>
-                </Button>
-
-                {hasPermission("orders.update") && order.paymentStatus !== "paid" && (
-                  <>
-                    <Button
-                      variant="tableActionSuccess"
-                      size="sm"
-                      onClick={handleApprovePayment}
-                      isLoading={actionLoading}
-                      className="h-8.5 px-3 text-xs rounded-xl shadow-2xs gap-1.5"
-                    >
-                      <Icons.Check size={13} />
-                      <span>Approve</span>
-                    </Button>
-                    <Button
-                      variant="tableActionDestructive"
-                      size="sm"
-                      onClick={() => setIsRejectModalOpen(true)}
-                      disabled={actionLoading}
-                      className="h-8.5 px-3 text-xs rounded-xl shadow-2xs gap-1.5"
-                    >
-                      <Icons.Trash size={13} />
-                      <span>Reject</span>
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          ) : (
-            <p className="text-xs text-slate-500 italic">
-              No payment receipt has been submitted by the customer yet.
-            </p>
-          )}
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsProofModalOpen(true)}
+              className="w-full sm:w-auto bg-white hover:bg-slate-100 text-[#0C134F] rounded-xl px-3.5 h-9 text-xs shadow-2xs gap-1.5 justify-center"
+            >
+              <Icons.Eye size={14} className="text-slate-400" />
+              <span>Inspect Receipt</span>
+            </Button>
+            {hasPermission("orders.update") && order.paymentStatus !== "paid" && (
+              <Button
+                variant="tableActionSuccess"
+                size="sm"
+                onClick={handleApprovePayment}
+                isLoading={actionLoading}
+                className="w-full sm:w-auto h-9 px-3.5 text-xs rounded-xl shadow-2xs gap-1.5 font-bold justify-center"
+              >
+                <Icons.Check size={14} />
+                <span>Approve & Verify</span>
+              </Button>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Main Order Content 2-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Columns: Items & Financials */}
+      {/* Main Order Content 2-Column Balanced Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* Left Column (Wide 2 Cols): Ordered Fragrances & Financials */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Order Items Table Card */}
-          <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
               <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
                 Ordered Fragrances
               </h3>
-              <Badge variant="secondary" size="sm" className="font-mono text-[10px] bg-slate-100/80 text-slate-600 border border-slate-200">
-                {order.items?.length || 0} items
-              </Badge>
+              <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                {order.items?.length || 0} {order.items?.length === 1 ? "item" : "items"}
+              </span>
             </div>
 
             <div className="divide-y divide-slate-100">
               {order.items?.map((item, idx) => (
-                <div key={idx} className="py-4 flex items-center justify-between text-xs transition-colors hover:bg-slate-50/50 -mx-2 px-2 rounded-xl">
-                  <div className="flex items-center space-x-3.5">
-                    <div className="w-12 h-12 rounded-xl bg-[#0C134F]/5 border border-[#0C134F]/15 flex items-center justify-center font-serif text-[#0C134F] shrink-0 shadow-2xs">
-                      <Icons.Package size={20} />
+                <div key={idx} className="py-3.5 flex items-center justify-between gap-3 text-xs transition-colors hover:bg-slate-50/50 -mx-2 px-2 rounded-xl">
+                  <div className="flex items-center space-x-3.5 min-w-0">
+                    <div className="w-11 h-11 rounded-xl bg-[#FAF8F5] border border-[#EFECE6] flex items-center justify-center font-serif text-[#0C134F] shrink-0 shadow-2xs">
+                      <Icons.Package size={18} />
                     </div>
-                    <div>
-                      <p className="font-semibold text-[#0C134F] text-[13px]">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[#0C134F] text-[13px] truncate">
                         {typeof item.productId === "object" ? item.productId.name : item.name || "Fragrance"}
                       </p>
-                      <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                      <p className="text-[11px] text-slate-500 font-mono mt-0.5 truncate">
                         SKU: {item.sku} {item.size ? `• ${item.size}` : ""}
                       </p>
                     </div>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="font-mono text-slate-500 text-[11px]">
                       {item.quantity} × {formatCurrency(item.unitPrice, "PKR")}
                     </p>
@@ -383,229 +380,182 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
             <div className="pt-4 border-t border-slate-100 space-y-2.5 text-xs">
               <div className="flex justify-between text-slate-600">
                 <span>Subtotal</span>
-                <span className="font-mono">{formatCurrency(order.subtotal, "PKR")}</span>
+                <span className="font-mono font-medium">{formatCurrency(order.subtotal, "PKR")}</span>
               </div>
-              {order.discountAmount ? (
+              {calculatedDiscount > 0 ? (
                 <div className="flex justify-between text-emerald-700 font-medium">
-                  <span>Discount ({order.couponCode || "Coupon"})</span>
-                  <span className="font-mono">-{formatCurrency(order.discountAmount, "PKR")}</span>
+                  <span>Discount ({order.couponCode || "Promotion"})</span>
+                  <span className="font-mono">-{formatCurrency(calculatedDiscount, "PKR")}</span>
                 </div>
               ) : null}
               <div className="flex justify-between text-slate-600">
-                <span>Shipping Fee</span>
-                <span className="font-mono">{formatCurrency(order.shippingFee, "PKR")}</span>
+                <span>Nationwide Shipping Fee</span>
+                <span className="font-mono font-medium">
+                  {order.shippingFee === 0 ? "FREE" : formatCurrency(order.shippingFee, "PKR")}
+                </span>
               </div>
-              {order.taxAmount ? (
-                <div className="flex justify-between text-slate-600">
-                  <span>Estimated Tax</span>
-                  <span className="font-mono">{formatCurrency(order.taxAmount, "PKR")}</span>
-                </div>
-              ) : null}
-              <div className="flex justify-between text-sm font-bold text-[#0C134F] pt-3.5 border-t border-slate-200">
+              <div className="flex justify-between items-baseline text-sm font-bold text-[#0C134F] pt-3.5 border-t border-slate-200">
                 <span>Total Amount</span>
-                <span className="font-mono text-lg font-bold text-[#0C134F]">{formatCurrency(order.totalAmount, "PKR")}</span>
+                <span className="font-mono text-xl font-bold text-[#0C134F]">
+                  {formatCurrency(finalTotalAmount, "PKR")}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Operational Controls: Status & Shipping */}
-          {hasPermission("orders.update") && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-              {/* Order Lifecycle Updater Card */}
-              <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs flex flex-col justify-between h-full">
-                <form onSubmit={handleUpdateStatus} className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F] border-b border-slate-100 pb-3 mb-4">
-                      Update Order Lifecycle
-                    </h3>
-                    <div className="space-y-4">
-                      <Select
-                        label="Status"
-                        value={selectedStatus}
-                        onChange={(e) => setSelectedStatus(e.target.value)}
-                        options={[
-                          { label: "Pending", value: "pending" },
-                          { label: "Awaiting Payment Verification", value: "awaiting_payment_verification" },
-                          { label: "Confirmed", value: "confirmed" },
-                          { label: "Processing", value: "processing" },
-                          { label: "Shipped", value: "shipped" },
-                          { label: "Delivered", value: "delivered" },
-                          { label: "Cancelled", value: "cancelled" },
-                          { label: "Refunded", value: "refunded" },
-                          { label: "Payment Rejected", value: "payment_rejected" },
-                        ]}
-                      />
-                      <Input
-                        label="Internal Notes"
-                        placeholder="Optional transition notes..."
-                        value={statusNotes}
-                        onChange={(e) => setStatusNotes(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="pt-4 mt-6">
-                    <Button
-                      type="submit"
-                      variant="brand"
-                      size="sm"
-                      className="w-full shadow-xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl"
-                      isLoading={actionLoading}
-                    >
-                      Save Status
-                    </Button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Payment Status & Settlement Card */}
-              <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs flex flex-col justify-between h-full">
-                <form onSubmit={handleUpdatePaymentStatus} className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Icons.Cash size={15} className="text-[#0C134F]" />
-                        <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
-                          Payment Status
-                        </h3>
-                      </div>
-                      <StatusBadge status={order.paymentStatus} />
-                    </div>
-
-                    <div className="space-y-4">
-                      {/* Payment Method & Quick Toggle Banner */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs">
-                        <div className="space-y-0.5">
-                          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Method</span>
-                          <span className="font-bold text-[#0C134F]">{order.paymentMethod?.replace(/_/g, " ").toUpperCase()}</span>
-                        </div>
-                        {order.paymentStatus !== "paid" ? (
-                          <Button
-                            type="button"
-                            variant="tableActionSuccess"
-                            size="sm"
-                            onClick={() => handleQuickPaymentToggle("paid")}
-                            disabled={actionLoading}
-                            className="h-8 px-3 text-xs rounded-lg gap-1.5 font-bold"
-                          >
-                            <Icons.Check size={14} />
-                            <span>Mark as Paid</span>
-                          </Button>
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleQuickPaymentToggle("pending")}
-                            disabled={actionLoading}
-                            className="h-8 px-3 text-xs rounded-lg gap-1.5 text-slate-600 border-slate-300 hover:bg-slate-100 font-semibold"
-                          >
-                            <span>Mark as Pending</span>
-                          </Button>
-                        )}
-                      </div>
-
-                      <Select
-                        label="Payment Status"
-                        value={selectedPaymentStatus}
-                        onChange={(e) => setSelectedPaymentStatus(e.target.value)}
-                        options={[
-                          { label: "Paid (Payment Received)", value: "paid" },
-                          { label: "Pending (Payment Awaiting)", value: "pending" },
-                          { label: "Pending Verification", value: "pending_verification" },
-                          { label: "Failed / Rejected", value: "rejected" },
-                          { label: "Refunded", value: "refunded" },
-                          { label: "Partially Refunded", value: "partially_refunded" },
-                        ]}
-                      />
-
-                      <Input
-                        label="Payment Notes / Reference"
-                        placeholder="e.g. Bank ref #, cash collected..."
-                        value={paymentNotes}
-                        onChange={(e) => setPaymentNotes(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="pt-4 mt-6">
-                    <Button
-                      type="submit"
-                      variant="brand"
-                      size="sm"
-                      className="w-full shadow-xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl"
-                      isLoading={actionLoading}
-                    >
-                      Save Payment Status
-                    </Button>
-                  </div>
-                </form>
-              </div>
+          {/* Customer Note (if present) */}
+          {order.notes && (
+            <div className="border border-slate-200/80 bg-white rounded-2xl p-5 shadow-2xs space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono flex items-center gap-1.5">
+                <Icons.Edit size={13} />
+                <span>Customer Order Note</span>
+              </span>
+              <p className="text-xs text-slate-600 italic bg-[#FAF8F5] p-3.5 rounded-xl border border-[#EFECE6] leading-relaxed">
+                &ldquo;{order.notes}&rdquo;
+              </p>
             </div>
           )}
         </div>
 
-        {/* Right Column: Customer & Delivery Addresses */}
+        {/* Right Column (Sidebar 1 Col): ORDER STATUS + CUSTOMER & SHIPPING */}
         <div className="space-y-6">
-          {/* Customer Profile Card */}
-          <div className="border border-slate-200/80 bg-white rounded-2xl p-6 space-y-3 text-xs shadow-2xs">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-              <Icons.User size={16} className="text-[#0C134F]" />
-              <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
-                Customer Details
-              </h3>
-            </div>
-            <div className="space-y-1">
-              <p className="font-semibold text-[#0C134F] text-sm">{order.customer?.name}</p>
-              <p className="text-slate-500">{order.customer?.email}</p>
-              {order.customer?.phone && (
-                <p className="text-slate-500 font-mono mt-1">{order.customer?.phone}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Shipping Address Card */}
-          <div className="border border-slate-200/80 bg-white rounded-2xl p-6 space-y-3 text-xs shadow-2xs">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-              <Icons.Delivery size={16} className="text-[#0C134F]" />
-              <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
-                Shipping Destination
-              </h3>
-            </div>
-            <div className="leading-relaxed text-slate-600 space-y-0.5">
-              <p className="font-semibold text-[#0C134F]">{order.shippingAddress?.fullName}</p>
-              <p>{order.shippingAddress?.addressLine1}</p>
-              {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress?.addressLine2}</p>}
-              <p>
-                {order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.postalCode}
-              </p>
-              <p>{order.shippingAddress?.country}</p>
-              <p className="mt-1 font-mono text-[11px] text-slate-500">{order.shippingAddress?.phone}</p>
-            </div>
-          </div>
-
-          {/* Notes Card */}
-          {order.notes && (
-            <div className="border border-slate-200/80 bg-white rounded-2xl p-6 space-y-2 text-xs shadow-2xs">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-                <Icons.Edit size={16} className="text-[#0C134F]" />
+          {/* ORDER STATUS CARD */}
+          {hasPermission("orders.update") && (
+            <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
-                  Order Notes
+                  Order Status
                 </h3>
+                <StatusBadge status={order.orderStatus} />
               </div>
-              <p className="text-slate-600 italic leading-relaxed">{order.notes}</p>
+
+              {/* If Order is Completed, no further changes allowed & button is replaced with "Order Completed" */}
+              {isOrderCompleted ? (
+                <div className="space-y-3.5 pt-1">
+                  <div className="w-full py-3.5 px-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-2xs">
+                    <Icons.Check size={16} className="text-emerald-600" />
+                    <span>Order Completed & Closed</span>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSaveOrderStatus} className="space-y-3.5 pt-1">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                      Change Status
+                    </label>
+                    <Select
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                      options={UNIFIED_ORDER_STATUSES}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="brand"
+                    size="sm"
+                    className="w-full bg-[#0C134F] hover:bg-[#151D64] text-white shadow-2xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl cursor-pointer transition-all"
+                    isLoading={actionLoading}
+                    disabled={actionLoading}
+                  >
+                    Update Status
+                  </Button>
+                </form>
+              )}
+
+              {/* Clean Payment Info Details */}
+              <div className="pt-3 text-xs text-slate-600 space-y-2 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 text-[11.5px]">Payment Method</span>
+                  <span className="font-semibold text-[#0C134F] uppercase tracking-wider text-[11px] font-mono">
+                    {order.paymentMethod?.replace(/_/g, " ")}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 text-[11.5px]">Payment Status</span>
+                  <StatusBadge status={order.paymentStatus} size="sm" />
+                </div>
+              </div>
             </div>
           )}
+
+          {/* CUSTOMER & DELIVERY DETAILS CARD */}
+          <div className="border border-slate-200/80 bg-white rounded-2xl p-6 shadow-2xs space-y-5">
+            {/* Customer Details */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
+                  Customer
+                </h3>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#0C134F]/5 text-[#0C134F] border border-[#0C134F]/10 flex items-center justify-center font-bold text-xs shrink-0 font-sans">
+                  {customerInitials}
+                </div>
+                <div className="space-y-0.5 min-w-0 flex-1 text-xs">
+                  <p className="font-semibold text-[#0C134F]">{customerName}</p>
+                  {customerEmail && (
+                    <a
+                      href={`mailto:${customerEmail}`}
+                      className="text-slate-500 hover:text-[#0C134F] font-mono text-[11px] block truncate transition-colors"
+                      title={customerEmail}
+                    >
+                      {customerEmail}
+                    </a>
+                  )}
+                  {customerPhone && (
+                    <a
+                      href={`tel:${customerPhone}`}
+                      className="text-slate-500 hover:text-[#0C134F] font-mono text-[11px] block transition-colors"
+                    >
+                      {customerPhone}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Shipping Destination */}
+            <div className="pt-4 border-t border-slate-100 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs uppercase tracking-[0.16em] font-bold text-[#0C134F]">
+                  Shipping Address
+                </h3>
+                <span className="text-[10px] font-mono font-medium uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80">
+                  {order.shippingAddress?.country || "Pakistan"}
+                </span>
+              </div>
+
+              <div className="text-xs text-slate-600 space-y-1 leading-relaxed">
+                <p className="font-semibold text-[#0C134F]">
+                  {order.shippingAddress?.fullName || customerName}
+                </p>
+                <p>{order.shippingAddress?.addressLine1}</p>
+                {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress.addressLine2}</p>}
+                <p>
+                  {[order.shippingAddress?.city, order.shippingAddress?.state, order.shippingAddress?.postalCode]
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
+                {order.shippingAddress?.phone && (
+                  <p className="font-mono text-slate-500 pt-1 text-[11px]">
+                    Phone: {order.shippingAddress.phone}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Payment Proof Lightbox Modal */}
-      {isProofModalOpen && proofUrl && (
+      {isProofModalOpen && proofUrl ? (
         <Modal
           isOpen={isProofModalOpen}
           onClose={() => setIsProofModalOpen(false)}
           title="Bank Transfer Payment Proof"
-          description="Uploaded receipt submitted by the customer."
+          description="Customer payment transfer receipt."
           maxWidth="lg"
         >
           <div className="space-y-4 pt-2 font-sans">
@@ -652,10 +602,10 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
             </div>
           </div>
         </Modal>
-      )}
+      ) : null}
 
       {/* Payment Rejection Reason Modal */}
-      {isRejectModalOpen && (
+      {isRejectModalOpen ? (
         <Modal
           isOpen={isRejectModalOpen}
           onClose={() => setIsRejectModalOpen(false)}
@@ -693,47 +643,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
             </div>
           </div>
         </Modal>
-      )}
-
-      {/* Cancel Order Modal */}
-      {isCancelModalOpen && (
-        <Modal
-          isOpen={isCancelModalOpen}
-          onClose={() => setIsCancelModalOpen(false)}
-          title="Cancel Order"
-          description={`Are you sure you want to cancel order ${order.orderNumber}?`}
-          maxWidth="sm"
-        >
-          <div className="space-y-4 font-sans pt-2">
-            <Input
-              label="Cancellation Reason (optional)"
-              placeholder="e.g. Customer requested cancellation"
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
-            />
-            <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsCancelModalOpen(false)}
-                disabled={actionLoading}
-                className="border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-[#0C134F] rounded-xl text-xs"
-              >
-                Keep Order
-              </Button>
-              <Button
-                variant="tableActionDestructive"
-                size="sm"
-                onClick={handleCancelOrder}
-                isLoading={actionLoading}
-                className="rounded-xl text-xs font-semibold"
-              >
-                Cancel Order
-              </Button>
-            </div>
-          </div>
-        </Modal>
-      )}
+      ) : null}
     </div>
   );
 }

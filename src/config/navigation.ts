@@ -20,9 +20,6 @@ export const adminNavigation: NavItem[] = [
   { title: "Reviews", href: "/admin/reviews" },
   { title: "Inventory", href: "/admin/inventory" },
   { title: "Coupons", href: "/admin/coupons" },
-  { title: "Collections", href: "/admin/collections" },
-  { title: "Categories", href: "/admin/categories" },
-  { title: "Journal", href: "/admin/journal" },
   { title: "Settings", href: "/admin/settings" },
 ];
 

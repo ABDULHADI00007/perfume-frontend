@@ -71,49 +71,78 @@ export default function AdminOrdersPage() {
   const columns: Column<AdminOrder>[] = [
     {
       header: "Order Ref",
+      className: "whitespace-nowrap",
       cell: (row) => (
-        <Link
-          href={`/admin/orders/${row._id}`}
-          className="font-mono text-xs font-bold text-[#0C134F] hover:text-[#590B16] transition-colors"
-        >
-          {row.orderNumber}
-        </Link>
-      ),
-    },
-    {
-      header: "Customer",
-      cell: (row) => (
-        <div>
-          <p className="font-semibold text-xs text-[#0C134F]">{row.customer?.name || "Guest"}</p>
-          <p className="text-[11px] text-slate-500 font-mono tracking-tight">{row.customer?.email}</p>
+        <div className="min-w-[100px] sm:min-w-0">
+          <Link
+            href={`/admin/orders/${row._id}`}
+            className="font-mono text-xs font-bold text-[#0C134F] hover:text-[#590B16] transition-colors block"
+          >
+            {row.orderNumber}
+          </Link>
+          <span className="sm:hidden text-[10px] text-slate-500 font-mono block mt-0.5 whitespace-nowrap">
+            {formatDate(row.createdAt)}
+          </span>
         </div>
       ),
     },
     {
+      header: "Customer",
+      className: "min-w-[110px] sm:min-w-0",
+      cell: (row) => {
+        const customerName =
+          row.customerSnapshot?.name ||
+          row.shippingAddress?.fullName ||
+          (row.customer?.firstName
+            ? `${row.customer.firstName} ${row.customer.lastName || ""}`.trim()
+            : null) ||
+          row.customer?.name ||
+          "Customer";
+
+        const customerEmail =
+          row.customerSnapshot?.email ||
+          row.customer?.email ||
+          "";
+
+        return (
+          <div className="min-w-0 max-w-[120px] sm:max-w-none">
+            <p className="font-semibold text-xs text-[#0C134F] truncate">{customerName}</p>
+            {customerEmail && (
+              <p className="text-[10.5px] text-slate-500 font-mono tracking-tight truncate">{customerEmail}</p>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       header: "Date Placed",
+      className: "hidden sm:table-cell whitespace-nowrap",
       cell: (row) => (
-        <span className="text-xs text-slate-600 font-sans">
+        <span className="text-xs text-slate-600 font-sans whitespace-nowrap">
           {formatDate(row.createdAt)}
         </span>
       ),
     },
     {
       header: "Payment Method",
+      className: "whitespace-nowrap",
       cell: (row) => (
-        <span className="text-[10.5px] uppercase tracking-wider font-mono font-medium text-slate-500">
+        <span className="text-[10.5px] uppercase tracking-wider font-mono font-medium text-slate-500 whitespace-nowrap">
           {row.paymentMethod?.replace(/_/g, " ")}
         </span>
       ),
     },
     {
-      header: "Payment Status",
+      header: "Status",
+      className: "whitespace-nowrap",
       cell: (row) => (
-        <div className="flex items-center gap-1.5">
-          <StatusBadge status={row.paymentStatus} />
+        <div className="flex items-center gap-1.5 whitespace-nowrap">
+          <StatusBadge status={row.orderStatus} size="sm" />
+
           {row.paymentProof?.url && (
             <span
               title="Bank wire proof attached"
-              className="p-1 bg-amber-50 text-amber-700 border border-amber-200/80 rounded-md shadow-2xs"
+              className="p-1 bg-amber-50 text-amber-700 border border-amber-200/80 rounded-md shadow-2xs inline-flex items-center"
             >
               <Icons.ShieldCheck size={12} />
             </span>
@@ -122,26 +151,35 @@ export default function AdminOrdersPage() {
       ),
     },
     {
-      header: "Fulfillment",
-      cell: (row) => <StatusBadge status={row.orderStatus} />,
-    },
-    {
       header: "Total",
       align: "right",
-      cell: (row) => (
-        <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums">
-          {formatCurrency(row.totalAmount, "PKR")}
-        </span>
-      ),
+      className: "whitespace-nowrap text-right",
+      cell: (row) => {
+        const rowTotal =
+          typeof row.totalAmount === "number" && row.totalAmount > 0
+            ? row.totalAmount
+            : typeof row.total === "number" && row.total > 0
+            ? row.total
+            : Math.max(0, (row.subtotal || 0) - (row.discount || row.discountAmount || 0) + (row.shippingFee || 0));
+
+        return (
+          <span className="font-bold text-xs font-mono text-[#0C134F] tabular-nums whitespace-nowrap">
+            {formatCurrency(rowTotal, "PKR")}
+          </span>
+        );
+      },
     },
     {
       header: "Action",
       align: "right",
+      className: "whitespace-nowrap text-right",
       cell: (row) => (
         <TableActionGroup>
           <TableActionButton
             variant="outline"
+            size="xs"
             href={`/admin/orders/${row._id}`}
+            className="px-2.5 py-1 text-xs whitespace-nowrap"
           >
             Review →
           </TableActionButton>
@@ -195,15 +233,12 @@ export default function AdminOrdersPage() {
             setPage(1);
           }}
           options={[
-            { label: "All Order Statuses", value: "" },
+            { label: "All Statuses", value: "" },
             { label: "Pending", value: "pending" },
-            { label: "Awaiting Verification", value: "awaiting_payment_verification" },
             { label: "Confirmed", value: "confirmed" },
-            { label: "Processing", value: "processing" },
-            { label: "Shipped", value: "shipped" },
             { label: "Delivered", value: "delivered" },
+            { label: "Completed", value: "completed" },
             { label: "Cancelled", value: "cancelled" },
-            { label: "Refunded", value: "refunded" },
           ]}
         />
 
@@ -214,13 +249,10 @@ export default function AdminOrdersPage() {
             setPage(1);
           }}
           options={[
-            { label: "All Payment Statuses", value: "" },
+            { label: "All Payments", value: "" },
             { label: "Pending", value: "pending" },
-            { label: "Pending Verification", value: "pending_verification" },
             { label: "Paid", value: "paid" },
-            { label: "Rejected", value: "rejected" },
-            { label: "Failed", value: "failed" },
-            { label: "Refunded", value: "refunded" },
+            { label: "Failed / Rejected", value: "failed" },
           ]}
         />
       </AdminFilterBar>

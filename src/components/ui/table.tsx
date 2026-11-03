@@ -54,9 +54,9 @@ const EASE_MORPH = [0.32, 0.72, 0, 1] as const;
 const SORT_LAYOUT_MS = 0.32;
 
 const densityClasses: Record<TableDensity, { head: string; cell: string }> = {
-  compact: { head: "h-9 px-4 text-[10.5px]", cell: "h-11 px-4 text-xs" },
-  comfortable: { head: "h-11 px-6 text-[11px]", cell: "h-14 px-6 text-xs" },
-  spacious: { head: "h-13 px-7 text-xs", cell: "h-16 px-7 text-sm" },
+  compact: { head: "h-9 px-2.5 sm:px-4 text-[10.5px]", cell: "h-11 px-2.5 sm:px-4 text-xs" },
+  comfortable: { head: "h-11 px-2.5 sm:px-6 text-[11px]", cell: "h-14 px-2.5 sm:px-6 text-xs" },
+  spacious: { head: "h-13 px-3.5 sm:px-7 text-xs", cell: "h-16 px-3.5 sm:px-7 text-sm" },
 };
 
 type TableContextValue = {
@@ -155,7 +155,7 @@ export const Table = React.forwardRef<HTMLDivElement, TableProps>(
           )}
           {...props}
         >
-          <table className="w-full caption-bottom border-collapse text-left font-sans">{children}</table>
+          <table className="w-full min-w-[500px] sm:min-w-0 caption-bottom border-collapse text-left font-sans">{children}</table>
         </div>
       </TableContext.Provider>
     );

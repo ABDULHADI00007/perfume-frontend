@@ -2,34 +2,30 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { adminService } from "../services/adminService";
-import { AdminProduct, AdminCategory, AdminCollection } from "../types";
+import { AdminProduct, AdminCategory } from "../types";
 import { FolderImagePickerModal } from "./FolderImagePickerModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Package,
   Sparkles,
   Image as ImageIcon,
-  Layers,
-  Eye,
-  Tag,
-  Search,
-  Plus,
   Trash2,
   AlertCircle,
   Check,
   Upload,
   FolderOpen,
   Loader2,
-  Sun,
-  Calendar,
-  Sliders,
-  ChevronDown,
+  ArrowLeft,
+  Flame,
+  Star,
+  Eye,
   X,
+  Layers,
+  Plus,
 } from "lucide-react";
 
 export interface ProductFormProps {
@@ -37,29 +33,18 @@ export interface ProductFormProps {
   isEdit?: boolean;
 }
 
-const COMMON_SCENT_FAMILIES = [
-  "Woody Amber",
-  "Royal Spiced Leather",
-  "Floral Oriental",
-  "Fresh Aquatic",
-  "Citrus Amber",
-  "Smoky Oud",
-  "Gourmand Vanilla",
-  "Chypre Fruity",
+const GENDER_OPTIONS = [
+  { value: "Unisex", label: "Unisex" },
+  { value: "Men", label: "Men" },
+  { value: "Women", label: "Women" },
 ];
 
-const SEASONS_LIST = ["Spring", "Summer", "Autumn", "Winter"];
-
-const OCCASIONS_LIST = [
-  "Evening",
-  "Daily Wear",
-  "Formal",
-  "Special Occasions",
-  "Date Night",
-  "Office",
-];
-
-const STANDARD_SIZES = ["50ml", "100ml", "30ml", "10ml"];
+interface VariantRow {
+  size: string;
+  price: number;
+  compareAtPrice?: number;
+  stock: number;
+}
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialProduct,
@@ -69,69 +54,63 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
   const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [collections, setCollections] = useState<AdminCollection[]>([]);
-  const [isLoadingMeta, setIsLoadingMeta] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [pickerTarget, setPickerTarget] = useState<"card" | number>("card");
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Form Fields - 1. Basic Info
+  // ── 1. COLLECTION CARD STATE ──
   const [name, setName] = useState(initialProduct?.name || "");
-  const [slug, setSlug] = useState(initialProduct?.slug || "");
   const [category, setCategory] = useState<string>(
     typeof initialProduct?.category === "object" && initialProduct.category !== null
       ? initialProduct.category._id
       : (initialProduct?.category as string) || ""
   );
+  const [cardImage, setCardImage] = useState<string>(() => {
+    if (!initialProduct?.images || initialProduct.images.length === 0) return "";
+    const primary = initialProduct.images.find((img) => img.isPrimary);
+    return primary ? primary.url : initialProduct.images[0].url || "";
+  });
+  const [cardPrice, setCardPrice] = useState<number>(
+    initialProduct?.price ? Number(initialProduct.price) : 13500
+  );
+  const [cardComparePrice, setCardComparePrice] = useState<number | undefined>(
+    initialProduct?.compareAtPrice ? Number(initialProduct.compareAtPrice) : 15500
+  );
+  const [cardStock, setCardStock] = useState<number>(
+    initialProduct?.variants?.[0]?.stock !== undefined
+      ? initialProduct.variants[0].stock
+      : 25
+  );
+  const [cardSize, setCardSize] = useState<string>(
+    initialProduct?.variants?.[0]?.size || "50ml"
+  );
   const [shortDescription, setShortDescription] = useState(
     initialProduct?.shortDescription || ""
   );
-  const [description, setDescription] = useState(initialProduct?.description || "");
-
-  // Form Fields - 2. Pricing & Inventory
-  const [price, setPrice] = useState<string>(
-    initialProduct?.price ? String(initialProduct.price) : "13500"
+  const [bestseller, setBestseller] = useState<boolean>(
+    initialProduct?.bestseller ?? true
   );
-  const [compareAtPrice, setCompareAtPrice] = useState<string>(
-    initialProduct?.compareAtPrice ? String(initialProduct.compareAtPrice) : ""
+  const [newArrival, setNewArrival] = useState<boolean>(
+    initialProduct?.newArrival ?? false
   );
-  const [sku, setSku] = useState(initialProduct?.sku || "");
-  const [currency] = useState<string>(initialProduct?.currency || "PKR");
-  const [variants, setVariants] = useState<
-    Array<{
-      size: string;
-      price: number;
-      compareAtPrice?: number;
-      sku: string;
-      stock: number;
-      status: "active" | "inactive";
-    }>
-  >(
-    initialProduct?.variants && initialProduct.variants.length > 0
-      ? initialProduct.variants.map((v) => ({
-          size: v.size,
-          price: v.price,
-          compareAtPrice: v.compareAtPrice,
-          sku: v.sku,
-          stock: v.stock || 0,
-          status: v.status || "active",
-        }))
-      : [{ size: "50ml", price: 13500, sku: "SS-01-50", stock: 25, status: "active" }]
+  const [featured, setFeatured] = useState<boolean>(
+    initialProduct?.featured ?? true
+  );
+  const [status, setStatus] = useState<"active" | "draft" | "archived">(
+    initialProduct?.status || "active"
   );
 
-  // Form Fields - 3. Fragrance Details & Notes
-  const [brand, setBrand] = useState(initialProduct?.brand || "Soulmate Scents");
-  const [concentration, setConcentration] = useState(
-    initialProduct?.fragrance?.concentration || "Extrait de Parfum"
-  );
-  const [gender, setGender] = useState<"Men" | "Women" | "Unisex">(
-    initialProduct?.fragrance?.gender || "Unisex"
-  );
-  const [scentFamily, setScentFamily] = useState<string>(
-    initialProduct?.scentFamily?.join(", ") || "Woody Amber"
-  );
+  // ── 2. PRODUCT DETAIL PAGE STATE ──
+  // 3 to 4 detail gallery pictures
+  const [detailImages, setDetailImages] = useState<string[]>(() => {
+    if (!initialProduct?.images || initialProduct.images.length === 0) return [];
+    return initialProduct.images.map((img) => img.url).filter(Boolean).slice(0, 4);
+  });
+
+  // Olfactory Pyramid notes
   const [topNotes, setTopNotes] = useState(
     initialProduct?.fragrance?.topNotes?.join(", ") || ""
   );
@@ -142,148 +121,71 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     initialProduct?.fragrance?.baseNotes?.join(", ") || ""
   );
 
-  // Form Fields - 4. Images
-  const [images, setImages] = useState<
-    Array<{ url: string; altText?: string; isPrimary?: boolean }>
-  >(
-    initialProduct?.images && initialProduct.images.length > 0
-      ? initialProduct.images
-      : [{ url: "/images/perfumes/elite-fusion.png", altText: "Fragrance Bottle", isPrimary: true }]
+  // Fragrance profile & narrative (Extrait de Parfum is the Soulmate Scents luxury standard)
+  const concentration = initialProduct?.fragrance?.concentration || "Extrait de Parfum";
+  const [gender, setGender] = useState<"Men" | "Women" | "Unisex">(
+    initialProduct?.fragrance?.gender || "Unisex"
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [rating, setRating] = useState<number>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (initialProduct as any)?.ratingAverage !== undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ? Number((initialProduct as any).ratingAverage)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      : (initialProduct as any)?.rating !== undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ? Number((initialProduct as any).rating)
+      : 4.9
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [ratingCount, setRatingCount] = useState<number>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (initialProduct as any)?.reviewCount !== undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ? Number((initialProduct as any).reviewCount)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      : (initialProduct as any)?.ratingCount !== undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ? Number((initialProduct as any).ratingCount)
+      : 128
+  );
+  const scentFamily = initialProduct?.scentFamily?.[0] || "Woody Amber";
+  const [description, setDescription] = useState(
+    initialProduct?.description || ""
   );
 
-  // Form Fields - 5. Advanced & Merchandising Options
-  const [longevity, setLongevity] = useState(
-    initialProduct?.fragrance?.longevity || "8-10 Hours"
-  );
-  const [sillage, setSillage] = useState(
-    initialProduct?.fragrance?.sillage || "Strong"
-  );
-  const [seasons, setSeasons] = useState<string[]>(
-    initialProduct?.season || ["Autumn", "Winter"]
-  );
-  const [occasions, setOccasions] = useState<string[]>(
-    initialProduct?.occasions || ["Evening", "Special Occasions", "Daily Wear"]
-  );
-  const [selectedCollections, setSelectedCollections] = useState<string[]>(
-    initialProduct?.collections?.map((c) => (typeof c === "object" ? c._id : c)) || []
-  );
-  const [metaTitle, setMetaTitle] = useState(
-    initialProduct?.seo?.metaTitle || ""
-  );
-  const [metaDescription, setMetaDescription] = useState(
-    initialProduct?.seo?.metaDescription || ""
-  );
+  // Secondary bottle sizes (e.g. 100ml, 30ml)
+  const [extraVariants, setExtraVariants] = useState<VariantRow[]>(() => {
+    if (initialProduct?.variants && initialProduct.variants.length > 1) {
+      return initialProduct.variants.slice(1).map((v) => ({
+        size: v.size || "100ml",
+        price: v.price || Math.round(Number(initialProduct.price || 13500) * 1.65),
+        compareAtPrice: v.compareAtPrice,
+        stock: v.stock !== undefined ? v.stock : 15,
+      }));
+    }
+    return [];
+  });
 
-  // Publication Status & Badges
-  const [status, setStatus] = useState<"active" | "draft" | "archived">(
-    initialProduct?.status || "active"
-  );
-  const [featured, setFeatured] = useState<boolean>(initialProduct?.featured ?? true);
-  const [bestseller, setBestseller] = useState<boolean>(initialProduct?.bestseller ?? true);
-  const [newArrival, setNewArrival] = useState<boolean>(initialProduct?.newArrival ?? false);
-
+  // Load Categories (for background schema compatibility)
   useEffect(() => {
-    async function loadMetadata() {
+    async function loadMeta() {
       try {
-        setIsLoadingMeta(true);
-        const [cats, cols] = await Promise.all([
-          adminService.getCategories(true),
-          adminService.getCollections(),
-        ]);
+        const cats = await adminService.getCategories(true);
         setCategories(cats);
-        setCollections(cols);
         if (!category && cats.length > 0) {
           setCategory(cats[0]._id);
         }
       } catch {
-        // Best effort
-      } finally {
-        setIsLoadingMeta(false);
+        // Fallback
       }
     }
-    loadMetadata();
+    loadMeta();
   }, [category]);
 
-  const handleNameChange = (val: string) => {
-    setName(val);
-    if (!isEdit && (!slug || slug === name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""))) {
-      setSlug(val.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""));
-    }
-    if (!isEdit && !sku && val) {
-      const initials = val
-        .split(" ")
-        .map((w) => w[0])
-        .join("")
-        .toUpperCase();
-      setSku(`SS-${initials || "PERF"}-MAIN`);
-    }
-  };
-
-  const handleAddImage = () => {
-    setImages([...images, { url: "", altText: "", isPrimary: images.length === 0 }]);
-  };
-
-  const handleRemoveImage = (index: number) => {
-    const updated = images.filter((_, i) => i !== index);
-    if (updated.length > 0 && !updated.some((img) => img.isPrimary)) {
-      updated[0].isPrimary = true;
-    }
-    setImages(updated);
-  };
-
-  const handleSetPrimaryImage = (index: number) => {
-    setImages(
-      images.map((img, i) => ({
-        ...img,
-        isPrimary: i === index,
-      }))
-    );
-  };
-
-  const handleAddVariant = (customSize?: string) => {
-    const sizeToAdd = customSize || "50ml";
-    const baseSku = sku ? `${sku.replace(/-MAIN$/, "")}-${sizeToAdd}` : `SS-VAR-${sizeToAdd}`;
-    setVariants([
-      ...variants,
-      {
-        size: sizeToAdd,
-        price: Number(price) || 13500,
-        sku: baseSku,
-        stock: 20,
-        status: "active",
-      },
-    ]);
-  };
-
-  const handleRemoveVariant = (index: number) => {
-    setVariants(variants.filter((_, i) => i !== index));
-  };
-
-  const handleCollectionToggle = (colId: string) => {
-    if (selectedCollections.includes(colId)) {
-      setSelectedCollections(selectedCollections.filter((id) => id !== colId));
-    } else {
-      setSelectedCollections([...selectedCollections, colId]);
-    }
-  };
-
-  const handleSeasonToggle = (seasonName: string) => {
-    if (seasons.includes(seasonName)) {
-      setSeasons(seasons.filter((s) => s !== seasonName));
-    } else {
-      setSeasons([...seasons, seasonName]);
-    }
-  };
-
-  const handleOccasionToggle = (occ: string) => {
-    if (occasions.includes(occ)) {
-      setOccasions(occasions.filter((o) => o !== occ));
-    } else {
-      setOccasions([...occasions, occ]);
-    }
-  };
-
-  const handleLocalFolderUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload handler for Computer Files
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -291,29 +193,44 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     setError(null);
 
     try {
+      const uploadedUrls: string[] = [];
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", files[i]);
 
         const res = await fetch("/api/upload", {
           method: "POST",
           body: formData,
         });
-
         const data = await res.json();
         if (data.success && data.url) {
-          const newImg = {
-            url: data.url,
-            altText: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
-            isPrimary: images.length === 0,
-          };
-          setImages((prev) => {
-            const filtered = prev.filter((im) => im.url.trim().length > 0);
-            return [...filtered, newImg];
-          });
+          uploadedUrls.push(data.url);
         } else {
-          throw new Error(data.message || "Failed to upload file");
+          throw new Error(data.message || "Failed to upload image");
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        if (pickerTarget === "card") {
+          // Set collection card image
+          setCardImage(uploadedUrls[0]);
+          // If detail images is empty, auto-add as first detail view as well
+          if (detailImages.length === 0) {
+            setDetailImages([uploadedUrls[0]]);
+          }
+        } else {
+          // Setting a specific slot or multiple detail slots
+          const slotIndex = Number(pickerTarget);
+          const next = [...detailImages];
+          if (uploadedUrls.length === 1) {
+            next[slotIndex] = uploadedUrls[0];
+          } else {
+            // Multiple images uploaded
+            for (let i = 0; i < uploadedUrls.length && slotIndex + i < 4; i++) {
+              next[slotIndex + i] = uploadedUrls[i];
+            }
+          }
+          setDetailImages(next.slice(0, 4));
         }
       }
     } catch (err: unknown) {
@@ -326,99 +243,145 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   };
 
-  const handleSelectFromFolderModal = (selected: { url: string; altText: string }) => {
-    setImages((prev) => {
-      const alreadyHas = prev.some((im) => im.url === selected.url);
-      if (alreadyHas) return prev;
-      const cleanPrev = prev.filter((im) => im.url.trim().length > 0);
-      return [
-        ...cleanPrev,
-        {
-          url: selected.url,
-          altText: selected.altText || name || "Perfume bottle",
-          isPrimary: cleanPrev.length === 0,
-        },
-      ];
-    });
-  };
-
-  const handleCancel = () => {
-    if (
-      name.trim() !== (initialProduct?.name || "") ||
-      price !== String(initialProduct?.price || "13500") ||
-      sku !== (initialProduct?.sku || "")
-    ) {
-      if (window.confirm("Discard unsaved changes? Your edits will not be saved.")) {
-        router.push("/admin/products");
+  // Select image from Folder Modal
+  const handleSelectFromFolder = (selected: { url: string }) => {
+    if (pickerTarget === "card") {
+      setCardImage(selected.url);
+      if (detailImages.length === 0) {
+        setDetailImages([selected.url]);
       }
     } else {
-      router.push("/admin/products");
+      const slotIndex = Number(pickerTarget);
+      const next = [...detailImages];
+      next[slotIndex] = selected.url;
+      setDetailImages(next.slice(0, 4));
+    }
+    setIsFolderModalOpen(false);
+  };
+
+  const openPicker = (target: "card" | number, mode: "upload" | "browse") => {
+    setPickerTarget(target);
+    if (mode === "upload") {
+      fileUploadInputRef.current?.click();
+    } else {
+      setIsFolderModalOpen(true);
     }
   };
 
+  const handleRemoveDetailImage = (index: number) => {
+    const next = detailImages.filter((_, i) => i !== index);
+    setDetailImages(next);
+  };
+
+  const handleAddExtraVariant = (sizeToAdd = "100ml") => {
+    if (extraVariants.some((v) => v.size.toLowerCase() === sizeToAdd.toLowerCase())) return;
+    const isLarger = sizeToAdd.includes("100");
+    const newPrice = isLarger ? Math.round(cardPrice * 1.65) : Math.round(cardPrice * 0.7);
+    const newCompare = isLarger ? Math.round(newPrice * 1.15) : undefined;
+    setExtraVariants([
+      ...extraVariants,
+      {
+        size: sizeToAdd,
+        price: newPrice,
+        compareAtPrice: newCompare,
+        stock: 15,
+      },
+    ]);
+  };
+
+  // Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (!name.trim()) {
-      setError("Product name is required.");
-      return;
-    }
-    if (!sku.trim()) {
-      setError("Product SKU is required.");
-      return;
-    }
-    if (!price || isNaN(Number(price)) || Number(price) < 0) {
-      setError("Valid product price is required.");
-      return;
-    }
-    if (!category) {
-      setError("Please select a valid category (Premium or Gold).");
+      setError("Fragrance name is required.");
       return;
     }
 
-    const validImages = images
-      .filter((img) => img.url && img.url.trim().length > 0)
-      .map((img) => ({
-        url: img.url.trim(),
-        altText: img.altText?.trim() || undefined,
-        isPrimary: Boolean(img.isPrimary),
-      }));
+    const finalCategory =
+      category ||
+      (typeof initialProduct?.category === "object" && initialProduct.category !== null
+        ? initialProduct.category._id
+        : (initialProduct?.category as string)) ||
+      categories[0]?._id ||
+      "64fa00000000000000000001";
 
-    if (validImages.length === 0) {
-      setError("At least one product image is required.");
+    // Determine final card cover image
+    const finalCardCover = cardImage || detailImages[0];
+    if (!finalCardCover) {
+      setError("Please upload at least one photo for the Collection Card.");
       return;
     }
 
-    if (!validImages.some((img) => img.isPrimary)) {
-      validImages[0].isPrimary = true;
+    // Combine Card Cover + Detail Gallery Photos (up to 4)
+    const combinedUrls: string[] = [finalCardCover];
+    for (const dUrl of detailImages) {
+      if (dUrl && !combinedUrls.includes(dUrl)) {
+        combinedUrls.push(dUrl);
+      }
     }
+
+    const validImages = combinedUrls.map((url, idx) => ({
+      url,
+      altText: `${name.trim()} - View ${idx + 1}`,
+      isPrimary: idx === 0,
+    }));
+
+    // Auto-generate slug and SKU
+    const initials =
+      name
+        .trim()
+        .split(/\s+/)
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase() || "SS";
+    const autoSku = `SS-${initials}`;
+    const autoSlug =
+      initialProduct?.slug ||
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    // Primary size variant (from Collection Card) + Extra sizes (from Detail Page)
+    const allVariants = [
+      {
+        size: cardSize.trim() || "50ml",
+        price: Number(cardPrice) || 13500,
+        compareAtPrice: cardComparePrice ? Number(cardComparePrice) : undefined,
+        sku: `${autoSku}-${cardSize.trim().toUpperCase()}`,
+        stock: Number(cardStock) || 0,
+        status: "active" as const,
+      },
+      ...extraVariants.map((v) => ({
+        size: v.size.trim(),
+        price: Number(v.price) || Math.round(Number(cardPrice) * 1.65),
+        compareAtPrice: v.compareAtPrice ? Number(v.compareAtPrice) : undefined,
+        sku: `${autoSku}-${v.size.trim().replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`,
+        stock: Number(v.stock) || 0,
+        status: "active" as const,
+      })),
+    ];
 
     const payload: Partial<AdminProduct> = {
       name: name.trim(),
-      slug: slug.trim() || undefined,
-      sku: sku.trim(),
-      brand: brand.trim() || "Soulmate Scents",
-      price: Number(price),
-      compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
-      currency: currency || "PKR",
+      slug: autoSlug,
+      sku: `${autoSku}-MAIN`,
+      brand: "Soulmate Scents",
+      price: Number(cardPrice) || 13500,
+      compareAtPrice: cardComparePrice ? Number(cardComparePrice) : undefined,
+      currency: "PKR",
       shortDescription: shortDescription.trim() || undefined,
       description: description.trim() || undefined,
       status,
-      category:
-        typeof category === "object" && category !== null && "_id" in category
-          ? (category as { _id: string })._id
-          : String(category),
-      collections: selectedCollections.map((c) =>
-        typeof c === "object" && c !== null && "_id" in c
-          ? (c as { _id: string })._id
-          : String(c)
-      ),
+      category: finalCategory,
+      collections: [],
       fragrance: {
         concentration,
         gender,
-        longevity: longevity.trim() || undefined,
-        sillage: sillage.trim() || undefined,
+        longevity: "10-14 Hours (Extrait hold)",
+        sillage: "Strong radiating trail",
         topNotes: topNotes
           .split(",")
           .map((n) => n.trim())
@@ -432,39 +395,32 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           .map((n) => n.trim())
           .filter(Boolean),
       },
-      scentFamily: scentFamily
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
-      season: seasons,
-      occasions: occasions,
+      scentFamily: scentFamily ? [scentFamily] : ["Woody Amber"],
       images: validImages,
-      variants: variants.map((v) => ({
-        size: v.size.trim(),
-        price: Number(v.price) || Number(price),
-        compareAtPrice: v.compareAtPrice ? Number(v.compareAtPrice) : undefined,
-        sku: v.sku.trim() || `${sku.trim()}-${v.size.trim()}`,
-        stock: Number(v.stock) || 0,
-        status: v.status || "active",
-      })),
+      variants: allVariants,
       featured,
       bestseller,
       newArrival,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...({ ratingAverage: Number(rating) || 4.9, reviewCount: Number(ratingCount) || 128, rating: Number(rating) || 4.9, ratingCount: Number(ratingCount) || 128 } as any),
       seo: {
-        metaTitle: metaTitle.trim() || `${name.trim()} | Soulmate Scents`,
-        metaDescription:
-          metaDescription.trim() || shortDescription.trim() || undefined,
+        metaTitle: `${name.trim()} | Soulmate Scents`,
+        metaDescription: shortDescription.trim() || `${name.trim()} - Luxury Fragrance`,
       },
     };
 
     try {
       setIsSubmitting(true);
+      setError(null);
+      setSuccessMessage(null);
       if (isEdit && initialProduct?._id) {
         await adminService.updateProduct(initialProduct._id, payload);
+        setSuccessMessage(`"${name.trim()}" has been updated successfully!`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         await adminService.createProduct(payload);
+        router.push("/admin/products");
       }
-      router.push("/admin/products");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save product");
     } finally {
@@ -472,27 +428,92 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   };
 
+  // Calculated discount percentage for card preview
+  const discountPct =
+    cardComparePrice && cardComparePrice > cardPrice
+      ? Math.round(((cardComparePrice - cardPrice) / cardComparePrice) * 100)
+      : null;
+
   return (
     <>
       {/* Folder Image Picker Modal */}
       <FolderImagePickerModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}
-        onSelectImage={handleSelectFromFolderModal}
-        selectedUrls={images.map((img) => img.url)}
+        onSelectImage={handleSelectFromFolder}
+        selectedUrls={
+          pickerTarget === "card"
+            ? cardImage ? [cardImage] : []
+            : detailImages
+        }
       />
 
-      {/* Hidden File Input for Device Folder Upload */}
+      {/* Hidden File Input */}
       <input
         ref={fileUploadInputRef}
         type="file"
         accept="image/*"
-        multiple
+        multiple={pickerTarget !== "card"}
         className="hidden"
-        onChange={handleLocalFolderUpload}
+        onChange={handleFileUpload}
       />
 
-      <form onSubmit={handleSubmit} className="space-y-6 font-sans">
+      <form onSubmit={handleSubmit} className="space-y-8 max-w-6xl mx-auto pb-20 font-sans">
+        {/* Top Header & Sticky Navigation */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <Link
+              href="/admin/products"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#0C134F] font-medium transition-colors mb-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Back to Catalog
+            </Link>
+            <h1 className="text-2xl font-serif font-bold text-slate-900 tracking-tight">
+              {isEdit ? "Edit Fragrance" : "Add New Fragrance"}
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Organized into Collection Card Settings & Product Detail Page Experience.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <Link
+              href="/admin/products"
+              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all border border-slate-200"
+            >
+              Discard
+            </Link>
+            <Button
+              type="submit"
+              variant="brand"
+              isLoading={isSubmitting}
+              className="px-5 py-2 text-xs font-bold uppercase tracking-wider h-10 rounded-xl bg-[#0C134F] hover:bg-[#0C134F]/90 text-white shadow-xs cursor-pointer gap-2"
+            >
+              <Check className="w-4 h-4" />
+              {isEdit ? "Update Fragrance" : "Publish Fragrance"}
+            </Button>
+          </div>
+        </div>
+
+        {/* Success Alert */}
+        {successMessage && (
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-medium flex items-center justify-between shadow-2xs animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-2.5">
+              <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span className="font-semibold">{successMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSuccessMessage(null)}
+              className="text-emerald-600 hover:text-emerald-800 p-1 rounded-lg cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Error Alert */}
         {error && (
           <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs font-medium flex items-center justify-between shadow-2xs">
             <div className="flex items-center gap-2">
@@ -502,707 +523,735 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <button
               type="button"
               onClick={() => setError(null)}
-              className="text-rose-500 hover:text-rose-700 p-1 rounded-lg"
+              className="text-rose-500 hover:text-rose-700 p-1 rounded-lg cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
 
-        {/* 2-Column Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Main 2 Columns: 4 Primary Cards + Advanced Collapsible */}
-          <div className="lg:col-span-2 space-y-6">
-            
-            {/* ── CARD 1: BASIC INFORMATION ── */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs space-y-4">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F] flex items-center gap-2">
-                  <Package className="w-4 h-4 text-slate-400" />
-                  1. Basic Information
-                </h3>
-                <span className="text-[10px] text-slate-400 font-mono">* Required fields</span>
+        {/* ═════════════════════════════════════════════════════════════════════ */}
+        {/* 🎴 CARD A: COLLECTION CARD SETTINGS (STOREFRONT LISTING CARD)        */}
+        {/* ═════════════════════════════════════════════════════════════════════ */}
+        <div className="bg-white border-2 border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xs space-y-5 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200/60 text-[#0C134F] text-[10px] font-bold uppercase tracking-wider mb-1.5 font-mono">
+                <Layers className="w-3 h-3 text-indigo-600" />
+                Storefront Collection Card
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  label="Product Name *"
-                  placeholder="e.g. Elite Fusion, Crown Legacy"
-                  value={name}
-                  onChange={(e) => handleNameChange(e.target.value)}
-                  required
-                  className="text-xs"
-                />
-                <Input
-                  label="Custom Slug"
-                  placeholder="e.g. elite-fusion"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className="text-xs font-mono"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Select
-                  label="Primary Category *"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  disabled={isLoadingMeta}
-                  options={
-                    categories.length > 0
-                      ? categories.map((c) => ({ label: `${c.name} Collection`, value: c._id }))
-                      : [{ label: "Loading categories...", value: "" }]
-                  }
-                />
-
-                <Input
-                  label="Brand"
-                  placeholder="Soulmate Scents"
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                  className="text-xs font-medium"
-                />
-              </div>
-
-              <Textarea
-                label="Short Sensory Teaser"
-                placeholder="e.g. Bold, magnetic, and built for modern leaders."
-                value={shortDescription}
-                onChange={(e) => setShortDescription(e.target.value)}
-                rows={2}
-                className="text-xs leading-relaxed resize-none"
-              />
-
-              <Textarea
-                label="Full Olfactory Narrative & Storytelling"
-                placeholder="Comprehensive storytelling, sensory breakdown, and wearer impression..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
-                className="text-xs leading-relaxed resize-none"
-              />
+              <h2 className="text-lg font-serif font-bold text-slate-900">
+                1. Collection Card Setup
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Controls the main bottle picture, title, price, discount ribbon, and teaser shown in collections.
+              </p>
             </div>
 
-            {/* ── CARD 2: PRICING & INVENTORY ── */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs space-y-4">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F] flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-slate-400" />
-                  2. Pricing & Bottle Sizes (PKR)
-                </h3>
-                <span className="text-[10.5px] font-mono text-slate-400">All prices in PKR (Rs.)</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Input
-                  label="Base Price (Rs.) *"
-                  type="number"
-                  step="1"
-                  min="0"
-                  placeholder="13500"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                  className="text-xs font-mono"
-                />
-                <Input
-                  label="Compare-at Price (Rs.)"
-                  type="number"
-                  step="1"
-                  min="0"
-                  placeholder="15000"
-                  value={compareAtPrice}
-                  onChange={(e) => setCompareAtPrice(e.target.value)}
-                  className="text-xs font-mono"
-                />
-                <Input
-                  label="Master SKU *"
-                  placeholder="e.g. SS-EF-MAIN"
-                  value={sku}
-                  onChange={(e) => setSku(e.target.value)}
-                  required
-                  className="text-xs font-mono"
-                />
-              </div>
-
-              {/* Variants Section */}
-              <div className="pt-2 border-t border-slate-100 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <label className="text-xs font-semibold text-[#0C134F] flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-slate-400" />
-                      Flacon Sizes & Variant Stock
-                    </label>
-                    <p className="text-[10.5px] text-slate-400">
-                      Standard size is 50ml. Add discovery travel sets (10ml) or 100ml editions.
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 mr-1">Add Size:</span>
-                    {STANDARD_SIZES.map((sz) => (
-                      <Button
-                        key={sz}
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAddVariant(sz)}
-                        className="text-[11px] h-7 px-2.5 rounded-lg border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] font-semibold cursor-pointer"
-                      >
-                        +{sz}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2.5">
-                  {variants.map((v, idx) => (
-                    <div
-                      key={idx}
-                      className="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 items-end transition-all hover:border-slate-300"
-                    >
-                      <Input
-                        label="Size"
-                        placeholder="50ml"
-                        value={v.size}
-                        onChange={(e) => {
-                          const next = [...variants];
-                          next[idx].size = e.target.value;
-                          setVariants(next);
-                        }}
-                        className="text-xs bg-white font-medium"
-                      />
-                      <Input
-                        label="Price (Rs.)"
-                        type="number"
-                        step="1"
-                        value={v.price}
-                        onChange={(e) => {
-                          const next = [...variants];
-                          next[idx].price = Number(e.target.value);
-                          setVariants(next);
-                        }}
-                        className="text-xs font-mono bg-white"
-                      />
-                      <Input
-                        label="Compare Price"
-                        type="number"
-                        step="1"
-                        value={v.compareAtPrice || ""}
-                        onChange={(e) => {
-                          const next = [...variants];
-                          next[idx].compareAtPrice = e.target.value ? Number(e.target.value) : undefined;
-                          setVariants(next);
-                        }}
-                        className="text-xs font-mono bg-white"
-                      />
-                      <Input
-                        label="Variant SKU"
-                        value={v.sku}
-                        onChange={(e) => {
-                          const next = [...variants];
-                          next[idx].sku = e.target.value;
-                          setVariants(next);
-                        }}
-                        className="text-xs font-mono bg-white"
-                      />
-                      <Input
-                        label="Stock"
-                        type="number"
-                        min="0"
-                        value={v.stock}
-                        onChange={(e) => {
-                          const next = [...variants];
-                          next[idx].stock = Number(e.target.value);
-                          setVariants(next);
-                        }}
-                        className="text-xs font-mono bg-white"
-                      />
-                      <div className="flex items-center justify-end pb-1 col-span-2 sm:col-span-1">
-                        {variants.length > 1 ? (
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveVariant(idx)}
-                            className="px-2.5 py-1.5 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors cursor-pointer"
-                          >
-                            Remove
-                          </button>
-                        ) : (
-                          <span className="text-[10px] text-slate-400 font-mono">Primary</span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* ── CARD 3: FRAGRANCE DETAILS & NOTES ── */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs space-y-4">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F] flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-slate-400" />
-                  3. Fragrance Details & Olfactory Pyramid
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Select
-                  label="Concentration"
-                  value={concentration}
-                  onChange={(e) => setConcentration(e.target.value)}
-                  options={[
-                    { label: "Extrait de Parfum (30%+ Luxury)", value: "Extrait de Parfum" },
-                    { label: "Eau de Parfum (15-20%)", value: "Eau de Parfum" },
-                    { label: "Eau de Toilette (5-15%)", value: "Eau de Toilette" },
-                    { label: "Parfum Oil / Pure Attar", value: "Parfum Oil" },
-                  ]}
-                />
-
-                <Select
-                  label="Gender Character"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value as "Men" | "Women" | "Unisex")}
-                  options={[
-                    { label: "Unisex", value: "Unisex" },
-                    { label: "Men", value: "Men" },
-                    { label: "Women", value: "Women" },
-                  ]}
-                />
-              </div>
-
-              <div>
-                <Input
-                  label="Scent Family / Olfactory Chord"
-                  placeholder="e.g. Woody Amber, Royal Spiced Leather"
-                  value={scentFamily}
-                  onChange={(e) => setScentFamily(e.target.value)}
-                  className="text-xs"
-                />
-
-                <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 mr-1">Quick Select:</span>
-                  {COMMON_SCENT_FAMILIES.map((fam) => (
-                    <button
-                      key={fam}
-                      type="button"
-                      onClick={() => setScentFamily(fam)}
-                      className={`text-[10.5px] px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
-                        scentFamily === fam
-                          ? "bg-[#0C134F] text-white border-[#0C134F] shadow-2xs font-semibold"
-                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-[#0C134F]"
-                      }`}
-                    >
-                      {fam}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-3 border-t border-slate-100">
-                <Input
-                  label="Top Notes (Opening Accord, comma-separated)"
-                  placeholder="e.g. Bergamot, Ambroxan, Orris Root"
-                  value={topNotes}
-                  onChange={(e) => setTopNotes(e.target.value)}
-                  className="text-xs"
-                />
-
-                <Input
-                  label="Heart Notes (Mid Accord, comma-separated)"
-                  placeholder="e.g. Woody Notes, Ambergris, Jasmine"
-                  value={heartNotes}
-                  onChange={(e) => setHeartNotes(e.target.value)}
-                  className="text-xs"
-                />
-
-                <Input
-                  label="Base Notes (Foundation, comma-separated)"
-                  placeholder="e.g. Patchouli, Woody Notes, Musk"
-                  value={baseNotes}
-                  onChange={(e) => setBaseNotes(e.target.value)}
-                  className="text-xs"
-                />
-              </div>
-            </div>
-
-            {/* ── CARD 4: PRODUCT IMAGES ── */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                <div>
-                  <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F] flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4 text-slate-400" />
-                    4. Product Images & Gallery
-                  </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    Browse the 64 bottle pictures in the perfumes folder or upload from your computer
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsFolderModalOpen(true)}
-                    className="gap-1.5 text-xs h-8 rounded-xl border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-[#0C134F] font-semibold shadow-2xs transition-all cursor-pointer"
-                  >
-                    <FolderOpen className="w-3.5 h-3.5 text-indigo-600" />
-                    Browse Perfumes Folder
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileUploadInputRef.current?.click()}
-                    disabled={isUploadingImage}
-                    className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-[#0C134F] shadow-2xs transition-all cursor-pointer font-medium"
-                  >
-                    {isUploadingImage ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0C134F]" />
-                    ) : (
-                      <Upload className="w-3.5 h-3.5 text-[#0C134F]" />
-                    )}
-                    Upload from Folder
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleAddImage}
-                    className="gap-1 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition-all cursor-pointer"
-                    title="Add manual URL input"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    Add URL
-                  </Button>
-                </div>
-              </div>
-
-              {/* Fast dropzone banner */}
-              <div
-                onClick={() => fileUploadInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-200 hover:border-[#0C134F]/40 rounded-xl p-3.5 text-center bg-slate-50/60 hover:bg-slate-50 transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <div className="p-2 bg-white rounded-xl shadow-2xs group-hover:scale-105 transition-transform">
-                    <Upload className="w-4 h-4 text-[#0C134F]" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-xs font-semibold text-[#0C134F]">
-                      Click to choose picture from your computer
-                    </p>
-                    <p className="text-[10.5px] text-slate-400">
-                      Saves automatically to <span className="font-mono text-slate-600">/public/images/perfumes/</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Images List */}
-              <div className="space-y-3 pt-1">
-                {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                      img.isPrimary
-                        ? "bg-slate-50/90 border-[#0C134F]/40 ring-1 ring-[#0C134F]/20"
-                        : "bg-white border-slate-200/80 hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="w-13 h-13 bg-white border border-slate-200/90 rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-2xs relative">
-                      {img.url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={img.url}
-                          alt={img.altText || "Fragrance thumbnail"}
-                          className="w-full h-full object-contain p-1"
-                        />
-                      ) : (
-                        <ImageIcon className="w-5 h-5 text-slate-300" />
-                      )}
-                    </div>
-
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <Input
-                        placeholder="/images/perfumes/elite-fusion.png"
-                        value={img.url}
-                        onChange={(e) => {
-                          const next = [...images];
-                          next[idx].url = e.target.value;
-                          setImages(next);
-                        }}
-                        className="text-xs bg-white font-mono"
-                      />
-                      <Input
-                        placeholder="Alt description (e.g. Front flacon)"
-                        value={img.altText || ""}
-                        onChange={(e) => {
-                          const next = [...images];
-                          next[idx].altText = e.target.value;
-                          setImages(next);
-                        }}
-                        className="text-xs bg-white"
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => handleSetPrimaryImage(idx)}
-                        title="Set as Main Cover Photo"
-                        className={`px-2.5 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-wider border transition-all cursor-pointer ${
-                          img.isPrimary
-                            ? "bg-[#0C134F] text-white border-[#0C134F] shadow-xs"
-                            : "bg-white text-slate-600 border-slate-200 hover:border-[#0C134F]/30 hover:text-[#0C134F] hover:bg-slate-100"
-                        }`}
-                      >
-                        {img.isPrimary ? "★ Primary" : "Set Primary"}
-                      </button>
-
-                      {images.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(idx)}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
-                          title="Remove image"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ── ADVANCED OPTIONS & SEO COLLAPSIBLE ACCORDION ── */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden transition-all">
+            {/* Catalog Status Switch */}
+            <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
-                className="w-full p-5 flex items-center justify-between text-left hover:bg-slate-50/60 transition-colors cursor-pointer"
+                onClick={() => setStatus("active")}
+                className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                  status === "active"
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-800 shadow-2xs"
+                    : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-slate-100 text-[#0C134F]">
-                    <Sliders className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F]">
-                      Advanced Attributes & SEO (Optional)
-                    </h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Longevity, projection, seasonal compatibility, curated collections, and Google search metadata
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-medium text-slate-400">
-                    {isAdvancedOpen ? "Collapse" : "Expand"}
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                      isAdvancedOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </div>
+                ● Live on Store
               </button>
+              <button
+                type="button"
+                onClick={() => setStatus("draft")}
+                className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                  status === "draft"
+                    ? "bg-amber-50 border-amber-300 text-amber-800 shadow-2xs"
+                    : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                }`}
+              >
+                Draft (Hidden)
+              </button>
+            </div>
+          </div>
 
-              {isAdvancedOpen && (
-                <div className="p-6 pt-2 border-t border-slate-100 space-y-5 bg-slate-50/30">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Select
-                      label="Longevity Rating"
-                      value={longevity}
-                      onChange={(e) => setLongevity(e.target.value)}
-                      options={[
-                        { label: "8-10 Hours (Standard)", value: "8-10 Hours" },
-                        { label: "10-12 Hours (High)", value: "10-12 Hours" },
-                        { label: "12+ Hours (Beast Mode)", value: "12+ Hours" },
-                        { label: "6-8 Hours (Moderate)", value: "6-8 Hours" },
-                        { label: "4-6 Hours (Fresh/Light)", value: "4-6 Hours" },
-                      ]}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Card Cover Image Upload & Mini Preview */}
+            <div className="lg:col-span-5 space-y-3">
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block font-serif">
+                Collection Card Picture (Cover Photo) *
+              </label>
+
+              {cardImage ? (
+                <div className="space-y-2">
+                  <div className="relative group rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[4/5] max-h-[340px] sm:max-h-none max-w-xs sm:max-w-none mx-auto sm:mx-0 flex items-center justify-center p-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={cardImage}
+                      alt={name || "Card Cover Picture"}
+                      className="w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
                     />
 
-                    <Select
-                      label="Sillage / Projection"
-                      value={sillage}
-                      onChange={(e) => setSillage(e.target.value)}
-                      options={[
-                        { label: "Strong (Room Filler)", value: "Strong" },
-                        { label: "Moderate (Arms Length)", value: "Moderate" },
-                        { label: "Enormous (Heavy Trail)", value: "Enormous" },
-                        { label: "Intimate (Skin Scent)", value: "Intimate" },
-                      ]}
-                    />
+                    {/* Overlay Badges preview */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+                      {bestseller && (
+                        <span className="bg-[#590B16] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm">
+                          Best Seller
+                        </span>
+                      )}
+                      {newArrival && (
+                        <span className="bg-[#0C134F] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm">
+                          New
+                        </span>
+                      )}
+                    </div>
+
+                    {discountPct && (
+                      <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm pointer-events-none">
+                        {discountPct}% OFF
+                      </div>
+                    )}
+
+                    {/* Hover Change / Remove Actions (Desktop) */}
+                    <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex flex-col items-center justify-center gap-2 p-4">
+                      <p className="text-white text-xs font-semibold mb-1">
+                        Change Card Cover Picture
+                      </p>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => openPicker("card", "upload")}
+                          disabled={isUploadingImage}
+                          className="bg-white text-slate-900 hover:bg-slate-100 text-xs h-8 px-3 rounded-xl cursor-pointer"
+                        >
+                          <Upload className="w-3.5 h-3.5 mr-1" />
+                          From Computer
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => openPicker("card", "browse")}
+                          className="bg-indigo-600 text-white hover:bg-indigo-700 text-xs h-8 px-3 rounded-xl cursor-pointer"
+                        >
+                          <FolderOpen className="w-3.5 h-3.5 mr-1" />
+                          From Folder
+                        </Button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setCardImage("")}
+                        className="text-xs text-rose-300 hover:text-rose-100 underline mt-1 cursor-pointer"
+                      >
+                        Remove Picture
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-[#0C134F] flex items-center gap-1.5">
-                        <Sun className="w-3.5 h-3.5 text-amber-500" />
-                        Seasonal Compatibility
-                      </label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {SEASONS_LIST.map((s) => {
-                          const active = seasons.includes(s);
-                          return (
-                            <button
-                              key={s}
-                              type="button"
-                              onClick={() => handleSeasonToggle(s)}
-                              className={`text-xs px-3 py-1.5 rounded-xl border font-medium transition-all cursor-pointer ${
-                                active
-                                  ? "bg-amber-50 border-amber-300 text-amber-900 shadow-2xs font-semibold"
-                                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-                              }`}
-                            >
-                              {active ? "✓ " : ""}{s}
-                            </button>
-                          );
-                        })}
-                      </div>
+                  {/* Mobile Touch Action Buttons */}
+                  <div className="flex sm:hidden items-center justify-between gap-2 max-w-xs mx-auto">
+                    <div className="flex gap-2 flex-1">
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => openPicker("card", "upload")}
+                        disabled={isUploadingImage}
+                        className="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-[11px] h-8.5 rounded-xl cursor-pointer"
+                      >
+                        <Upload className="w-3 h-3 mr-1" />
+                        Computer
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => openPicker("card", "browse")}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] h-8.5 rounded-xl cursor-pointer"
+                      >
+                        <FolderOpen className="w-3 h-3 mr-1" />
+                        Folder
+                      </Button>
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-[#0C134F] flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-blue-500" />
-                        Recommended Occasions
-                      </label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {OCCASIONS_LIST.map((occ) => {
-                          const active = occasions.includes(occ);
-                          return (
-                            <button
-                              key={occ}
-                              type="button"
-                              onClick={() => handleOccasionToggle(occ)}
-                              className={`text-xs px-2.5 py-1.5 rounded-xl border font-medium transition-all cursor-pointer ${
-                                active
-                                  ? "bg-indigo-50 border-indigo-300 text-indigo-900 shadow-2xs font-semibold"
-                                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-                              }`}
-                            >
-                              {active ? "✓ " : ""}{occ}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCardImage("")}
+                      className="text-xs text-rose-500 font-semibold px-2 py-1 hover:underline"
+                    >
+                      Remove
+                    </button>
                   </div>
-
-                  {/* Curated Collections */}
-                  {collections.length > 0 && (
-                    <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                      <label className="text-xs font-semibold text-[#0C134F] block">
-                        Assign to Curated Collections
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {collections.map((col) => (
-                          <Checkbox
-                            key={col._id}
-                            label={col.name}
-                            checked={selectedCollections.includes(col._id)}
-                            onChange={() => handleCollectionToggle(col._id)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* SEO Metadata */}
-                  <div className="space-y-3 pt-2 border-t border-slate-100">
-                    <label className="text-xs font-semibold text-[#0C134F] flex items-center gap-1.5">
-                      <Search className="w-3.5 h-3.5 text-slate-400" />
-                      Search Engine Optimization (SEO)
-                    </label>
-
-                    <Input
-                      label="Meta Title"
-                      placeholder="e.g. Elite Fusion Extrait de Parfum | Soulmate Scents"
-                      value={metaTitle}
-                      onChange={(e) => setMetaTitle(e.target.value)}
-                      className="text-xs"
-                    />
-
-                    <Textarea
-                      label="Meta Description"
-                      placeholder="150-160 character sensory synopsis for Google search results..."
-                      value={metaDescription}
-                      onChange={(e) => setMetaDescription(e.target.value)}
-                      rows={2}
-                      className="text-xs leading-relaxed resize-none"
-                    />
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-slate-300 hover:border-[#0C134F]/40 rounded-2xl p-6 text-center bg-slate-50/70 hover:bg-slate-50 transition-colors aspect-[4/5] flex flex-col items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-white shadow-xs border border-slate-200 flex items-center justify-center mb-3">
+                    <ImageIcon className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <p className="text-xs font-bold text-slate-800 mb-1">
+                    Upload Card Picture
+                  </p>
+                  <p className="text-[11px] text-slate-400 mb-4 max-w-[200px]">
+                    This is the main flacon photo that appears on collection cards
+                  </p>
+                  <div className="flex flex-col gap-2 w-full max-w-[220px]">
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => openPicker("card", "upload")}
+                      disabled={isUploadingImage}
+                      className="w-full bg-[#0C134F] hover:bg-[#0C134F]/90 text-white text-xs h-8.5 rounded-xl cursor-pointer gap-1.5 shadow-2xs font-semibold"
+                    >
+                      {isUploadingImage ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Upload className="w-3.5 h-3.5" />
+                      )}
+                      Upload from Computer
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openPicker("card", "browse")}
+                      className="w-full border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs h-8.5 rounded-xl cursor-pointer gap-1.5 font-semibold"
+                    >
+                      <FolderOpen className="w-3.5 h-3.5 text-indigo-600" />
+                      Pick from Perfumes Folder
+                    </Button>
                   </div>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Right Column: Publication, Visibility & Sticky Actions */}
-          <div className="space-y-6 lg:sticky lg:top-24">
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs space-y-5">
-              <h3 className="text-xs uppercase tracking-[0.18em] font-bold text-[#0C134F] border-b border-slate-100 pb-3 flex items-center gap-2">
-                <Eye className="w-4 h-4 text-slate-400" />
-                Publication & Visibility
-              </h3>
-
-              <Select
-                label="Catalog Status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as "active" | "draft" | "archived")}
-                options={[
-                  { label: "Active (Published on Storefront)", value: "active" },
-                  { label: "Draft (Hidden / Unlisted)", value: "draft" },
-                  { label: "Archived (Discontinued)", value: "archived" },
-                ]}
-              />
-
-              <div className="space-y-3 pt-2 border-t border-slate-100">
-                <label className="text-xs font-semibold text-[#0C134F] block">
-                  Merchandising Badges
-                </label>
-                <Checkbox
-                  label="Featured on Homepage"
-                  checked={featured}
-                  onChange={(e) => setFeatured(e.target.checked)}
-                />
-                <Checkbox
-                  label="Bestseller Badge"
-                  checked={bestseller}
-                  onChange={(e) => setBestseller(e.target.checked)}
-                />
-                <Checkbox
-                  label="New Arrival Highlight"
-                  checked={newArrival}
-                  onChange={(e) => setNewArrival(e.target.checked)}
+            {/* Card Content & Details */}
+            <div className="lg:col-span-7 space-y-4">
+              <div>
+                <Input
+                  label="Fragrance Name *"
+                  placeholder="e.g. Crown Legacy, Elite Fusion"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="text-sm font-semibold"
                 />
               </div>
 
-              <div className="pt-4 border-t border-slate-100 space-y-2.5">
-                <Button
-                  type="submit"
-                  variant="brand"
-                  size="lg"
-                  className="w-full gap-2 text-xs font-bold uppercase tracking-wider h-11 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer bg-[#0C134F] hover:bg-[#0C134F]/90 text-white"
-                  isLoading={isSubmitting}
-                >
-                  <Check className="w-4 h-4" />
-                  {isEdit ? "Update Fragrance" : "Publish Fragrance"}
-                </Button>
+              {/* Pricing & Stock Row */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                    Selling Price (Rs.) *
+                  </label>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="13500"
+                    value={cardPrice}
+                    onChange={(e) => setCardPrice(Number(e.target.value) || 0)}
+                    className="text-xs bg-white font-mono"
+                  />
+                </div>
 
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                    Original Price (Rs.)
+                  </label>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="15500"
+                    value={cardComparePrice || ""}
+                    onChange={(e) =>
+                      setCardComparePrice(e.target.value ? Number(e.target.value) : undefined)
+                    }
+                    className="text-xs bg-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                    Primary Size
+                  </label>
+                  <Input
+                    placeholder="50ml"
+                    value={cardSize}
+                    onChange={(e) => setCardSize(e.target.value)}
+                    className="text-xs bg-white font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                    Stock Badge
+                  </label>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="25"
+                    value={cardStock}
+                    onChange={(e) => setCardStock(Number(e.target.value) || 0)}
+                    className="text-xs bg-white font-mono"
+                  />
+                </div>
+              </div>
+
+              {/* Card Short Sensory Teaser */}
+              <Textarea
+                label="Short Sensory Teaser (Shown on Collection Card Overview)"
+                placeholder="e.g. Bold, magnetic, and built for modern leaders."
+                value={shortDescription}
+                onChange={(e) => setShortDescription(e.target.value)}
+                rows={2}
+                className="text-xs leading-relaxed resize-none bg-white"
+              />
+
+              {/* Card Merchandising Ribbons */}
+              <div className="pt-2">
+                <label className="text-xs font-semibold text-slate-700 block mb-2 font-serif">
+                  Card Ribbons & Badges:
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div
+                    onClick={() => setBestseller(!bestseller)}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
+                      bestseller
+                        ? "bg-[#590B16]/5 border-[#590B16]/30 text-[#590B16]"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Flame className={`w-3.5 h-3.5 ${bestseller ? "text-[#590B16]" : "text-slate-400"}`} />
+                      <span className="text-xs font-bold">Best Seller</span>
+                    </div>
+                    <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${bestseller ? "bg-[#590B16] border-[#590B16] text-white" : "border-slate-300 bg-white"}`}>
+                      {bestseller && <Check className="w-2.5 h-2.5" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setNewArrival(!newArrival)}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
+                      newArrival
+                        ? "bg-indigo-50/60 border-indigo-200 text-[#0C134F]"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Star className={`w-3.5 h-3.5 ${newArrival ? "text-indigo-600" : "text-slate-400"}`} />
+                      <span className="text-xs font-bold">New Arrival</span>
+                    </div>
+                    <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${newArrival ? "bg-[#0C134F] border-[#0C134F] text-white" : "border-slate-300 bg-white"}`}>
+                      {newArrival && <Check className="w-2.5 h-2.5" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setFeatured(!featured)}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
+                      featured
+                        ? "bg-amber-50/70 border-amber-200 text-amber-900"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Sparkles className={`w-3.5 h-3.5 ${featured ? "text-amber-600" : "text-slate-400"}`} />
+                      <span className="text-xs font-bold">Featured</span>
+                    </div>
+                    <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${featured ? "bg-amber-600 border-amber-600 text-white" : "border-slate-300 bg-white"}`}>
+                      {featured && <Check className="w-2.5 h-2.5" />}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ═════════════════════════════════════════════════════════════════════ */}
+        {/* 📖 CARD B: PRODUCT DETAIL PAGE EXPERIENCE                           */}
+        {/* ═════════════════════════════════════════════════════════════════════ */}
+        <div className="bg-white border-2 border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xs space-y-5 sm:space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200/60 text-rose-800 text-[10px] font-bold uppercase tracking-wider mb-1.5 font-mono">
+              <Eye className="w-3 h-3 text-rose-700" />
+              Product Detail Page Experience
+            </div>
+            <h2 className="text-lg font-serif font-bold text-slate-900">
+              2. Detail Page Showcase & Composition
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Upload 3 to 4 gallery photos, set the 3 Olfactory Pyramid notes, and configure full fragrance narrative.
+            </p>
+          </div>
+
+          {/* ── B.1: DETAIL PAGE GALLERY (3 to 4 Photos) ── */}
+          <div className="space-y-3 p-5 bg-slate-50/70 rounded-2xl border border-slate-200/80">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-xs uppercase tracking-wider font-bold text-slate-800 flex items-center gap-2 font-serif">
+                  <ImageIcon className="w-4 h-4 text-indigo-600" />
+                  Detail Page Gallery Photos (3 to 4 Pictures)
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Customers view these angles in the thumbnail carousel and full-screen gallery.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleCancel}
-                  className="w-full text-xs font-semibold text-slate-600 hover:text-[#0C134F] hover:bg-slate-50 border-slate-200 rounded-xl h-10 transition-all cursor-pointer"
+                  size="sm"
+                  onClick={() => openPicker(detailImages.length < 4 ? detailImages.length : 0, "upload")}
+                  disabled={isUploadingImage}
+                  className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] font-semibold cursor-pointer shadow-2xs"
                 >
-                  Cancel
+                  <Upload className="w-3.5 h-3.5" />
+                  Upload from Computer
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openPicker(detailImages.length < 4 ? detailImages.length : 0, "browse")}
+                  className="gap-1.5 text-xs h-8 rounded-xl border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-900 font-semibold cursor-pointer shadow-2xs"
+                >
+                  <FolderOpen className="w-3.5 h-3.5 text-indigo-600" />
+                  Pick from Folder
                 </Button>
               </div>
             </div>
+
+            {/* 4 Gallery Slots Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-2">
+              {[0, 1, 2, 3].map((slotIdx) => {
+                const imgUrl = detailImages[slotIdx];
+                const slotLabels = [
+                  "1. Front Flacon",
+                  "2. Angle / Cap",
+                  "3. Box / Packaging",
+                  "4. Lifestyle Scene",
+                ];
+
+                return (
+                  <div
+                    key={slotIdx}
+                    className="p-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex flex-col items-center text-center relative group"
+                  >
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 font-mono">
+                      {slotLabels[slotIdx]}
+                    </span>
+
+                    {imgUrl ? (
+                      <div className="w-full space-y-1.5">
+                        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-50 border border-slate-100 p-2 flex items-center justify-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={imgUrl}
+                            alt={`Detail view ${slotIdx + 1}`}
+                            className="w-full h-full object-contain drop-shadow-xs"
+                          />
+                          {/* Hover Overlay (Desktop) */}
+                          <div className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex flex-col items-center justify-center gap-1.5 p-2">
+                            <button
+                              type="button"
+                              onClick={() => openPicker(slotIdx, "upload")}
+                              className="px-2 py-1 bg-white text-slate-900 rounded text-[10px] font-bold hover:bg-slate-100 cursor-pointer"
+                            >
+                              Replace
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveDetailImage(slotIdx)}
+                              className="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold hover:bg-rose-700 cursor-pointer"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Mobile visible action buttons */}
+                        <div className="flex sm:hidden items-center justify-center gap-1 w-full pt-1">
+                          <button
+                            type="button"
+                            onClick={() => openPicker(slotIdx, "upload")}
+                            className="flex-1 py-1 px-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-md text-[9.5px] font-semibold"
+                          >
+                            Change
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveDetailImage(slotIdx)}
+                            className="py-1 px-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md text-[9.5px] font-semibold"
+                            title="Remove"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => openPicker(slotIdx, "upload")}
+                        className="w-full aspect-square rounded-lg border-2 border-dashed border-slate-200 hover:border-[#0C134F]/40 bg-slate-50/50 hover:bg-slate-50 flex flex-col items-center justify-center cursor-pointer transition-all p-2"
+                      >
+                        <Plus className="w-5 h-5 text-slate-400 mb-1" />
+                        <span className="text-[10.5px] font-semibold text-slate-600">Add View {slotIdx + 1}</span>
+                        <span className="text-[9px] text-slate-400">Upload or Pick</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── B.2: OLFACTORY PYRAMID (The 3 Scent Circles) ── */}
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-xs uppercase tracking-wider font-bold text-slate-800 flex items-center gap-2 font-serif">
+                <Sparkles className="w-4 h-4 text-amber-600" />
+                Olfactory Pyramid (Shown in 3 Circular Badges on Detail Page)
+              </h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Each section directly populates the Top, Heart, and Base note cards under the fragrance composition.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              <div className="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 font-serif">🌸 Top Notes</span>
+                  <span className="text-[10px] text-slate-400 font-mono">Opening 15m</span>
+                </div>
+                <Input
+                  placeholder="Bergamot, Saffron, Pink Pepper"
+                  value={topNotes}
+                  onChange={(e) => setTopNotes(e.target.value)}
+                  className="text-xs bg-white"
+                />
+                <p className="text-[10px] text-slate-400">Comma-separated opening accord</p>
+              </div>
+
+              <div className="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 font-serif">🪵 Heart Notes</span>
+                  <span className="text-[10px] text-slate-400 font-mono">Core 2-4h</span>
+                </div>
+                <Input
+                  placeholder="Damascus Rose, Rich Oud, Amber"
+                  value={heartNotes}
+                  onChange={(e) => setHeartNotes(e.target.value)}
+                  className="text-xs bg-white"
+                />
+                <p className="text-[10px] text-slate-400">Comma-separated mid accord</p>
+              </div>
+
+              <div className="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 font-serif">🍂 Base Notes</span>
+                  <span className="text-[10px] text-slate-400 font-mono">Drydown 8-14h</span>
+                </div>
+                <Input
+                  placeholder="Sandalwood, Bourbon Vanilla, Musk"
+                  value={baseNotes}
+                  onChange={(e) => setBaseNotes(e.target.value)}
+                  className="text-xs bg-white"
+                />
+                <p className="text-[10px] text-slate-400">Comma-separated foundation</p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── B.3: GENDER, REVIEWS & FULL NARRATIVE ── */}
+          <div className="space-y-4 pt-2 border-t border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Select
+                label="Gender Suitability"
+                value={gender}
+                onChange={(e) => setGender(e.target.value as "Unisex" | "Men" | "Women")}
+                options={GENDER_OPTIONS}
+              />
+
+              <Input
+                label="Customer Rating (Stars ⭐)"
+                type="number"
+                step="0.1"
+                min="1"
+                max="5"
+                placeholder="4.9"
+                value={rating}
+                onChange={(e) => setRating(Number(e.target.value) || 5)}
+                className="text-xs bg-white font-mono"
+              />
+
+              <Input
+                label="Total Reviews Count"
+                type="number"
+                min="0"
+                placeholder="128"
+                value={ratingCount}
+                onChange={(e) => setRatingCount(Number(e.target.value) || 0)}
+                className="text-xs bg-white font-mono"
+              />
+            </div>
+
+            {/* Full Narrative Textarea */}
+            <Textarea
+              label="Full Olfactory Narrative (Shown in Detail Page Description Tab)"
+              placeholder="A captivating, regal scent crafted with rare essences..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="text-xs leading-relaxed resize-none bg-white"
+            />
+          </div>
+
+          {/* ── B.4: OPTIONAL SECONDARY SIZES ── */}
+          <div className="pt-2 border-t border-slate-100 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-bold text-slate-800 font-serif">
+                  Additional Flacon Sizes (Optional for Detail Page)
+                </h4>
+                <p className="text-[11px] text-slate-400">
+                  Allow customers to switch between 50ml, 100ml, or discovery travel bottles.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase text-slate-400 mr-1">Add:</span>
+                {["100ml", "30ml", "10ml"].map((sz) => (
+                  <button
+                    key={sz}
+                    type="button"
+                    onClick={() => handleAddExtraVariant(sz)}
+                    className="text-[11px] h-7 px-2.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold cursor-pointer shadow-2xs transition-all hover:border-[#0C134F]/30"
+                  >
+                    +{sz}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {extraVariants.length > 0 && (
+              <div className="space-y-2.5">
+                {extraVariants.map((v, idx) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 items-end"
+                  >
+                    <div>
+                      <label className="text-[10.5px] font-semibold text-slate-600 block mb-1">
+                        Size
+                      </label>
+                      <Input
+                        value={v.size}
+                        onChange={(e) => {
+                          const next = [...extraVariants];
+                          next[idx].size = e.target.value;
+                          setExtraVariants(next);
+                        }}
+                        className="text-xs bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-semibold text-slate-600 block mb-1">
+                        Price (Rs.)
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={v.price}
+                        onChange={(e) => {
+                          const next = [...extraVariants];
+                          next[idx].price = Number(e.target.value) || 0;
+                          setExtraVariants(next);
+                        }}
+                        className="text-xs bg-white font-mono"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-semibold text-slate-600 block mb-1">
+                        Compare Price (Rs.)
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={v.compareAtPrice || ""}
+                        onChange={(e) => {
+                          const next = [...extraVariants];
+                          next[idx].compareAtPrice = e.target.value ? Number(e.target.value) : undefined;
+                          setExtraVariants(next);
+                        }}
+                        className="text-xs bg-white font-mono"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <label className="text-[10.5px] font-semibold text-slate-600 block mb-1">
+                          Stock
+                        </label>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={v.stock}
+                          onChange={(e) => {
+                            const next = [...extraVariants];
+                            next[idx].stock = Number(e.target.value) || 0;
+                            setExtraVariants(next);
+                          }}
+                          className="text-xs bg-white font-mono"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExtraVariants(extraVariants.filter((_, i) => i !== idx))
+                        }
+                        className="h-9 w-9 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0 mt-auto"
+                        title="Remove size"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Floating / Sticky Save Action Bar */}
+        <div className="sticky bottom-4 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-lg flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="flex items-center justify-between sm:justify-start gap-3 flex-wrap">
+            <span className="text-xs font-serif font-bold text-slate-900 hidden sm:inline truncate max-w-[200px]">
+              {name ? name : "Untitled Fragrance"}
+            </span>
+            <span className="text-[11px] text-slate-400">
+              Status: <strong className={status === "active" ? "text-emerald-700" : "text-amber-700"}>{status === "active" ? "Live on Storefront" : "Draft (Hidden)"}</strong>
+            </span>
+            {successMessage && (
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full flex items-center gap-1.5 animate-in fade-in">
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Updated!</span>
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end gap-2.5 w-full sm:w-auto">
+            <Link
+              href="/admin/products"
+              className="flex-1 sm:flex-initial text-center px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all border border-slate-200"
+            >
+              Cancel
+            </Link>
+            <Button
+              type="submit"
+              variant="brand"
+              isLoading={isSubmitting}
+              className="flex-1 sm:flex-initial px-5 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider h-10 rounded-xl bg-[#0C134F] hover:bg-[#0C134F]/90 text-white shadow-xs cursor-pointer gap-2"
+            >
+              <Check className="w-4 h-4" />
+              {isEdit ? "Update Fragrance" : "Publish Fragrance"}
+            </Button>
           </div>
         </div>
       </form>

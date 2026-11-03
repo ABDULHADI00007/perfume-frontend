@@ -9,14 +9,14 @@ export function AdminAppShellSkeleton({ className = "" }: { className?: string }
   return (
     <div
       className={cn(
-        "min-h-screen flex flex-col md:flex-row bg-[#F8F9FA] font-sans text-slate-900 select-none animate-in fade-in duration-300",
+        "min-h-screen flex flex-col lg:flex-row bg-[#F8F9FA] font-sans text-slate-900 select-none animate-in fade-in duration-300",
         className
       )}
       aria-label="Loading Admin Portal..."
       aria-busy="true"
     >
       {/* 1. Left Persistent Sidebar Skeleton */}
-      <aside className="hidden md:flex w-72 lg:w-80 bg-white h-screen sticky top-0 shrink-0 p-5 sm:p-6 flex-col justify-between border-r border-slate-200/80 shadow-[2px_0_16px_rgba(18,23,53,0.02)]">
+      <aside className="hidden lg:flex w-72 lg:w-80 bg-white h-screen sticky top-0 shrink-0 p-5 sm:p-6 flex-col justify-between border-r border-slate-200/80 shadow-[2px_0_16px_rgba(18,23,53,0.02)]">
         <div className="space-y-6">
           {/* Brand Header Skeleton */}
           <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
@@ -64,9 +64,9 @@ export function AdminAppShellSkeleton({ className = "" }: { className?: string }
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         {/* Top Header Skeleton */}
         <header className="h-16 px-4 sm:px-6 lg:px-8 bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 flex items-center justify-between gap-4">
-          {/* Mobile hamburger placeholder + Search Bar */}
+          {/* Mobile/Tablet hamburger placeholder + Search Bar */}
           <div className="flex items-center gap-3 flex-1 max-w-md">
-            <Skeleton className="md:hidden w-8 h-8 rounded-lg bg-slate-200/80" />
+            <Skeleton className="lg:hidden w-8 h-8 rounded-lg bg-slate-200/80" />
             <Skeleton className="h-9 w-full rounded-xl bg-slate-100 border border-slate-200/60" />
           </div>
 

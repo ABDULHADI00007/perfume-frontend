@@ -3,7 +3,8 @@
 import React, { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icons } from "./icons";
-import { drawerVariants, overlayVariants } from "@/lib/motion";
+import { drawerVariants, drawerLeftVariants, overlayVariants } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 export interface DrawerProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   description,
   children,
   footer,
+  position = "right",
   maxWidth = "md",
 }) => {
   const handleKeyDown = useCallback(
@@ -76,13 +78,22 @@ export const Drawer: React.FC<DrawerProps> = ({
             className="fixed inset-0 bg-black/60 backdrop-blur-[2px]"
           />
 
-          <div className="fixed inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10">
+          <div
+            className={cn(
+              "fixed inset-y-0 max-w-full flex",
+              position === "left" ? "left-0 pr-4 sm:pr-10" : "right-0 pl-4 sm:pl-10"
+            )}
+          >
             <motion.div
-              variants={drawerVariants}
+              variants={position === "left" ? drawerLeftVariants : drawerVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`w-screen ${maxWidthMap[maxWidth]} bg-surface border-l border-border shadow-modal flex flex-col`}
+              className={cn(
+                "w-screen bg-surface shadow-modal flex flex-col",
+                maxWidthMap[maxWidth],
+                position === "left" ? "border-r border-border" : "border-l border-border"
+              )}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border-subtle">

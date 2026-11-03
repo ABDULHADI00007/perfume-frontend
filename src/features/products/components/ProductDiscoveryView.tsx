@@ -80,28 +80,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
     );
   };
 
-  const ALLOWED_LUXURY_SLUGS = [
-    "elite-fusion",
-    "crown-legacy",
-    "blue-horizon",
-    "sultans-veil",
-    "velvet-orchid",
-    "infinite-boss",
-    "pulse",
-    "noble-ocean",
-    "whispers-bloom",
-    "vivid-desire",
-    "dusk",
-    "suroor",
-    "gentle-man",
-    "secret-garden",
-    "eternal-blaze",
-  ];
-
   const { products } = useMemo(() => {
-    let filtered = initialProducts.filter((p) =>
-      ALLOWED_LUXURY_SLUGS.includes(p.slug)
-    );
+    let filtered = initialProducts;
     if (activeCategory === "men") {
       filtered = filtered.filter((p) => (p.gender || "").toLowerCase() === "men");
     } else if (activeCategory === "women") {

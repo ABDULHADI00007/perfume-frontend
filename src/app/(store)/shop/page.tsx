@@ -19,17 +19,12 @@ async function getLiveProducts(): Promise<Product[]> {
   try {
     const res = await productService.getProducts({ limit: 100 });
     if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
-      const dynamicMap = new Map<string, Product>();
-      res.data.forEach((p) => {
-        if (p.slug) dynamicMap.set(p.slug, p);
-      });
-
-      const merged = allProducts.map((staticProd) => {
-        const live = dynamicMap.get(staticProd.slug);
-        return live ? { ...staticProd, ...live } : staticProd;
-      });
-
-      return merged;
+      // Live database products are the primary source of truth
+      const liveProducts = res.data;
+      const liveSlugs = new Set(liveProducts.map((p) => p.slug).filter(Boolean));
+      // Merge with static products only for any legacy slugs not yet in DB
+      const fallbackExtras = allProducts.filter((p) => !liveSlugs.has(p.slug));
+      return [...liveProducts, ...fallbackExtras];
     }
   } catch {
     // API offline, fallback to static dataset

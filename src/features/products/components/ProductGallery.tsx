@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 export interface ProductGalleryProps {
   images: string[];
@@ -19,6 +22,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const displayImages =
     images && images.length > 0
@@ -32,22 +40,43 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 
   const currentImage = displayImages[selectedImageIndex] || displayImages[0];
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
     setSelectedImageIndex((prev) => (prev > 0 ? prev - 1 : displayImages.length - 1));
-  };
+  }, [displayImages.length]);
 
-  const handleNextImage = () => {
+  const handleNextImage = useCallback(() => {
     setSelectedImageIndex((prev) => (prev < displayImages.length - 1 ? prev + 1 : 0));
-  };
+  }, [displayImages.length]);
 
-  const handleDownloadImage = () => {
-    const link = document.createElement("a");
-    link.href = currentImage;
-    link.download = `${title.toLowerCase().replace(/\s+/g, "-")}-view-${selectedImageIndex + 1}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  useEffect(() => {
+    if (!isZoomOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsZoomOpen(false);
+      } else if (e.key === "ArrowLeft") {
+        handlePrevImage();
+      } else if (e.key === "ArrowRight") {
+        handleNextImage();
+      }
+    };
+
+    const origBodyOverflow = document.body.style.overflow;
+    const origHtmlOverflow = document.documentElement.style.overflow;
+    const origBodyTouchAction = document.body.style.touchAction;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = origBodyOverflow;
+      document.documentElement.style.overflow = origHtmlOverflow;
+      document.body.style.touchAction = origBodyTouchAction;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isZoomOpen, handlePrevImage, handleNextImage]);
 
   return (
     <div className={`flex flex-col sm:flex-row gap-4 items-start w-full ${className}`}>
@@ -89,26 +118,24 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
           })}
         </div>
 
-      {/* Primary Flacon Display Area (Top on Mobile, Right Column on Desktop - Original Size with Bottom Cropping) */}
+      {/* Primary Flacon Display Area (Top on Mobile, Right Column on Desktop) */}
       <div className="relative order-1 sm:order-2 sm:flex-1 w-full aspect-[4/4.5] sm:aspect-auto sm:h-[560px] lg:h-[580px] rounded-2xl overflow-hidden bg-[#0F1524] shadow-lg group border-none outline-none ring-0">
         {/* Fullscreen Expand Icon Button (Top-Right) */}
         <button
           type="button"
           onClick={() => setIsZoomOpen(true)}
           aria-label={`Enlarge image for ${title}`}
-          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none"
+          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none cursor-pointer"
           title="Expand image"
         >
-          <svg className="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-          </svg>
+          <Maximize2 className="w-4 h-4" />
         </button>
 
-        {/* Main Image Trigger (Anchored to top: bottle cap fully visible, extra bottom marble space cropped) */}
+        {/* Main Image Trigger */}
         <button
           type="button"
           onClick={() => setIsZoomOpen(true)}
-          className="w-full h-full block cursor-zoom-in relative border-none outline-none focus:outline-none focus:ring-0 select-none"
+          className="w-full h-full block cursor-zoom-in relative border-none outline-none focus:outline-none focus:ring-0 select-none p-2 sm:p-0"
           aria-label="Enlarge showcase image"
         >
           <Image
@@ -117,8 +144,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             fill
             priority
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 50vw"
-            className="object-cover object-[center_20%] w-full h-full transition-transform duration-700 ease-out"
-            style={{ objectPosition: "center 20%" }}
+            className="object-contain sm:object-cover sm:object-[center_20%] w-full h-full transition-transform duration-700 ease-out"
           />
         </button>
 
@@ -130,161 +156,104 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
         </div>
       </div>
 
-            {/* FULLSCREEN LUXURY GALLERY MODAL (Exact match to User's Reference Screenshot) */}
+      {/* 21st.dev ANIMATED MINIMALIST LIGHTBOX MODAL (PORTAL) */}
+      {isMounted &&
+        createPortal(
+          <AnimatePresence>
             {isZoomOpen && (
-              <div
-                className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                className="fixed inset-0 z-[99999] bg-white w-screen h-screen overflow-hidden flex items-center justify-center p-4 sm:p-8 select-none"
+                style={{ overscrollBehavior: "none" }}
                 role="dialog"
                 aria-modal="true"
-                aria-label={`${title} Fullscreen Gallery`}
+                aria-label={`${title} image preview`}
+                onClick={() => setIsZoomOpen(false)}
+                onWheel={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
               >
-                {/* Modal Container Card */}
-                <div className="relative w-full max-w-6xl max-h-[92vh] bg-[#0B0F19] rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col lg:flex-row">
-                  {/* Top Close Button (✕) */}
-                  <button
-                    type="button"
-                    onClick={() => setIsZoomOpen(false)}
-                    className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
-                    aria-label="Close modal"
-                  >
-                    ✕
-                  </button>
+                {/* Top-Right Close Button (✕) */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsZoomOpen(false);
+                  }}
+                  className="absolute top-5 right-5 sm:top-8 sm:right-8 z-[100000] p-2.5 rounded-full text-stone-600 hover:text-black hover:bg-stone-100 transition-colors cursor-pointer outline-none"
+                  aria-label="Close preview"
+                >
+                  <X className="w-6 h-6 sm:w-7 sm:h-7" />
+                </motion.button>
 
-                  {/* Left Thumbnail Strip */}
-                  <div className="hidden lg:flex flex-col gap-3 w-28 p-4 bg-[#070A11] border-r border-white/10 overflow-y-auto scrollbar-none flex-shrink-0">
-                    {displayImages.map((img, idx) => {
-                      const isSelected = selectedImageIndex === idx;
-                      return (
-                        <button
-                          key={`modal-thumb-${idx}`}
-                          type="button"
-                          onClick={() => setSelectedImageIndex(idx)}
-                          className={`relative w-20 h-20 rounded-xl overflow-hidden transition-all flex-shrink-0 border-none outline-none focus:outline-none ${isSelected
-                            ? "ring-2 ring-white/50 scale-95 opacity-100"
-                            : "opacity-50 hover:opacity-100"
-                            }`}
-                        >
-                          <Image src={img} alt={`Thumb ${idx + 1}`} fill sizes="80px" className="object-cover" />
-                        </button>
-                      );
-                    })}
-                  </div>
+                {/* Previous Arrow Button (‹) - Always visible */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevImage();
+                  }}
+                  className="absolute left-3 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-[100000] p-3 sm:p-4 rounded-full text-stone-700 hover:text-black hover:bg-stone-100/90 transition-all cursor-pointer outline-none select-none"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8 stroke-[1.75]" />
+                </motion.button>
 
-                  {/* Center Main Showcase Area */}
-                  <div className="relative flex-1 bg-[#070A11] flex items-center justify-center p-6 min-h-[350px] sm:min-h-[500px]">
-                    {/* Prev Button (‹) */}
-                    <button
-                      type="button"
-                      onClick={handlePrevImage}
-                      className="absolute left-4 z-20 w-11 h-11 rounded-full bg-black/40 hover:bg-black/80 text-white border border-white/20 flex items-center justify-center text-xl transition-all backdrop-blur-md"
-                      aria-label="Previous image"
+                {/* Central Showcase Image */}
+                <motion.div
+                  initial={{ scale: 0.92, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.92, opacity: 0 }}
+                  transition={{ type: "spring", damping: 28, stiffness: 320 }}
+                  className="relative w-full max-w-4xl h-[74vh] sm:h-[80vh] max-h-[80vh] flex items-center justify-center overflow-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={selectedImageIndex}
+                      initial={{ opacity: 0.75, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0.75, scale: 0.98 }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      className="relative w-full h-full flex items-center justify-center"
                     >
-                      ‹
-                    </button>
-
-                    {/* Main Image */}
-                    <div className="relative w-full h-full max-h-[72vh] aspect-square">
                       <Image
                         src={currentImage}
                         alt={title}
                         fill
-                        sizes="(max-width: 1024px) 90vw, 72vh"
-                        className="object-contain"
+                        priority
+                        sizes="(max-width: 1024px) 95vw, 1200px"
+                        className="object-contain pointer-events-none"
                       />
-                    </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </motion.div>
 
-                    {/* Next Button (›) */}
-                    <button
-                      type="button"
-                      onClick={handleNextImage}
-                      className="absolute right-4 z-20 w-11 h-11 rounded-full bg-black/40 hover:bg-black/80 text-white border border-white/20 flex items-center justify-center text-xl transition-all backdrop-blur-md"
-                      aria-label="Next image"
-                    >
-                      ›
-                    </button>
-
-                    {/* Counter Overlay (e.g. 1 / 4) */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-3.5 py-1 rounded-full border border-white/10 backdrop-blur-md">
-                      {selectedImageIndex + 1} / {displayImages.length}
-                    </div>
-                  </div>
-
-                  {/* Right Information & Action Controls Sidebar */}
-                  <div className="w-full lg:w-80 bg-[#0B0F19] text-white p-6 sm:p-8 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/10">
-                    <div className="flex flex-col space-y-4">
-                      <div>
-                        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                          {title}
-                        </h2>
-                        <p className="text-xs text-gray-400 mt-1">
-                          Eau de Parfum | 50ml
-                        </p>
-                      </div>
-
-                      <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                        A bold and sophisticated fragrance crafted for those who lead with presence. Blending rare extracts with warm spices and amber.
-                      </p>
-
-                      <div className="w-full h-[1px] bg-white/10 my-2" />
-
-                      {/* 4 Feature Control Actions */}
-                      <div className="flex flex-col space-y-3.5 pt-1">
-                        <div className="flex items-center gap-3 text-xs text-gray-300">
-                          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                            🔍
-                          </div>
-                          <div>
-                            <strong className="block text-white font-medium">Zoom In / Out</strong>
-                            <span className="text-[10px] text-gray-400">Scroll to zoom</span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-gray-300">
-                          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                            🔄
-                          </div>
-                          <div>
-                            <strong className="block text-white font-medium">View Details</strong>
-                            <span className="text-[10px] text-gray-400">See every detail up close</span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-gray-300">
-                          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                            ⤢
-                          </div>
-                          <div>
-                            <strong className="block text-white font-medium">Fullscreen</strong>
-                            <span className="text-[10px] text-gray-400">Immersive view</span>
-                          </div>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={handleDownloadImage}
-                          className="flex items-center gap-3 text-xs text-gray-300 hover:text-white transition-colors group cursor-pointer text-left"
-                        >
-                          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/20">
-                            📥
-                          </div>
-                          <div>
-                            <strong className="block text-white font-medium">Download Image</strong>
-                            <span className="text-[10px] text-gray-400">Save for reference</span>
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Bottom Watermark Script */}
-                    <div className="pt-6 border-t border-white/10 mt-6">
-                      <span className="font-serif italic text-lg text-white/80 tracking-wide">
-                        Details Define Luxury
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                {/* Next Arrow Button (›) - Always visible */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextImage();
+                  }}
+                  className="absolute right-3 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-[100000] p-3 sm:p-4 rounded-full text-stone-700 hover:text-black hover:bg-stone-100/90 transition-all cursor-pointer outline-none select-none"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8 stroke-[1.75]" />
+                </motion.button>
+              </motion.div>
             )}
-          </div>
-          );
+          </AnimatePresence>,
+          document.body
+        )}
+    </div>
+  );
 };

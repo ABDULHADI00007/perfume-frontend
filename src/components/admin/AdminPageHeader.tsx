@@ -37,7 +37,7 @@ export const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({
     <div className={`space-y-4 pb-6 border-b border-slate-200/80 ${className}`}>
       {/* Optional Breadcrumbs */}
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-xs">
+        <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-xs overflow-x-auto whitespace-nowrap pb-1 scrollbar-none">
           <Link
             href="/admin"
             className="text-slate-400 hover:text-[#0C134F] transition-colors flex items-center gap-1 font-medium"
