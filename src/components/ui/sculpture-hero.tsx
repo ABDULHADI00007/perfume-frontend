@@ -684,26 +684,31 @@ class LiquidEngine {
     const gl = this.gl
     const home = this.homeData
     if (!home) return
-    const w = this.rect.w > 10 ? this.rect.w : 1300
     const h = this.rect.h > 10 ? this.rect.h : 600
     const total = TEX_W * this.texH
     const st = new Float32Array(total * 4)
+
     for (let i = 0; i < this.n; i++) {
       const hx = home[i * 4] - 0.5
-      const hy = home[i * 4 + 1] - 0.5
       const sd = home[i * 4 + 2]
 
-      // Particles on the left disperse far left, particles on the right disperse far right
-      const side = hx >= 0 ? 1 : -1
-      const disperseX = side * (w * (0.24 + Math.random() * 0.38)) + hx * w * 0.45 * (0.7 + sd * 0.7)
-      const disperseY = (Math.random() - 0.5) * h * 0.42 + hy * 160 * (sd - 0.5)
+      // Rain cascade: smooth particle rainfall directly from above within sculpture space
+      // Subtle organic horizontal flutter (gentle scented breeze)
+      const breeze = Math.sin(i * 0.19 + sd * 6.28) * 16.0 + (Math.random() - 0.5) * 20.0
+      const disperseX = hx * 24.0 + breeze
+
+      // Staggered vertical fall height: drops originate smoothly from high above
+      const rainDropHeight = h * (0.8 + Math.random() * 0.9) + sd * (h * 0.45)
+      const disperseY = -rainDropHeight
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
-      // Initial liquid momentum swirling inward towards home
-      st[i * 4 + 2] = -side * (18 + Math.random() * 26)
-      st[i * 4 + 3] = (Math.random() - 0.5) * 16
+
+      // Initial downward velocity: smooth, liquid rain cascade momentum
+      st[i * 4 + 2] = (Math.random() - 0.5) * 4.0
+      st[i * 4 + 3] = 18.0 + Math.random() * 22.0 + sd * 10.0
     }
+
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
     gl.texImage2D(gl.TEXTURE_2D, 0, this.stateFormat.internal, TEX_W, this.texH, 0, gl.RGBA, gl.FLOAT, st)
     this.introT = 0
@@ -723,6 +728,16 @@ class LiquidEngine {
       }
     }
     this.wake()
+  }
+
+  triggerIntro() {
+    if (!this.ready || !this.homeData || this.destroyed || this.lost) return
+    try {
+      this.startIntro()
+      this.wake()
+    } catch {
+      // safe fallback
+    }
   }
 
   resize(cssW: number, cssH: number, rect: Rect) {
@@ -1259,7 +1274,7 @@ const CSS = `
   gap:clamp(24px,3.6cqw,64px);padding:0 clamp(24px,3.5cqw,56px) clamp(28px,4.5cqh,52px)}
 .sh-eyebrow{font-family:var(--sh-head);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#590B16;opacity:.92;margin:0 0 clamp(10px,1.4cqh,16px);
   display:flex;align-items:center;gap:12px;font-weight:600}
-.sh-eyebrow::before{content:"";width:32px;height:1.5px;background:#590B16;opacity:1}
+.sh-eyebrow::before{content:none}
 .sh-h1{font-family:var(--sh-head);font-weight:600;font-size:clamp(44px,5.8cqw,118px);line-height:.92;letter-spacing:.02em;text-transform:uppercase;margin:0;
   text-wrap:balance}
 .sh-h1 .sh-line{display:block}
@@ -1343,7 +1358,7 @@ function injectFonts() {
   document.head.appendChild(l)
 }
 
-function renderHeadline(text: string, accent: string) {
+function renderHeadline(text: string, accent: string, isAwakened: boolean) {
   const lines = text.split("\n")
   return lines.map((line, li) => {
     let content: React.ReactNode = line
@@ -1365,10 +1380,10 @@ function renderHeadline(text: string, accent: string) {
         <motion.span
           className="sh-line block"
           initial={{ y: "115%", opacity: 0 }}
-          animate={{ y: "0%", opacity: 1 }}
+          animate={isAwakened ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
           transition={{
-            duration: 1.05,
-            delay: 0.15 + li * 0.14,
+            duration: 1.15,
+            delay: 0.22 + li * 0.16,
             ease: [0.16, 1, 0.3, 1],
           }}
         >
@@ -1448,6 +1463,33 @@ export default function SculptureHero(props: SculptureHeroProps) {
   const engineRef = React.useRef<LiquidEngine | null>(null)
   const aspectRef = React.useRef(1983 / 793)
   const [isTouch, setIsTouch] = React.useState(false)
+  const [isAwakened, setIsAwakened] = React.useState(false)
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).__HERO_AWAKENED__) {
+      setIsAwakened(true)
+      return
+    }
+
+    const handleAwaken = () => {
+      setIsAwakened(true)
+      setTimeout(() => {
+        engineRef.current?.triggerIntro()
+      }, 50)
+    }
+
+    window.addEventListener("hero:awaken", handleAwaken)
+
+    const fallback = setTimeout(() => {
+      setIsAwakened(true)
+      engineRef.current?.triggerIntro()
+    }, 1900)
+
+    return () => {
+      window.removeEventListener("hero:awaken", handleAwaken)
+      clearTimeout(fallback)
+    }
+  }, [])
 
   // Scroll parallax for cinematic luxury depth on scroll
   const { scrollYProgress } = useScroll({
@@ -1740,14 +1782,28 @@ export default function SculptureHero(props: SculptureHeroProps) {
       ) : null}
       <motion.div
         ref={stageRef}
-        className="sh-stage"
+        className="sh-stage relative"
         aria-hidden="true"
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={isAwakened ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
+        transition={{ duration: 1.25, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
         style={{
           scale: stageScale,
           y: stageY,
-          willChange: "transform",
+          willChange: "transform, opacity",
         }}
       >
+        {/* Luxury Golden Scent Glow behind the perfume sculpture */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={isAwakened ? { opacity: 0.85, scale: 1 } : { opacity: 0, scale: 0.75 }}
+          transition={{ duration: 1.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] max-w-[85vw] h-[440px] max-h-[75vh] rounded-full pointer-events-none -z-10"
+          style={{
+            background: "radial-gradient(circle, rgba(197, 155, 39, 0.18) 0%, rgba(89, 11, 22, 0.08) 50%, transparent 75%)",
+            filter: "blur(54px)",
+          }}
+        />
         <img ref={imgRef} className="sh-fallback" src={activeSrc} alt="" crossOrigin="anonymous" draggable={false} />
       </motion.div>
       <span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>{imageAlt}</span>
@@ -1807,32 +1863,43 @@ export default function SculptureHero(props: SculptureHeroProps) {
       >
         <div>
           {eyebrow ? (
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 0.92, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="sh-eyebrow"
+              animate={isAwakened ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+              transition={{ duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-3 mb-2.5 sm:mb-3.5"
             >
-              {eyebrow}
-            </motion.p>
+              <motion.span
+                initial={{ width: 0 }}
+                animate={isAwakened ? { width: 34 } : { width: 0 }}
+                transition={{ duration: 0.85, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                className="h-[1.5px] bg-[#590B16] inline-block shrink-0"
+              />
+              <span
+                className="text-[11px] sm:text-[11.5px] tracking-[0.22em] uppercase font-semibold text-[#590B16]"
+                style={{ fontFamily: "var(--sh-head)" }}
+              >
+                {eyebrow}
+              </span>
+            </motion.div>
           ) : null}
-          <h1 className="sh-h1">{renderHeadline(headline, headlineAccent)}</h1>
+          <h1 className="sh-h1">{renderHeadline(headline, headlineAccent, isAwakened)}</h1>
         </div>
         <div className="sh-aside">
           {body ? (
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 0.82, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+              animate={isAwakened ? { opacity: 0.82, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 18, filter: "blur(6px)" }}
+              transition={{ duration: 0.95, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
               className="sh-body"
             >
               {body}
             </motion.p>
           ) : null}
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={isAwakened ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.85, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
             className="sh-ctas"
           >
             {primaryCta && primaryCta.label ? (
@@ -1840,17 +1907,22 @@ export default function SculptureHero(props: SculptureHeroProps) {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="sh-btn relative overflow-hidden group"
+                className="sh-btn relative overflow-hidden group shadow-[0_4px_20px_rgba(89,11,22,0.2)]"
                 href={primaryCta.href}
               >
-                <span className="absolute inset-0 -translate-x-[120%] group-hover:translate-x-[120%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
+                <motion.span
+                  initial={{ x: "-120%" }}
+                  animate={isAwakened ? { x: ["-120%", "120%"] } : { x: "-120%" }}
+                  transition={{ delay: 1.05, duration: 1.25, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
+                />
                 <span className="relative z-10">{primaryCta.label}</span>
                 <Arrow />
               </motion.a>
             ) : null}
             {secondaryCta && secondaryCta.label ? (
               <motion.a
-                whileHover={{ x: 3 }}
+                whileHover={{ x: 4 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="sh-txt"
                 href={secondaryCta.href}

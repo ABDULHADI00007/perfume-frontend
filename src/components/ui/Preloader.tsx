@@ -70,6 +70,10 @@ export function Preloader() {
     const flyTimer = setTimeout(() => {
       calculateFlyOffsets();
       setPhase("flying");
+      if (typeof window !== "undefined") {
+        (window as any).__HERO_AWAKENED__ = true;
+        window.dispatchEvent(new CustomEvent("hero:awaken"));
+      }
     }, 1400);
 
     const doneTimer = setTimeout(() => {
