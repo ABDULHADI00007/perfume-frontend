@@ -186,8 +186,8 @@ void main(){
   vec2 q = p*0.0095 + vec2(uTime*0.35, -uTime*0.2);
   vec2 c = curl(q) + 0.5*curl(q*2.3 + 7.1);
   acc += c*(e*1.2*uSpread)*uTurb*light;
-  // elastic return home
-  float k = (0.006 + 0.02*uReturn)*(0.65+sd*0.7)*(0.45 + (1.0 - uIntro)*0.55);
+  // elastic return home (soft, progressive pull)
+  float k = (0.0035 + 0.010*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65);
   acc -= off*k;
 
   vel += acc*uDt;
@@ -196,7 +196,7 @@ void main(){
   vel *= pow(viscousDamp, uDt);
 
   // Soft speed limiter during intro so particles float in slow-motion without shooting down
-  float maxSpd = mix(5.5, 32.0, pow(1.0 - uIntro, 2.0));
+  float maxSpd = mix(5.0, 32.0, pow(1.0 - uIntro, 2.0));
   float curSpd = length(vel);
   if(curSpd > maxSpd){ vel = (vel/curSpd)*maxSpd; }
 
@@ -252,22 +252,19 @@ void main(){
 
   vec2 v = st.zw;
   float sp = length(v);
-  vec2 dir = sp > 0.001 ? v/sp : vec2(1.0,0.0);
   float r = uDot*hm.w*0.5;
-  float len = min(sp*1.25, 18.0)*uStreak;
-  vec2 lc = aCorner*vec2(r + len*0.5 + 1.0, r + 1.0);
-  vec2 center = base - dir*len*0.5;
-  vec2 world = center + dir*lc.x + vec2(-dir.y, dir.x)*lc.y;
+  vec2 lc = aCorner*(r + 1.0);
+  vec2 world = base + lc;
 
   vec2 clip = world/uRes*2.0-1.0;
   gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
   vLocal = lc;
-  vHalfLen = len*0.5;
+  vHalfLen = 0.0;
   vR = r;
   vec3 col = cl.rgb*uTint;
-  // fast material catches the light, like liquid metal
-  float glint = smoothstep(2.0, 16.0, sp);
-  col = mix(col, min(col*1.18 + vec3(0.07,0.075,0.085), vec3(1.0)), glint*0.75);
+  // Luxury Glint (Descent Shimmer)
+  float glint = smoothstep(0.8, 3.5, sp);
+  col = mix(col, min(col*1.15 + vec3(0.08, 0.07, 0.04), vec3(1.0)), glint*0.4);
   vCol = col;
   vA = a;
 }
@@ -283,12 +280,8 @@ in float vA;
 uniform float uDpr;
 out vec4 o;
 void main(){
-  vec2 q = vec2(max(abs(vLocal.x)-vHalfLen, 0.0), vLocal.y);
-  float d = length(q) - vR;
+  float d = length(vLocal) - vR;
   float a = clamp(0.5 - d*uDpr, 0.0, 1.0);
-  // comet tail: the trailing end thins out
-  float tail = vHalfLen > 0.0 ? clamp(0.5 - vLocal.x/(2.0*(vHalfLen+vR)), 0.0, 1.0) : 0.0;
-  a *= 1.0 - tail*0.55;
   a *= vA;
   if(a < 0.004) discard;
   o = vec4(vCol*a, a);
@@ -705,19 +698,19 @@ class LiquidEngine {
       const hy = home[i * 4 + 1]
       const sd = home[i * 4 + 2]
 
-      // Clean vertical alignment: ZERO liquid sway or horizontal drift
+      // Har particle ka X coordinate uski actual bottle column par locked rehta hai (Zero liquid sway)
       const disperseX = 0.0
 
-      // Natural waterfall cascade: bottle caps and upper crest land first,
-      // gently flowing down to the base in a harmonious luxury reveal
+      // Top-to-bottom waterfall cascade: 
+      // Bottle ke top caps aur splash pehle aate hain, phir bottle base
       const topCascade = hy * 45.0
       const fallDistance = 65.0 + topCascade + Math.random() * 85.0 + sd * 35.0
-      const disperseY = -fallDistance
+      const disperseY = -fallDistance // -Y ka matlab screen ke upar (sky)
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
 
-      // Initial downward velocity: calm, majestic descent
+      // Initial downward velocity: clean, vertical descent (zero liquid sideways motion)
       st[i * 4 + 2] = 0.0
       st[i * 4 + 3] = 0.8 + Math.random() * 1.2 + sd * 0.4
     }
@@ -1455,9 +1448,9 @@ export default function SculptureHero(props: SculptureHeroProps) {
     particleDensity = 1,
     particleSpread = 1,
     dotSize = 1,
-    turbulence = 1,
-    liquid = 1,
-    streaks = true,
+    turbulence = 0.5,
+    liquid = 0,
+    streaks = false,
     restStyle = "image",
     returnSpeed = 1,
     ambient = false,
@@ -1867,6 +1860,8 @@ export default function SculptureHero(props: SculptureHeroProps) {
           </ul>
         </nav>
       )}
+
+      {/* Hint removed per design requirements */}
 
       <div className="sh-spacer" />
 
