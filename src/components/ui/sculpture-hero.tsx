@@ -186,8 +186,10 @@ void main(){
   vec2 q = p*0.0095 + vec2(uTime*0.35, -uTime*0.2);
   vec2 c = curl(q) + 0.5*curl(q*2.3 + 7.1);
   acc += c*(e*1.2*uSpread)*uTurb*light;
-  // elastic return home (soft, progressive pull)
-  float k = (0.0035 + 0.010*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65);
+  // Progressive bottom-to-top magnetic return home:
+  // Bottom particles (hm.y ~ 1.0) lock foundation first; upper particles float in descent
+  float heightBonus = (hm.y * 0.45 + 0.55);
+  float k = (0.0038 + 0.011*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65)*heightBonus;
   acc -= off*k;
 
   vel += acc*uDt;
@@ -244,7 +246,9 @@ void main(){
   float wakeE = texture(uFlow, hm.xy).b;
   float E = energyAt(hm.xy*uRect.zw, uMouse, uRadius, uPresence, wakeE);
   float lift = smoothstep(0.35, 2.5, length(st.xy));
-  float a = max(max(E, lift), max(uRest, 1.0-uIntroVis));
+  // Particles active and fully visible throughout intro descent
+  float introPart = 1.0 - smoothstep(0.72, 1.0, uIntroVis);
+  float a = max(max(E, lift), max(uRest, introPart));
   if(a < 0.01 || hm.w <= 0.0){ gl_Position = vec4(2.0,2.0,2.0,1.0); return; }
 
   vec2 base = uRect.xy + hm.xy*uRect.zw + st.xy;
@@ -332,7 +336,13 @@ void main(){
   float key = uAlphaMode > 0.5 ? tx.a : smoothstep(0.012, 0.05, length(tx.rgb-uImgBg));
   float k = key*e.x*e.y;
   float E = energyAt(rp, uMouse, uRadius, uPresence, fl.b);
-  float show = (1.0 - max(E, uRest))*uIntroVis;
+  // Zero static image during particle fall: ONLY particles are visible!
+  // Once particles land and complete from bottom to top, the photographic image seamlessly takes over.
+  float fillProgress = smoothstep(0.55, 0.98, uIntroVis);
+  float threshold = mix(1.15, -0.15, fillProgress);
+  float bottomToTopMask = clamp((uv.y - threshold) / 0.18, 0.0, 1.0);
+  float introFade = bottomToTopMask * fillProgress;
+  float show = (1.0 - max(E, uRest)) * introFade;
 
   vec3 baseMat = uAlphaMode > 0.5 ? col : col*(uBg/max(uImgBg, vec3(0.001)));
 
@@ -695,24 +705,25 @@ class LiquidEngine {
     const st = new Float32Array(total * 4)
 
     for (let i = 0; i < this.n; i++) {
-      const hy = home[i * 4 + 1]
+      const hy = home[i * 4 + 1] // 0.0 at top cap, 1.0 at bottle bottom
       const sd = home[i * 4 + 2]
 
-      // Har particle ka X coordinate uski actual bottle column par locked rehta hai (Zero liquid sway)
+      // Har particle ka X coordinate uski actual bottle column par locked (Zero sideways sway)
       const disperseX = 0.0
 
-      // Top-to-bottom waterfall cascade: 
-      // Bottle ke top caps aur splash pehle aate hain, phir bottle base
-      const topCascade = hy * 45.0
-      const fallDistance = 65.0 + topCascade + Math.random() * 85.0 + sd * 35.0
-      const disperseY = -fallDistance // -Y ka matlab screen ke upar (sky)
+      // Staggered Bottom-to-Top flow wave:
+      // Bottom particles (hy ~ 1.0) start close to home (dock and complete first)
+      // Top particles (hy ~ 0.0) start high in the sky (arrive last in continuous flow)
+      const fromBottom = 1.0 - hy // 0.0 at bottom, 1.0 at top cap
+      const cascadeHeight = 60.0 + fromBottom * 230.0 + Math.random() * 36.0 + sd * 26.0
+      const disperseY = -cascadeHeight // -Y = above in the sky
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
 
-      // Initial downward velocity: clean, vertical descent (zero liquid sideways motion)
+      // Initial downward velocity: bottom particles settle gently, upper stream down gracefully
       st[i * 4 + 2] = 0.0
-      st[i * 4 + 3] = 0.8 + Math.random() * 1.2 + sd * 0.4
+      st[i * 4 + 3] = 0.6 + fromBottom * 1.0 + Math.random() * 0.4
     }
 
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
