@@ -182,16 +182,24 @@ void main(){
   acc += vec2(-n.y, n.x)*f*1.45*uStrength*uSpread*(0.4+sd);
   // carried by the liquid wake
   acc += (wake*42.0*uSpread*light - vel)*e*0.08;
-  // curl-noise turbulence where the material is disturbed (and during the intro)
+  // curl-noise turbulence where the material is disturbed (gentle air drift during intro)
   vec2 q = p*0.0095 + vec2(uTime*0.35, -uTime*0.2);
   vec2 c = curl(q) + 0.5*curl(q*2.3 + 7.1);
-  acc += c*(e*1.2*uSpread + uIntro*1.5)*uTurb*light;
-  // elastic return home
-  float k = (0.006 + 0.02*uReturn)*(0.65+sd*0.7)*(1.0 - uIntro*0.75);
+  acc += c*(e*1.2*uSpread + uIntro*0.35)*uTurb*light;
+  // elastic return home (soft, progressive pull)
+  float k = (0.0035 + 0.010*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65);
   acc -= off*k;
 
   vel += acc*uDt;
-  vel *= pow(mix(0.93, 0.955, e), uDt);
+  // Critical fluid damping during intro: prevents overshoot, vibration, and snaps
+  float viscousDamp = mix(0.86, mix(0.93, 0.955, e), pow(1.0 - uIntro, 2.0));
+  vel *= pow(viscousDamp, uDt);
+
+  // Soft speed limiter during intro so particles float in slow-motion without shooting down
+  float maxSpd = mix(5.5, 32.0, pow(1.0 - uIntro, 2.0));
+  float curSpd = length(vel);
+  if(curSpd > maxSpd){ vel = (vel/curSpd)*maxSpd; }
+
   off += vel*uDt;
   if(dot(off,off) < 0.0004 && dot(vel,vel) < 0.0004){ off = vec2(0.0); vel = vec2(0.0); }
   o = vec4(off, vel);
@@ -450,6 +458,8 @@ class LiquidEngine {
   private ready = false
   private destroyed = false
   private lost = false
+  private hasTriggeredIntro = false
+  private pendingIntro = false
 
   constructor(canvas: HTMLCanvasElement, opts: EngineOptions, onFail: () => void) {
     this.canvas = canvas
@@ -583,7 +593,11 @@ class LiquidEngine {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
     this.buildParticles(img)
     this.ready = true
-    if (this.opts.intro && !this.opts.reducedMotion) this.startIntro()
+    if (this.pendingIntro && !this.hasTriggeredIntro) {
+      this.hasTriggeredIntro = true
+      this.pendingIntro = false
+      this.startIntro()
+    }
     this.wake()
   }
 
@@ -684,7 +698,6 @@ class LiquidEngine {
     const gl = this.gl
     const home = this.homeData
     if (!home) return
-    const h = this.rect.h > 10 ? this.rect.h : 600
     const total = TEX_W * this.texH
     const st = new Float32Array(total * 4)
 
@@ -692,21 +705,20 @@ class LiquidEngine {
       const hx = home[i * 4] - 0.5
       const sd = home[i * 4 + 2]
 
-      // Rain cascade: smooth particle rainfall directly from above within sculpture space
-      // Subtle organic horizontal flutter (gentle scented breeze)
-      const breeze = Math.sin(i * 0.19 + sd * 6.28) * 16.0 + (Math.random() - 0.5) * 20.0
-      const disperseX = hx * 24.0 + breeze
+      // Subtle organic horizontal drift (swaying scented breeze)
+      const breeze = Math.sin(i * 0.19 + sd * 6.28) * 6.0 + (Math.random() - 0.5) * 8.0
+      const disperseX = hx * 12.0 + breeze
 
-      // Staggered vertical fall height: drops originate smoothly from high above
-      const rainDropHeight = h * (0.8 + Math.random() * 0.9) + sd * (h * 0.45)
+      // Staggered vertical fall height: drops float gently from above the bottles
+      const rainDropHeight = 90.0 + Math.random() * 140.0 + sd * 70.0
       const disperseY = -rainDropHeight
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
 
-      // Initial downward velocity: smooth, liquid rain cascade momentum
-      st[i * 4 + 2] = (Math.random() - 0.5) * 4.0
-      st[i * 4 + 3] = 18.0 + Math.random() * 22.0 + sd * 10.0
+      // Initial downward velocity: calm, slow-motion floating mist (gentle descent, no shooting)
+      st[i * 4 + 2] = (Math.random() - 0.5) * 0.5
+      st[i * 4 + 3] = 1.2 + Math.random() * 1.8 + sd * 0.8
     }
 
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
@@ -731,7 +743,12 @@ class LiquidEngine {
   }
 
   triggerIntro() {
-    if (!this.ready || !this.homeData || this.destroyed || this.lost) return
+    if (this.hasTriggeredIntro || this.destroyed || this.lost) return
+    if (!this.ready || !this.homeData) {
+      this.pendingIntro = true
+      return
+    }
+    this.hasTriggeredIntro = true
     try {
       this.startIntro()
       this.wake()
@@ -1466,24 +1483,30 @@ export default function SculptureHero(props: SculptureHeroProps) {
   const [isAwakened, setIsAwakened] = React.useState(false)
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).__HERO_AWAKENED__) {
+    let triggered = false
+
+    const awaken = () => {
+      if (triggered) return
+      triggered = true
       setIsAwakened(true)
+      engineRef.current?.triggerIntro()
+    }
+
+    if (typeof window !== "undefined" && (window as any).__HERO_AWAKENED__) {
+      awaken()
       return
     }
 
+    const fallback = setTimeout(() => {
+      awaken()
+    }, 2000)
+
     const handleAwaken = () => {
-      setIsAwakened(true)
-      setTimeout(() => {
-        engineRef.current?.triggerIntro()
-      }, 50)
+      clearTimeout(fallback)
+      awaken()
     }
 
     window.addEventListener("hero:awaken", handleAwaken)
-
-    const fallback = setTimeout(() => {
-      setIsAwakened(true)
-      engineRef.current?.triggerIntro()
-    }, 1900)
 
     return () => {
       window.removeEventListener("hero:awaken", handleAwaken)
