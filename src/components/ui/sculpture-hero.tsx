@@ -186,8 +186,8 @@ void main(){
   vec2 q = p*0.0095 + vec2(uTime*0.35, -uTime*0.2);
   vec2 c = curl(q) + 0.5*curl(q*2.3 + 7.1);
   acc += c*(e*1.2*uSpread)*uTurb*light;
-  // elastic return home (soft, progressive pull)
-  float k = (0.0035 + 0.010*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65);
+  // elastic return home
+  float k = (0.006 + 0.02*uReturn)*(0.65+sd*0.7)*(0.45 + (1.0 - uIntro)*0.55);
   acc -= off*k;
 
   vel += acc*uDt;
@@ -252,16 +252,22 @@ void main(){
 
   vec2 v = st.zw;
   float sp = length(v);
+  vec2 dir = sp > 0.001 ? v/sp : vec2(1.0,0.0);
   float r = uDot*hm.w*0.5;
-  vec2 lc = aCorner*(r + 1.0);
-  vec2 world = base + lc;
+  float len = min(sp*1.25, 18.0)*uStreak;
+  vec2 lc = aCorner*vec2(r + len*0.5 + 1.0, r + 1.0);
+  vec2 center = base - dir*len*0.5;
+  vec2 world = center + dir*lc.x + vec2(-dir.y, dir.x)*lc.y;
 
   vec2 clip = world/uRes*2.0-1.0;
   gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
   vLocal = lc;
-  vHalfLen = 0.0;
+  vHalfLen = len*0.5;
   vR = r;
   vec3 col = cl.rgb*uTint;
+  // fast material catches the light, like liquid metal
+  float glint = smoothstep(2.0, 16.0, sp);
+  col = mix(col, min(col*1.18 + vec3(0.07,0.075,0.085), vec3(1.0)), glint*0.75);
   vCol = col;
   vA = a;
 }
@@ -277,8 +283,12 @@ in float vA;
 uniform float uDpr;
 out vec4 o;
 void main(){
-  float d = length(vLocal) - vR;
+  vec2 q = vec2(max(abs(vLocal.x)-vHalfLen, 0.0), vLocal.y);
+  float d = length(q) - vR;
   float a = clamp(0.5 - d*uDpr, 0.0, 1.0);
+  // comet tail: the trailing end thins out
+  float tail = vHalfLen > 0.0 ? clamp(0.5 - vLocal.x/(2.0*(vHalfLen+vR)), 0.0, 1.0) : 0.0;
+  a *= 1.0 - tail*0.55;
   a *= vA;
   if(a < 0.004) discard;
   o = vec4(vCol*a, a);
@@ -692,21 +702,24 @@ class LiquidEngine {
     const st = new Float32Array(total * 4)
 
     for (let i = 0; i < this.n; i++) {
+      const hy = home[i * 4 + 1]
       const sd = home[i * 4 + 2]
 
       // Clean vertical alignment: ZERO liquid sway or horizontal drift
       const disperseX = 0.0
 
-      // Staggered vertical fall height: clean particles start directly above their final spot
-      const fallDistance = 70.0 + Math.random() * 110.0 + sd * 45.0
+      // Natural waterfall cascade: bottle caps and upper crest land first,
+      // gently flowing down to the base in a harmonious luxury reveal
+      const topCascade = hy * 45.0
+      const fallDistance = 65.0 + topCascade + Math.random() * 85.0 + sd * 35.0
       const disperseY = -fallDistance
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
 
-      // Initial downward velocity: clean, vertical descent (zero liquid sideways motion)
+      // Initial downward velocity: calm, majestic descent
       st[i * 4 + 2] = 0.0
-      st[i * 4 + 3] = 1.0 + Math.random() * 1.4 + sd * 0.4
+      st[i * 4 + 3] = 0.8 + Math.random() * 1.2 + sd * 0.4
     }
 
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
@@ -1442,9 +1455,9 @@ export default function SculptureHero(props: SculptureHeroProps) {
     particleDensity = 1,
     particleSpread = 1,
     dotSize = 1,
-    turbulence = 0.5,
-    liquid = 0,
-    streaks = false,
+    turbulence = 1,
+    liquid = 1,
+    streaks = true,
     restStyle = "image",
     returnSpeed = 1,
     ambient = false,
@@ -1854,12 +1867,6 @@ export default function SculptureHero(props: SculptureHeroProps) {
           </ul>
         </nav>
       )}
-
-      {interactive && hintText ? (
-        <div ref={hintRef} className="sh-hint" aria-hidden="true">
-          {hintText}
-        </div>
-      ) : null}
 
       <div className="sh-spacer" />
 
