@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { cartStore } from "@/features/cart/store/cartStore";
 import { ShoppingBag } from "lucide-react";
@@ -72,9 +72,56 @@ const collectionProducts: CollectionProduct[] = [
   },
 ];
 
+const STC_CSS = `
+  .stc-line {
+    display: block;
+    clip-path: inset(-0.25em -0.4em -0.02em -0.4em);
+  }
+  .stc-ch {
+    display: inline-block;
+    transform: translateY(115%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(0.08s + var(--i) * 0.028s);
+  }
+  .stc-is-in .stc-ch {
+    transform: translateY(0%);
+  }
+  .stc-is-in .stc-heading:hover .stc-ch {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .stc-is-in .stc-heading .stc-ch:hover {
+    transform: translateY(-0.06em);
+  }
+`;
+
 export function DiscoverCollectionSection() {
   const [quickViewProduct, setQuickViewProduct] = useState<CollectionProduct | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.16 });
+
+  const [canAnimateRow2, setCanAnimateRow2] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      const timer = setTimeout(() => {
+        setCanAnimateRow2(true);
+      }, 750);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView]);
+
+  let letterIndex = 0;
+  const renderLetters = (word: string) =>
+    [...word].map((c, i) => (
+      <span
+        key={i}
+        className="stc-ch"
+        style={{ "--i": letterIndex++ } as React.CSSProperties}
+      >
+        {c === " " ? "\u00A0" : c}
+      </span>
+    ));
 
   const handleQuickAdd = (product: CollectionProduct, e: React.MouseEvent) => {
     e.preventDefault();
@@ -96,86 +143,102 @@ export function DiscoverCollectionSection() {
   };
 
   return (
-    <section className="w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70">
+    <section
+      ref={sectionRef}
+      className={`w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70 ${
+        isInView ? "stc-is-in" : ""
+      }`}
+    >
+      <style>{STC_CSS}</style>
       <Container size="wide">
         {/* ================= TOP EDITORIAL HEADER ================= */}
         <div className="w-full mb-6 sm:mb-7 lg:mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-left select-none"
-          >
+          <div className="text-left select-none">
             <h2
-              className="text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
+              className="stc-heading text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
                 fontSize: "clamp(2.4rem, 4.5vw, 4.25rem)",
               }}
             >
-              DISCOVER THE
-              <br />
-              COLLECTION
+              <span className="stc-line">{renderLetters("DISCOVER THE")}</span>
+              <span className="stc-line">{renderLetters("COLLECTION")}</span>
             </h2>
 
-            {/* Subtle luxury accent line */}
-            <div className="w-20 sm:w-24 h-[2px] bg-[#590B16]/30 mt-3.5" />
-          </motion.div>
+            {/* Subtle luxury accent line drawing itself */}
+            <div
+              className="w-20 sm:w-24 h-[2px] bg-[#590B16]/30 mt-3.5 origin-left"
+              style={{
+                transform: isInView ? "scaleX(1)" : "scaleX(0)",
+                opacity: isInView ? 1 : 0,
+                transition: "transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease",
+                transitionDelay: `${0.08 + letterIndex * 0.028 + 0.04}s`,
+              }}
+            />
+          </div>
         </div>
 
         {/* ================= ASYMMETRICAL EDITORIAL MASONRY GRID ================= */}
         {/* On mobile: 2 columns, On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
-          {collectionProducts.map((product, idx) => (
-            <motion.article
-              key={product.id}
-              initial={{ opacity: 0, y: 50, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.85,
-                delay: idx * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className={`group flex flex-col ${product.colDesktop}`}
-            >
+          {collectionProducts.map((product, idx) => {
+            const isBottomRow = idx >= 3;
+            const cardDelay = isBottomRow
+              ? canAnimateRow2
+                ? 0.1 + (idx - 3) * 0.12
+                : 0.85 + (idx - 3) * 0.12
+              : 0.52 + idx * 0.12;
+
+            return (
+              <motion.article
+                key={product.id}
+                initial={{ opacity: 0, y: 110, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{
+                  once: true,
+                  amount: isBottomRow ? 0.2 : 0.14,
+                  margin: isBottomRow ? "-35px" : "-20px",
+                }}
+                transition={{
+                  duration: 0.95,
+                  delay: cardDelay,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className={`group flex flex-col ${product.colDesktop}`}
+              >
               {/* Product Card Canvas (Crisp pure white box with shimmer & lift) */}
               <Link
                 href={`/perfumes/${product.slug}`}
-                className="relative block w-full aspect-[4/4.3] bg-white rounded-none overflow-hidden transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_22px_44px_rgba(89,11,22,0.12)] group-hover:-translate-y-2"
+                className="relative block w-full aspect-[4/4.3] bg-white rounded-none overflow-hidden transition-all duration-700 shadow-[0_2px_12px_rgba(89,11,22,0.03)] group-hover:shadow-[0_26px_52px_rgba(89,11,22,0.13)] group-hover:-translate-y-2.5"
                 aria-label={`Explore ${product.title}`}
               >
                 {/* Diagonal Glass Reflection Sheen Sweep on Hover */}
-                <div className="absolute inset-0 -translate-x-[120%] group-hover:translate-x-[120%] bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none z-20" />
+                <div className="absolute inset-0 -translate-x-[140%] group-hover:translate-x-[140%] bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-1000 ease-out pointer-events-none z-20" />
 
                 {/* Perfume Bottle Image Container - absolute inset-0 guarantees full visibility */}
                 <div className="absolute inset-0 p-3 sm:p-5 flex items-center justify-center z-10">
-                  <motion.div
-                    className="relative w-full h-full flex items-center justify-center"
-                    whileHover={{ scale: 1.07, y: -4 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  >
+                  <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
                     <img
                       src={product.image}
                       alt={product.title}
                       loading="eager"
-                      className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_16px_28px_rgba(89,11,22,0.16)] transition-all duration-700"
+                      className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
                     />
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Hover Quick Add Action Button with Smooth Slide-Up Reveal (Centered, Wider) */}
-                <div className="absolute inset-x-0 bottom-2.5 sm:bottom-4 px-2 sm:px-3 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-30">
+                <div className="absolute inset-x-0 bottom-2.5 sm:bottom-4 px-2 sm:px-3 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-3 group-hover:translate-y-0 z-30">
                   <button
                     type="button"
                     onClick={(e) => handleQuickAdd(product, e)}
-                    className="w-full max-w-[240px] sm:max-w-[260px] py-2.5 sm:py-2.5 px-4 sm:px-6 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:bg-[#42060F] shadow-md hover:shadow-xl active:scale-95 text-center flex items-center justify-center gap-2 font-serif cursor-pointer"
+                    className="relative overflow-hidden w-full max-w-[240px] sm:max-w-[260px] py-2.5 sm:py-2.5 px-4 sm:px-6 bg-[#590B16] text-[#FAF7EE] text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:bg-[#42060F] hover:scale-[1.02] active:scale-[0.96] shadow-md hover:shadow-xl text-center flex items-center justify-center gap-2 font-serif cursor-pointer"
                     style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                     aria-label={`Quick add ${product.title} to bag`}
                   >
-                    <ShoppingBag size={13} className="shrink-0 text-[#FAF7EE]" />
-                    <span>Quick Add</span>
+                    <span className="absolute inset-0 -translate-x-[120%] hover:translate-x-[120%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 pointer-events-none" />
+                    <ShoppingBag size={13} className="shrink-0 text-[#FAF7EE] relative z-10" />
+                    <span className="relative z-10">Quick Add</span>
                   </button>
                 </div>
               </Link>
@@ -184,7 +247,7 @@ export function DiscoverCollectionSection() {
               <div className="mt-2 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
                 <Link href={`/perfumes/${product.slug}`}>
                   <h3
-                    className="text-[#590B16] text-[12px] sm:text-[14.5px] font-semibold tracking-[0.03em] font-serif hover:text-[#42060F] transition-colors uppercase line-clamp-1"
+                    className="text-[#590B16] text-[12px] sm:text-[14.5px] font-semibold tracking-[0.03em] font-serif hover:text-[#42060F] transition-all duration-300 group-hover:tracking-[0.04em] uppercase line-clamp-1"
                     style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
                     {product.title}
@@ -198,7 +261,8 @@ export function DiscoverCollectionSection() {
                 </p>
               </div>
             </motion.article>
-          ))}
+          );
+        })}
         </div>
       </Container>
 

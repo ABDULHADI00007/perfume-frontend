@@ -69,9 +69,9 @@ export function constructMetadata({
       follow: !noIndex,
     },
     icons: {
-      icon: "/images/perfumes/favicon-icon.png?v=2",
-      shortcut: "/images/perfumes/favicon-icon.png?v=2",
-      apple: "/images/perfumes/favicon-icon.png?v=2",
+      icon: "/images/perfumes/favicon-icon.png?v=soulmate-3",
+      shortcut: "/images/perfumes/favicon-icon.png?v=soulmate-3",
+      apple: "/images/perfumes/favicon-icon.png?v=soulmate-3",
     },
   };
 }

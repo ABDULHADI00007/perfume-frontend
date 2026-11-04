@@ -25,6 +25,7 @@ export const Hero: React.FC<SculptureHeroProps> = ({
   mobileSculptureScale = 1.15,
   sculptureY = 3.5,
   mobileSculptureY = 2.5,
+  intro = true,
   ...props
 }) => {
   // Dynamically compute hero height so the hero + announcement bar + header fit within viewport without scrolling
@@ -73,6 +74,7 @@ export const Hero: React.FC<SculptureHeroProps> = ({
         mobileSculptureScale={mobileSculptureScale}
         sculptureY={sculptureY}
         mobileSculptureY={mobileSculptureY}
+        intro={intro}
         headingFont="'Cinzel', 'Marcellus', serif"
         accentFont="'Cinzel', 'Marcellus', serif"
         {...props}

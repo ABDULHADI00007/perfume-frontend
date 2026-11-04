@@ -1,47 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 
 export function NewCollectionSection() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.05,
-      },
-    },
-  };
+  const contentRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(contentRef, { once: true, amount: 0.25 });
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.9,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
-  const cardVariant = (delay: number) => ({
-    hidden: { opacity: 0, scale: 0.88, y: 24 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        duration: 0.9,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  });
+  // Refined luxury ease curve
+  const luxuryEase = [0.19, 1, 0.22, 1] as const;
 
   return (
     <section
@@ -49,20 +18,23 @@ export function NewCollectionSection() {
       className="w-full bg-[#FAF7EE] overflow-hidden select-none scroll-mt-28 min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-6 sm:pt-8 md:pt-14 lg:pt-[clamp(36px,5vw,68px)] pb-8 sm:pb-10 md:pb-24 lg:pb-[clamp(36px,5vw,68px)]"
     >
       <Container size="wide" className="mt-3 mb-auto sm:my-auto md:my-0">
-        <motion.div
+        <div
+          ref={contentRef}
           className="relative w-full flex flex-col items-center lg:block gap-5 sm:gap-7 md:gap-10 lg:gap-0 lg:min-h-[clamp(360px,52vw,660px)]"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.12 }}
-          variants={containerVariants}
         >
           {/* ============ TYPOGRAPHY — left side on desktop, upper on mobile ============ */}
-          <motion.div
-            variants={fadeInUp}
-            className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 mt-5 min-[360px]:mt-7 sm:mt-4 md:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0"
-          >
-            {/* ROW 1: NEW + Star Badge — aligned with COLLECTION */}
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]">
+          <div className="order-1 lg:order-none relative lg:absolute lg:left-0 z-10 w-full lg:w-[65%] lg:top-[clamp(30px,5vw,70px)] px-2 sm:px-4 mt-5 min-[360px]:mt-7 sm:mt-4 md:mt-0 md:pl-2 md:pr-4 md:-translate-x-8 lg:translate-x-0 lg:px-0">
+            {/* ROW 1: NEW + Star Badge — Step 2 after pictures (slides in from right) */}
+            <motion.div
+              initial={{ opacity: 0, x: 70 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 70 }}
+              transition={{
+                duration: 0.88,
+                delay: 0.65,
+                ease: luxuryEase,
+              }}
+              className="flex items-center gap-2 sm:gap-3 lg:gap-[clamp(8px,1.5vw,20px)] pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)]"
+            >
               <h2
                 className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold whitespace-nowrap"
                 style={{
@@ -95,37 +67,54 @@ export function NewCollectionSection() {
                   <path d="M50 0 C50 27.614 72.386 50 100 50 C72.386 50 50 72.386 50 100 C50 72.386 27.614 50 0 50 C27.614 50 50 27.614 50 0 Z" />
                 </svg>
               </motion.div>
-            </div>
+            </motion.div>
 
-            {/* ROW 2: PERFUME — desktop indent preserved, tablet prominent */}
-            <h2
+            {/* ROW 2: PERFUME — Step 3 after NEW (slides in from right) */}
+            <motion.h2
+              initial={{ opacity: 0, x: 70 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 70 }}
+              transition={{
+                duration: 0.88,
+                delay: 0.90,
+                ease: luxuryEase,
+              }}
               className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-3 sm:pl-5 md:pl-12 lg:pl-[clamp(180px,21.5vw,320px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(24px,3.5vw,52px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
             >
               PERFUME
-            </h2>
+            </motion.h2>
 
-            {/* ROW 3: COLLECTION — desktop indent & margin preserved, tablet prominent */}
-            <h2
+            {/* ROW 3: COLLECTION — Step 4 after PERFUME (slides in from right) */}
+            <motion.h2
+              initial={{ opacity: 0, x: 70 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 70 }}
+              transition={{
+                duration: 0.88,
+                delay: 1.15,
+                ease: luxuryEase,
+              }}
               className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold pl-0 sm:pl-1 md:pl-3 lg:pl-[clamp(30px,4.5vw,75px)] mt-5 min-[360px]:mt-6 sm:mt-7 md:mt-4 lg:mt-[clamp(36px,4.8vw,75px)] whitespace-nowrap"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
               }}
             >
               COLLECTION
-            </h2>
-          </motion.div>
+            </motion.h2>
+          </div>
 
-          {/* ============ IMAGE COLLAGE — center-right on desktop, scaled for mobile/tablet ============ */}
-          <motion.div
-            variants={containerVariants}
-            className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-6 min-[360px]:mt-8 min-[390px]:mt-10 sm:mt-8 md:mt-0 -translate-x-24 min-[360px]:-translate-x-28 min-[390px]:-translate-x-32 sm:-translate-x-24 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]"
-          >
-            {/* ── CARD 1: Top-left, Girl on green bg — tilted CCW ── */}
+          {/* ============ IMAGE COLLAGE — Step 1: animate in first ============ */}
+          <div className="order-2 lg:order-none relative lg:absolute lg:top-0 lg:right-0 z-20 mx-auto mt-6 min-[360px]:mt-8 min-[390px]:mt-10 sm:mt-8 md:mt-0 -translate-x-24 min-[360px]:-translate-x-28 min-[390px]:-translate-x-32 sm:-translate-x-24 md:translate-x-12 lg:translate-x-0 lg:mx-0 w-[370px] min-[360px]:w-[400px] min-[400px]:w-[440px] min-[440px]:w-[470px] min-[480px]:w-[500px] sm:w-[530px] md:w-[560px] lg:w-[clamp(300px,58vw,700px)] h-[370px] min-[360px]:h-[400px] min-[400px]:h-[440px] min-[440px]:h-[470px] min-[480px]:h-[500px] sm:h-[530px] md:h-[560px] lg:h-[clamp(360px,52vw,660px)]">
+            {/* ── CARD 1: Top-left, Girl on green bg ── */}
             <motion.div
-              variants={cardVariant(0.08)}
+              initial={{ opacity: 0, scale: 0.92, y: 32 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 32 }}
+              transition={{
+                duration: 1.1,
+                delay: 0.12,
+                ease: luxuryEase,
+              }}
               className="absolute overflow-hidden"
               style={{
                 top: "0%",
@@ -133,7 +122,6 @@ export function NewCollectionSection() {
                 width: "50%",
                 height: "60%",
                 backgroundColor: "#93C591",
-                transform: "rotate(-3.5deg)",
                 zIndex: 22,
                 borderRadius: "4px",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
@@ -148,9 +136,15 @@ export function NewCollectionSection() {
               />
             </motion.div>
 
-            {/* ── CARD 2: Top-right, Tom Ford smoke bottle — tilted CW ── */}
+            {/* ── CARD 2: Top-right, Tom Ford smoke bottle ── */}
             <motion.div
-              variants={cardVariant(0.2)}
+              initial={{ opacity: 0, scale: 0.92, y: 32 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 32 }}
+              transition={{
+                duration: 1.1,
+                delay: 0.28,
+                ease: luxuryEase,
+              }}
               className="absolute overflow-hidden"
               style={{
                 top: "-4%",
@@ -158,7 +152,6 @@ export function NewCollectionSection() {
                 width: "36%",
                 height: "50%",
                 backgroundColor: "#FAF0D7",
-                transform: "rotate(5deg)",
                 zIndex: 21,
                 borderRadius: "4px",
                 boxShadow: "0 4px 22px rgba(0,0,0,0.18)",
@@ -174,9 +167,15 @@ export function NewCollectionSection() {
               />
             </motion.div>
 
-            {/* ── CARD 3: Bottom-left, Tom Ford bottle — tilted CCW ── */}
+            {/* ── CARD 3: Bottom-left, Tom Ford bottle ── */}
             <motion.div
-              variants={cardVariant(0.32)}
+              initial={{ opacity: 0, scale: 0.92, y: 32 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 32 }}
+              transition={{
+                duration: 1.1,
+                delay: 0.44,
+                ease: luxuryEase,
+              }}
               className="absolute overflow-hidden"
               style={{
                 bottom: "4%",
@@ -184,7 +183,6 @@ export function NewCollectionSection() {
                 width: "36%",
                 height: "50%",
                 backgroundColor: "#FAF0D7",
-                transform: "rotate(-5deg)",
                 zIndex: 24,
                 borderRadius: "4px",
                 boxShadow: "0 12px 40px rgba(0,0,0,0.28)",
@@ -199,9 +197,15 @@ export function NewCollectionSection() {
               />
             </motion.div>
 
-            {/* ── CARD 4: Bottom-right, Girl model — tilted CW ── */}
+            {/* ── CARD 4: Bottom-right, Girl model ── */}
             <motion.div
-              variants={cardVariant(0.44)}
+              initial={{ opacity: 0, scale: 0.92, y: 32 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 32 }}
+              transition={{
+                duration: 1.1,
+                delay: 0.60,
+                ease: luxuryEase,
+              }}
               className="absolute overflow-hidden"
               style={{
                 bottom: "0%",
@@ -209,7 +213,6 @@ export function NewCollectionSection() {
                 width: "51%",
                 height: "63%",
                 backgroundColor: "#93C591",
-                transform: "rotate(4.5deg)",
                 zIndex: 23,
                 borderRadius: "4px",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.22)",
@@ -223,10 +226,8 @@ export function NewCollectionSection() {
                 sizes="(max-width: 768px) 50vw, 320px"
               />
             </motion.div>
-
-          </motion.div>
-
-        </motion.div>
+          </div>
+        </div>
       </Container>
     </section>
   );

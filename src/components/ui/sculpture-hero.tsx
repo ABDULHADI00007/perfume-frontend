@@ -10,6 +10,7 @@
  */
 
 import * as React from "react"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 
 /* ────────────────────────────────────────────────────────────────────
    Engine (WebGL2 GPGPU particles)
@@ -684,16 +685,24 @@ class LiquidEngine {
     const home = this.homeData
     if (!home) return
     const w = this.rect.w > 10 ? this.rect.w : 1300
+    const h = this.rect.h > 10 ? this.rect.h : 600
     const total = TEX_W * this.texH
     const st = new Float32Array(total * 4)
     for (let i = 0; i < this.n; i++) {
       const hx = home[i * 4] - 0.5
       const hy = home[i * 4 + 1] - 0.5
       const sd = home[i * 4 + 2]
-      const ang = (Math.random() - 0.5) * 0.9 + (hx > 0 ? 0 : Math.PI)
-      const dist = w * (0.04 + Math.random() * 0.14) * (0.5 + Math.abs(hx) * 1.4)
-      st[i * 4] = Math.cos(ang) * dist + hx * w * 0.25 * sd
-      st[i * 4 + 1] = Math.sin(ang) * dist * 0.55 + hy * 120 * (Math.random() - 0.5)
+
+      // Particles on the left disperse far left, particles on the right disperse far right
+      const side = hx >= 0 ? 1 : -1
+      const disperseX = side * (w * (0.24 + Math.random() * 0.38)) + hx * w * 0.45 * (0.7 + sd * 0.7)
+      const disperseY = (Math.random() - 0.5) * h * 0.42 + hy * 160 * (sd - 0.5)
+
+      st[i * 4] = disperseX
+      st[i * 4 + 1] = disperseY
+      // Initial liquid momentum swirling inward towards home
+      st[i * 4 + 2] = -side * (18 + Math.random() * 26)
+      st[i * 4 + 3] = (Math.random() - 0.5) * 16
     }
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
     gl.texImage2D(gl.TEXTURE_2D, 0, this.stateFormat.internal, TEX_W, this.texH, 0, gl.RGBA, gl.FLOAT, st)
@@ -1352,8 +1361,19 @@ function renderHeadline(text: string, accent: string) {
       }
     }
     return (
-      <span className="sh-line" key={li}>
-        {content}
+      <span className="sh-line-wrap block overflow-hidden" key={li}>
+        <motion.span
+          className="sh-line block"
+          initial={{ y: "115%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          transition={{
+            duration: 1.05,
+            delay: 0.15 + li * 0.14,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {content}
+        </motion.span>
       </span>
     )
   })
@@ -1410,7 +1430,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
     ambient = false,
     ambientIntensity = 1,
     speed = 1,
-    intro = false,
+    intro = true,
     height = "100svh",
     backdropText = "",
     showCredit = true,
@@ -1428,6 +1448,26 @@ export default function SculptureHero(props: SculptureHeroProps) {
   const engineRef = React.useRef<LiquidEngine | null>(null)
   const aspectRef = React.useRef(1983 / 793)
   const [isTouch, setIsTouch] = React.useState(false)
+
+  // Scroll parallax for cinematic luxury depth on scroll
+  const { scrollYProgress } = useScroll({
+    target: rootRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end start"],
+  })
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 26,
+    restDelta: 0.001,
+  })
+
+  // Text gently drifts down and softly dims on scroll
+  const contentY = useTransform(smoothProgress, [0, 1], [0, 70])
+  const contentOpacity = useTransform(smoothProgress, [0, 0.85], [1, 0.2])
+
+  // Sculpture stage gently scales and translates for deep 3D sensation
+  const stageScale = useTransform(smoothProgress, [0, 1], [1, 0.94])
+  const stageY = useTransform(smoothProgress, [0, 1], [0, 45])
 
   const layout = React.useRef({ scale: sculptureScale, mobileScale: mobileSculptureScale, x: sculptureX, y: sculptureY, mobileY: mobileSculptureY })
   layout.current = {
@@ -1698,9 +1738,18 @@ export default function SculptureHero(props: SculptureHeroProps) {
           {backdropText}
         </div>
       ) : null}
-      <div ref={stageRef} className="sh-stage" aria-hidden="true">
+      <motion.div
+        ref={stageRef}
+        className="sh-stage"
+        aria-hidden="true"
+        style={{
+          scale: stageScale,
+          y: stageY,
+          willChange: "transform",
+        }}
+      >
         <img ref={imgRef} className="sh-fallback" src={activeSrc} alt="" crossOrigin="anonymous" draggable={false} />
-      </div>
+      </motion.div>
       <span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>{imageAlt}</span>
 
       {showNav && (
@@ -1747,29 +1796,72 @@ export default function SculptureHero(props: SculptureHeroProps) {
 
       <div className="sh-spacer" />
 
-      <div ref={contentRef} className="sh-content">
+      <motion.div
+        ref={contentRef}
+        className="sh-content"
+        style={{
+          y: contentY,
+          opacity: contentOpacity,
+          willChange: "transform, opacity",
+        }}
+      >
         <div>
-          {eyebrow ? <p className="sh-eyebrow">{eyebrow}</p> : null}
+          {eyebrow ? (
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 0.92, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="sh-eyebrow"
+            >
+              {eyebrow}
+            </motion.p>
+          ) : null}
           <h1 className="sh-h1">{renderHeadline(headline, headlineAccent)}</h1>
         </div>
         <div className="sh-aside">
-          {body ? <p className="sh-body">{body}</p> : null}
-          <div className="sh-ctas">
+          {body ? (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 0.82, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+              className="sh-body"
+            >
+              {body}
+            </motion.p>
+          ) : null}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
+            className="sh-ctas"
+          >
             {primaryCta && primaryCta.label ? (
-              <a className="sh-btn" href={primaryCta.href}>
-                {primaryCta.label}
+              <motion.a
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="sh-btn relative overflow-hidden group"
+                href={primaryCta.href}
+              >
+                <span className="absolute inset-0 -translate-x-[120%] group-hover:translate-x-[120%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
+                <span className="relative z-10">{primaryCta.label}</span>
                 <Arrow />
-              </a>
+              </motion.a>
             ) : null}
             {secondaryCta && secondaryCta.label ? (
-              <a className="sh-txt" href={secondaryCta.href}>
+              <motion.a
+                whileHover={{ x: 3 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="sh-txt"
+                href={secondaryCta.href}
+              >
                 {secondaryCta.label}
                 <Arrow />
-              </a>
+              </motion.a>
             ) : null}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {showCredit && (
         <a className="sh-credit" href="https://guglielmogiannattasio.it" target="_blank" rel="noopener">

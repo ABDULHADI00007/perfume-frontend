@@ -4,6 +4,7 @@ import React, { Suspense } from "react";
 import "./globals.css";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { TopProgressBar } from "@/components/layout/TopProgressBar";
+import { Preloader } from "@/components/ui/Preloader";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -43,11 +44,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${cormorant.variable} ${plusJakarta.variable} ${outfit.variable}`}>
       <head>
-        <link rel="icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" sizes="any" />
-        <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=2" type="image/png" />
-        <link rel="apple-touch-icon" href="/images/perfumes/favicon-icon.png?v=2" />
+        <link rel="icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" sizes="any" />
+        <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" />
       </head>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col selection:bg-accent-subtle selection:text-foreground">
+        <Preloader />
         <Suspense fallback={null}>
           <TopProgressBar />
         </Suspense>

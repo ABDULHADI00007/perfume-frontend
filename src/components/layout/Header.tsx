@@ -109,12 +109,14 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             <div className="flex items-center space-x-3 sm:space-x-4">
               {/* Brand Logo — Soulmate Scents */}
               <Link
+                id="navbar-brand-logo"
                 href="/"
                 aria-label="Soulmate Scents Home"
                 className="group flex flex-col items-start py-0.5"
               >
                 <div className="flex items-center gap-2">
                   <Image
+                    id="navbar-brand-logo-img"
                     src="/images/perfumes/1789763707946.png"
                     alt="Soulmate Scents"
                     width={160}

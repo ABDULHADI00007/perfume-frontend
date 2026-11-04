@@ -89,17 +89,25 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
     <section id="parallax-gallery" className="w-full bg-white text-stone-900 overflow-hidden relative border-y border-[#590B16]/10 select-none scroll-mt-20">
       {/* Giant SOULMATE SCENTS Header with exact brand dark red #3E060E */}
       <div className="pt-12 pb-6 sm:pt-24 sm:pb-12 pl-1 min-[360px]:pl-2 min-[400px]:pl-3 sm:pl-4 md:pl-6 lg:pl-8 pr-4 text-left overflow-hidden select-none relative z-10 flex flex-col items-start justify-center">
-        <motion.h2
-          style={{
-            x: headlineX,
-            color: "#3E060E",
-            willChange: "transform",
-            fontFamily: "'Cinzel', 'Marcellus', serif",
-          }}
-          className="font-serif text-[10vw] sm:text-[11.5vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none"
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full overflow-visible"
         >
-          SOULMATE SCENTS
-        </motion.h2>
+          <motion.h2
+            style={{
+              x: headlineX,
+              color: "#3E060E",
+              willChange: "transform",
+              fontFamily: "'Cinzel', 'Marcellus', serif",
+            }}
+            className="font-serif text-[10vw] sm:text-[11.5vw] uppercase font-bold tracking-[0.02em] leading-none whitespace-nowrap select-none"
+          >
+            SOULMATE SCENTS
+          </motion.h2>
+        </motion.div>
       </div>
 
       {/* Responsive Parallax Gallery Container — 2 cols on mobile, 3 on tablet, 4 on desktop */}
@@ -107,10 +115,10 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
         ref={gallery}
         className="relative box-border flex h-[140vh] sm:h-[160vh] lg:h-[175vh] w-full gap-3 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-3"
       >
-        <Column images={[images[0], images[1], images[2]]} y={y} className="flex" />
-        <Column images={[images[3], images[4], images[5]]} y={y2} className="flex" />
-        <Column images={[images[6], images[7], images[8]]} y={y3} className="hidden sm:flex" />
-        <Column images={[images[9], images[10], images[11]]} y={y4} className="hidden lg:flex" />
+        <Column images={[images[0], images[1], images[2]]} y={y} colIdx={0} className="flex" />
+        <Column images={[images[3], images[4], images[5]]} y={y2} colIdx={1} className="flex" />
+        <Column images={[images[6], images[7], images[8]]} y={y3} colIdx={2} className="hidden sm:flex" />
+        <Column images={[images[9], images[10], images[11]]} y={y4} colIdx={3} className="hidden lg:flex" />
       </div>
 
       <div className="pb-12 sm:pb-24" />
@@ -121,10 +129,11 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
 type ColumnProps = {
   images: string[];
   y: MotionValue<number>;
+  colIdx: number;
   className?: string;
 };
 
-const Column = ({ images, y, className = "" }: ColumnProps) => {
+const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
   return (
     <motion.div
       className={`relative -top-[45%] flex h-full flex-1 min-w-0 flex-col gap-2 sm:gap-3 md:gap-4 first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%] ${className}`}
@@ -136,22 +145,33 @@ const Column = ({ images, y, className = "" }: ColumnProps) => {
       }}
     >
       {images.map((src, i) => (
-        <div
+        <motion.div
           key={i}
-          className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)] border border-stone-200/70 group"
+          initial={{ opacity: 0, scale: 0.93, y: 35 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{
+            duration: 0.95,
+            delay: colIdx * 0.1 + i * 0.12,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)] hover:shadow-[0_24px_50px_-8px_rgba(62,6,14,0.18)] border border-stone-200/70 group transition-shadow duration-700"
           style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
         >
+          {/* 21st.dev luxury light reflection sweep across each card */}
+          <div className="absolute inset-0 -translate-x-[140%] group-hover:translate-x-[140%] bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none z-20" />
+
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt="Soulmate Scents Parfumerie Flacon"
-            className="pointer-events-none w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="pointer-events-none w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
             loading="eager"
             decoding="async"
             draggable={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#3E060E]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
+        </motion.div>
       ))}
     </motion.div>
   );
