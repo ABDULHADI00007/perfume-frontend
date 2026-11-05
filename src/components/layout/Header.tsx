@@ -121,7 +121,6 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                     alt="Soulmate Scents"
                     width={160}
                     height={44}
-                    priority
                     className="h-9 sm:h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
                   />
                 </div>

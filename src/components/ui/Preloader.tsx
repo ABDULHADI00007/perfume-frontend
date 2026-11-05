@@ -163,7 +163,6 @@ export function Preloader() {
                 src="/images/perfumes/1789763707946.png"
                 alt="Soulmate Scents - Essence of Unbreakable Bonds"
                 fill
-                priority
                 className="object-contain object-center"
                 sizes="(max-width: 640px) 340px, 420px"
               />
