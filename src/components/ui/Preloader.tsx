@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Preloader() {
@@ -157,14 +156,14 @@ export function Preloader() {
                 ease: [0.22, 1, 0.36, 1],
                 delay: 0.05,
               }}
-              className="relative w-full h-full bg-transparent"
+              className="relative w-full h-full bg-transparent flex items-center justify-center"
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/images/perfumes/1789763707946.png"
                 alt="Soulmate Scents - Essence of Unbreakable Bonds"
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 640px) 340px, 420px"
+                className="w-full h-full object-contain object-center select-none pointer-events-none"
+                draggable={false}
               />
             </motion.div>
           </div>
