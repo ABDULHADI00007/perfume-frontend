@@ -216,7 +216,6 @@ export function NewCollectionSection() {
                   fill
                   className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                   sizes="(max-width: 768px) 45vw, 280px"
-                  priority
                 />
               </motion.div>
             </motion.div>

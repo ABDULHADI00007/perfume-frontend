@@ -33,7 +33,7 @@ export function ArtOfBloomSection() {
     <section
       ref={sectionRef}
       id="art-of-scent"
-      className="w-full bg-white min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-8 sm:pt-10 md:pt-16 lg:pt-16 pb-6 sm:pb-10 md:pb-20 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
+      className="relative w-full bg-white min-h-[100svh] md:min-h-0 flex flex-col justify-start md:block pt-8 sm:pt-10 md:pt-16 lg:pt-16 pb-6 sm:pb-10 md:pb-20 lg:pb-28 scroll-mt-28 overflow-hidden select-none"
     >
       <Container size="wide" className="mt-3 mb-auto sm:my-auto md:my-0">
         <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-10 md:gap-14 lg:gap-0 items-start">
@@ -79,7 +79,6 @@ export function ArtOfBloomSection() {
                       fill
                       className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                       sizes="(max-width: 768px) 360px, 500px"
-                      priority
                     />
                   </motion.div>
                 </motion.div>

@@ -233,7 +233,7 @@ export function DiscoverCollectionSection() {
                     <img
                       src={product.image}
                       alt={product.title}
-                      loading="eager"
+                      loading="lazy"
                       className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
                     />
                   </motion.div>

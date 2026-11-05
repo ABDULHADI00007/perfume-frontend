@@ -163,7 +163,7 @@ const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
             src={src}
             alt="Soulmate Scents Parfumerie Flacon"
             className="pointer-events-none w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             draggable={false}
           />
