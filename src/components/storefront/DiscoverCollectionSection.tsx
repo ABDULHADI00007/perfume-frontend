@@ -186,26 +186,27 @@ export function DiscoverCollectionSection() {
             const isBottomRow = idx >= 3;
             const cardDelay = isDesktop
               ? isBottomRow
-                ? 0.06 + (idx - 3) * 0.16
-                : 0.06 + idx * 0.16
-              : 0.04 + (idx % 2) * 0.14;
+                ? 0.12 + (idx - 3) * 0.22
+                : 0.12 + idx * 0.22
+              : 0.08 + (idx % 2) * 0.18;
 
             return (
               <motion.article
                 key={product.id}
-                initial={{ opacity: 0, y: 65, scale: 0.94 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, y: 55, scale: 0.96, filter: "blur(6px)" }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                 viewport={{
                   once: true,
-                  amount: isDesktop ? 0.35 : 0.22,
-                  margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+                  amount: isDesktop ? 0.3 : 0.2,
+                  margin: isDesktop ? "0px 0px -120px 0px" : "0px 0px -40px 0px",
                 }}
                 transition={{
-                  duration: 0.85,
+                  duration: 1.3,
                   delay: cardDelay,
-                  ease: [0.16, 1, 0.3, 1],
+                  ease: [0.19, 1, 0.22, 1],
                 }}
                 className={`group flex flex-col ${product.colDesktop}`}
+                style={{ willChange: "transform, opacity, filter" }}
               >
               {/* Product Card Canvas (Crisp pure white box with shimmer & lift) */}
               <Link
@@ -216,16 +217,26 @@ export function DiscoverCollectionSection() {
                 {/* Diagonal Glass Reflection Sheen Sweep on Hover */}
                 <div className="absolute inset-0 -translate-x-[140%] group-hover:translate-x-[140%] bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-1000 ease-out pointer-events-none z-20" />
 
-                {/* Perfume Bottle Image Container - absolute inset-0 guarantees full visibility */}
+                {/* Perfume Bottle Image Container - absolute inset-0 guarantees full visibility with layered depth float */}
                 <div className="absolute inset-0 p-3 sm:p-5 flex items-center justify-center z-10">
-                  <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                  <motion.div
+                    initial={{ scale: 0.92, y: 18 }}
+                    whileInView={{ scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 1.35,
+                      delay: cardDelay + 0.12,
+                      ease: [0.19, 1, 0.22, 1],
+                    }}
+                    className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
+                  >
                     <img
                       src={product.image}
                       alt={product.title}
                       loading="eager"
                       className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
                     />
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Hover Quick Add Action Button with Smooth Slide-Up Reveal (Centered, Wider) */}
@@ -244,8 +255,18 @@ export function DiscoverCollectionSection() {
                 </div>
               </Link>
 
-              {/* Text Details below the white box */}
-              <div className="mt-2 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1">
+              {/* Text Details below the white box - reveals smoothly with staggered elegance */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.95,
+                  delay: cardDelay + 0.22,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="mt-2.5 sm:mt-3 text-left transition-transform duration-300 group-hover:translate-x-1"
+              >
                 <Link href={`/perfumes/${product.slug}`}>
                   <h3
                     className="text-[#590B16] text-[12px] sm:text-[14.5px] font-semibold tracking-[0.03em] font-serif hover:text-[#42060F] transition-all duration-300 group-hover:tracking-[0.04em] uppercase line-clamp-1"
@@ -260,7 +281,7 @@ export function DiscoverCollectionSection() {
                 >
                   {product.price}
                 </p>
-              </div>
+              </motion.div>
             </motion.article>
           );
         })}
