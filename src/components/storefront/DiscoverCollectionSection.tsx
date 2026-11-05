@@ -99,7 +99,6 @@ export function DiscoverCollectionSection() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const isHeaderInView = useInView(headerRef, { once: true, amount: 0.35, margin: "0px 0px -40px 0px" });
 
   const [isDesktop, setIsDesktop] = useState(true);
   useEffect(() => {
@@ -108,6 +107,12 @@ export function DiscoverCollectionSection() {
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  const isHeaderInView = useInView(headerRef, {
+    once: true,
+    amount: isDesktop ? 0.55 : 0.35,
+    margin: isDesktop ? "0px 0px -120px 0px" : "0px 0px -40px 0px",
+  });
 
   let letterIndex = 0;
   const renderLetters = (word: string) =>
@@ -178,24 +183,27 @@ export function DiscoverCollectionSection() {
         {/* On mobile: 2 columns, On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
           {collectionProducts.map((product, idx) => {
+            const isBottomRow = idx >= 3;
             const cardDelay = isDesktop
-              ? (idx % 4) * 0.12
-              : (idx % 2) * 0.12;
+              ? isBottomRow
+                ? 0.06 + (idx - 3) * 0.16
+                : 0.06 + idx * 0.16
+              : 0.04 + (idx % 2) * 0.14;
 
             return (
               <motion.article
                 key={product.id}
-                initial={{ opacity: 0, y: 50, scale: 0.96 }}
+                initial={{ opacity: 0, y: 65, scale: 0.94 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{
                   once: true,
-                  amount: 0.22,
-                  margin: "0px 0px -40px 0px",
+                  amount: isDesktop ? 0.35 : 0.22,
+                  margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
                 }}
                 transition={{
-                  duration: 0.8,
+                  duration: 0.85,
                   delay: cardDelay,
-                  ease: [0.22, 1, 0.36, 1],
+                  ease: [0.16, 1, 0.3, 1],
                 }}
                 className={`group flex flex-col ${product.colDesktop}`}
               >
