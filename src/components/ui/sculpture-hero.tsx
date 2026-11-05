@@ -186,23 +186,44 @@ void main(){
   vec2 q = p*0.0095 + vec2(uTime*0.35, -uTime*0.2);
   vec2 c = curl(q) + 0.5*curl(q*2.3 + 7.1);
   acc += c*(e*1.2*uSpread)*uTurb*light;
-  // Progressive bottom-to-top magnetic return home:
-  // Bottom particles (hm.y ~ 1.0) lock foundation first; upper particles float in descent
+  // Dual-mode physics:
+  // During intro: gentle bottom-to-top progressive return and damping
+  // When picture is complete (uIntro == 0): original FAST, energetic, responsive liquid interaction!
   float heightBonus = (hm.y * 0.45 + 0.55);
-  float k = (0.0038 + 0.011*uReturn)*(0.7+sd*0.5)*(0.35 + (1.0 - uIntro)*0.65)*heightBonus;
+  float introK = (0.0038 + 0.011*uReturn)*(0.7+sd*0.5)*heightBonus;
+  float normalK = (0.006 + 0.02*uReturn)*(0.65+sd*0.7);
+  float k = mix(normalK, introK, uIntro);
   acc -= off*k;
 
   vel += acc*uDt;
-  // Critical fluid damping during intro: prevents overshoot, vibration, and snaps
-  float viscousDamp = mix(0.86, mix(0.93, 0.955, e), pow(1.0 - uIntro, 2.0));
+  // Damping: during intro, 0.86 prevents bounce; on hover/settled, original 0.93-0.955 fluid glide
+  float normalDamp = mix(0.93, 0.955, e);
+  float viscousDamp = mix(normalDamp, 0.86, uIntro);
   vel *= pow(viscousDamp, uDt);
 
-  // Soft speed limiter during intro so particles float in slow-motion without shooting down
-  float maxSpd = mix(5.0, 32.0, pow(1.0 - uIntro, 2.0));
+  // Speed cap: during intro, limited to 5.0 for gentle rain; on hover/settled, full 32.0 fast reaction!
+  float maxSpd = mix(32.0, 5.0, uIntro);
   float curSpd = length(vel);
   if(curSpd > maxSpd){ vel = (vel/curSpd)*maxSpd; }
 
+  vec2 prevOff = off;
   off += vel*uDt;
+
+  // ZERO BOUNCE-BACK: Inelastic droplet docking
+  // When particle reaches home from above during intro, it locks instantly.
+  // No overshooting, no oscillation, no bouncing back up!
+  if(uIntro > 0.01 && e < 0.05){
+    float d = length(off);
+    if(d < 45.0){
+      float cushion = smoothstep(0.0, 45.0, d);
+      vel *= mix(0.30, 0.88, cushion);
+    }
+    if((prevOff.y <= 0.0 && off.y >= -0.6) || d < 0.6){
+      off = vec2(0.0);
+      vel = vec2(0.0);
+    }
+  }
+
   if(dot(off,off) < 0.0004 && dot(vel,vel) < 0.0004){ off = vec2(0.0); vel = vec2(0.0); }
   o = vec4(off, vel);
 }
@@ -226,6 +247,7 @@ uniform float uDot;
 uniform float uTime;
 uniform float uAmbient;
 uniform float uStreak;
+uniform float uIntro;
 uniform float uIntroVis;
 uniform float uRest;
 uniform vec3 uTint;
@@ -247,7 +269,7 @@ void main(){
   float E = energyAt(hm.xy*uRect.zw, uMouse, uRadius, uPresence, wakeE);
   float lift = smoothstep(0.35, 2.5, length(st.xy));
   // Particles active and fully visible throughout intro descent
-  float introPart = 1.0 - smoothstep(0.72, 1.0, uIntroVis);
+  float introPart = 1.0 - smoothstep(0.78, 1.0, uIntroVis);
   float a = max(max(E, lift), max(uRest, introPart));
   if(a < 0.01 || hm.w <= 0.0){ gl_Position = vec4(2.0,2.0,2.0,1.0); return; }
 
@@ -256,19 +278,24 @@ void main(){
 
   vec2 v = st.zw;
   float sp = length(v);
+  vec2 dir = sp > 0.001 ? v/sp : vec2(1.0,0.0);
   float r = uDot*hm.w*0.5;
-  vec2 lc = aCorner*(r + 1.0);
-  vec2 world = base + lc;
+  // During hover, fast particles stretch into liquid streaks; during intro, clean round dots
+  float streakAmount = uStreak * (1.0 - uIntro);
+  float len = min(sp*1.25, 18.0) * streakAmount;
+  vec2 lc = aCorner*vec2(r + len*0.5 + 1.0, r + 1.0);
+  vec2 center = base - dir*len*0.5;
+  vec2 world = center + dir*lc.x + vec2(-dir.y, dir.x)*lc.y;
 
   vec2 clip = world/uRes*2.0-1.0;
   gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
   vLocal = lc;
-  vHalfLen = 0.0;
+  vHalfLen = len*0.5;
   vR = r;
   vec3 col = cl.rgb*uTint;
-  // Luxury Glint (Descent Shimmer)
-  float glint = smoothstep(0.8, 3.5, sp);
-  col = mix(col, min(col*1.15 + vec3(0.08, 0.07, 0.04), vec3(1.0)), glint*0.4);
+  // Fast material catches the light like liquid metal on hover, champagne glint on fall
+  float glint = smoothstep(1.2, 10.0, sp);
+  col = mix(col, min(col*1.18 + vec3(0.08, 0.075, 0.05), vec3(1.0)), glint*0.65);
   vCol = col;
   vA = a;
 }
@@ -284,8 +311,11 @@ in float vA;
 uniform float uDpr;
 out vec4 o;
 void main(){
-  float d = length(vLocal) - vR;
+  vec2 q = vec2(max(abs(vLocal.x)-vHalfLen, 0.0), vLocal.y);
+  float d = length(q) - vR;
   float a = clamp(0.5 - d*uDpr, 0.0, 1.0);
+  float tail = vHalfLen > 0.0 ? clamp(0.5 - vLocal.x/(2.0*(vHalfLen+vR)), 0.0, 1.0) : 0.0;
+  a *= 1.0 - tail*0.55;
   a *= vA;
   if(a < 0.004) discard;
   o = vec4(vCol*a, a);
@@ -338,7 +368,7 @@ void main(){
   float E = energyAt(rp, uMouse, uRadius, uPresence, fl.b);
   // Zero static image during particle fall: ONLY particles are visible!
   // Once particles land and complete from bottom to top, the photographic image seamlessly takes over.
-  float fillProgress = smoothstep(0.55, 0.98, uIntroVis);
+  float fillProgress = smoothstep(0.75, 0.99, uIntroVis);
   float threshold = mix(1.15, -0.15, fillProgress);
   float bottomToTopMask = clamp((uv.y - threshold) / 0.18, 0.0, 1.0);
   float introFade = bottomToTopMask * fillProgress;
@@ -711,19 +741,25 @@ class LiquidEngine {
       // Har particle ka X coordinate uski actual bottle column par locked (Zero sideways sway)
       const disperseX = 0.0
 
-      // Staggered Bottom-to-Top flow wave:
-      // Bottom particles (hy ~ 1.0) start close to home (dock and complete first)
-      // Top particles (hy ~ 0.0) start high in the sky (arrive last in continuous flow)
-      const fromBottom = 1.0 - hy // 0.0 at bottom, 1.0 at top cap
-      const cascadeHeight = 60.0 + fromBottom * 230.0 + Math.random() * 36.0 + sd * 26.0
-      const disperseY = -cascadeHeight // -Y = above in the sky
+      // Ultra-Wide Raindrop Staggering & Massive Vertical Gaps:
+      // fromBottom: 0.0 at bottle base (lands first), 1.0 at top caps (lands last)
+      const fromBottom = 1.0 - hy
+
+      // Massive vertical spacing across ~3800px of vertical sky expanse:
+      // Bottom drops start at ~120px to ~700px above (lands first and builds base foundation)
+      // Middle drops start at ~1200px to ~2300px above with huge open vertical air space
+      // Top drops start high in the heavens at ~2400px to ~3800px above
+      const waveBase = 120.0 + Math.pow(fromBottom, 1.25) * 2200.0
+      const dropJitter = sd * 650.0 + (i % 19) * 58.0 + Math.random() * 180.0
+      const cascadeHeight = waveBase + dropJitter
+      const disperseY = -cascadeHeight // -Y = sky above
 
       st[i * 4] = disperseX
       st[i * 4 + 1] = disperseY
 
-      // Initial downward velocity: bottom particles settle gently, upper stream down gracefully
+      // Initial downward velocity: graceful athletic rain speed across the vast vertical space
       st[i * 4 + 2] = 0.0
-      st[i * 4 + 3] = 0.6 + fromBottom * 1.0 + Math.random() * 0.4
+      st[i * 4 + 3] = 1.85 + (Math.random() - 0.5) * 0.35
     }
 
     gl.bindTexture(gl.TEXTURE_2D, this.stateTex[this.stateIdx])
@@ -859,7 +895,7 @@ class LiquidEngine {
     const fk = this.presenceTarget > this.flowing ? 0.05 : 0.018
     this.flowing += (this.presenceTarget - this.flowing) * (1 - Math.pow(1 - fk, dt))
     if (this.flowing < 0.002 && this.presenceTarget === 0) this.flowing = 0
-    if (this.introT < 1) this.introT = Math.min(1, this.introT + Math.min(rawMs, 100) / 3200)
+    if (this.introT < 1) this.introT = Math.min(1, this.introT + Math.min(rawMs, 100) / 3800)
 
     const interacting = this.presence > 0.001 || this.burst > 0
     // settle is counted in simulated frames, so slow devices never snap mid-return
@@ -970,6 +1006,7 @@ class LiquidEngine {
     const o = this.opts
     const r = this.rect
     const rm = o.reducedMotion
+    const intro = rm || !o.intro ? 0 : Math.pow(1 - this.introT, 2)
     const introVis = rm || !o.intro ? 1 : Math.pow(this.introT, 2.2)
     const base = o.ambient && !rm ? clamp(o.ambientIntensity, 0, 2) : 0
     const amb = base + this.flowing * 0.85 * clamp(o.liquid, 0, 2) * (rm ? 0.3 : 1)
@@ -1040,6 +1077,7 @@ class LiquidEngine {
     gl.uniform1f(P.u.uTime, this.time)
     gl.uniform1f(P.u.uAmbient, amb)
     gl.uniform1f(P.u.uStreak, (o.streaks ? 1 : 0) * (0.45 + 0.55 * introVis))
+    gl.uniform1f(P.u.uIntro, intro)
     gl.uniform1f(P.u.uIntroVis, introVis)
     gl.uniform1f(P.u.uRest, rest)
     gl.uniform1f(P.u.uDpr, dpr)
@@ -1405,7 +1443,7 @@ function renderHeadline(text: string, accent: string, isAwakened: boolean) {
           animate={isAwakened ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
           transition={{
             duration: 1.15,
-            delay: 0.22 + li * 0.16,
+            delay: 1.95 + li * 0.22,
             ease: [0.16, 1, 0.3, 1],
           }}
         >
@@ -1459,9 +1497,9 @@ export default function SculptureHero(props: SculptureHeroProps) {
     particleDensity = 1,
     particleSpread = 1,
     dotSize = 1,
-    turbulence = 0.5,
-    liquid = 0,
-    streaks = false,
+    turbulence = 1,
+    liquid = 1,
+    streaks = true,
     restStyle = "image",
     returnSpeed = 1,
     ambient = false,
@@ -1654,14 +1692,15 @@ export default function SculptureHero(props: SculptureHeroProps) {
     const coarse = window.matchMedia("(hover: none), (pointer: coarse)")
     setIsTouch(coarse.matches)
     let engine: LiquidEngine | null = null
-    const fail = () => {
+    const fail = (err?: any) => {
+      if (err) console.error("SculptureHero WebGL Error:", err)
       root.dataset.gl = "off"
     }
     try {
       engine = new LiquidEngine(canvas, optsRef.current(mq.matches), fail)
       engineRef.current = engine
-    } catch {
-      fail()
+    } catch (e) {
+      fail(e)
     }
 
     const ro = new ResizeObserver(() => relayout())
@@ -1890,13 +1929,13 @@ export default function SculptureHero(props: SculptureHeroProps) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={isAwakened ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-              transition={{ duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.85, delay: 1.65, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-3 mb-2.5 sm:mb-3.5"
             >
               <motion.span
                 initial={{ width: 0 }}
                 animate={isAwakened ? { width: 34 } : { width: 0 }}
-                transition={{ duration: 0.85, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.85, delay: 1.72, ease: [0.16, 1, 0.3, 1] }}
                 className="h-[1.5px] bg-[#590B16] inline-block shrink-0"
               />
               <span
@@ -1914,7 +1953,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
             <motion.p
               initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
               animate={isAwakened ? { opacity: 0.82, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 18, filter: "blur(6px)" }}
-              transition={{ duration: 0.95, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.95, delay: 2.50, ease: [0.16, 1, 0.3, 1] }}
               className="sh-body"
             >
               {body}
@@ -1923,7 +1962,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={isAwakened ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ duration: 0.85, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.85, delay: 2.85, ease: [0.16, 1, 0.3, 1] }}
             className="sh-ctas"
           >
             {primaryCta && primaryCta.label ? (
@@ -1937,7 +1976,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
                 <motion.span
                   initial={{ x: "-120%" }}
                   animate={isAwakened ? { x: ["-120%", "120%"] } : { x: "-120%" }}
-                  transition={{ delay: 1.05, duration: 1.25, ease: "easeInOut" }}
+                  transition={{ delay: 3.40, duration: 1.25, ease: "easeInOut" }}
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
                 />
                 <span className="relative z-10">{primaryCta.label}</span>

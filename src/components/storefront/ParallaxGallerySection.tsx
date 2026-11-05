@@ -158,9 +158,6 @@ const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
           className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)] hover:shadow-[0_24px_50px_-8px_rgba(62,6,14,0.18)] border border-stone-200/70 group transition-shadow duration-700"
           style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
         >
-          {/* 21st.dev luxury light reflection sweep across each card */}
-          <div className="absolute inset-0 -translate-x-[140%] group-hover:translate-x-[140%] bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none z-20" />
-
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}

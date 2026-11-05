@@ -121,15 +121,17 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
       {/* Primary Flacon Display Area (Top on Mobile, Right Column on Desktop) */}
       <div className="relative order-1 sm:order-2 sm:flex-1 w-full aspect-[4/4.5] sm:aspect-auto sm:h-[560px] lg:h-[580px] rounded-2xl overflow-hidden bg-[#0F1524] shadow-lg group border-none outline-none ring-0">
         {/* Fullscreen Expand Icon Button (Top-Right) */}
-        <button
+        <motion.button
           type="button"
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.92 }}
           onClick={() => setIsZoomOpen(true)}
           aria-label={`Enlarge image for ${title}`}
           className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none cursor-pointer"
           title="Expand image"
         >
           <Maximize2 className="w-4 h-4" />
-        </button>
+        </motion.button>
 
         {/* Main Image Trigger */}
         <button
@@ -165,7 +167,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
+                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 className="fixed inset-0 z-[99999] bg-white w-screen h-screen overflow-hidden flex items-center justify-center p-4 sm:p-8 select-none"
                 style={{ overscrollBehavior: "none" }}
                 role="dialog"
@@ -205,22 +207,26 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                   <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8 stroke-[1.75]" />
                 </motion.button>
 
-                {/* Central Showcase Image */}
+                {/* Central Showcase Image with Smooth Scale Zoom Animation */}
                 <motion.div
-                  initial={{ scale: 0.92, opacity: 0 }}
+                  initial={{ scale: 0.72, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.92, opacity: 0 }}
-                  transition={{ type: "spring", damping: 28, stiffness: 320 }}
+                  exit={{ scale: 0.78, opacity: 0 }}
+                  transition={{
+                    duration: 0.42,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  style={{ transformOrigin: "center center" }}
                   className="relative w-full max-w-4xl h-[74vh] sm:h-[80vh] max-h-[80vh] flex items-center justify-center overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={selectedImageIndex}
-                      initial={{ opacity: 0.75, scale: 0.98 }}
+                      initial={{ opacity: 0.45, scale: 0.92 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0.75, scale: 0.98 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      exit={{ opacity: 0.45, scale: 0.96 }}
+                      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                       className="relative w-full h-full flex items-center justify-center"
                     >
                       <Image

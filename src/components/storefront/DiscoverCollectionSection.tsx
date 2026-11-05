@@ -98,18 +98,16 @@ export function DiscoverCollectionSection() {
   const [quickViewProduct, setQuickViewProduct] = useState<CollectionProduct | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.16 });
+  const headerRef = useRef<HTMLDivElement>(null);
+  const isHeaderInView = useInView(headerRef, { once: true, amount: 0.35, margin: "0px 0px -40px 0px" });
 
-  const [canAnimateRow2, setCanAnimateRow2] = useState(false);
-
+  const [isDesktop, setIsDesktop] = useState(true);
   useEffect(() => {
-    if (isInView) {
-      const timer = setTimeout(() => {
-        setCanAnimateRow2(true);
-      }, 750);
-      return () => clearTimeout(timer);
-    }
-  }, [isInView]);
+    const update = () => setIsDesktop(window.innerWidth >= 1024);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   let letterIndex = 0;
   const renderLetters = (word: string) =>
@@ -145,14 +143,12 @@ export function DiscoverCollectionSection() {
   return (
     <section
       ref={sectionRef}
-      className={`w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70 ${
-        isInView ? "stc-is-in" : ""
-      }`}
+      className="w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70"
     >
       <style>{STC_CSS}</style>
       <Container size="wide">
         {/* ================= TOP EDITORIAL HEADER ================= */}
-        <div className="w-full mb-6 sm:mb-7 lg:mb-8">
+        <div ref={headerRef} className={`w-full mb-6 sm:mb-7 lg:mb-8 ${isHeaderInView ? "stc-is-in" : ""}`}>
           <div className="text-left select-none">
             <h2
               className="stc-heading text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
@@ -169,10 +165,10 @@ export function DiscoverCollectionSection() {
             <div
               className="w-20 sm:w-24 h-[2px] bg-[#590B16]/30 mt-3.5 origin-left"
               style={{
-                transform: isInView ? "scaleX(1)" : "scaleX(0)",
-                opacity: isInView ? 1 : 0,
+                transform: isHeaderInView ? "scaleX(1)" : "scaleX(0)",
+                opacity: isHeaderInView ? 1 : 0,
                 transition: "transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease",
-                transitionDelay: `${0.08 + letterIndex * 0.028 + 0.04}s`,
+                transitionDelay: `${0.04 + letterIndex * 0.024 + 0.04}s`,
               }}
             />
           </div>
@@ -182,25 +178,22 @@ export function DiscoverCollectionSection() {
         {/* On mobile: 2 columns, On desktop: 4 columns x 2 rows with negative space layout matching reference perfectly */}
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-x-8 lg:gap-y-12">
           {collectionProducts.map((product, idx) => {
-            const isBottomRow = idx >= 3;
-            const cardDelay = isBottomRow
-              ? canAnimateRow2
-                ? 0.1 + (idx - 3) * 0.12
-                : 0.85 + (idx - 3) * 0.12
-              : 0.52 + idx * 0.12;
+            const cardDelay = isDesktop
+              ? (idx % 4) * 0.12
+              : (idx % 2) * 0.12;
 
             return (
               <motion.article
                 key={product.id}
-                initial={{ opacity: 0, y: 110, scale: 0.95 }}
+                initial={{ opacity: 0, y: 50, scale: 0.96 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{
                   once: true,
-                  amount: isBottomRow ? 0.2 : 0.14,
-                  margin: isBottomRow ? "-35px" : "-20px",
+                  amount: 0.22,
+                  margin: "0px 0px -40px 0px",
                 }}
                 transition={{
-                  duration: 0.95,
+                  duration: 0.8,
                   delay: cardDelay,
                   ease: [0.22, 1, 0.36, 1],
                 }}
