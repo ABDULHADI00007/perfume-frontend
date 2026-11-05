@@ -41,7 +41,7 @@ export function ArtOfBloomSection() {
           <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start pl-0 sm:pl-6 lg:pl-10 pr-14 min-[360px]:pr-16 min-[400px]:pr-20 min-[480px]:pr-28 sm:pr-36 md:pr-48 lg:pr-0 pt-11 min-[360px]:pt-14 sm:pt-6 lg:pt-0">
             <div className="relative w-[270px] min-[360px]:w-[290px] min-[400px]:w-[320px] min-[480px]:w-[360px] sm:w-[400px] md:w-[440px] lg:w-[500px] h-[320px] min-[360px]:h-[350px] min-[400px]:h-[380px] min-[480px]:h-[430px] sm:h-[480px] md:h-[520px] lg:h-[590px]">
               
-              {/* 1. Main Black Perfume Image - 3rd in sequence on mobile, 1st on desktop */}
+              {/* 1. Main Black Perfume Image - 3rd in sequence on mobile, 4th (end me) on desktop */}
               <motion.div
                 style={{ y: mainCardY }}
                 className="absolute inset-0"
@@ -49,10 +49,14 @@ export function ArtOfBloomSection() {
                 <motion.div
                   initial={{ opacity: 0, y: 55 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{
+                    once: true,
+                    amount: isDesktop ? 0.35 : 0.2,
+                    margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+                  }}
                   transition={{
                     duration: 1.25,
-                    delay: isDesktop ? 0.30 : 0.65,
+                    delay: isDesktop ? 0.95 : 0.65,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   className="w-full h-full overflow-hidden shadow-[0_20px_55px_rgba(0,0,0,0.32)] hover:shadow-[0_28px_65px_rgba(0,0,0,0.45)] transition-shadow duration-700 relative"
@@ -68,19 +72,23 @@ export function ArtOfBloomSection() {
                 </motion.div>
               </motion.div>
 
-              {/* 2. Overlapping Flower Secondary Card - 4th in sequence on mobile */}
+              {/* 2. Overlapping Flower Secondary Card - 3rd on desktop (black flower pic), 4th on mobile */}
               <motion.div
                 style={{ y: secondaryCardY, rotate: secondaryCardRotate }}
                 className="absolute bottom-[-6%] sm:bottom-[-4%] -right-14 min-[360px]:-right-16 min-[400px]:-right-20 min-[480px]:-right-28 sm:-right-36 md:-right-48 lg:-right-64 z-10 w-[155px] min-[360px]:w-[170px] min-[400px]:w-[190px] min-[480px]:w-[210px] sm:w-[230px] md:w-[250px] lg:w-[280px] h-[195px] min-[360px]:h-[215px] min-[400px]:h-[240px] min-[480px]:h-[265px] sm:h-[290px] md:h-[310px] lg:h-[350px]"
               >
-                {/* Entrance Reveal: 4th on mobile, animates right after black pic */}
+                {/* Entrance Reveal */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.92, x: 28, y: 32, rotate: 3 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{
+                    once: true,
+                    amount: isDesktop ? 0.35 : 0.2,
+                    margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+                  }}
                   transition={{
                     duration: 1.15,
-                    delay: isDesktop ? 1.10 : 0.85,
+                    delay: isDesktop ? 0.70 : 0.85,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   className="w-full h-full"
@@ -118,14 +126,18 @@ export function ArtOfBloomSection() {
               className="font-cinzel uppercase text-[clamp(3.8rem,14.8vw,5.8rem)] min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.88] sm:leading-[0.84] tracking-[0.05em]"
               style={{ fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif" }}
             >
-              {/* Step 1 on Mobile: Heading text emerges FIRST */}
+              {/* Step 1: Heading text emerges FIRST */}
               <motion.span
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{
+                  once: true,
+                  amount: isDesktop ? 0.35 : 0.2,
+                  margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+                }}
                 transition={{
                   duration: 0.95,
-                  delay: isDesktop ? 0.65 : 0.08,
+                  delay: 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 className="block whitespace-nowrap"
@@ -135,10 +147,14 @@ export function ArtOfBloomSection() {
               <motion.span
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{
+                  once: true,
+                  amount: isDesktop ? 0.35 : 0.2,
+                  margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+                }}
                 transition={{
                   duration: 0.95,
-                  delay: isDesktop ? 0.80 : 0.22,
+                  delay: isDesktop ? 0.20 : 0.22,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 className="block pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 font-normal mt-2 min-[360px]:mt-2.5 sm:mt-3 md:-mt-3 lg:-mt-5 whitespace-nowrap"
@@ -147,14 +163,18 @@ export function ArtOfBloomSection() {
               </motion.span>
             </h2>
 
-            {/* Step 2 on Mobile: Paragraph text emerges SECOND */}
+            {/* Step 2: Paragraph text emerges SECOND */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{
+                once: true,
+                amount: isDesktop ? 0.35 : 0.2,
+                margin: isDesktop ? "0px 0px -140px 0px" : "0px 0px -40px 0px",
+              }}
               transition={{
                 duration: 1.05,
-                delay: isDesktop ? 1.10 : 0.40,
+                delay: isDesktop ? 0.42 : 0.40,
                 ease: [0.16, 1, 0.3, 1],
               }}
               className="pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-5 min-[360px]:pt-6 sm:pt-3 lg:pt-4"
