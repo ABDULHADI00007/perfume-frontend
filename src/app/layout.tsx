@@ -47,8 +47,15 @@ export default function RootLayout({
         <link rel="icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" sizes="any" />
         <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" />
         <link rel="apple-touch-icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
       </head>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col selection:bg-accent-subtle selection:text-foreground">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2.5 focus:bg-[#590B16] focus:text-[#FAF7EE] focus:text-xs focus:font-semibold focus:uppercase focus:tracking-widest focus:shadow-xl focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <Preloader />
         <Suspense fallback={null}>
           <TopProgressBar />

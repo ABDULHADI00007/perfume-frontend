@@ -154,6 +154,7 @@
 
   /* Smooth Scroll Container Rules for Storefront Composition */
   .cinematic-scroll-container {
+    position: relative;
     scroll-behavior: auto;
   }
 

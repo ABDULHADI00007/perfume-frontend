@@ -26,7 +26,7 @@ const collectionProducts: CollectionProduct[] = [
     slug: "elite-fusion",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_elite_fusion.jpg",
+    image: "/images/perfumes/collection_elite_fusion.webp",
     notes: "Fresh Bergamot · Rich Ambroxan · Woody Patchouli",
     colDesktop: "lg:col-start-1 lg:row-start-1",
   },
@@ -36,7 +36,7 @@ const collectionProducts: CollectionProduct[] = [
     slug: "crown-legacy",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_crown_legacy.jpg",
+    image: "/images/perfumes/collection_crown_legacy.webp",
     notes: "Sicilian Bergamot · Rich Oud · Smoky Leather",
     colDesktop: "lg:col-start-3 lg:row-start-1",
   },
@@ -46,7 +46,7 @@ const collectionProducts: CollectionProduct[] = [
     slug: "blue-horizon",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_blue_horizon.jpg",
+    image: "/images/perfumes/collection_blue_horizon.webp",
     notes: "Green Apple · Aquatic Lotus · Cedarwood",
     colDesktop: "lg:col-start-4 lg:row-start-1",
   },
@@ -56,7 +56,7 @@ const collectionProducts: CollectionProduct[] = [
     slug: "sultans-veil",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_sultans_veil.jpg",
+    image: "/images/perfumes/collection_sultans_veil.webp",
     notes: "Pink Pepper · Cedar · Noble Oud",
     colDesktop: "lg:col-start-2 lg:row-start-2",
   },
@@ -66,7 +66,7 @@ const collectionProducts: CollectionProduct[] = [
     slug: "velvet-orchid",
     price: "Rs. 3,000",
     numericPrice: 3000,
-    image: "/images/perfumes/collection_velvet_orchid.jpg",
+    image: "/images/perfumes/collection_velvet_orchid.webp",
     notes: "Bright Orange · Turkish Rose · Bourbon Vanilla",
     colDesktop: "lg:col-start-4 lg:row-start-2",
   },
@@ -148,7 +148,8 @@ export function DiscoverCollectionSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70"
+      id="discover-collection"
+      className="w-full bg-[#FAF7EE] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 lg:pb-20 overflow-hidden select-none border-y border-[#ECE5D8]/70 scroll-mt-24"
     >
       <style>{STC_CSS}</style>
       <Container size="wide">
@@ -156,6 +157,7 @@ export function DiscoverCollectionSection() {
         <div ref={headerRef} className={`w-full mb-6 sm:mb-7 lg:mb-8 ${isHeaderInView ? "stc-is-in" : ""}`}>
           <div className="text-left select-none">
             <h2
+              id="discover-collection-heading"
               className="stc-heading text-[#590B16] font-normal uppercase leading-[1.02] tracking-[0.02em]"
               style={{
                 fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
@@ -233,6 +235,8 @@ export function DiscoverCollectionSection() {
                     <img
                       src={product.image}
                       alt={product.title}
+                      width={400}
+                      height={430}
                       loading="lazy"
                       className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
                     />
@@ -269,6 +273,7 @@ export function DiscoverCollectionSection() {
               >
                 <Link href={`/perfumes/${product.slug}`}>
                   <h3
+                    id={`product-heading-${product.slug}`}
                     className="text-[#590B16] text-[12px] sm:text-[14.5px] font-semibold tracking-[0.03em] font-serif hover:text-[#42060F] transition-all duration-300 group-hover:tracking-[0.04em] uppercase line-clamp-1"
                     style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                   >
@@ -328,6 +333,7 @@ export function DiscoverCollectionSection() {
                   Extrait de Parfum · 100ml
                 </div>
                 <h3
+                  id="quickview-product-title"
                   className="text-2xl sm:text-3xl text-[#590B16] font-normal font-serif uppercase tracking-[0.04em]"
                   style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                 >

@@ -118,16 +118,16 @@ export const InteractiveTravelCard = React.forwardRef<
       }
     };
 
-    // --- 3D Tilt Animation Logic with Buttery Smooth Spring Physics ---
+    // --- 3D Tilt Animation Logic with Ultra-Silky Smooth Spring Physics ---
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    // Buttery smooth luxury spring configuration
-    const springConfig = { damping: 22, stiffness: 120, mass: 0.5 };
+    // Ultra-silky, calm luxury spring configuration for maximum fluid smoothness
+    const springConfig = { damping: 30, stiffness: 60, mass: 0.6 };
     const springX = useSpring(mouseX, springConfig);
     const springY = useSpring(mouseY, springConfig);
 
-    // 3D tilt angles: top, bottom, left, and right all respond with fluid depth
+    // Full 3D tilt angles (smooth 14deg depth gliding gracefully)
     const rotateX = useTransform(springY, [-0.5, 0.5], ["14deg", "-14deg"]);
     const rotateY = useTransform(springX, [-0.5, 0.5], ["-14deg", "14deg"]);
 
@@ -161,6 +161,13 @@ export const InteractiveTravelCard = React.forwardRef<
       mouseY.set(0);
     };
 
+    const handleTouchEnd = () => {
+      setIsCardHovered(false);
+      setIsButtonHovered(false);
+      mouseX.set(0);
+      mouseY.set(0);
+    };
+
     return (
       <div style={{ perspective: 1200 }} className="w-full flex justify-center">
         <motion.div
@@ -169,17 +176,19 @@ export const InteractiveTravelCard = React.forwardRef<
           onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
           animate={{
-            scale: isCardHovered && !isButtonHovered ? 1.02 : 1,
+            scale: isCardHovered && !isButtonHovered ? 1.018 : 1,
           }}
-          transition={{ scale: { duration: 0.25, ease: "easeOut" } }}
+          transition={{ scale: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
           style={{
-            rotateX: isButtonHovered ? "0deg" : rotateX,
-            rotateY: isButtonHovered ? "0deg" : rotateY,
+            rotateX,
+            rotateY,
             transformStyle: "preserve-3d",
           }}
           className={cn(
-            "relative h-[19.5rem] min-[360px]:h-[21rem] min-[440px]:h-[23rem] sm:h-[25rem] lg:h-[29.5rem] w-full max-w-[340px] rounded-[18px] min-[380px]:rounded-[22px] sm:rounded-[30px] overflow-hidden transition-all duration-300 select-none group border border-[#E0D7CB]/80 outline-none bg-[#EBE4D8] cursor-pointer",
+            "relative h-[19.5rem] min-[360px]:h-[21rem] min-[440px]:h-[23rem] sm:h-[25rem] lg:h-[29.5rem] w-full max-w-[340px] rounded-[18px] min-[380px]:rounded-[22px] sm:rounded-[30px] overflow-hidden select-none group border border-[#E0D7CB]/80 outline-none bg-[#EBE4D8] cursor-pointer transition-[box-shadow] duration-500 ease-out",
             isCardHovered && !isButtonHovered
               ? "shadow-[0_20px_45px_rgba(40,30,20,0.14)]"
               : "shadow-[0_12px_36px_rgba(40,30,20,0.08)]",
@@ -231,7 +240,7 @@ export const InteractiveTravelCard = React.forwardRef<
                 {discountBadge}
               </span>
 
-              {/* Floating Wishlist Heart with Sleek Black Circular Backdrop & #590B16 Heart Icon */}
+              {/* Floating Wishlist Heart with Sleek Black Circular Backdrop */}
               <motion.button
                 type="button"
                 onMouseEnter={() => {
@@ -259,9 +268,9 @@ export const InteractiveTravelCard = React.forwardRef<
               >
                 <Heart
                   className={cn(
-                    "w-3.5 h-3.5 min-[380px]:w-3.5 min-[380px]:h-3.5 sm:w-4.5 sm:h-4.5 drop-shadow-xs transition-all duration-200",
+                    "w-3.5 h-3.5 min-[380px]:w-4 min-[380px]:h-4 sm:w-4.5 sm:h-4.5 transition-all duration-200",
                     isFav
-                      ? "fill-[#590B16] text-[#590B16] stroke-[#590B16]"
+                      ? "fill-[#590B16] text-[#590B16] stroke-[#590B16] stroke-1"
                       : "fill-none stroke-white text-white stroke-[2.2] hover:scale-105"
                   )}
                 />

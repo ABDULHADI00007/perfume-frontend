@@ -74,9 +74,10 @@ export function ArtOfBloomSection() {
                     className="w-full h-full relative"
                   >
                     <Image
-                      src="/images/perfumes/sultans-veil-art-of-scent.jpg"
+                      src="/images/perfumes/sultans-veil-art-of-scent.webp"
                       alt="Sultan's Veil - Soulmate Scents"
                       fill
+                      loading="lazy"
                       className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                       sizes="(max-width: 768px) 360px, 500px"
                     />
@@ -120,9 +121,10 @@ export function ArtOfBloomSection() {
                     className="w-full h-full shadow-[0_22px_45px_rgba(0,0,0,0.28)] hover:shadow-[0_28px_60px_rgba(0,0,0,0.4)] overflow-hidden relative transition-shadow duration-700"
                   >
                     <Image
-                      src="/images/perfumes/ea2ce943-14bd-4b9a-9621-5312369aa7a8.png"
+                      src="/images/perfumes/ea2ce943-14bd-4b9a-9621-5312369aa7a8.webp"
                       alt="Botanical Flower Bloom"
                       fill
+                      loading="lazy"
                       className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                       sizes="(max-width: 768px) 210px, 280px"
                     />
@@ -136,6 +138,7 @@ export function ArtOfBloomSection() {
           {/* Right Column: Exact Reference Typography (Desktop Right, Mobile & Tablet Above) */}
           <div className="order-1 lg:order-2 lg:col-span-7 space-y-3 sm:space-y-5 md:space-y-6 pt-0 sm:pt-0 lg:pt-0 mt-4 sm:mt-0 md:-mt-2 lg:-mt-2 pl-2 sm:pl-4 lg:pl-2 lg:-ml-4 xl:-ml-6 z-20">
             <h2
+              id="art-of-scent-heading"
               className="font-cinzel uppercase text-[clamp(3.8rem,14.8vw,5.8rem)] min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-[98px] xl:text-[110px] font-normal text-[#4A0A13] leading-[0.88] sm:leading-[0.84] tracking-[0.05em]"
               style={{ fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif" }}
             >
@@ -192,7 +195,7 @@ export function ArtOfBloomSection() {
               }}
               className="pl-1.5 min-[360px]:pl-3 min-[390px]:pl-5 min-[480px]:pl-16 sm:pl-24 md:pl-32 lg:pl-36 pt-5 min-[360px]:pt-6 sm:pt-3 lg:pt-4"
             >
-              <p className="text-[17px] min-[360px]:text-[18px] min-[390px]:text-[19px] sm:text-[18px] md:text-[17px] lg:text-[16px] xl:text-[17px] text-[#4A0A13]/90 font-sans leading-[1.65] sm:leading-relaxed font-normal max-w-[470px] sm:max-w-[495px] md:max-w-[520px] ml-1 min-[360px]:ml-2 sm:ml-16 md:ml-20 lg:ml-32 xl:ml-36">
+              <p id="art-of-scent-description" className="text-[17px] min-[360px]:text-[18px] min-[390px]:text-[19px] sm:text-[18px] md:text-[17px] lg:text-[16px] xl:text-[17px] text-[#4A0A13]/90 font-sans leading-[1.65] sm:leading-relaxed font-normal max-w-[470px] sm:max-w-[495px] md:max-w-[520px] ml-1 min-[360px]:ml-2 sm:ml-16 md:ml-20 lg:ml-32 xl:ml-36">
                 Born where rare botanicals meet pure passion, this{" "}
                 <br className="hidden min-[480px]:inline" />
                 fragrance unfolds in layers of floral depth, warm{" "}

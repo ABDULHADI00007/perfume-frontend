@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckoutAddress } from "../types";
 import { CheckoutFormErrors } from "../validation";
+import { COUNTRIES } from "../countries";
 
 interface ShippingAddressSectionProps {
   address: CheckoutAddress;
@@ -13,16 +14,13 @@ interface ShippingAddressSectionProps {
   notes: string;
   onNotesChange: (notes: string) => void;
   errors: CheckoutFormErrors;
+  onSetFieldError: (field: keyof CheckoutFormErrors, error: string | undefined) => void;
 }
 
-const COUNTRY_OPTIONS: SelectOption[] = [
-  { label: "Pakistan", value: "Pakistan" },
-  { label: "United Arab Emirates", value: "United Arab Emirates" },
-  { label: "Saudi Arabia", value: "Saudi Arabia" },
-  { label: "United Kingdom", value: "United Kingdom" },
-  { label: "United States", value: "United States" },
-  { label: "Canada", value: "Canada" },
-];
+const COUNTRY_OPTIONS: SelectOption[] = COUNTRIES.map((c) => ({
+  label: `${c.flag}  ${c.country}`,
+  value: c.country,
+}));
 
 export function ShippingAddressSection({
   address,
@@ -30,12 +28,28 @@ export function ShippingAddressSection({
   notes,
   onNotesChange,
   errors,
+  onSetFieldError,
 }: ShippingAddressSectionProps) {
+  const handleAddressBlur = (field: keyof CheckoutAddress, minLength: number, fieldName: string) => {
+    const val = (address[field] || "").trim();
+    if (!val) {
+      onSetFieldError(field as keyof CheckoutFormErrors, `${fieldName} is required`);
+    } else if (val.length < minLength) {
+      onSetFieldError(field as keyof CheckoutFormErrors, `Please enter a valid ${fieldName.toLowerCase()}`);
+    } else {
+      onSetFieldError(field as keyof CheckoutFormErrors, undefined);
+    }
+  };
+
   return (
     <Card variant="default" className="border border-[#E2DED6] bg-white p-2 sm:p-4">
       <CardHeader className="pb-4 border-b border-[#F0ECE1]">
         <div className="flex items-center gap-3">
-          <Badge variant="default" size="lg" className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#590B16] text-white">
+          <Badge
+            variant="default"
+            size="lg"
+            className="w-8 h-8 rounded-full justify-center p-0 font-serif font-bold text-sm bg-[#590B16] text-white"
+          >
             2
           </Badge>
           <div>
@@ -50,17 +64,25 @@ export function ShippingAddressSection({
       </CardHeader>
 
       <CardContent className="pt-6 space-y-4">
+        {/* Street Address */}
         <Input
           id="checkout-address-1"
           label="Street Address *"
           placeholder="e.g. House #12, Block H-3, Johar Town"
           value={address.addressLine1}
-          onChange={(e) => onChange("addressLine1", e.target.value)}
+          onChange={(e) => {
+            onChange("addressLine1", e.target.value);
+            if (errors.addressLine1 && e.target.value.trim().length >= 3) {
+              onSetFieldError("addressLine1", undefined);
+            }
+          }}
+          onBlur={() => handleAddressBlur("addressLine1", 3, "Street address")}
           error={errors.addressLine1}
           autoComplete="street-address"
           required
         />
 
+        {/* Apartment (Optional) */}
         <Input
           id="checkout-address-2"
           label="Apartment, Suite, Unit (Optional)"
@@ -70,13 +92,20 @@ export function ShippingAddressSection({
           autoComplete="address-line2"
         />
 
+        {/* City, State, Postal Code */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
             id="checkout-city"
             label="City *"
             placeholder="e.g. Lahore"
             value={address.city}
-            onChange={(e) => onChange("city", e.target.value)}
+            onChange={(e) => {
+              onChange("city", e.target.value);
+              if (errors.city && e.target.value.trim().length >= 2) {
+                onSetFieldError("city", undefined);
+              }
+            }}
+            onBlur={() => handleAddressBlur("city", 2, "City")}
             error={errors.city}
             autoComplete="address-level2"
             required
@@ -87,7 +116,13 @@ export function ShippingAddressSection({
             label="State / Province *"
             placeholder="e.g. Punjab"
             value={address.state}
-            onChange={(e) => onChange("state", e.target.value)}
+            onChange={(e) => {
+              onChange("state", e.target.value);
+              if (errors.state && e.target.value.trim().length >= 2) {
+                onSetFieldError("state", undefined);
+              }
+            }}
+            onBlur={() => handleAddressBlur("state", 2, "State or province")}
             error={errors.state}
             autoComplete="address-level1"
             required
@@ -98,18 +133,31 @@ export function ShippingAddressSection({
             label="Postal / ZIP Code *"
             placeholder="e.g. 54000"
             value={address.postalCode}
-            onChange={(e) => onChange("postalCode", e.target.value)}
+            onChange={(e) => {
+              onChange("postalCode", e.target.value);
+              if (errors.postalCode && e.target.value.trim().length >= 2) {
+                onSetFieldError("postalCode", undefined);
+              }
+            }}
+            onBlur={() => handleAddressBlur("postalCode", 2, "Postal / ZIP code")}
             error={errors.postalCode}
             autoComplete="postal-code"
             required
           />
         </div>
 
+        {/* Country / Region */}
         <Select
           id="checkout-country"
           label="Country / Region *"
           value={address.country}
-          onChange={(e) => onChange("country", e.target.value)}
+          onChange={(e) => {
+            const newCountry = e.target.value;
+            onChange("country", newCountry);
+            if (errors.country && newCountry.trim()) {
+              onSetFieldError("country", undefined);
+            }
+          }}
           error={errors.country}
           options={COUNTRY_OPTIONS}
         />
@@ -131,5 +179,3 @@ export function ShippingAddressSection({
     </Card>
   );
 }
-
-

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { adminService } from "@/features/admin/services/adminService";
 import { AdminSettings } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
@@ -13,11 +14,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AdminDetailSkeleton } from "@/components/admin/AdminDetailSkeleton";
 import { Icons } from "@/components/ui/icons";
+import { cn } from "@/lib/utils";
 
 export default function AdminSettingsPage() {
   const { hasPermission } = useAdminAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -149,8 +152,16 @@ export default function AdminSettingsPage() {
       setIsSaving(true);
       setError(null);
       setSuccessMessage(null);
+      setJustSaved(false);
       await adminService.updateSettings(payload);
-      setSuccessMessage("Settings saved successfully. All changes are active on the storefront.");
+      setSuccessMessage("Storefront settings updated successfully. All changes are active on the storefront.");
+      setJustSaved(true);
+      setTimeout(() => {
+        setJustSaved(false);
+      }, 4000);
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save settings");
     } finally {
@@ -165,7 +176,39 @@ export default function AdminSettingsPage() {
   const canEdit = hasPermission("settings.update");
 
   return (
-    <div className="space-y-6 font-sans max-w-5xl">
+    <div className="space-y-6 font-sans max-w-5xl relative">
+      {/* Floating Viewport Toast for Immediate Visibility in empty space below header */}
+      <AnimatePresence>
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -12, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed top-20 right-4 sm:right-8 z-[99999] max-w-md bg-white border border-emerald-500/40 text-stone-900 shadow-[0_16px_40px_rgba(0,0,0,0.18)] rounded-2xl p-4 flex items-start gap-3.5"
+          >
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-200">
+              <Icons.Check className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div className="flex-1 pr-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+                Settings Updated Successfully
+              </h4>
+              <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
+                {successMessage}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSuccessMessage(null)}
+              className="text-stone-400 hover:text-stone-700 p-1 rounded-lg transition-colors cursor-pointer"
+            >
+              <Icons.Close size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AdminPageHeader
         category="CONFIGURATION"
         title="Storefront Settings"
@@ -412,16 +455,48 @@ export default function AdminSettingsPage() {
 
         {/* Submit Actions */}
         {canEdit && (
-          <div className="flex flex-col sm:flex-row justify-end pt-2">
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              isLoading={isSaving}
-              className="w-full sm:w-auto bg-[#0C134F] hover:bg-[#121A4B] text-white rounded-xl px-9 py-3.5 text-xs font-bold tracking-[0.18em] uppercase shadow-md hover:shadow-lg transition-all cursor-pointer"
-            >
-              Save Storefront Settings
-            </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-stone-200/60">
+            <div className="flex items-center gap-2">
+              <AnimatePresence>
+                {justSaved && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shadow-xs"
+                  >
+                    <Icons.Check className="w-4 h-4 stroke-[2.5] text-emerald-600" />
+                    <span>Settings saved and published live!</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                isLoading={isSaving}
+                className={cn(
+                  "w-full sm:w-auto rounded-xl px-9 py-3.5 text-xs font-bold tracking-[0.18em] uppercase shadow-md transition-all duration-300 cursor-pointer flex items-center justify-center gap-2",
+                  justSaved
+                    ? "!bg-emerald-600 hover:!bg-emerald-700 !text-white shadow-emerald-600/25"
+                    : "bg-[#0C134F] hover:bg-[#121A4B] text-white"
+                )}
+              >
+                {justSaved ? (
+                  <>
+                    <Icons.Check className="w-4 h-4 stroke-[2.5]" />
+                    <span>Settings Saved!</span>
+                  </>
+                ) : isSaving ? (
+                  <span>Saving Settings...</span>
+                ) : (
+                  <span>Save Storefront Settings</span>
+                )}
+              </Button>
+            </div>
           </div>
         )}
       </form>

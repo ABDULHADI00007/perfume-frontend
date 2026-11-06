@@ -160,9 +160,12 @@ export function Preloader() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/perfumes/1789763707946.png"
+                src="/images/perfumes/1789763707946.webp"
                 alt="Soulmate Scents - Essence of Unbreakable Bonds"
+                width={832}
+                height={345}
                 className="w-full h-full object-contain object-center select-none pointer-events-none"
+                loading="lazy"
                 draggable={false}
               />
             </motion.div>

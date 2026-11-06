@@ -1871,7 +1871,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
             filter: "blur(54px)",
           }}
         />
-        <img ref={imgRef} className="sh-fallback" src={activeSrc} alt="" crossOrigin="anonymous" draggable={false} />
+        <img ref={imgRef} className="sh-fallback" src={activeSrc} alt={imageAlt || "Soulmate Scents Haute Parfumerie Flacon"} loading="lazy" crossOrigin="anonymous" draggable={false} />
       </motion.div>
       <span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>{imageAlt}</span>
 
@@ -1946,7 +1946,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
               </span>
             </motion.div>
           ) : null}
-          <h1 className="sh-h1">{renderHeadline(headline, headlineAccent, isAwakened)}</h1>
+          <h1 id="main-hero-heading" className="sh-h1">{renderHeadline(headline, headlineAccent, isAwakened)}</h1>
         </div>
         <div className="sh-aside">
           {body ? (
@@ -1955,6 +1955,7 @@ export default function SculptureHero(props: SculptureHeroProps) {
               animate={isAwakened ? { opacity: 0.82, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 18, filter: "blur(6px)" }}
               transition={{ duration: 0.95, delay: 2.50, ease: [0.16, 1, 0.3, 1] }}
               className="sh-body"
+              id="hero-summary"
             >
               {body}
             </motion.p>

@@ -12,7 +12,7 @@ export default function StoreLayout({
     <div className="min-h-screen flex flex-col bg-background text-foreground storefront-theme">
       <AnnouncementBar />
       <Header />
-      <main id="main-content" className="flex-1 focus:outline-none">
+      <main id="main-content" className="relative flex-1 focus:outline-none">
         {children}
       </main>
       <Footer />

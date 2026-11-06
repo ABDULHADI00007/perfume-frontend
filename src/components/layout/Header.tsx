@@ -115,13 +115,16 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                 className="group flex flex-col items-start py-0.5"
               >
                 <div className="flex items-center gap-2">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     id="navbar-brand-logo-img"
-                    src="/images/perfumes/1789763707946.png"
+                    src="/images/perfumes/1789763707946.webp"
                     alt="Soulmate Scents"
                     width={160}
                     height={44}
                     className="h-9 sm:h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </Link>

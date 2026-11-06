@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import SculptureHero, { SculptureHeroProps } from "@/components/ui/sculpture-hero";
 
 export const Hero: React.FC<SculptureHeroProps> = ({
-  src = "/images/hero/perfume_splash_center_nobg.png",
-  mobileSrc = "/images/hero/perfume_splash_center_mobile.png",
+  src = "/images/hero/perfume_splash_center_nobg.webp",
+  mobileSrc = "/images/hero/perfume_splash_center_mobile.webp",
   showNav = false,
   showCredit = false,
   height,

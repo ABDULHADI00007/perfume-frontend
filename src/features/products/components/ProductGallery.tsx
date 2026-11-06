@@ -79,65 +79,99 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
   }, [isZoomOpen, handlePrevImage, handleNextImage]);
 
   return (
-    <div className={`flex flex-col sm:flex-row gap-4 items-start w-full ${className}`}>
-      {/* Thumbnails Strip (Left Column on Desktop, Bottom Row on Mobile) */}
-      <div className="flex sm:flex-col gap-2.5 sm:gap-3 order-2 sm:order-1 overflow-x-auto sm:overflow-y-auto max-h-[580px] py-1 scrollbar-none flex-shrink-0 w-full sm:w-auto">
-          {displayImages.map((img, idx) => {
-            const isSelected = selectedImageIndex === idx;
-            const isVideoThumb = idx === displayImages.length - 1 && displayImages.length > 3;
+    <div className={`flex flex-col lg:flex-row gap-3.5 sm:gap-4 items-start w-full ${className}`}>
+      {/* Thumbnails Strip (Left Column on Desktop, Bottom Row on Mobile & Tablet) */}
+      <div className="flex lg:flex-col gap-2.5 sm:gap-3 order-2 lg:order-1 overflow-x-auto lg:overflow-y-auto max-h-[580px] py-1 scrollbar-none flex-shrink-0 w-full lg:w-auto">
+        {displayImages.map((img, idx) => {
+          const isSelected = selectedImageIndex === idx;
+          const isVideoThumb = idx === displayImages.length - 1 && displayImages.length > 3;
 
-            return (
-              <button
-                key={`${img}-${idx}`}
-                type="button"
-                onClick={() => setSelectedImageIndex(idx)}
-                aria-label={`Select view ${idx + 1} for ${title}`}
-                className={`relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl overflow-hidden transition-all duration-200 flex-shrink-0 bg-[#0D1424] border-none outline-none focus:outline-none focus:ring-0 ${isSelected
-                  ? "scale-95 shadow-md opacity-100"
-                  : "opacity-60 hover:opacity-100"
-                  }`}
-              >
-                <Image
-                  src={img}
-                  alt={`${title} thumbnail ${idx + 1}`}
-                  fill
-                  sizes="(max-width: 640px) 56px, 80px"
-                  className="object-cover object-center"
-                />
-                {isVideoThumb && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="w-6 h-6 rounded-full bg-white/90 text-black flex items-center justify-center pl-0.5">
-                      <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-                        <polygon points="5 3 19 12 5 21 5 3" />
-                      </svg>
-                    </div>
+          return (
+            <button
+              key={`${img}-${idx}`}
+              type="button"
+              onClick={() => setSelectedImageIndex(idx)}
+              aria-label={`Select view ${idx + 1} for ${title}`}
+              className={`relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden transition-all duration-200 flex-shrink-0 bg-[#FAF7EE] border border-stone-200/60 outline-none focus:outline-none ${isSelected
+                ? "scale-95 shadow-md opacity-100 ring-2 ring-[#590B16]"
+                : "opacity-60 hover:opacity-100"
+                }`}
+            >
+              <Image
+                src={img}
+                alt={`${title} thumbnail ${idx + 1}`}
+                fill
+                sizes="(max-width: 640px) 56px, 80px"
+                className="object-cover object-center"
+              />
+              {isVideoThumb && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-white/90 text-black flex items-center justify-center pl-0.5">
+                    <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
                   </div>
-                )}
-              </button>
-            );
-          })}
-        </div>
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
-      {/* Primary Flacon Display Area (Top on Mobile, Right Column on Desktop) */}
-      <div className="relative order-1 sm:order-2 sm:flex-1 w-full aspect-[4/4.5] sm:aspect-auto sm:h-[560px] lg:h-[580px] rounded-2xl overflow-hidden bg-[#0F1524] shadow-lg group border-none outline-none ring-0">
+      {/* Primary Flacon Display Area (Top on Mobile & Tablet, Right Column on Desktop) */}
+      <div className="relative order-1 lg:order-2 flex-1 w-full aspect-[4/5] sm:aspect-[4/4.5] md:aspect-[4/5] lg:aspect-auto lg:h-[580px] rounded-2xl overflow-hidden bg-[#FAF7EE] shadow-sm group border border-stone-200/60 outline-none ring-0">
         {/* Fullscreen Expand Icon Button (Top-Right) */}
         <motion.button
           type="button"
-          whileHover={{ scale: 1.12 }}
-          whileTap={{ scale: 0.92 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
           onClick={() => setIsZoomOpen(true)}
           aria-label={`Enlarge image for ${title}`}
-          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none cursor-pointer"
+          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-20 p-2 sm:p-2.5 rounded-full bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition-all duration-200 outline-none focus:outline-none cursor-pointer"
           title="Expand image"
         >
           <Maximize2 className="w-4 h-4" />
         </motion.button>
 
+        {/* On-Card Navigation Arrows for Mobile and Tablet View */}
+        {displayImages.length > 1 && (
+          <>
+            <div className="absolute left-2.5 sm:left-3.5 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrevImage();
+                }}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.15)] flex items-center justify-center active:scale-90 transition-transform cursor-pointer border border-stone-200/70"
+                aria-label="Previous view"
+              >
+                <ChevronLeft className="w-5 h-5 stroke-[2.2]" />
+              </button>
+            </div>
+            <div className="absolute right-2.5 sm:right-3.5 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNextImage();
+                }}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.15)] flex items-center justify-center active:scale-90 transition-transform cursor-pointer border border-stone-200/70"
+                aria-label="Next view"
+              >
+                <ChevronRight className="w-5 h-5 stroke-[2.2]" />
+              </button>
+            </div>
+          </>
+        )}
+
         {/* Main Image Trigger */}
-        <button
+        <motion.button
           type="button"
+          whileTap={{ scale: 0.985 }}
+          transition={{ duration: 0.15 }}
           onClick={() => setIsZoomOpen(true)}
-          className="w-full h-full block cursor-zoom-in relative border-none outline-none focus:outline-none focus:ring-0 select-none p-2 sm:p-0"
+          className="w-full h-full block cursor-zoom-in relative border-none outline-none focus:outline-none focus:ring-0 select-none p-0"
           aria-label="Enlarge showcase image"
         >
           <Image
@@ -146,9 +180,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             fill
             priority
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 50vw"
-            className="object-contain sm:object-cover sm:object-[center_20%] w-full h-full transition-transform duration-700 ease-out"
+            className="object-cover object-center sm:object-[center_20%] w-full h-full transition-transform duration-700 ease-out"
           />
-        </button>
+        </motion.button>
 
         {/* Bottom Left Watermark Text Overlay */}
         <div className="absolute bottom-5 left-5 z-10 pointer-events-none">
@@ -180,53 +214,64 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                 {/* Top-Right Close Button (✕) */}
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.25 }}
+                  whileHover={{ scale: 1.12, rotate: 90 }}
+                  whileTap={{ scale: 0.88 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsZoomOpen(false);
                   }}
-                  className="absolute top-5 right-5 sm:top-8 sm:right-8 z-[100000] p-2.5 rounded-full text-stone-600 hover:text-black hover:bg-stone-100 transition-colors cursor-pointer outline-none"
+                  className="absolute top-4 right-4 sm:top-7 sm:right-7 z-[100000] p-3 rounded-full text-stone-600 hover:text-black hover:bg-stone-100 transition-colors cursor-pointer outline-none"
                   aria-label="Close preview"
                 >
                   <X className="w-6 h-6 sm:w-7 sm:h-7" />
                 </motion.button>
 
-                {/* Previous Arrow Button (‹) - Always visible */}
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePrevImage();
-                  }}
-                  className="absolute left-3 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-[100000] p-3 sm:p-4 rounded-full text-stone-700 hover:text-black hover:bg-stone-100/90 transition-all cursor-pointer outline-none select-none"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8 stroke-[1.75]" />
-                </motion.button>
+                {/* Previous Arrow Button (‹) - Rock-solid vertical center, never jumps */}
+                <div className="fixed sm:absolute left-2 sm:left-5 md:left-8 top-1/2 -translate-y-1/2 z-[100000] pointer-events-auto">
+                  <motion.button
+                    type="button"
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrevImage();
+                    }}
+                    className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white text-stone-800 hover:text-black shadow-[0_4px_24px_rgba(0,0,0,0.16)] border border-stone-200/80 transition-shadow duration-150 cursor-pointer outline-none flex items-center justify-center"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8 stroke-[2]" />
+                  </motion.button>
+                </div>
 
                 {/* Central Showcase Image with Smooth Scale Zoom Animation */}
                 <motion.div
-                  initial={{ scale: 0.72, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.78, opacity: 0 }}
+                  initial={{ opacity: 0, scale: 0.65, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.75, y: 12 }}
                   transition={{
-                    duration: 0.42,
-                    ease: [0.16, 1, 0.3, 1],
+                    type: "spring",
+                    damping: 25,
+                    stiffness: 180,
+                    mass: 0.6,
                   }}
-                  style={{ transformOrigin: "center center" }}
-                  className="relative w-full max-w-4xl h-[74vh] sm:h-[80vh] max-h-[80vh] flex items-center justify-center overflow-hidden"
+                  className="relative w-full max-w-4xl h-[70vh] sm:h-[80vh] max-h-[82vh] flex items-center justify-center overflow-hidden px-8 sm:px-16"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={selectedImageIndex}
-                      initial={{ opacity: 0.45, scale: 0.92 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0.45, scale: 0.96 }}
-                      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
                       className="relative w-full h-full flex items-center justify-center"
                     >
                       <Image
@@ -234,27 +279,33 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                         alt={title}
                         fill
                         priority
-                        sizes="(max-width: 1024px) 95vw, 1200px"
-                        className="object-contain pointer-events-none"
+                        sizes="(max-width: 1024px) 90vw, 1100px"
+                        className="object-contain pointer-events-none select-none"
                       />
                     </motion.div>
                   </AnimatePresence>
                 </motion.div>
 
-                {/* Next Arrow Button (›) - Always visible */}
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNextImage();
-                  }}
-                  className="absolute right-3 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-[100000] p-3 sm:p-4 rounded-full text-stone-700 hover:text-black hover:bg-stone-100/90 transition-all cursor-pointer outline-none select-none"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8 stroke-[1.75]" />
-                </motion.button>
+                {/* Next Arrow Button (›) - Rock-solid vertical center, never jumps */}
+                <div className="fixed sm:absolute right-2 sm:right-5 md:right-8 top-1/2 -translate-y-1/2 z-[100000] pointer-events-auto">
+                  <motion.button
+                    type="button"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 16 }}
+                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNextImage();
+                    }}
+                    className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white text-stone-800 hover:text-black shadow-[0_4px_24px_rgba(0,0,0,0.16)] border border-stone-200/80 transition-shadow duration-150 cursor-pointer outline-none flex items-center justify-center"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 stroke-[2]" />
+                  </motion.button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>,

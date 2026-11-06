@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 export interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
-  description?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
   position?: "right" | "left";
@@ -18,8 +18,8 @@ export interface DrawerProps {
 }
 
 const maxWidthMap = {
-  sm: "max-w-sm",
-  md: "max-w-md",
+  sm: "max-w-sm sm:max-w-[400px]",
+  md: "max-w-md sm:max-w-lg",
   lg: "max-w-lg",
 };
 
@@ -75,7 +75,7 @@ export const Drawer: React.FC<DrawerProps> = ({
             animate="visible"
             exit="exit"
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-[2px]"
+            className="fixed inset-0 bg-black/50 backdrop-blur-[4px]"
           />
 
           <div
@@ -97,32 +97,47 @@ export const Drawer: React.FC<DrawerProps> = ({
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border-subtle">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.35, delay: 0.08 }}
+                >
                   {title && (
-                    <h2
-                      id={titleId}
-                      className="font-serif text-xl sm:text-2xl font-bold text-black leading-tight"
-                    >
-                      {title}
-                    </h2>
+                    typeof title === "string" ? (
+                      <h2
+                        id={titleId}
+                        className="font-serif text-xl sm:text-2xl font-bold text-black leading-tight"
+                      >
+                        {title}
+                      </h2>
+                    ) : (
+                      title
+                    )
                   )}
                   {description && (
-                    <p
-                      id={descriptionId}
-                      className="text-xs text-[#64748B] mt-1 font-sans font-medium"
-                    >
-                      {description}
-                    </p>
+                    typeof description === "string" ? (
+                      <p
+                        id={descriptionId}
+                        className="text-xs text-[#64748B] mt-1 font-sans font-medium"
+                      >
+                        {description}
+                      </p>
+                    ) : (
+                      description
+                    )
                   )}
-                </div>
-                <button
+                </motion.div>
+                <motion.button
                   type="button"
+                  whileHover={{ scale: 1.12, rotate: 90 }}
+                  whileTap={{ scale: 0.88 }}
+                  transition={{ duration: 0.2 }}
                   onClick={onClose}
                   aria-label="Close drawer"
-                  className="p-2 text-[#64748B] hover:text-[#590B16] transition-colors focus-visible:outline-none"
+                  className="p-2 text-[#64748B] hover:text-[#590B16] transition-colors focus-visible:outline-none cursor-pointer"
                 >
                   <Icons.Close size={18} />
-                </button>
+                </motion.button>
               </div>
 
               {/* Body */}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { adminService } from "../services/adminService";
 import { AdminProduct, AdminCategory } from "../types";
 import { FolderImagePickerModal } from "./FolderImagePickerModal";
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import {
   Sparkles,
   Image as ImageIcon,
@@ -60,6 +62,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [pickerTarget, setPickerTarget] = useState<"card" | number>("card");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
 
   // ── 1. COLLECTION CARD STATE ──
   const [name, setName] = useState(initialProduct?.name || "");
@@ -413,13 +416,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       setIsSubmitting(true);
       setError(null);
       setSuccessMessage(null);
+      setJustSaved(false);
       if (isEdit && initialProduct?._id) {
         await adminService.updateProduct(initialProduct._id, payload);
-        setSuccessMessage(`"${name.trim()}" has been updated successfully!`);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        setSuccessMessage(`"${name.trim()}" has been updated successfully! All changes are live on the storefront.`);
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 4000);
+        setTimeout(() => setSuccessMessage(null), 5000);
       } else {
         await adminService.createProduct(payload);
-        router.push("/admin/products");
+        setSuccessMessage(`"${name.trim()}" published successfully! Redirecting to catalog...`);
+        setJustSaved(true);
+        setTimeout(() => {
+          router.push("/admin/products");
+        }, 1200);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save product");
@@ -457,6 +467,38 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         className="hidden"
         onChange={handleFileUpload}
       />
+
+      {/* Floating Viewport Toast for Immediate Visibility in empty space below header */}
+      <AnimatePresence>
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -12, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed top-20 right-4 sm:right-8 z-[99999] max-w-md bg-white border border-emerald-500/40 text-stone-900 shadow-[0_16px_40px_rgba(0,0,0,0.18)] rounded-2xl p-4 flex items-start gap-3.5"
+          >
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-200">
+              <Check className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div className="flex-1 pr-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+                {isEdit ? "Fragrance Updated Successfully" : "Fragrance Published Successfully"}
+              </h4>
+              <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
+                {successMessage}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSuccessMessage(null)}
+              className="text-stone-400 hover:text-stone-700 p-1 rounded-lg transition-colors cursor-pointer"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <form onSubmit={handleSubmit} className="space-y-8 max-w-6xl mx-auto pb-20 font-sans">
         {/* Top Header & Sticky Navigation */}
@@ -1228,12 +1270,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <span className="text-[11px] text-slate-400">
               Status: <strong className={status === "active" ? "text-emerald-700" : "text-amber-700"}>{status === "active" ? "Live on Storefront" : "Draft (Hidden)"}</strong>
             </span>
-            {successMessage && (
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full flex items-center gap-1.5 animate-in fade-in">
-                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Updated!</span>
-              </span>
-            )}
+            <AnimatePresence>
+              {justSaved && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.9, x: -8 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, x: -8 }}
+                  className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs"
+                >
+                  <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
+                  <span>Changes Published Live!</span>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="flex items-center justify-end gap-2.5 w-full sm:w-auto">
@@ -1247,10 +1296,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               type="submit"
               variant="brand"
               isLoading={isSubmitting}
-              className="flex-1 sm:flex-initial px-5 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider h-10 rounded-xl bg-[#0C134F] hover:bg-[#0C134F]/90 text-white shadow-xs cursor-pointer gap-2"
+              className={cn(
+                "flex-1 sm:flex-initial px-5 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider h-10 rounded-xl text-white shadow-xs cursor-pointer gap-2 transition-all duration-300",
+                justSaved
+                  ? "!bg-emerald-600 hover:!bg-emerald-700 !text-white shadow-emerald-600/25"
+                  : "bg-[#0C134F] hover:bg-[#0C134F]/90"
+              )}
             >
-              <Check className="w-4 h-4" />
-              {isEdit ? "Update Fragrance" : "Publish Fragrance"}
+              {justSaved ? (
+                <>
+                  <Check className="w-4 h-4 stroke-[2.5]" />
+                  <span>{isEdit ? "Fragrance Updated!" : "Fragrance Published!"}</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>{isEdit ? "Update Fragrance" : "Publish Fragrance"}</span>
+                </>
+              )}
             </Button>
           </div>
         </div>

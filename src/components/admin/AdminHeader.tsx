@@ -7,7 +7,7 @@ import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
 import { useAdminNotification } from "@/features/admin/context/AdminNotificationContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -121,7 +121,10 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             </button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end" className="w-80 p-0 rounded-2xl shadow-xl border border-slate-200/90 font-sans z-50">
+          <DropdownMenuContent
+            align="end"
+            className="w-[360px] sm:w-[410px] p-0 rounded-2xl shadow-2xl border border-slate-200/90 font-sans z-50 bg-white overflow-hidden"
+          >
             <div className="p-3.5 px-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 rounded-t-2xl">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-xs text-[#0C134F]">Order Notifications</span>
@@ -150,7 +153,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               </div>
             </div>
 
-            <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
+            <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
               {recentOrders.length === 0 ? (
                 <div className="p-6 text-center text-xs text-slate-500">
                   <Icons.Check size={20} className="mx-auto mb-1.5 text-emerald-600" />
@@ -159,53 +162,112 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               ) : (
                 recentOrders.slice(0, 5).map((ord) => {
                   const isUnread = ord._id ? !readOrderIds.has(ord._id) : false;
-                  const isPending =
-                    ord.orderStatus === "pending" ||
-                    ord.orderStatus === "awaiting_payment_verification";
                   const orderCust =
                     ord.customerSnapshot?.name ||
                     ord.shippingAddress?.fullName ||
                     "Customer";
+
+                  // Clean status config with compact pill badge
+                  const getStatusConfig = (status: string) => {
+                    switch (status) {
+                      case "awaiting_payment_verification":
+                        return {
+                          label: "Verify Payment",
+                          bg: "bg-amber-50 text-amber-800 border-amber-200",
+                          dot: "bg-amber-500",
+                        };
+                      case "pending":
+                        return {
+                          label: "Pending",
+                          bg: "bg-amber-50 text-amber-800 border-amber-200",
+                          dot: "bg-amber-500",
+                        };
+                      case "confirmed":
+                        return {
+                          label: "Confirmed",
+                          bg: "bg-blue-50 text-blue-800 border-blue-200",
+                          dot: "bg-blue-500",
+                        };
+                      case "delivered":
+                        return {
+                          label: "Delivered",
+                          bg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+                          dot: "bg-emerald-500",
+                        };
+                      case "completed":
+                        return {
+                          label: "Completed",
+                          bg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+                          dot: "bg-emerald-500",
+                        };
+                      case "cancelled":
+                        return {
+                          label: "Cancelled",
+                          bg: "bg-rose-50 text-rose-800 border-rose-200",
+                          dot: "bg-rose-500",
+                        };
+                      default:
+                        return {
+                          label: status?.replace(/_/g, " ") || "Order",
+                          bg: "bg-slate-100 text-slate-700 border-slate-200",
+                          dot: "bg-slate-400",
+                        };
+                    }
+                  };
+
+                  const statusCfg = getStatusConfig(ord.orderStatus);
+
                   return (
                     <DropdownMenuItem
                       key={ord._id}
                       asChild
                       className={`p-3 px-4 cursor-pointer transition-colors ${
                         isUnread
-                          ? "bg-slate-100/90 hover:bg-slate-200/80 border-l-4 border-[#0C134F]"
-                          : "bg-white hover:bg-slate-50 border-l-4 border-transparent"
+                          ? "bg-slate-50/90 hover:bg-slate-100/90 border-l-[3.5px] border-[#0C134F]"
+                          : "bg-white hover:bg-slate-50/80 border-l-[3.5px] border-transparent"
                       }`}
                       onClick={() => ord._id && markAsRead(ord._id)}
                     >
                       <Link href={`/admin/orders/${ord._id}`} className="block w-full">
+                        {/* Line 1: Order # + Status Pill on Left, Price on Right */}
                         <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
                             {isUnread && (
                               <span className="w-2 h-2 rounded-full bg-[#0C134F] shrink-0" title="Unread" />
                             )}
                             <span
-                              className={`font-mono text-xs ${
-                                isUnread ? "font-bold text-[#0C134F]" : "font-medium text-slate-700"
+                              className={`font-mono text-xs tracking-tight truncate ${
+                                isUnread ? "font-bold text-[#0C134F]" : "font-semibold text-slate-700"
                               }`}
                             >
                               #{ord.orderNumber}
                             </span>
+                            <span
+                              className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border whitespace-nowrap shrink-0 ${statusCfg.bg}`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusCfg.dot}`} />
+                              <span>{statusCfg.label}</span>
+                            </span>
                           </div>
-                          <span
-                            className={`text-[10px] font-mono font-medium px-1.5 py-0.5 rounded capitalize ${
-                              isPending
-                                ? "bg-amber-100 text-amber-800 border border-amber-200"
-                                : "bg-slate-100 text-slate-600"
-                            }`}
-                          >
-                            {ord.orderStatus?.replace(/_/g, " ")}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between mt-1 text-[11px] text-slate-500">
-                          <span className="truncate max-w-[140px]">{orderCust}</span>
-                          <span className="font-mono font-semibold text-[#0C134F]">
+
+                          <span className="font-mono font-bold text-xs text-[#0C134F] whitespace-nowrap shrink-0 pl-2">
                             {formatCurrency(ord.totalAmount || ord.total || 0, "PKR")}
                           </span>
+                        </div>
+
+                        {/* Line 2: Customer Name on Left, Date/Time on Right */}
+                        <div className="flex items-center justify-between gap-2 mt-1.5 text-[11px] text-slate-500">
+                          <div className="flex items-center gap-1.5 truncate min-w-0">
+                            <Icons.User size={12} className="text-slate-400 shrink-0" />
+                            <span className="truncate max-w-[200px] font-medium text-slate-600">
+                              {orderCust}
+                            </span>
+                          </div>
+                          {ord.createdAt && (
+                            <span className="text-[10px] font-mono text-slate-400 whitespace-nowrap shrink-0">
+                              {formatDate(ord.createdAt)}
+                            </span>
+                          )}
                         </div>
                       </Link>
                     </DropdownMenuItem>
@@ -230,7 +292,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             <div className="p-2 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl">
               <Link
                 href="/admin/orders"
-                className="w-full py-1.5 px-3 text-center text-xs font-semibold text-[#0C134F] hover:bg-slate-100/80 rounded-xl transition-colors block"
+                className="w-full py-2 px-3 text-center text-xs font-bold text-[#0C134F] hover:bg-slate-100/80 rounded-xl transition-colors block"
               >
                 Go to Orders Management →
               </Link>

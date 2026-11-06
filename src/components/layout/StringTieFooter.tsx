@@ -1108,7 +1108,7 @@ export default function StringTieFooter({
               </div>
             )}
             <div className="stt-head">
-              <h2 className="stt-title">
+              <h2 id="footer-brand-title" className="stt-title">
                 <span className="stt-sr">{heading}</span>
                 <span aria-hidden="true">
                   {letters(title)}

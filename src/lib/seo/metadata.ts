@@ -53,7 +53,10 @@ export function constructMetadata({
     metadataBase: new URL(siteConfig.url),
     title: fullTitle,
     description,
-    keywords: ["luxury perfume", "haute parfumerie", "niche fragrance", "artisanal perfume", "olfactory journal"],
+    authors: [{ name: "Soulmate Scents Master Perfumers", url: siteConfig.url }],
+    creator: "Soulmate Scents",
+    publisher: "Soulmate Scents",
+    keywords: ["luxury perfume", "haute parfumerie", "niche fragrance", "artisanal perfume", "olfactory journal", "extrait de parfum", "pakistan luxury fragrance"],
     alternates: {
       canonical: canonicalUrl,
     },

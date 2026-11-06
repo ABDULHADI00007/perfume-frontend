@@ -6,18 +6,18 @@ import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
 
 const perfumeImages = [
-  "/images/perfumes/dusk-still-life.png",
-  "/images/perfumes/suroor-still-life.png",
-  "/images/perfumes/gentle-man-still-life.png",
-  "/images/perfumes/Secret Garden Perfume in Bloom.png",
-  "/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png",
-  "/images/perfumes/vivid-desire-still-life.png",
-  "/images/perfumes/Infinite Boss in Golden Stone Light.png",
-  "/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png",
-  "/images/perfumes/noble-ocean-luxury.png",
-  "/images/perfumes/pulse-luxury.jpg",
-  "/images/perfumes/dusk-still-life.png",
-  "/images/perfumes/suroor-still-life.png",
+  "/images/perfumes/dusk-still-life.webp",
+  "/images/perfumes/suroor-still-life.webp",
+  "/images/perfumes/gentle-man-still-life.webp",
+  "/images/perfumes/Secret Garden Perfume in Bloom.webp",
+  "/images/perfumes/Whispers Bloom Luxury Perfume Still Life.webp",
+  "/images/perfumes/vivid-desire-still-life.webp",
+  "/images/perfumes/Infinite Boss in Golden Stone Light.webp",
+  "/images/perfumes/Eternal Blaze Citrus Floral Fragrance.webp",
+  "/images/perfumes/noble-ocean-luxury.webp",
+  "/images/perfumes/pulse-luxury.webp",
+  "/images/perfumes/dusk-still-life.webp",
+  "/images/perfumes/suroor-still-life.webp",
 ];
 
 export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
@@ -40,11 +40,15 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
     restDelta: 0.0005,
   });
 
-  const { height } = dimension;
-  const y = useTransform(smoothProgress, [0, 1], [0, height * 2]);
-  const y2 = useTransform(smoothProgress, [0, 1], [0, height * 3.3]);
-  const y3 = useTransform(smoothProgress, [0, 1], [0, height * 1.25]);
-  const y4 = useTransform(smoothProgress, [0, 1], [0, height * 3]);
+  const { height, width } = dimension;
+  const isMobile = width < 640;
+  const isTablet = width >= 640 && width < 1024;
+  const travelScale = isMobile ? 0.46 : isTablet ? 0.52 : 1;
+
+  const y = useTransform(smoothProgress, [0, 1], [0, height * 1.85 * travelScale]);
+  const y2 = useTransform(smoothProgress, [0, 1], [0, height * 2.85 * travelScale]);
+  const y3 = useTransform(smoothProgress, [0, 1], [0, height * 1.35 * travelScale]);
+  const y4 = useTransform(smoothProgress, [0, 1], [0, height * 2.65 * travelScale]);
 
   useEffect(() => {
     let reqId: number;
@@ -97,6 +101,7 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
           className="w-full overflow-visible"
         >
           <motion.h2
+            id="parallax-gallery-heading"
             style={{
               x: headlineX,
               color: "#3E060E",
@@ -110,10 +115,10 @@ export const Skiper30 = ({ images = perfumeImages }: { images?: string[] }) => {
         </motion.div>
       </div>
 
-      {/* Responsive Parallax Gallery Container — 2 cols on mobile, 3 on tablet, 4 on desktop */}
+      {/* Responsive Parallax Gallery Container — balanced card aspect-ratio across mobile, tablet & desktop */}
       <div
         ref={gallery}
-        className="relative box-border flex h-[140vh] sm:h-[160vh] lg:h-[175vh] w-full gap-3 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-3"
+        className="relative box-border flex h-[94vh] sm:h-[96vh] md:h-[98vh] lg:h-[175vh] w-full gap-2.5 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-3"
       >
         <Column images={[images[0], images[1], images[2]]} y={y} colIdx={0} className="flex" />
         <Column images={[images[3], images[4], images[5]]} y={y2} colIdx={1} className="flex" />
@@ -136,7 +141,7 @@ type ColumnProps = {
 const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
   return (
     <motion.div
-      className={`relative -top-[45%] flex h-full flex-1 min-w-0 flex-col gap-2 sm:gap-3 md:gap-4 first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%] ${className}`}
+      className={`relative flex h-full flex-1 min-w-0 flex-col gap-2.5 sm:gap-3 md:gap-4 first:-top-[25%] sm:first:-top-[35%] lg:first:-top-[45%] [&:nth-child(2)]:-top-[55%] sm:[&:nth-child(2)]:-top-[68%] lg:[&:nth-child(2)]:-top-[95%] [&:nth-child(3)]:-top-[25%] sm:[&:nth-child(3)]:-top-[35%] lg:[&:nth-child(3)]:-top-[45%] [&:nth-child(4)]:-top-[40%] sm:[&:nth-child(4)]:-top-[55%] lg:[&:nth-child(4)]:-top-[75%] ${className}`}
       style={{
         y,
         willChange: "transform",
@@ -162,6 +167,8 @@ const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
           <img
             src={src}
             alt="Soulmate Scents Parfumerie Flacon"
+            width={400}
+            height={600}
             className="pointer-events-none w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
             loading="lazy"
             decoding="async"

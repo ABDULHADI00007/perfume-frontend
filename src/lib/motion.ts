@@ -194,15 +194,17 @@ export const drawerVariants: Variants = {
   visible: {
     x: 0,
     transition: {
-      duration: DURATION_NORMAL,
-      ease: EASING_LUXURY,
+      type: "spring",
+      damping: 32,
+      stiffness: 280,
+      mass: 0.85,
     },
   },
   exit: {
     x: "100%",
     transition: {
-      duration: DURATION_FAST,
-      ease: EASING_SMOOTH,
+      duration: 0.28,
+      ease: [0.32, 0, 0.67, 0],
     },
   },
 };
@@ -212,15 +214,17 @@ export const drawerLeftVariants: Variants = {
   visible: {
     x: 0,
     transition: {
-      duration: DURATION_NORMAL,
-      ease: EASING_LUXURY,
+      type: "spring",
+      damping: 32,
+      stiffness: 280,
+      mass: 0.85,
     },
   },
   exit: {
     x: "-100%",
     transition: {
-      duration: DURATION_FAST,
-      ease: EASING_SMOOTH,
+      duration: 0.28,
+      ease: [0.32, 0, 0.67, 0],
     },
   },
 };

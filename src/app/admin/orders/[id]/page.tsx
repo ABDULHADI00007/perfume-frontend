@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, use } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { adminService } from "@/features/admin/services/adminService";
 import { AdminOrder } from "@/features/admin/types";
 import { useAdminAuth } from "@/features/admin/context/AdminAuthContext";
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
 import { Icons } from "@/components/ui/icons";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, cn } from "@/lib/utils";
 
 // 1 Unified, Simple Status Dropdown
 const UNIFIED_ORDER_STATUSES = [
@@ -41,6 +42,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   const [order, setOrder] = useState<AdminOrder | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [justUpdated, setJustUpdated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -165,7 +167,7 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
 
         setOrder(updated);
         setSelectedStatus("completed");
-        setSuccessMessage("Success: Order marked as Completed & Payment marked as Paid!");
+        setSuccessMessage(`Order #${order.orderNumber} marked as Completed & Payment marked as Paid!`);
       } else if (selectedStatus === "cancelled") {
         try {
           updated = await adminService.cancelOrder(orderId, "Cancelled by Admin");
@@ -174,13 +176,16 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
         }
         setOrder(updated);
         setSelectedStatus(updated.orderStatus);
-        setSuccessMessage("Order has been cancelled.");
+        setSuccessMessage(`Order #${order.orderNumber} has been cancelled.`);
       } else {
         updated = await adminService.updateOrderStatus(orderId, selectedStatus);
         setOrder(updated);
         setSelectedStatus(updated.orderStatus);
-        setSuccessMessage(`Order status updated to ${selectedStatus.toUpperCase()} successfully.`);
+        setSuccessMessage(`Order #${order.orderNumber} status updated to ${selectedStatus.toUpperCase()} successfully.`);
       }
+      setJustUpdated(true);
+      setTimeout(() => setJustUpdated(false), 4000);
+      setTimeout(() => setSuccessMessage(null), 5000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to update order status");
     } finally {
@@ -193,11 +198,15 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       setActionLoading(true);
       setError(null);
       setSuccessMessage(null);
+      setJustUpdated(false);
       const updated = await adminService.approvePayment(orderId);
       setOrder(updated);
       setSelectedStatus(updated.orderStatus);
-      setSuccessMessage("Payment proof approved successfully! Order verified.");
+      setSuccessMessage(`Payment proof for Order #${order.orderNumber} approved successfully!`);
+      setJustUpdated(true);
       setIsProofModalOpen(false);
+      setTimeout(() => setJustUpdated(false), 4000);
+      setTimeout(() => setSuccessMessage(null), 5000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to approve payment");
     } finally {
@@ -215,12 +224,16 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
       setActionLoading(true);
       setError(null);
       setSuccessMessage(null);
+      setJustUpdated(false);
       const updated = await adminService.rejectPayment(orderId, rejectReason.trim());
       setOrder(updated);
-      setSuccessMessage("Payment proof rejected.");
+      setSuccessMessage(`Payment proof for Order #${order.orderNumber} rejected.`);
+      setJustUpdated(true);
       setIsRejectModalOpen(false);
       setIsProofModalOpen(false);
       setRejectReason("");
+      setTimeout(() => setJustUpdated(false), 4000);
+      setTimeout(() => setSuccessMessage(null), 5000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to reject payment");
     } finally {
@@ -231,7 +244,39 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
   const proofUrl = order.paymentProof?.url || order.paymentProof?.proofUrl;
 
   return (
-    <div className="space-y-6 font-sans max-w-7xl">
+    <div className="space-y-6 font-sans max-w-7xl relative">
+      {/* Floating Viewport Toast for Immediate Visibility in empty space below header */}
+      <AnimatePresence>
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -12, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed top-20 right-4 sm:right-8 z-[99999] max-w-md bg-white border border-emerald-500/40 text-stone-900 shadow-[0_16px_40px_rgba(0,0,0,0.18)] rounded-2xl p-4 flex items-start gap-3.5"
+          >
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-200">
+              <Icons.Check className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div className="flex-1 pr-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+                Order Updated Successfully
+              </h4>
+              <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
+                {successMessage}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSuccessMessage(null)}
+              className="text-stone-400 hover:text-stone-700 p-1 rounded-lg transition-colors cursor-pointer"
+            >
+              <Icons.Close size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AdminPageHeader
         category="STORE MANAGEMENT"
         title={`Order #${order.orderNumber}`}
@@ -454,11 +499,23 @@ export default function AdminOrderDetailPage({ params }: { params: Promise<{ id:
                     type="submit"
                     variant="brand"
                     size="sm"
-                    className="w-full bg-[#0C134F] hover:bg-[#151D64] text-white shadow-2xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl cursor-pointer transition-all"
+                    className={cn(
+                      "w-full text-white shadow-2xs text-xs font-bold uppercase tracking-wider h-10 rounded-xl cursor-pointer transition-all duration-300 flex items-center justify-center gap-2",
+                      justUpdated
+                        ? "!bg-emerald-600 hover:!bg-emerald-700 shadow-emerald-600/25"
+                        : "bg-[#0C134F] hover:bg-[#151D64]"
+                    )}
                     isLoading={actionLoading}
                     disabled={actionLoading}
                   >
-                    Update Status
+                    {justUpdated ? (
+                      <>
+                        <Icons.Check size={16} className="stroke-[2.5]" />
+                        <span>Status Updated!</span>
+                      </>
+                    ) : (
+                      <span>Update Status</span>
+                    )}
                   </Button>
                 </form>
               )}

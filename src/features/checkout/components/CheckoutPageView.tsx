@@ -20,7 +20,8 @@ import {
   CouponValidationData,
   CreateOrderPayload,
 } from "../types";
-import { validateCheckoutForm, CheckoutFormErrors } from "../validation";
+import { validateCheckoutForm, validatePhone, CheckoutFormErrors } from "../validation";
+import { getCountryConfig } from "../countries";
 import { checkoutService } from "../services/checkoutService";
 import { Container } from "@/components/layout/Container";
 
@@ -86,6 +87,37 @@ export function CheckoutPageView() {
       isMounted = false;
     };
   }, []);
+
+  const handleSetFieldError = (field: keyof CheckoutFormErrors, error: string | undefined) => {
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (error) {
+        next[field] = error;
+      } else {
+        delete next[field];
+      }
+      return next;
+    });
+  };
+
+  const handleCountryChange = (newCountry: string) => {
+    setAddress((prev) => ({ ...prev, country: newCountry }));
+    handleSetFieldError("country", undefined);
+
+    // If customer already typed phone, validate with new country rules
+    const config = getCountryConfig(newCountry);
+    if (customer.phone) {
+      if (customer.phone.length > config.maxDigits) {
+        const trimmed = customer.phone.slice(0, config.maxDigits);
+        setCustomer((prev) => ({ ...prev, phone: trimmed }));
+        const phoneErr = validatePhone(trimmed, newCountry);
+        handleSetFieldError("phone", phoneErr || undefined);
+      } else {
+        const phoneErr = validatePhone(customer.phone, newCountry);
+        handleSetFieldError("phone", phoneErr || undefined);
+      }
+    }
+  };
 
   const handleCustomerChange = (field: keyof CheckoutCustomer, value: string) => {
     setCustomer((prev) => ({ ...prev, [field]: value }));
@@ -159,11 +191,15 @@ export function CheckoutPageView() {
     setIsSubmitting(true);
 
     try {
+      const countryConfig = getCountryConfig(address.country || "Pakistan");
+      const cleanDigits = customer.phone.replace(/\D/g, "");
+      const fullPhone = cleanDigits ? `${countryConfig.dialCode} ${cleanDigits}` : "";
+
       const payload: CreateOrderPayload = {
         customer: {
           name: `${customer.firstName.trim()} ${customer.lastName.trim()}`,
           email: customer.email.trim(),
-          phone: customer.phone.trim(),
+          phone: fullPhone,
         },
         items: cart.items.map((item) => ({
           productId: item.productId,
@@ -175,23 +211,23 @@ export function CheckoutPageView() {
         })),
         shippingAddress: {
           fullName: `${customer.firstName.trim()} ${customer.lastName.trim()}`,
-          phone: customer.phone.trim(),
+          phone: fullPhone,
           addressLine1: address.addressLine1.trim(),
           addressLine2: address.addressLine2?.trim() || undefined,
           city: address.city.trim(),
           state: address.state.trim(),
           postalCode: address.postalCode.trim(),
-          country: address.country.trim() || "United States",
+          country: address.country.trim() || "Pakistan",
         },
         billingAddress: {
           fullName: `${customer.firstName.trim()} ${customer.lastName.trim()}`,
-          phone: customer.phone.trim(),
+          phone: fullPhone,
           addressLine1: address.addressLine1.trim(),
           addressLine2: address.addressLine2?.trim() || undefined,
           city: address.city.trim(),
           state: address.state.trim(),
           postalCode: address.postalCode.trim(),
-          country: address.country.trim() || "United States",
+          country: address.country.trim() || "Pakistan",
         },
         paymentMethod,
         couponCode: appliedCoupon?.coupon?.code,
@@ -275,6 +311,9 @@ export function CheckoutPageView() {
                 customer={customer}
                 onChange={handleCustomerChange}
                 errors={errors}
+                onSetFieldError={handleSetFieldError}
+                country={address.country}
+                onCountryChange={handleCountryChange}
               />
 
               <ShippingAddressSection
@@ -283,6 +322,7 @@ export function CheckoutPageView() {
                 notes={notes}
                 onNotesChange={setNotes}
                 errors={errors}
+                onSetFieldError={handleSetFieldError}
               />
 
               <PaymentMethodSection

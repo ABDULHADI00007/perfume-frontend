@@ -50,6 +50,7 @@ export function NewCollectionSection() {
               style={{ willChange: "transform, opacity, filter" }}
             >
               <h2
+                id="new-collection-heading"
                 className="uppercase text-[#590B16] leading-[0.88] tracking-[0.02em] font-serif text-[clamp(4.8rem,18.5vw,7.2rem)] sm:text-[clamp(5.2rem,16.5vw,7.6rem)] md:text-[clamp(4.2rem,10.5vw,6.8rem)] lg:text-[clamp(3.4rem,9.8vw,10rem)] font-bold whitespace-nowrap"
                 style={{
                   fontFamily: "'Cinzel', 'Marcellus', 'Italiana', serif",
@@ -85,6 +86,7 @@ export function NewCollectionSection() {
 
             {/* ROW 2: PERFUME */}
             <motion.h2
+              id="new-collection-heading-perfume"
               initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{
@@ -108,6 +110,7 @@ export function NewCollectionSection() {
 
             {/* ROW 3: COLLECTION */}
             <motion.h2
+              id="new-collection-heading-collection"
               initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{
@@ -167,9 +170,10 @@ export function NewCollectionSection() {
                 className="w-full h-full relative"
               >
                 <Image
-                  src="/images/editorial/whispers_bloom_model_editorial.jpg"
+                  src="/images/editorial/whispers_bloom_model_editorial.webp"
                   alt="Whispers Bloom Luxury Fragrance Model"
                   fill
+                  loading="lazy"
                   className="object-cover object-[50%_15%] transition-transform duration-700 ease-out hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 320px"
                 />
@@ -211,9 +215,10 @@ export function NewCollectionSection() {
                 className="w-full h-full relative"
               >
                 <Image
-                  src="/images/perfumes/velvet_orchid_smoke.png"
+                  src="/images/perfumes/velvet_orchid_smoke.webp"
                   alt="Velvet Orchid Perfume Bottle with Swirling Smoke"
                   fill
+                  loading="lazy"
                   className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                   sizes="(max-width: 768px) 45vw, 280px"
                 />
@@ -255,9 +260,10 @@ export function NewCollectionSection() {
                 className="w-full h-full relative"
               >
                 <Image
-                  src="/images/perfumes/velvet_orchid_smoke.png"
+                  src="/images/perfumes/velvet_orchid_smoke.webp"
                   alt="Velvet Orchid with Swirling Smoke"
                   fill
+                  loading="lazy"
                   className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
                   sizes="(max-width: 768px) 40vw, 240px"
                 />
@@ -299,9 +305,10 @@ export function NewCollectionSection() {
                 className="w-full h-full relative"
               >
                 <Image
-                  src="/images/editorial/whispers_bloom_model_editorial.jpg"
+                  src="/images/editorial/whispers_bloom_model_editorial.webp"
                   alt="Whispers Bloom Luxury Fragrance Model"
                   fill
+                  loading="lazy"
                   className="object-cover object-[50%_15%] transition-transform duration-700 ease-out hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 320px"
                 />

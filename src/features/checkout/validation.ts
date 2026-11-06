@@ -1,4 +1,5 @@
 import { CheckoutCustomer, CheckoutAddress, PaymentMethod } from "./types";
+import { getCountryConfig } from "./countries";
 
 export interface CheckoutFormErrors {
   firstName?: string;
@@ -14,7 +15,57 @@ export interface CheckoutFormErrors {
   general?: string;
 }
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+export function validateEmail(email: string): string | null {
+  const trimmed = email.trim();
+  if (!trimmed) {
+    return "Email address is required";
+  }
+  if (!EMAIL_REGEX.test(trimmed)) {
+    return "Please enter a valid email address (e.g. name@example.com)";
+  }
+  return null;
+}
+
+export function validatePhone(phone: string, country: string): string | null {
+  const digits = phone.replace(/\D/g, "");
+  const config = getCountryConfig(country);
+
+  if (!digits) {
+    return "Phone number is required for courier delivery";
+  }
+
+  if (config.country === "Pakistan") {
+    if (digits.length > 11) {
+      return "Pakistan phone number cannot exceed 11 digits";
+    }
+    if (digits.startsWith("0")) {
+      if (digits.length < 11) {
+        return `Please enter complete 11-digit mobile number (e.g. 03001234567) - currently ${digits.length} digits`;
+      }
+    } else if (digits.startsWith("3")) {
+      if (digits.length < 10) {
+        return `Please enter complete 10-digit mobile number (e.g. 3001234567) - currently ${digits.length} digits`;
+      }
+    } else {
+      if (digits.length < 10) {
+        return "Pakistan phone number must be 10 or 11 digits (e.g. 03001234567)";
+      }
+    }
+    return null;
+  }
+
+  // Other supported countries
+  if (digits.length > config.maxDigits) {
+    return `${config.country} phone number cannot exceed ${config.maxDigits} digits`;
+  }
+  if (digits.length < config.minDigits) {
+    return `${config.country} phone number must be at least ${config.minDigits} digits`;
+  }
+
+  return null;
+}
 
 export function validateCheckoutForm(
   customer: CheckoutCustomer,
@@ -36,16 +87,14 @@ export function validateCheckoutForm(
     errors.lastName = "Last name must be at least 2 characters";
   }
 
-  if (!customer.email.trim()) {
-    errors.email = "Email address is required";
-  } else if (!EMAIL_REGEX.test(customer.email.trim())) {
-    errors.email = "Please enter a valid email address";
+  const emailErr = validateEmail(customer.email);
+  if (emailErr) {
+    errors.email = emailErr;
   }
 
-  if (!customer.phone.trim()) {
-    errors.phone = "Phone number is required for courier delivery";
-  } else if (customer.phone.trim().replace(/\D/g, "").length < 7) {
-    errors.phone = "Please enter a valid phone number (at least 7 digits)";
+  const phoneErr = validatePhone(customer.phone, address.country || "Pakistan");
+  if (phoneErr) {
+    errors.phone = phoneErr;
   }
 
   // Shipping Address Validation
@@ -73,7 +122,7 @@ export function validateCheckoutForm(
     errors.postalCode = "Please enter a valid postal code";
   }
 
-  if (!address.country.trim()) {
+  if (!address.country || !address.country.trim()) {
     errors.country = "Country is required";
   }
 
