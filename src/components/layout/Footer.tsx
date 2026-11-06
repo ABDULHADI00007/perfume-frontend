@@ -19,10 +19,6 @@ export const Footer: React.FC<FooterProps> = (props) => {
       phone="+92 333 7615355"
       links={[
         {
-          label: "FAQs & Scent Guide",
-          href: "/faq",
-        },
-        {
           label: "instagram.com/soulmatescents",
           href: "https://www.instagram.com/soulmatescents?vrfl=MWc1YTY4MGVuNWpyaw==",
         },
