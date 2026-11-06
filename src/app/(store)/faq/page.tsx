@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
@@ -273,51 +274,67 @@ export default function FAQPage() {
                     </h3>
                   </div>
 
-                  {/* Question Items */}
-                  <div className="space-y-3">
+                  {/* Clean Minimal Question Items with Smooth Accordion Animation */}
+                  <div className="bg-white rounded-2xl border border-[#E2DED6] divide-y divide-[#F0ECE1] px-5 sm:px-6 shadow-xs overflow-hidden">
                     {category.items.map((item, idx) => {
                       const key = `${category.category}-${idx}`;
                       const isOpen = openItem === key;
 
                       return (
-                        <div
-                          key={key}
-                          className={`rounded-xl border transition-all ${
-                            isOpen
-                              ? "border-[#590B16]/40 bg-white shadow-xs"
-                              : "border-[#E2DED6] bg-white hover:border-stone-400"
-                          }`}
-                        >
+                        <div key={key} className="py-4 sm:py-5 transition-colors">
                           <button
                             type="button"
                             onClick={() => toggle(key)}
                             aria-expanded={isOpen}
-                            className="w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer gap-4 group"
+                            className="w-full flex items-center justify-between text-left cursor-pointer gap-4 group py-0.5"
                           >
-                            <span className="font-sans text-sm sm:text-base font-semibold text-black group-hover:text-[#590B16] transition-colors leading-snug">
+                            <span
+                              className={`font-sans text-sm sm:text-base leading-snug transition-colors pr-2 ${
+                                isOpen
+                                  ? "text-[#590B16] font-semibold"
+                                  : "text-stone-900 font-medium group-hover:text-[#590B16]"
+                              }`}
+                            >
                               {item.q}
                             </span>
-                            <Icons.ChevronDown
-                              size={18}
-                              strokeWidth={1.5}
-                              className={`text-stone-400 group-hover:text-[#590B16] transition-transform duration-200 shrink-0 ${
-                                isOpen ? "rotate-180 text-[#590B16]" : ""
-                              }`}
-                            />
+                            <motion.div
+                              animate={{ rotate: isOpen ? 180 : 0 }}
+                              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                              className="shrink-0"
+                            >
+                              <Icons.ChevronDown
+                                size={17}
+                                strokeWidth={1.5}
+                                className={`transition-colors ${
+                                  isOpen ? "text-[#590B16]" : "text-stone-400 group-hover:text-stone-700"
+                                }`}
+                              />
+                            </motion.div>
                           </button>
 
-                          {isOpen && (
-                            <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-stone-100 text-xs sm:text-sm text-black/80 font-sans leading-relaxed space-y-3 text-left">
-                              <p className="leading-relaxed">{item.a}</p>
-                              {item.steps && (
-                                <ol className="list-decimal pl-5 space-y-1.5 font-medium text-stone-700 bg-[#FAF8F5] p-3.5 rounded-xl text-left border border-stone-200/60">
-                                  {item.steps.map((step, sIdx) => (
-                                    <li key={sIdx}>{step}</li>
-                                  ))}
-                                </ol>
-                              )}
-                            </div>
-                          )}
+                          <AnimatePresence initial={false}>
+                            {isOpen && (
+                              <motion.div
+                                key="content"
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                                className="overflow-hidden"
+                              >
+                                <div className="pt-3 pb-1 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed space-y-3 text-left">
+                                  <p className="leading-relaxed">{item.a}</p>
+                                  {item.steps && (
+                                    <ol className="list-decimal pl-5 space-y-1.5 font-medium text-stone-700 bg-[#FAF8F5] p-3.5 rounded-xl text-left border border-stone-200/60 mt-3">
+                                      {item.steps.map((step, sIdx) => (
+                                        <li key={sIdx}>{step}</li>
+                                      ))}
+                                    </ol>
+                                  )}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
                       );
                     })}

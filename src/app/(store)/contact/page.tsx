@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Icons } from "@/components/ui/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -348,15 +349,27 @@ export default function ContactPage() {
                       {faq.question}
                     </span>
                     <Icons.ChevronDown
-                      className={`w-4 h-4 text-stone-500 transition-transform duration-200 flex-shrink-0 ${openFaq === idx ? "rotate-180 text-[#590B16]" : ""
-                        }`}
+                      className={`w-4 h-4 text-stone-500 transition-transform duration-200 flex-shrink-0 ${
+                        openFaq === idx ? "rotate-180 text-[#590B16]" : ""
+                      }`}
                     />
                   </button>
-                  {openFaq === idx && (
-                    <p className="text-xs text-black/80 font-sans mt-2 leading-relaxed font-normal">
-                      {faq.answer}
-                    </p>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {openFaq === idx && (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <p className="text-xs text-black/80 font-sans mt-2 pb-1 leading-relaxed font-normal">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
