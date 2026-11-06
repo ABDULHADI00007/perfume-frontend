@@ -23,7 +23,7 @@ interface FAQCategory {
 const FAQ_CATEGORIES: FAQCategory[] = [
   {
     category: "Fragrance Formulation & Longevity",
-    icon: <Sparkles className="w-4 h-4 text-[#590B16]" />,
+    icon: <Sparkles className="w-5 h-5 text-[#590B16]" strokeWidth={1.5} />,
     items: [
       {
         q: "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
@@ -45,7 +45,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
   },
   {
     category: "Application & Storage Rituals",
-    icon: <Clock className="w-4 h-4 text-[#590B16]" />,
+    icon: <Clock className="w-5 h-5 text-[#590B16]" strokeWidth={1.5} />,
     items: [
       {
         q: "How should I apply perfume for maximum longevity and projection?",
@@ -65,7 +65,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
   },
   {
     category: "Orders, Shipping & Cash on Delivery (COD)",
-    icon: <Truck className="w-4 h-4 text-[#590B16]" />,
+    icon: <Truck className="w-5 h-5 text-[#590B16]" strokeWidth={1.5} />,
     items: [
       {
         q: "Is Cash on Delivery (COD) available across Pakistan?",
@@ -87,7 +87,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
   },
   {
     category: "Returns, Damages & Customer Care",
-    icon: <RefreshCw className="w-4 h-4 text-[#590B16]" />,
+    icon: <RefreshCw className="w-5 h-5 text-[#590B16]" strokeWidth={1.5} />,
     items: [
       {
         q: "What is your return and replacement policy?",
@@ -184,7 +184,7 @@ export default function FAQPage() {
           {/* Header Section matching Warm Regards & Site Header Typography */}
           <div className="mb-10 sm:mb-14 text-left">
             <Badge variant="accent" className="mb-3 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20 font-sans">
-              <HelpCircle className="w-3 h-3 mr-1.5 text-[#590B16]" />
+              <HelpCircle className="w-3.5 h-3.5 mr-1.5 text-[#590B16]" strokeWidth={1.5} />
               CLIENT HELP & SCENT KNOWLEDGE
             </Badge>
             <h1
@@ -203,7 +203,7 @@ export default function FAQPage() {
             <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left">
               <div>
                 <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20 font-sans">
-                  <Layers className="w-3 h-3 mr-1.5 text-[#590B16]" />
+                  <Layers className="w-3.5 h-3.5 mr-1.5 text-[#590B16]" strokeWidth={1.5} />
                   FRAGRANCE LONGEVITY MATRIX
                 </Badge>
                 <h2
@@ -240,7 +240,7 @@ export default function FAQPage() {
                       }`}
                     >
                       <td className="py-3.5 px-4 flex items-center gap-2 font-sans font-semibold">
-                        {row.isHighlight && <Sparkles size={13} className="text-[#590B16]" />}
+                        {row.isHighlight && <Sparkles size={13} strokeWidth={1.5} className="text-[#590B16]" />}
                         <span>{row.category}</span>
                       </td>
                       <td className="py-3.5 px-4 font-sans font-semibold text-stone-900">{row.oil}</td>
@@ -260,11 +260,11 @@ export default function FAQPage() {
             <div className="lg:col-span-8 space-y-10 text-left">
               {FAQ_CATEGORIES.map((category) => (
                 <div key={category.category} className="space-y-4">
-                  {/* Category Header */}
-                  <div className="flex items-center gap-2.5 pb-2.5 border-b border-[#F0ECE1]">
-                    <div className="w-7 h-7 rounded-lg bg-[#590B16]/10 flex items-center justify-center">
+                  {/* Category Header with Clean Minimal Icon */}
+                  <div className="flex items-center gap-3 pb-2.5 border-b border-[#F0ECE1]">
+                    <span className="text-[#590B16] shrink-0" aria-hidden="true">
                       {category.icon}
-                    </div>
+                    </span>
                     <h3
                       className="text-xl sm:text-2xl font-bold text-black tracking-tight"
                       style={{ fontFamily: websiteSerifFont, fontWeight: 700 }}
@@ -297,15 +297,13 @@ export default function FAQPage() {
                             <span className="font-sans text-sm sm:text-base font-semibold text-black group-hover:text-[#590B16] transition-colors leading-snug">
                               {item.q}
                             </span>
-                            <span
-                              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                                isOpen
-                                  ? "rotate-180 bg-[#590B16] text-white"
-                                  : "text-stone-400 bg-stone-100 group-hover:bg-[#590B16]/10 group-hover:text-[#590B16]"
+                            <Icons.ChevronDown
+                              size={18}
+                              strokeWidth={1.5}
+                              className={`text-stone-400 group-hover:text-[#590B16] transition-transform duration-200 shrink-0 ${
+                                isOpen ? "rotate-180 text-[#590B16]" : ""
                               }`}
-                            >
-                              <Icons.ChevronDown size={14} />
-                            </span>
+                            />
                           </button>
 
                           {isOpen && (
@@ -331,7 +329,7 @@ export default function FAQPage() {
             {/* Right Column: Sticky Concierge Help Card (Takes 4 cols) */}
             <aside className="lg:col-span-4 sticky top-24 space-y-6">
               <div className="rounded-2xl bg-gradient-to-br from-[#590B16] to-[#3E060E] text-white p-6 sm:p-8 text-left shadow-lg">
-                <ShieldCheck className="w-9 h-9 text-[#C5A880] mb-3" />
+                <ShieldCheck className="w-8 h-8 text-[#C5A880] mb-3" strokeWidth={1.5} />
                 <h3
                   className="text-2xl sm:text-3xl font-bold mb-2 text-white tracking-tight"
                   style={{ fontFamily: websiteSerifFont, fontWeight: 700 }}
@@ -348,7 +346,7 @@ export default function FAQPage() {
                     rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-[#590B16] font-semibold text-xs uppercase tracking-wider hover:bg-stone-100 transition-colors shadow-md font-sans"
                   >
-                    <Icons.Phone className="w-4 h-4" />
+                    <Icons.Phone className="w-4 h-4" strokeWidth={1.5} />
                     <span>WhatsApp Concierge</span>
                   </a>
                   <Link
