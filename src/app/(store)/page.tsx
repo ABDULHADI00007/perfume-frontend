@@ -5,7 +5,6 @@ import { NewCollectionSection } from "@/components/storefront/NewCollectionSecti
 import { DiscoverCollectionSection } from "@/components/storefront/DiscoverCollectionSection";
 import { ArtOfBloomSection } from "@/components/storefront/ArtOfBloomSection";
 import { Skiper30 } from "@/components/storefront/ParallaxGallerySection";
-import { OlfactoryConciergeSection } from "@/components/storefront/OlfactoryConciergeSection";
 
 export const metadata = constructMetadata({
   title: "Soulmate Scents — Haute Parfumerie & Luxury Extraits",
@@ -239,9 +238,6 @@ export default function HomePage() {
 
       {/* 01.2 — NEW PERFUME COLLECTION: Sage green editorial collage section */}
       <NewCollectionSection />
-
-      {/* 05 — HAUTE PARFUMERIE CONCIERGE: SEO/AEO/GEO Verified Knowledge, FAQ & Table of Contents */}
-      <OlfactoryConciergeSection />
     </div>
   );
 }

@@ -1,173 +1,372 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { Icons } from "@/components/ui/icons";
+import { Sparkles, Layers, ShieldCheck, HelpCircle, Truck, RefreshCw, Clock } from "lucide-react";
 
-const faqs = [
+interface FAQItem {
+  q: string;
+  a: string;
+  steps?: string[];
+  tips?: string;
+}
+
+interface FAQCategory {
+  category: string;
+  icon: React.ReactNode;
+  items: FAQItem[];
+}
+
+const FAQ_CATEGORIES: FAQCategory[] = [
   {
-    category: "Fragrance & Ingredients",
+    category: "Fragrance Formulation & Longevity",
+    icon: <Sparkles className="w-4 h-4 text-[#590B16]" />,
     items: [
       {
-        q: "What is an Extrait de Parfum?",
-        a: "Extrait de Parfum is the highest concentration of fragrance oil, typically 25–40% pure aromatic compounds suspended in alcohol. Our extraits range from 28–32%, which gives them an exceptional depth, longevity (12+ hours), and skin-intimate character that lighter concentrations cannot achieve.",
+        q: "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
+        a: "An Extrait de Parfum is the highest and purest concentration of fine fragrance. It contains between 30% and 40% pure aromatic perfume oil, compared to standard Eau de Parfum (EDP) which only contains 15% to 20% oil. This allows Soulmate Scents extraits to deliver 12 to 18+ hours of continuous, smooth longevity on skin and over 24 hours on fabrics without harsh alcohol evaporation.",
       },
       {
-        q: "Are your fragrances synthetic-free?",
-        a: "We use no synthetic diluents or aromachemical fillers. We do, however, selectively use certain safe, ethically produced aroma molecules where they serve a specific compositional purpose — always disclosed in our full ingredient lists.",
+        q: "How long do Soulmate Scents fragrances last on skin and clothes?",
+        a: "Due to our high 30%–40% extrait concentration and macerated botanical oils, our fragrances typically last 12–18 hours on skin and remain noticeably fragrant on fabrics for multiple days. The character develops gracefully from vivid solar top notes to deep, intimate resinous base accords.",
       },
       {
-        q: "How long do your fragrances last on skin?",
-        a: "Due to our high extrait concentration, our fragrances typically last 12–18+ hours. The character changes beautifully across that time, from vivid top notes to deep, intimate base accords.",
+        q: "Are Soulmate Scents original formulations or impressions / copies?",
+        a: "All Soulmate Scents creations are bespoke, original high-luxury formulations crafted in artisanal small batches using ethically sourced raw essences—including aged Mysore sandalwood, French Grasse rose, Cambodian oud, and ambergris.",
       },
       {
-        q: "Where are your ingredients sourced?",
-        a: "Single-origin Mysore sandalwood, Grasse jasmine harvested at twilight, aged Cambodian oud, and Moroccan rose absolute — all sourced directly from sustainable farms and distilleries with transparent supply chains.",
+        q: "Are your fragrances safe for sensitive skin?",
+        a: "Yes. Because our formulations use up to 40% pure fragrance oil and significantly less alcohol than mass-market fragrances, they are much gentler on the skin and avoid the drying effects or irritation often caused by cheap alcohol-heavy sprays.",
       },
     ],
   },
   {
-    category: "Orders & Delivery",
+    category: "Application & Storage Rituals",
+    icon: <Clock className="w-4 h-4 text-[#590B16]" />,
     items: [
       {
-        q: "How long does delivery take?",
-        a: "Standard delivery is 3–5 business days domestically. International orders arrive within 7–14 business days. All orders are packaged with archival tissue, a wax seal, and a personal handwritten note.",
+        q: "How should I apply perfume for maximum longevity and projection?",
+        a: "For optimal sillage and lasting power, follow these master evaluator application steps:",
+        steps: [
+          "Moisturize skin with an unscented lotion or oil before spraying to lock in the fragrance molecules.",
+          "Target high-temperature pulse points: the sides of your neck, inner wrists, and collarbone.",
+          "Never rub your wrists together—friction creates heat that crushes delicate top notes before the scent develops.",
+          "Apply 2 to 3 mist sprays from 6 inches away for an even, luxurious scent cloud.",
+        ],
       },
       {
-        q: "Do you offer free shipping?",
-        a: "Yes — complimentary shipping on all domestic orders over PKR 5,000. International orders over USD 150 ship free. All orders include a complimentary sample and presentation box.",
-      },
-      {
-        q: "Can I track my order?",
-        a: "Yes. Once dispatched, you will receive a tracking link via email. Our concierge team is also available to provide updates at any time.",
+        q: "How should I store luxury perfume to preserve its freshness?",
+        a: "Keep your perfume bottles upright in a cool, dark environment away from direct sunlight and bathroom humidity. Ideal room temperature is between 15°C and 20°C. Storing the bottle inside its presentation box protects delicate botanical extracts for years.",
       },
     ],
   },
   {
-    category: "Returns & Exchanges",
+    category: "Orders, Shipping & Cash on Delivery (COD)",
+    icon: <Truck className="w-4 h-4 text-[#590B16]" />,
     items: [
       {
-        q: "What is your returns policy?",
-        a: "We offer a 14-day returns window on all unopened, sealed flacons. Given the intimate nature of fragrance, opened products cannot be returned unless genuinely faulty. Please refer to our Returns page for full details.",
+        q: "Is Cash on Delivery (COD) available across Pakistan?",
+        a: "Yes! We offer 100% Cash on Delivery (COD) to all cities, towns, and regions across Pakistan, as well as direct bank wire transfer options.",
       },
       {
-        q: "My order arrived damaged — what should I do?",
-        a: "Please contact our concierge team within 48 hours of delivery with photographs of the damaged item and packaging. We will arrange an immediate replacement at no cost.",
+        q: "How long does courier delivery take?",
+        a: "Domestic orders within Pakistan are delivered within 2 to 4 business days via express white-glove couriers (TCS / Trax). Major metropolitan cities like Karachi, Lahore, and Islamabad / Rawalpindi often receive delivery within 48 hours.",
+      },
+      {
+        q: "Do you offer free delivery?",
+        a: "Yes. All domestic orders above the free shipping threshold qualify for complimentary white-glove doorstep delivery.",
+      },
+      {
+        q: "Can I track my parcel once shipped?",
+        a: "Absolutely. As soon as your parcel is dispatched, you will receive an SMS and email notification with your active courier tracking number.",
       },
     ],
   },
   {
-    category: "Discovery Set",
+    category: "Returns, Damages & Customer Care",
+    icon: <RefreshCw className="w-4 h-4 text-[#590B16]" />,
     items: [
       {
-        q: "What is included in the Discovery Set?",
-        a: "Five 5ml Extrait flacons of our signature fragrances, a handmade linen presentation box, a comprehensive olfactory tasting guide, and a full-value voucher redeemable toward any 100ml flacon purchase.",
+        q: "What is your return and replacement policy?",
+        a: "We offer an easy 7-day return and exchange window on all unopened, factory-sealed flacons. If your order arrives damaged or leaking during courier transit, contact our concierge within 48 hours and we will ship an immediate replacement flacon at zero extra charge.",
       },
       {
-        q: "Can I choose which fragrances are in the Discovery Set?",
-        a: "The Discovery Set is curated to present our five signature extraits in their intended seasonal arc. If you have a specific enquiry about a bespoke discovery experience, please contact our concierge.",
+        q: "How do I reach the Soulmate Scents concierge team?",
+        a: "You can reach our VIP Concierge team directly via WhatsApp (+92 333 7615355), email (soulmatescents@gmail.com), or through our Contact page.",
       },
     ],
   },
 ];
 
-export default function FAQPage() {
-  const [openItem, setOpenItem] = useState<string | null>(null);
+const CONCENTRATION_MATRIX = [
+  {
+    category: "Extrait de Parfum (Soulmate Scents)",
+    oil: "30% to 40% Pure Oil",
+    longevity: "12 to 18+ Hours",
+    projection: "Magnetic & Deep",
+    bestFor: "Signature Scent, Evenings & Milestones",
+    isHighlight: true,
+  },
+  {
+    category: "Eau de Parfum (EDP)",
+    oil: "15% to 20% Oil",
+    longevity: "6 to 8 Hours",
+    projection: "Moderate Sillage",
+    bestFor: "Daily Office & Daytime Wear",
+    isHighlight: false,
+  },
+  {
+    category: "Eau de Toilette (EDT)",
+    oil: "5% to 15% Oil",
+    longevity: "3 to 5 Hours",
+    projection: "Light / Fresh",
+    bestFor: "Casual Gym & Warm Weather",
+    isHighlight: false,
+  },
+  {
+    category: "Eau de Cologne (EDC)",
+    oil: "2% to 4% Oil",
+    longevity: "1 to 2 Hours",
+    projection: "Faint",
+    bestFor: "Post-Shower Refreshment",
+    isHighlight: false,
+  },
+];
 
-  const toggle = (key: string) => setOpenItem((prev) => (prev === key ? null : key));
+export default function FAQPage() {
+  const [openItem, setOpenItem] = useState<string | null>("Fragrance Formulation & Longevity-0");
+
+  const toggle = (key: string) => {
+    setOpenItem((prev) => (prev === key ? null : key));
+  };
+
+  // Structured Data Schema for Google & AI Search Engines
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ_CATEGORIES.flatMap((cat) =>
+      cat.items.map((item) => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.a,
+        },
+      }))
+    ),
+  };
 
   return (
-    <main className="bg-background min-h-screen">
+    <>
+      {/* Inject Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
-      {/* Header */}
-      <section className="border-b border-border/60 py-20 sm:py-28">
-        <Container size="default">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center space-x-3 mb-6">
-              <span className="w-6 h-[1px] bg-accent" />
-              <span className="text-[11px] uppercase tracking-[0.28em] font-medium text-foreground-muted font-sans">
-                Information
-              </span>
-            </div>
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-foreground leading-[1.1] tracking-tight mb-6">
-              Frequently Asked Questions
-            </h1>
-            <p className="text-base text-foreground-muted font-sans font-light leading-relaxed">
-              Answers to the most common enquiries about our fragrances, ordering process, and client care.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <main className="bg-[#FAF9F6] min-h-screen text-black">
+        {/* Header Section */}
+        <section className="border-b border-[#F0ECE1] bg-white py-14 sm:py-20">
+          <Container size="default">
+            <div className="max-w-3xl">
+              <nav aria-label="Breadcrumb" className="mb-4">
+                <ol className="flex items-center gap-2 text-xs font-sans text-stone-500 uppercase tracking-wider">
+                  <li>
+                    <Link href="/" className="hover:text-black transition-colors">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="text-stone-300">&gt;</li>
+                  <li className="text-black font-semibold">Help & FAQ Guide</li>
+                </ol>
+              </nav>
 
-      {/* FAQ Accordion */}
-      <section className="py-16 sm:py-24">
-        <Container size="default">
-          <div className="space-y-16">
-            {faqs.map((category) => (
-              <div key={category.category}>
-                {/* Category Heading */}
-                <div className="flex items-center space-x-4 mb-8 pb-4 border-b border-border/60">
-                  <span className="w-4 h-[2px] bg-accent" />
-                  <h2 className="font-sans text-[11px] uppercase tracking-[0.22em] font-semibold text-foreground">
-                    {category.category}
-                  </h2>
-                </div>
-
-                {/* Questions */}
-                <div className="space-y-3">
-                  {category.items.map((item, idx) => {
-                    const key = `${category.category}-${idx}`;
-                    const isOpen = openItem === key;
-                    return (
-                      <div
-                        key={key}
-                        className={`border transition-colors duration-200 ${isOpen ? "border-border-strong bg-surface" : "border-border/60 bg-surface hover:border-border-strong"}`}
-                      >
-                        <button
-                          onClick={() => toggle(key)}
-                          aria-expanded={isOpen}
-                          className="w-full flex items-start justify-between text-left px-6 py-5 cursor-pointer gap-4"
-                        >
-                          <span className="font-sans text-sm font-medium text-foreground leading-relaxed">
-                            {item.q}
-                          </span>
-                          <span className={`flex-shrink-0 mt-0.5 text-foreground-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
-                            <Icons.ChevronDown size={16} />
-                          </span>
-                        </button>
-                        {isOpen && (
-                          <div className="px-6 pb-6">
-                            <p className="text-sm text-foreground-muted font-sans font-light leading-relaxed">
-                              {item.a}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#590B16]/10 text-[#590B16] text-[11px] uppercase tracking-[0.2em] font-semibold mb-3">
+                <HelpCircle size={13} />
+                <span>Client Help & Scent Knowledge</span>
               </div>
-            ))}
-          </div>
 
-          {/* Still have questions CTA */}
-          <div className="mt-20 p-8 sm:p-10 bg-surface border border-border text-center">
-            <h3 className="font-serif text-2xl font-normal text-foreground mb-3">
-              Still have a question?
-            </h3>
-            <p className="text-sm text-foreground-muted font-sans font-light mb-6 max-w-md mx-auto">
-              Our fragrance concierge team is available Monday through Friday to assist with any enquiry.
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center font-sans font-medium uppercase px-8 py-3.5 text-xs tracking-[0.2em] bg-primary text-primary-foreground hover:bg-primary-hover border border-primary transition-all duration-200 cursor-pointer"
-            >
-              Contact Concierge
-            </a>
-          </div>
-        </Container>
-      </section>
+              <h1
+                className="font-serif text-3xl sm:text-5xl font-bold text-black tracking-tight leading-tight mb-4"
+                style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+              >
+                Frequently Asked Questions
+              </h1>
 
-    </main>
+              <p className="text-sm sm:text-base text-stone-600 font-sans leading-relaxed">
+                Everything you need to know about Soulmate Scents luxury formulations, lasting longevity, nationwide courier dispatch, and our client satisfaction guarantee.
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        {/* Concentration Comparison Matrix Table */}
+        <section className="py-12 sm:py-16 border-b border-[#F0ECE1] bg-[#FAF8F5]">
+          <Container size="default">
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#C5A880] font-bold mb-1">
+                  <Layers size={14} />
+                  <span>Fragrance Longevity Matrix</span>
+                </div>
+                <h2
+                  className="font-serif text-2xl sm:text-3xl font-bold text-stone-900"
+                  style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                >
+                  Perfume Concentration Guide
+                </h2>
+              </div>
+              <p className="text-xs text-stone-500 max-w-sm font-sans">
+                Why Soulmate Scents extraits last 12-18+ hours compared to standard commercial perfumes.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-[#E2DED6] bg-white shadow-xs">
+              <table className="w-full text-left text-xs font-sans min-w-[620px]">
+                <thead className="bg-[#590B16] text-white uppercase text-[10px] tracking-wider font-semibold">
+                  <tr>
+                    <th className="py-3 px-4">Category</th>
+                    <th className="py-3 px-4">Pure Essence Oil</th>
+                    <th className="py-3 px-4">Skin Longevity</th>
+                    <th className="py-3 px-4">Sillage & Aura</th>
+                    <th className="py-3 px-4">Best For</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100">
+                  {CONCENTRATION_MATRIX.map((row) => (
+                    <tr
+                      key={row.category}
+                      className={`transition-colors ${
+                        row.isHighlight
+                          ? "bg-[#590B16]/5 font-semibold text-[#590B16]"
+                          : "text-stone-700 hover:bg-stone-50"
+                      }`}
+                    >
+                      <td className="py-3 px-4 flex items-center gap-2">
+                        {row.isHighlight && <Sparkles size={13} className="text-[#590B16]" />}
+                        <span>{row.category}</span>
+                      </td>
+                      <td className="py-3 px-4 font-mono">{row.oil}</td>
+                      <td className="py-3 px-4 font-mono">{row.longevity}</td>
+                      <td className="py-3 px-4">{row.projection}</td>
+                      <td className="py-3 px-4 text-stone-500 font-normal">{row.bestFor}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Container>
+        </section>
+
+        {/* Categorized FAQs Accordion */}
+        <section className="py-14 sm:py-20">
+          <Container size="default">
+            <div className="space-y-12 max-w-4xl mx-auto">
+              {FAQ_CATEGORIES.map((category) => (
+                <div key={category.category} className="space-y-4">
+                  {/* Category Header */}
+                  <div className="flex items-center gap-2.5 pb-2 border-b border-[#F0ECE1]">
+                    <div className="w-7 h-7 rounded-lg bg-[#590B16]/10 flex items-center justify-center">
+                      {category.icon}
+                    </div>
+                    <h3
+                      className="font-serif text-lg sm:text-xl font-bold text-stone-900"
+                      style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                    >
+                      {category.category}
+                    </h3>
+                  </div>
+
+                  {/* Question Items */}
+                  <div className="space-y-2.5">
+                    {category.items.map((item, idx) => {
+                      const key = `${category.category}-${idx}`;
+                      const isOpen = openItem === key;
+
+                      return (
+                        <div
+                          key={key}
+                          className={`rounded-xl border transition-all ${
+                            isOpen
+                              ? "border-[#590B16]/40 bg-white shadow-xs"
+                              : "border-[#E2DED6] bg-white hover:border-stone-400"
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => toggle(key)}
+                            aria-expanded={isOpen}
+                            className="w-full flex items-center justify-between p-4 text-left cursor-pointer gap-4"
+                          >
+                            <span className="font-serif text-sm sm:text-base font-semibold text-stone-900">
+                              {item.q}
+                            </span>
+                            <span
+                              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                                isOpen
+                                  ? "rotate-180 bg-[#590B16] text-white"
+                                  : "text-stone-400 bg-stone-100"
+                              }`}
+                            >
+                              <Icons.ChevronDown size={14} />
+                            </span>
+                          </button>
+
+                          {isOpen && (
+                            <div className="px-4 pb-4 pt-1 border-t border-stone-100 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed space-y-3">
+                              <p>{item.a}</p>
+                              {item.steps && (
+                                <ol className="list-decimal pl-5 space-y-1.5 font-medium text-stone-700 bg-stone-50 p-3 rounded-lg">
+                                  {item.steps.map((step, sIdx) => (
+                                    <li key={sIdx}>{step}</li>
+                                  ))}
+                                </ol>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Need More Assistance CTA Banner */}
+            <div className="mt-16 max-w-4xl mx-auto rounded-2xl bg-gradient-to-r from-[#590B16] to-[#3E060E] text-white p-6 sm:p-10 text-center shadow-lg">
+              <ShieldCheck className="w-10 h-10 mx-auto text-[#C5A880] mb-3" />
+              <h3
+                className="font-serif text-2xl sm:text-3xl font-bold mb-2"
+                style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+              >
+                Still Have Questions?
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-200 max-w-md mx-auto mb-6 font-sans">
+                Our fragrance concierge team is available 7 days a week to guide you with personal scent recommendations or order queries.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href="https://wa.me/923337615355"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[#590B16] font-semibold text-xs uppercase tracking-wider hover:bg-stone-100 transition-colors shadow-md"
+                >
+                  <Icons.Phone className="w-4 h-4" />
+                  <span>WhatsApp Concierge</span>
+                </a>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/40 text-white font-semibold text-xs uppercase tracking-wider hover:bg-white/10 transition-colors"
+                >
+                  <span>Contact Form</span>
+                </Link>
+              </div>
+            </div>
+          </Container>
+        </section>
+      </main>
+    </>
   );
 }
