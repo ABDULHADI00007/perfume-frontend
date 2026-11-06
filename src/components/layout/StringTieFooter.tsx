@@ -1269,15 +1269,18 @@ export default function StringTieFooter({
                 {/* Big Heading for FAQ / Scents Guide above Warm Regards */}
                 <Link
                   href="/faq"
-                  className="mb-5 sm:mb-7 group inline-flex flex-col items-center md:items-start text-center md:text-left transition-all"
+                  className="mb-6 sm:mb-8 group inline-flex flex-col items-center md:items-start text-center md:text-left transition-all"
                 >
-                  <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.24em] text-[#C5A880] font-sans font-semibold mb-1 flex items-center gap-1.5 group-hover:text-[#E2D2B0]">
+                  <span
+                    className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#C5A880] font-semibold mb-1.5 flex items-center gap-1.5 group-hover:text-[#E2D2B0]"
+                    style={{ fontFamily: "var(--stt-sans)" }}
+                  >
                     <span>Client Help & Knowledge</span>
                     <span className="transition-transform group-hover:translate-x-1">→</span>
                   </span>
                   <span
-                    className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#EBE3D7] group-hover:text-white transition-colors tracking-wide underline-offset-6 group-hover:underline"
-                    style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                    className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#EBE3D7] group-hover:text-white transition-colors tracking-tight underline-offset-8 group-hover:underline"
+                    style={{ fontFamily: "var(--stt-display)" }}
                   >
                     FAQ / Scents Guide
                   </span>
