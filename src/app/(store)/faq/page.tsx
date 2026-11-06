@@ -27,12 +27,12 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     icon: <Sparkles className="w-5 h-5 text-[#590B16]" strokeWidth={1.5} />,
     items: [
       {
-        q: "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
-        a: "An Extrait de Parfum is the highest and purest concentration of fine fragrance. It contains between 30% and 40% pure aromatic perfume oil, compared to standard Eau de Parfum (EDP) which only contains 15% to 20% oil. This allows Soulmate Scents extraits to deliver 12 to 18+ hours of continuous, smooth longevity on skin and over 24 hours on fabrics without harsh alcohol evaporation.",
+        q: "What makes Soulmate Scents Eau de Parfum (EDP) last so long?",
+        a: "Soulmate Scents crafts concentrated Eau de Parfum (EDP) using 25% to 30% imported pure aromatic essence oils—significantly higher than typical commercial perfumes which use only 12% to 18%. Specially formulated for Pakistan's warm climate, our fragrances deliver 12 to 18+ hours of lasting longevity on skin and over 24 hours on clothes without harsh alcohol evaporation.",
       },
       {
         q: "How long do Soulmate Scents fragrances last on skin and clothes?",
-        a: "Due to our high 30%–40% extrait concentration and macerated botanical oils, our fragrances typically last 12–18 hours on skin and remain noticeably fragrant on fabrics for multiple days. The character develops gracefully from vivid solar top notes to deep, intimate resinous base accords.",
+        a: "Due to our concentrated 25%–30% Eau de Parfum formulation and matured botanical oils, our fragrances typically last 12 to 18+ hours on skin and remain noticeably fragrant on fabrics for multiple days. The scent profile develops gracefully from vivid top notes to deep, rich base notes.",
       },
       {
         q: "Are Soulmate Scents original formulations or impressions / copies?",
@@ -40,7 +40,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         q: "Are your fragrances safe for sensitive skin?",
-        a: "Yes. Because our formulations use up to 40% pure fragrance oil and significantly less alcohol than mass-market fragrances, they are much gentler on the skin and avoid the drying effects or irritation often caused by cheap alcohol-heavy sprays.",
+        a: "Yes. Because our formulations use up to 30% pure fragrance oil and significantly less alcohol than mass-market fragrances, they are much gentler on the skin and avoid the drying effects or irritation often caused by cheap alcohol-heavy sprays.",
       },
     ],
   },
@@ -104,35 +104,35 @@ const FAQ_CATEGORIES: FAQCategory[] = [
 
 const CONCENTRATION_MATRIX = [
   {
-    category: "Extrait de Parfum (Soulmate Scents)",
-    oil: "30% to 40% Pure Oil",
+    category: "Eau de Parfum (Soulmate Scents)",
+    oil: "25% to 30% Pure Essence",
     longevity: "12 to 18+ Hours",
-    projection: "Magnetic & Deep",
-    bestFor: "Signature Scent, Evenings & Milestones",
+    projection: "Strong & Long-Lasting",
+    bestFor: "Signature Scent, Daily Luxury & Events",
     isHighlight: true,
   },
   {
-    category: "Eau de Parfum (EDP)",
-    oil: "15% to 20% Oil",
-    longevity: "6 to 8 Hours",
+    category: "Commercial Eau de Parfum (EDP)",
+    oil: "12% to 18% Oil",
+    longevity: "4 to 6 Hours",
     projection: "Moderate Sillage",
-    bestFor: "Daily Office & Daytime Wear",
+    bestFor: "Standard Daily Office Wear",
     isHighlight: false,
   },
   {
     category: "Eau de Toilette (EDT)",
-    oil: "5% to 15% Oil",
-    longevity: "3 to 5 Hours",
+    oil: "5% to 10% Oil",
+    longevity: "2 to 4 Hours",
     projection: "Light / Fresh",
-    bestFor: "Casual Gym & Warm Weather",
+    bestFor: "Summer & Casual Routine",
     isHighlight: false,
   },
   {
-    category: "Eau de Cologne (EDC)",
-    oil: "2% to 4% Oil",
-    longevity: "1 to 2 Hours",
-    projection: "Faint",
-    bestFor: "Post-Shower Refreshment",
+    category: "Body Sprays & Colognes",
+    oil: "1% to 3% Oil",
+    longevity: "Under 1 Hour",
+    projection: "Faint Burst",
+    bestFor: "Post-Gym & Quick Refreshment",
     isHighlight: false,
   },
 ];
@@ -199,13 +199,13 @@ export default function FAQPage() {
             </p>
           </div>
 
-          {/* Concentration Comparison Matrix Table */}
-          <div className="mb-14 p-4 sm:p-6 rounded-2xl border border-[#E2DED6] bg-white shadow-xs">
+          {/* Concentration Comparison Matrix Table (Clean & Minimal) */}
+          <div className="mb-14 p-5 sm:p-7 rounded-2xl border border-[#E2DED6] bg-white shadow-xs">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left">
               <div>
                 <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20 font-sans">
                   <Layers className="w-3.5 h-3.5 mr-1.5 text-[#590B16]" strokeWidth={1.5} />
-                  FRAGRANCE LONGEVITY MATRIX
+                  FRAGRANCE LONGEVITY GUIDE
                 </Badge>
                 <h2
                   className="text-2xl sm:text-3xl font-bold text-black tracking-tight"
@@ -214,40 +214,44 @@ export default function FAQPage() {
                   Perfume Concentration Guide
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-black/70 max-w-sm font-sans font-normal text-left sm:text-right">
-                Why Soulmate Scents extraits last 12-18+ hours compared to standard commercial perfumes.
+              <p className="text-xs sm:text-sm text-stone-500 max-w-sm font-sans font-normal text-left sm:text-right">
+                Why Soulmate Scents Eau de Parfum lasts 12-18+ hours in Pakistan&apos;s climate compared to standard commercial perfumes.
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-[#E2DED6] bg-white">
+            <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-sans min-w-[620px]">
-                <thead className="border-b-2 border-[#590B16]/20 bg-[#FAF7EE] text-[#590B16] uppercase text-[11px] tracking-wider font-bold">
+                <thead className="border-b border-[#F0ECE1] text-[11px] uppercase tracking-wider text-stone-500 font-semibold">
                   <tr>
-                    <th className="py-3 px-4">Category</th>
-                    <th className="py-3 px-4">Pure Essence Oil</th>
-                    <th className="py-3 px-4">Skin Longevity</th>
-                    <th className="py-3 px-4">Sillage & Aura</th>
-                    <th className="py-3 px-4">Best For</th>
+                    <th className="pb-3 px-4 font-semibold">Category</th>
+                    <th className="pb-3 px-4 font-semibold">Pure Essence Oil</th>
+                    <th className="pb-3 px-4 font-semibold">Skin Longevity</th>
+                    <th className="pb-3 px-4 font-semibold">Sillage & Aura</th>
+                    <th className="pb-3 px-4 font-semibold">Best For</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-stone-100">
+                <tbody className="divide-y divide-[#F0ECE1]">
                   {CONCENTRATION_MATRIX.map((row) => (
                     <tr
                       key={row.category}
                       className={`transition-colors ${
                         row.isHighlight
-                          ? "bg-[#590B16]/5 font-semibold text-[#590B16]"
-                          : "text-stone-700 hover:bg-stone-50"
+                          ? "bg-[#590B16]/[0.03] text-[#590B16] font-medium"
+                          : "text-stone-700 hover:bg-stone-50/60"
                       }`}
                     >
-                      <td className="py-3.5 px-4 flex items-center gap-2 font-sans font-semibold">
+                      <td className="py-4 px-4 flex items-center gap-2 font-sans font-semibold">
                         {row.isHighlight && <Sparkles size={13} strokeWidth={1.5} className="text-[#590B16]" />}
-                        <span>{row.category}</span>
+                        <span className={row.isHighlight ? "text-[#590B16] font-bold" : "text-stone-900"}>{row.category}</span>
                       </td>
-                      <td className="py-3.5 px-4 font-sans font-semibold text-stone-900">{row.oil}</td>
-                      <td className="py-3.5 px-4 font-sans font-semibold text-stone-900">{row.longevity}</td>
-                      <td className="py-3.5 px-4 font-sans">{row.projection}</td>
-                      <td className="py-3.5 px-4 font-sans text-stone-600 font-normal">{row.bestFor}</td>
+                      <td className={`py-4 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-900"}`}>
+                        {row.oil}
+                      </td>
+                      <td className={`py-4 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-900"}`}>
+                        {row.longevity}
+                      </td>
+                      <td className="py-4 px-4 font-sans text-stone-700">{row.projection}</td>
+                      <td className="py-4 px-4 font-sans text-stone-500 font-normal">{row.bestFor}</td>
                     </tr>
                   ))}
                 </tbody>
