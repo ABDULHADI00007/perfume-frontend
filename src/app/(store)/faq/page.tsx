@@ -189,7 +189,8 @@ export default function FAQPage() {
               </div>
 
               <h1
-                className="font-serif text-3xl sm:text-5xl font-normal text-black tracking-tight leading-tight mb-4"
+                className="font-serif text-3xl sm:text-5xl font-bold text-black tracking-tight leading-tight mb-4"
+                style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
               >
                 Frequently Asked Questions
               </h1>
@@ -211,7 +212,8 @@ export default function FAQPage() {
                   <span>Fragrance Longevity Matrix</span>
                 </div>
                 <h2
-                  className="font-serif text-2xl sm:text-3xl font-normal text-stone-900"
+                  className="font-serif text-2xl sm:text-3xl font-bold text-stone-900"
+                  style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                 >
                   Perfume Concentration Guide
                 </h2>
@@ -270,7 +272,8 @@ export default function FAQPage() {
                       {category.icon}
                     </div>
                     <h3
-                      className="font-serif text-lg sm:text-xl font-normal text-stone-900"
+                      className="font-serif text-lg sm:text-xl font-bold text-stone-900"
+                      style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
                     >
                       {category.category}
                     </h3>
@@ -335,7 +338,8 @@ export default function FAQPage() {
             <div className="mt-16 max-w-4xl mx-auto rounded-2xl bg-gradient-to-r from-[#590B16] to-[#3E060E] text-white p-6 sm:p-10 text-center shadow-lg">
               <ShieldCheck className="w-10 h-10 mx-auto text-[#C5A880] mb-3" />
               <h3
-                className="font-serif text-2xl sm:text-3xl font-normal mb-2"
+                className="font-serif text-2xl sm:text-3xl font-bold mb-2"
+                style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
               >
                 Still Have Questions?
               </h3>

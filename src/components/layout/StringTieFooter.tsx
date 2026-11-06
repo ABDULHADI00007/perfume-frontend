@@ -1265,11 +1265,11 @@ export default function StringTieFooter({
             </div>
 
             {(regards || signature.length > 0 || signatureText) && (
-              <div className="stt-regards">
+              <div className="stt-regards pb-2 sm:pb-4">
                 {/* Big Heading for FAQ / Scents Guide above Warm Regards */}
                 <Link
                   href="/faq"
-                  className="mb-6 sm:mb-8 group inline-flex flex-col items-center md:items-start text-center md:text-left transition-all"
+                  className="mb-8 sm:mb-14 -translate-y-4 sm:-translate-y-8 group inline-flex flex-col items-center md:items-start text-center md:text-left transition-all hover:opacity-95"
                 >
                   <span
                     className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#C5A880] font-semibold mb-1.5 flex items-center gap-1.5 group-hover:text-[#E2D2B0]"
