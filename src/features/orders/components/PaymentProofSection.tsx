@@ -10,6 +10,7 @@ import { orderService } from "@/features/orders/services/orderService";
 
 interface PaymentProofSectionProps {
   order: OrderConfirmation;
+  token?: string;
   onProofSubmitted: (updatedOrder: OrderConfirmation) => void;
 }
 
@@ -26,6 +27,7 @@ const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 export const PaymentProofSection: React.FC<PaymentProofSectionProps> = ({
   order,
+  token,
   onProofSubmitted,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -126,52 +128,62 @@ export const PaymentProofSection: React.FC<PaymentProofSectionProps> = ({
     setServerError(null);
     setSuccessMessage(null);
 
-    let finalUrl = "";
-    let originalName = "";
-    let mimeType: AllowedMime = "image/jpeg";
-
-    if (mode === "file") {
-      if (!selectedFile) {
-        setValidationError("Please select a receipt document or image to upload.");
-        return;
-      }
-
-      originalName = selectedFile.name;
-      mimeType = selectedFile.type as AllowedMime;
-
-      // Create a persistent object / public reference URL compliant with backend's z.string().url()
-      // In production, media is stored in CDN/S3/Cloudinary; we construct the canonical storage URL
-      const sanitizedName = originalName.replace(/[^a-zA-Z0-9.-]/g, "_");
-      finalUrl = `https://storage.maisonparfum.com/proofs/${orderNumber}_${Date.now()}_${sanitizedName}`;
-    } else {
-      if (!receiptUrlInput.trim()) {
-        setValidationError("Please provide a valid URL for your transaction receipt.");
-        return;
-      }
-
-      try {
-        const parsed = new URL(receiptUrlInput.trim());
-        if (!["http:", "https:"].includes(parsed.protocol)) {
-          throw new Error("Invalid protocol");
-        }
-        finalUrl = receiptUrlInput.trim();
-        originalName = "Online Transaction Receipt";
-        mimeType = "image/jpeg";
-      } catch {
-        setValidationError("Please enter a valid HTTP or HTTPS receipt URL.");
-        return;
-      }
-    }
-
     setIsSubmitting(true);
 
     try {
-      const res = await orderService.submitPaymentProof(orderNumber, {
-        url: finalUrl,
-        originalName,
-        mimeType,
-        storageKey: `proofs/${orderNumber}_${Date.now()}`,
-      });
+      let payload: Parameters<typeof orderService.submitPaymentProof>[1];
+
+      if (mode === "file") {
+        if (!selectedFile) {
+          setValidationError("Please select a receipt document or image to upload.");
+          setIsSubmitting(false);
+          return;
+        }
+
+        const fileData = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = reader.result as string;
+            const base64 = result.includes(",") ? result.split(",")[1] : result;
+            resolve(base64);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(selectedFile);
+        });
+
+        payload = {
+          fileData,
+          originalName: selectedFile.name,
+          mimeType: selectedFile.type as AllowedMime,
+          token: token || order.orderAccessToken,
+        };
+      } else {
+        if (!receiptUrlInput.trim()) {
+          setValidationError("Please provide a valid URL for your transaction receipt.");
+          setIsSubmitting(false);
+          return;
+        }
+
+        try {
+          const parsed = new URL(receiptUrlInput.trim());
+          if (!["http:", "https:"].includes(parsed.protocol)) {
+            throw new Error("Invalid protocol");
+          }
+        } catch {
+          setValidationError("Please enter a valid HTTP or HTTPS receipt URL.");
+          setIsSubmitting(false);
+          return;
+        }
+
+        payload = {
+          url: receiptUrlInput.trim(),
+          originalName: "Online Transaction Receipt",
+          mimeType: "image/jpeg",
+          token: token || order.orderAccessToken,
+        };
+      }
+
+      const res = await orderService.submitPaymentProof(orderNumber, payload);
 
       if (res.success && res.data) {
         setSuccessMessage("Your payment proof has been successfully submitted for verification.");

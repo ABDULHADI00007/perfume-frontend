@@ -30,10 +30,12 @@ export interface PaymentProof {
 }
 
 export interface SubmitPaymentProofPayload {
-  url: string;
+  url?: string;
   storageKey?: string;
   originalName?: string;
   mimeType?: "image/jpeg" | "image/png" | "image/webp" | "application/pdf";
+  token?: string;
+  fileData?: string;
 }
 
 export interface OrderItemSnapshot {
@@ -68,6 +70,7 @@ export interface ShippingAddressSnapshot {
 export interface OrderConfirmation {
   _id?: string;
   orderNumber: string;
+  orderAccessToken?: string;
   orderStatus: OrderStatus;
   paymentStatus: PaymentStatus;
   paymentMethod: PaymentMethod;

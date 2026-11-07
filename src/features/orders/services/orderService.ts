@@ -17,13 +17,17 @@ export const orderService = {
   },
 
   /**
-   * Get sanitized customer order confirmation by order number (Public)
+   * Get sanitized customer order confirmation by order number
+   * Requires valid guest order access token or authenticated session
    */
   async getOrderConfirmation(
-    orderNumber: string
+    orderNumber: string,
+    token?: string
   ): Promise<ApiResponse<OrderConfirmation>> {
+    const params = token ? { token } : undefined;
     return apiClient<ApiResponse<OrderConfirmation>>(
-      API_ENDPOINTS.orders.confirmation(orderNumber.toUpperCase().trim())
+      API_ENDPOINTS.orders.confirmation(orderNumber.toUpperCase().trim()),
+      { params }
     );
   },
 

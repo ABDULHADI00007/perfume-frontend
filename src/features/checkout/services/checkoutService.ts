@@ -46,7 +46,8 @@ export const checkoutService = {
   /**
    * Retrieve Public Order Confirmation Snapshot
    */
-  async getOrderConfirmation(orderNumber: string): Promise<ApiResponse<CreatedOrder>> {
-    return apiClient<ApiResponse<CreatedOrder>>(`/orders/confirmation/${orderNumber}`);
+  async getOrderConfirmation(orderNumber: string, token?: string): Promise<ApiResponse<CreatedOrder>> {
+    const params = token ? { token } : undefined;
+    return apiClient<ApiResponse<CreatedOrder>>(`/orders/confirmation/${orderNumber}`, { params });
   },
 };

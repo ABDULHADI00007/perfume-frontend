@@ -84,6 +84,7 @@ export interface StoreSettingsData {
 export interface CreatedOrder {
   _id: string;
   orderNumber: string;
+  orderAccessToken?: string;
   orderStatus: string;
   paymentStatus: string;
   paymentMethod: PaymentMethod;

@@ -240,8 +240,11 @@ export function CheckoutPageView() {
       if (res.success && res.data) {
         // Clear cart only after confirmed successful order creation
         clearCart();
-        // Redirect to Order Confirmation
-        router.push(`/order/success?orderNumber=${res.data.orderNumber}`);
+        // Redirect to Order Confirmation with secure access token
+        const targetUrl = res.data.orderAccessToken
+          ? `/order/success?orderNumber=${encodeURIComponent(res.data.orderNumber)}&token=${encodeURIComponent(res.data.orderAccessToken)}`
+          : `/order/success?orderNumber=${encodeURIComponent(res.data.orderNumber)}`;
+        router.push(targetUrl);
       } else {
         setSubmitError(res.message || "Failed to secure your order. Please try again.");
       }

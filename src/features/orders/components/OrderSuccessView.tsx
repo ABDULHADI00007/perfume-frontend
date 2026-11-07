@@ -23,6 +23,7 @@ import { PaymentProofSection } from "./PaymentProofSection";
 export function OrderSuccessView() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
+  const token = searchParams.get("token");
 
   const [order, setOrder] = useState<OrderConfirmation | null>(null);
   const [storeSettings, setStoreSettings] = useState<StoreSettingsData | null>(null);
@@ -41,7 +42,7 @@ export function OrderSuccessView() {
 
       try {
         const [orderRes, settingsRes] = await Promise.all([
-          orderService.getOrderConfirmation(orderNumber),
+          orderService.getOrderConfirmation(orderNumber, token || undefined),
           orderService.getStoreSettings().catch(() => null),
         ]);
 
@@ -74,7 +75,7 @@ export function OrderSuccessView() {
     return () => {
       isMounted = false;
     };
-  }, [orderNumber]);
+  }, [orderNumber, token]);
 
   const handleCopyOrderNumber = () => {
     if (!order?.orderNumber || !navigator.clipboard) return;
@@ -348,6 +349,7 @@ export function OrderSuccessView() {
                   />
                   <PaymentProofSection
                     order={order}
+                    token={token || order.orderAccessToken}
                     onProofSubmitted={handleProofSubmitted}
                   />
                 </div>
