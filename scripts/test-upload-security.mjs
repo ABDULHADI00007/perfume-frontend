@@ -102,3 +102,4 @@ assert.strictEqual(files.length > 0, true, 'Existing perfume images are preserve
 console.log(`✓ PASS: Existing perfume gallery directory preserved with ${files.length} images`);
 
 console.log('--- ALL SEC-VULN-01 SECURITY TESTS PASSED ---');
+
