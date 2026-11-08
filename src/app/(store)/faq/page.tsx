@@ -105,34 +105,34 @@ const FAQ_CATEGORIES: FAQCategory[] = [
 const CONCENTRATION_MATRIX = [
   {
     category: "Eau de Parfum (Soulmate Scents)",
-    oil: "25% to 30% Pure Essence",
+    oil: "25% to 30% Pure Oil",
     longevity: "12 to 18+ Hours",
-    projection: "Strong & Long-Lasting",
-    bestFor: "Signature Scent, Daily Luxury & Events",
+    projection: "Magnetic & Deep",
+    bestFor: "Signature Scent, Evenings & Milestones",
     isHighlight: true,
   },
   {
-    category: "Commercial Eau de Parfum (EDP)",
-    oil: "12% to 18% Oil",
-    longevity: "4 to 6 Hours",
+    category: "Eau de Parfum (Standard EDP)",
+    oil: "15% to 20% Oil",
+    longevity: "6 to 8 Hours",
     projection: "Moderate Sillage",
-    bestFor: "Standard Daily Office Wear",
+    bestFor: "Daily Office & Daytime Wear",
     isHighlight: false,
   },
   {
     category: "Eau de Toilette (EDT)",
-    oil: "5% to 10% Oil",
-    longevity: "2 to 4 Hours",
+    oil: "5% to 15% Oil",
+    longevity: "3 to 5 Hours",
     projection: "Light / Fresh",
-    bestFor: "Summer & Casual Routine",
+    bestFor: "Casual Gym & Warm Weather",
     isHighlight: false,
   },
   {
-    category: "Body Sprays & Colognes",
-    oil: "1% to 3% Oil",
-    longevity: "Under 1 Hour",
-    projection: "Faint Burst",
-    bestFor: "Post-Gym & Quick Refreshment",
+    category: "Eau de Cologne (EDC)",
+    oil: "2% to 4% Oil",
+    longevity: "1 to 2 Hours",
+    projection: "Faint",
+    bestFor: "Post-Shower Refreshment",
     isHighlight: false,
   },
 ];
@@ -205,7 +205,7 @@ export default function FAQPage() {
               <div>
                 <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20 font-sans">
                   <Layers className="w-3.5 h-3.5 mr-1.5 text-[#590B16]" strokeWidth={1.5} />
-                  FRAGRANCE LONGEVITY GUIDE
+                  FRAGRANCE LONGEVITY MATRIX
                 </Badge>
                 <h2
                   className="text-2xl sm:text-3xl font-bold text-black tracking-tight"
@@ -215,43 +215,45 @@ export default function FAQPage() {
                 </h2>
               </div>
               <p className="text-xs sm:text-sm text-stone-500 max-w-sm font-sans font-normal text-left sm:text-right">
-                Why Soulmate Scents Eau de Parfum lasts 12-18+ hours in Pakistan&apos;s climate compared to standard commercial perfumes.
+                Why Soulmate Scents Eau de Parfum lasts 12-18+ hours compared to standard commercial perfumes.
               </p>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-xl border border-[#EAE6DF]">
               <table className="w-full text-left text-xs font-sans min-w-[620px]">
-                <thead className="border-b border-[#F0ECE1] text-[11px] uppercase tracking-wider text-stone-500 font-semibold">
+                <thead className="bg-[#FAF8F5] border-b border-[#EAE6DF] text-[11px] uppercase tracking-wider text-stone-600 font-semibold">
                   <tr>
-                    <th className="pb-3 px-4 font-semibold">Category</th>
-                    <th className="pb-3 px-4 font-semibold">Pure Essence Oil</th>
-                    <th className="pb-3 px-4 font-semibold">Skin Longevity</th>
-                    <th className="pb-3 px-4 font-semibold">Sillage & Aura</th>
-                    <th className="pb-3 px-4 font-semibold">Best For</th>
+                    <th className="py-3 px-4 font-semibold">Category</th>
+                    <th className="py-3 px-4 font-semibold">Pure Essence Oil</th>
+                    <th className="py-3 px-4 font-semibold">Skin Longevity</th>
+                    <th className="py-3 px-4 font-semibold">Sillage & Aura</th>
+                    <th className="py-3 px-4 font-semibold">Best For</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F0ECE1]">
+                <tbody className="divide-y divide-[#EAE6DF]">
                   {CONCENTRATION_MATRIX.map((row) => (
                     <tr
                       key={row.category}
                       className={`transition-colors ${
                         row.isHighlight
-                          ? "bg-[#590B16]/[0.03] text-[#590B16] font-medium"
-                          : "text-stone-700 hover:bg-stone-50/60"
+                          ? "bg-[#590B16]/[0.035] hover:bg-[#590B16]/[0.06]"
+                          : "hover:bg-stone-50/70"
                       }`}
                     >
-                      <td className="py-4 px-4 flex items-center gap-2 font-sans font-semibold">
+                      <td className="py-3.5 px-4 flex items-center gap-2 font-sans font-semibold">
                         {row.isHighlight && <Sparkles size={13} strokeWidth={1.5} className="text-[#590B16]" />}
                         <span className={row.isHighlight ? "text-[#590B16] font-bold" : "text-stone-900"}>{row.category}</span>
                       </td>
-                      <td className={`py-4 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-900"}`}>
+                      <td className={`py-3.5 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-800"}`}>
                         {row.oil}
                       </td>
-                      <td className={`py-4 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-900"}`}>
+                      <td className={`py-3.5 px-4 font-sans ${row.isHighlight ? "font-bold text-[#590B16]" : "font-medium text-stone-800"}`}>
                         {row.longevity}
                       </td>
-                      <td className="py-4 px-4 font-sans text-stone-700">{row.projection}</td>
-                      <td className="py-4 px-4 font-sans text-stone-500 font-normal">{row.bestFor}</td>
+                      <td className={`py-3.5 px-4 font-sans ${row.isHighlight ? "text-[#590B16] font-medium" : "text-stone-700"}`}>
+                        {row.projection}
+                      </td>
+                      <td className="py-3.5 px-4 font-sans text-stone-500 font-normal">{row.bestFor}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -278,19 +280,26 @@ export default function FAQPage() {
                     </h3>
                   </div>
 
-                  {/* Clean Minimal Question Items with Smooth Accordion Animation */}
-                  <div className="bg-white rounded-2xl border border-[#E2DED6] divide-y divide-[#F0ECE1] px-5 sm:px-6 shadow-xs overflow-hidden">
+                  {/* Clean Minimal Independent Question Cards with Smooth Accordion Animation */}
+                  <div className="space-y-3">
                     {category.items.map((item, idx) => {
                       const key = `${category.category}-${idx}`;
                       const isOpen = openItem === key;
 
                       return (
-                        <div key={key} className="py-4 sm:py-5 transition-colors">
+                        <div
+                          key={key}
+                          className={`bg-white rounded-xl sm:rounded-2xl border transition-all duration-300 shadow-2xs overflow-hidden ${
+                            isOpen
+                              ? "border-[#590B16]/30 shadow-xs ring-1 ring-[#590B16]/10"
+                              : "border-[#E2DED6] hover:border-stone-300"
+                          }`}
+                        >
                           <button
                             type="button"
                             onClick={() => toggle(key)}
                             aria-expanded={isOpen}
-                            className="w-full flex items-center justify-between text-left cursor-pointer gap-4 group py-0.5"
+                            className="w-full flex items-center justify-between text-left cursor-pointer gap-4 group p-4 sm:p-5 sm:px-6"
                           >
                             <span
                               className={`font-sans text-sm sm:text-base leading-snug transition-colors pr-2 ${
@@ -326,8 +335,8 @@ export default function FAQPage() {
                                 transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                                 className="overflow-hidden"
                               >
-                                <div className="pt-3 pb-1 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed space-y-3 text-left">
-                                  <p className="leading-relaxed">{item.a}</p>
+                                <div className="px-4 pb-5 sm:px-6 sm:pb-6 pt-0 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed space-y-3 text-left border-t border-[#F0ECE1]/80 mt-0.5">
+                                  <p className="leading-relaxed pt-3">{item.a}</p>
                                   {item.steps && (
                                     <ol className="list-decimal pl-5 space-y-1.5 font-medium text-stone-700 bg-[#FAF8F5] p-3.5 rounded-xl text-left border border-stone-200/60 mt-3">
                                       {item.steps.map((step, sIdx) => (
