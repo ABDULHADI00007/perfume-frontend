@@ -29,63 +29,7 @@ interface CustomerReviewItem {
   helpfulCount: number;
 }
 
-const DEFAULT_REVIEWS: CustomerReviewItem[] = [
-  {
-    id: "rev-1",
-    name: "Mohammad Ali",
-    rating: 5,
-    date: "2 days ago",
-    title: "Unbelievable longevity and projection!",
-    comment:
-      "I ordered this after hearing so much praise. The opening is crisp with spices and bergamot, but the drydown of rich oud and warm amber is where it truly shines. It easily lasted 12+ hours on my outfit with endless compliments.",
-    isVerified: true,
-    helpfulCount: 24,
-  },
-  {
-    id: "rev-2",
-    name: "Sara Ahmed",
-    rating: 5,
-    date: "5 days ago",
-    title: "Pure luxury in a bottle",
-    comment:
-      "The packaging was breathtaking and the magnetic cap feels so premium. Wore it to a wedding reception and people kept asking what scent I was wearing. Truly high niche perfumery at an honest price.",
-    isVerified: true,
-    helpfulCount: 18,
-  },
-  {
-    id: "rev-3",
-    name: "Zainab Malik",
-    rating: 5,
-    date: "1 week ago",
-    title: "My new signature scent",
-    comment:
-      "Subtle yet commanding. It doesn't cause any headache like synthetic scents do; you can tell the natural oils and ingredients are top tier. Will definitely repurchase once this bottle runs out.",
-    isVerified: true,
-    helpfulCount: 15,
-  },
-  {
-    id: "rev-4",
-    name: "Usman Tariq",
-    rating: 4,
-    date: "2 weeks ago",
-    title: "Sophisticated and masculine",
-    comment:
-      "Very refined scent profile with great character. Projection is strong for the first 4-5 hours then settles into an alluring warm skin scent. Ideal for evening gatherings and special occasions.",
-    isVerified: true,
-    helpfulCount: 9,
-  },
-  {
-    id: "rev-5",
-    name: "Dr. Bilal Shah",
-    rating: 5,
-    date: "3 weeks ago",
-    title: "Exceeded my highest expectations",
-    comment:
-      "Arrived within 2 days in secure luxury boxing. The balance of spicy saffron and ambergris creates an intoxicating scent trail. Easily stands toe-to-toe with international designer perfumes.",
-    isVerified: true,
-    helpfulCount: 12,
-  },
-];
+const DEFAULT_REVIEWS: CustomerReviewItem[] = [];
 
 export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
   productId = "default-product",
@@ -127,7 +71,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setReviews([...parsed, ...DEFAULT_REVIEWS]);
+          setReviews(parsed);
         }
       }
     } catch {
@@ -246,7 +190,7 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                 : "text-gray-400 hover:text-gray-700"
             }`}
           >
-            <span>Reviews ({ratingCount + (reviews.length - DEFAULT_REVIEWS.length)})</span>
+            <span>Reviews ({reviews.length})</span>
           </button>
           <button
             type="button"
@@ -325,36 +269,36 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
                   })}
                 </div>
                 <p className="text-xs sm:text-sm font-medium text-stone-600">
-                  Based on {ratingCount + (reviews.length - DEFAULT_REVIEWS.length)} verified reviews
+                  {reviews.length > 0
+                    ? `Based on ${reviews.length} verified ${reviews.length === 1 ? "review" : "reviews"}`
+                    : "No customer reviews yet"}
                 </p>
                 <div className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#590B16] bg-[#590B16]/10 px-3 py-1 rounded-full">
                   <span>✓</span>
-                  <span>98% of customers recommend this fragrance</span>
+                  <span>100% authentic customer feedback</span>
                 </div>
               </div>
 
               {/* Center: Rating Distribution Progress Bars */}
               <div className="lg:col-span-5 flex flex-col space-y-2">
-                {[
-                  { star: 5, pct: 85, count: 77 },
-                  { star: 4, pct: 11, count: 10 },
-                  { star: 3, pct: 3, count: 3 },
-                  { star: 2, pct: 1, count: 1 },
-                  { star: 1, pct: 0, count: 0 },
-                ].map((item) => (
-                  <div key={item.star} className="flex items-center gap-3 text-xs font-medium text-stone-600">
-                    <span className="w-12 text-right shrink-0">{item.star} Stars</span>
-                    <div className="flex-1 h-2.5 bg-[#E6DFD5] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#F97316] rounded-full transition-all duration-500"
-                        style={{ width: `${item.pct}%` }}
-                      />
+                {[5, 4, 3, 2, 1].map((star) => {
+                  const starCount = reviews.filter((r) => r.rating === star).length;
+                  const pct = reviews.length > 0 ? Math.round((starCount / reviews.length) * 100) : 0;
+                  return (
+                    <div key={star} className="flex items-center gap-3 text-xs font-medium text-stone-600">
+                      <span className="w-12 text-right shrink-0">{star} Stars</span>
+                      <div className="flex-1 h-2.5 bg-[#E6DFD5] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#F97316] rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <span className="w-8 text-stone-400 text-[11px] shrink-0 text-right">
+                        {pct}%
+                      </span>
                     </div>
-                    <span className="w-8 text-stone-400 text-[11px] shrink-0 text-right">
-                      {item.pct}%
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Right: "Write a Review" Call to Action */}
@@ -574,9 +518,28 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
 
           {/* Customer Reviews List */}
           <div className="space-y-6">
-            {filteredReviews.length === 0 ? (
+            {reviews.length === 0 ? (
+              <div className="text-center py-12 px-4 bg-[#FAF8F5] border border-[#EBE3D7] rounded-2xl space-y-3">
+                <div className="w-12 h-12 mx-auto rounded-full bg-[#590B16]/10 text-[#590B16] flex items-center justify-center font-serif text-xl">
+                  ★
+                </div>
+                <h4 className="font-serif text-lg font-bold text-[#0D1424]">No Reviews Yet</h4>
+                <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto leading-relaxed">
+                  Be the first to share your olfactory journey with {productTitle}. Your authentic experience helps fellow fragrance connoisseurs.
+                </p>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowReviewForm(true)}
+                    className="px-6 py-2.5 bg-[#590B16] hover:bg-[#430810] text-white text-xs font-serif font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
+                  >
+                    Write the First Review
+                  </button>
+                </div>
+              </div>
+            ) : filteredReviews.length === 0 ? (
               <div className="text-center py-12 bg-stone-50 rounded-xl">
-                <p className="text-sm text-stone-500">No reviews found for this filter.</p>
+                <p className="text-sm text-stone-500">No reviews found for this star filter.</p>
               </div>
             ) : (
               filteredReviews.map((rev) => {
