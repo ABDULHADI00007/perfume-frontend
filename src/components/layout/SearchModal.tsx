@@ -260,7 +260,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             ) : (
               filteredProducts.map((product, index) => {
                 const isSelected = index === selectedIndex;
-                const primaryImage = product.images?.[0] || "/images/perfumes/oyd_royal.png";
+                const primaryImage = product.images?.[0] || "/images/perfumes/collection_crown_legacy.jpg";
                 const price = product.variants?.[0]?.price || 13500;
 
                 return (

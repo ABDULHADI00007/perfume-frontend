@@ -20,7 +20,7 @@ export const initialCollections: Collection[] = [
     subtitle: "High-Concentration Pure Perfume Formulations",
     description:
       "Formulated at 30% concentration, these intense compositions offer extraordinary sillage and intimacy on skin throughout the day.",
-    heroImage: "/images/perfumes/oyd_royal.png",
+    heroImage: "/images/perfumes/collection_crown_legacy.jpg",
     featured: true,
     createdAt: "2026-01-01T00:00:00Z",
     updatedAt: "2026-01-01T00:00:00Z",

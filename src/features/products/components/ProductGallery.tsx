@@ -32,10 +32,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     images && images.length > 0
       ? images
       : [
-        "/images/perfumes/oyd_royal.png",
-        "/images/perfumes/sultan-veils.png",
-        "/images/perfumes/amber-rivera.png",
-        "/images/perfumes/noir_external.png",
+        "/images/perfumes/Crown Legacy_ Regal Golden Perfume Still Life.png",
+        "/images/perfumes/Sultan’s Veil by Lanternlight.png",
+        "/images/perfumes/Infinite Boss in Golden Stone Light.png",
+        "/images/perfumes/collection_sultans_veil.jpg",
       ];
 
   const currentImage = displayImages[selectedImageIndex] || displayImages[0];

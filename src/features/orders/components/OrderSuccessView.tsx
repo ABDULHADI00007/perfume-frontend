@@ -512,7 +512,7 @@ export function OrderSuccessView() {
 }
 
 function OrderItemImage({ src, alt }: { src?: string; alt: string }) {
-  const defaultSrc = "/images/perfumes/oyd_royal.png";
+  const defaultSrc = "/images/perfumes/collection_crown_legacy.jpg";
   const initialSrc = src && (src.startsWith("/") || src.startsWith("http")) ? src : defaultSrc;
   const [imgSrc, setImgSrc] = useState<string>(initialSrc);
 

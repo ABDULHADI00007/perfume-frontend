@@ -38,7 +38,7 @@ export const DiscoveryCTA: React.FC = () => {
               
               <div className="bg-surface p-4 sm:p-6 border border-border">
                 <OptimizedImage
-                  src="/images/perfumes/sultan-veils.png"
+                  src="/images/perfumes/collection_sultans_veil.jpg"
                   alt="Maison de Parfum Discovery Set with 5ml extrait flacons in linen presentation box"
                   aspectRatio="16/9"
                   className="w-full h-auto object-cover bg-surface-subtle/40"

@@ -200,7 +200,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-07-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-EB-50" },
     ],
-    images: ["/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png", "/images/perfumes/eternal-blaze-luxury.jpg", "/images/perfumes/amber-rivera.png"],
+    images: ["/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png", "/images/perfumes/eternal-blaze-luxury.jpg", "/images/perfumes/collection_velvet_amber.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,

@@ -649,73 +649,98 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
       {activeTab === "notes" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-5 flex flex-col space-y-4">
-            <h3 className="font-serif text-2xl font-bold text-[#0D1424]">
-              Olfactory Architecture
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-600 font-sans leading-relaxed">
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1.5">
+                Olfactory Pyramid & Notes
+              </span>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#0D1424]">
+                Olfactory Architecture
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-600 font-sans leading-relaxed">
               Every fragrance by Soulmate Scents is harmonized with a 3-tier olfactory pyramid. Crafted with exquisite natural absolutes and rich resins to guarantee lingering projection and multifaceted silage from sunrise to dusk.
             </p>
-            <div className="pt-2 text-xs text-stone-600 space-y-2">
-              <p><strong className="text-stone-900">Concentration:</strong> {concentration}</p>
-              <p><strong className="text-stone-900">Olfactory Family:</strong> {olfactoryFamily}</p>
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="p-3.5 bg-stone-50/90 rounded-xl border border-stone-200/70">
+                <span className="block text-[10px] uppercase font-bold tracking-wider text-[#590B16] font-serif mb-0.5">
+                  Concentration
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-stone-800 font-sans">
+                  {concentration || "Eau de Parfum"}
+                </span>
+              </div>
+              <div className="p-3.5 bg-stone-50/90 rounded-xl border border-stone-200/70">
+                <span className="block text-[10px] uppercase font-bold tracking-wider text-[#590B16] font-serif mb-0.5">
+                  Olfactory Family
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-stone-800 font-sans">
+                  {olfactoryFamily || "Oriental Woody"}
+                </span>
+              </div>
             </div>
           </div>
 
           <div className="lg:col-span-7">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3 sm:gap-6">
               {/* Top Notes */}
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-3 border border-gray-200 shadow-xs">
-                  <Image
-                    src="/images/perfumes/sultan-veils.png"
-                    alt="Top Notes"
-                    fill
-                    sizes="(max-width: 640px) 80px, 96px"
-                    className="object-cover object-center"
-                  />
+              <div className="flex flex-col items-center text-center group">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-br from-[#EADECF] via-[#FAF7F2] to-[#D5C2AA] shadow-sm border border-[#DAC8B1] transition-all duration-300 group-hover:shadow-md group-hover:scale-105">
+                  <div className="relative w-full h-full rounded-full overflow-hidden bg-stone-100">
+                    <Image
+                      src="/images/editorial/savoir-faire-botanical.webp"
+                      alt="Top Notes - Fresh Botanicals & Citrus"
+                      fill
+                      sizes="(max-width: 640px) 80px, 112px"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
                 </div>
-                <h4 className="font-serif text-sm font-bold text-[#0D1424]">
+                <h4 className="font-serif text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-[#0D1424] mt-3">
                   Top Notes
                 </h4>
-                <p className="text-[11px] text-gray-500 mt-0.5">
+                <p className="font-sans text-xs text-stone-500 leading-relaxed mt-1 max-w-[190px]">
                   {topNotesText}
                 </p>
               </div>
 
               {/* Heart Notes */}
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-3 border border-gray-200 shadow-xs">
-                  <Image
-                    src="/images/perfumes/oyd_royal.png"
-                    alt="Heart Notes"
-                    fill
-                    sizes="(max-width: 640px) 80px, 96px"
-                    className="object-cover object-center"
-                  />
+              <div className="flex flex-col items-center text-center group">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-br from-[#EADECF] via-[#FAF7F2] to-[#D5C2AA] shadow-sm border border-[#DAC8B1] transition-all duration-300 group-hover:shadow-md group-hover:scale-105">
+                  <div className="relative w-full h-full rounded-full overflow-hidden bg-stone-100">
+                    <Image
+                      src="/images/editorial/journal-jasmine.webp"
+                      alt="Heart Notes - Floral Jasmine & Spices"
+                      fill
+                      sizes="(max-width: 640px) 80px, 112px"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
                 </div>
-                <h4 className="font-serif text-sm font-bold text-[#0D1424]">
+                <h4 className="font-serif text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-[#0D1424] mt-3">
                   Heart Notes
                 </h4>
-                <p className="text-[11px] text-gray-500 mt-0.5">
+                <p className="font-sans text-xs text-stone-500 leading-relaxed mt-1 max-w-[190px]">
                   {heartNotesText}
                 </p>
               </div>
 
               {/* Base Notes */}
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-3 border border-gray-200 shadow-xs">
-                  <Image
-                    src="/images/perfumes/amber-rivera.png"
-                    alt="Base Notes"
-                    fill
-                    sizes="(max-width: 640px) 80px, 96px"
-                    className="object-cover object-center"
-                  />
+              <div className="flex flex-col items-center text-center group">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-br from-[#EADECF] via-[#FAF7F2] to-[#D5C2AA] shadow-sm border border-[#DAC8B1] transition-all duration-300 group-hover:shadow-md group-hover:scale-105">
+                  <div className="relative w-full h-full rounded-full overflow-hidden bg-stone-100">
+                    <Image
+                      src="/images/editorial/journal-woods.webp"
+                      alt="Base Notes - Rare Woods & Resins"
+                      fill
+                      sizes="(max-width: 640px) 80px, 112px"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
                 </div>
-                <h4 className="font-serif text-sm font-bold text-[#0D1424]">
+                <h4 className="font-serif text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-[#0D1424] mt-3">
                   Base Notes
                 </h4>
-                <p className="text-[11px] text-gray-500 mt-0.5">
+                <p className="font-sans text-xs text-stone-500 leading-relaxed mt-1 max-w-[190px]">
                   {baseNotesText}
                 </p>
               </div>

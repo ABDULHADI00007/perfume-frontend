@@ -207,7 +207,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     className="relative h-20 w-16 bg-[#FAF7EE] border border-black/10 rounded-xl overflow-hidden group block shadow-2xs"
                   >
                     <OptimizedImage
-                      src={item.image || "/images/perfumes/oyd_royal.png"}
+                      src={item.image || "/images/perfumes/collection_crown_legacy.jpg"}
                       alt={item.title}
                       aspectRatio="3/4"
                       priority={false}

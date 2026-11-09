@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: PageProps) {
     });
   }
 
-  const primaryImage = product.images?.[0] || "/images/perfumes/oyd_royal.png";
+  const primaryImage = product.images?.[0] || "/images/perfumes/collection_crown_legacy.jpg";
 
   return constructMetadata({
     title: `${product.title} | Soulmate Scents`,

@@ -37,7 +37,7 @@ export const CollectionHighlight: React.FC = () => {
               
               <div className="bg-surface p-4 sm:p-6 border border-border">
                 <OptimizedImage
-                  src="/images/perfumes/amber-rivera.png"
+                  src="/images/perfumes/collection_velvet_orchid.jpg"
                   alt="Maison de Parfum Private Reserve collection flacons"
                   aspectRatio="16/9"
                   className="w-full h-auto object-cover bg-surface-subtle/40"

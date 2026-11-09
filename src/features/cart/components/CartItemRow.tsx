@@ -37,7 +37,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
           aria-label={`View ${item.title}`}
         >
           <OptimizedImage
-            src={item.image || "/images/perfumes/oyd_royal.png"}
+            src={item.image || "/images/perfumes/collection_crown_legacy.jpg"}
             alt={item.title}
             aspectRatio="3/4"
             priority={false}
@@ -130,7 +130,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
             aria-label={`View ${item.title}`}
           >
             <OptimizedImage
-              src={item.image || "/images/perfumes/oyd_royal.png"}
+              src={item.image || "/images/perfumes/collection_crown_legacy.jpg"}
               alt={item.title}
               aspectRatio="3/4"
               priority={false}

@@ -8,47 +8,47 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 const perfumeCylinderImages: CarouselImage[] = [
   {
     title: "Amber Riviera — Extrait de Parfum",
-    src: "/images/perfumes/amber-rivera.png",
+    src: "/images/perfumes/Infinite Boss in Golden Stone Light.png",
     alt: "Amber Riviera Luxury Perfume Flacon",
   },
   {
     title: "Oud Majesty — Royal Reserve",
-    src: "/images/perfumes/oud-majesty.png",
+    src: "/images/perfumes/Crown Legacy_ Regal Golden Perfume Still Life.png",
     alt: "Oud Majesty Perfume Flacon",
   },
   {
     title: "Citrus Rêverie — Solar Infusion",
-    src: "/images/perfumes/cirtus-revrie.png",
+    src: "/images/perfumes/noble-ocean-still-life.png",
     alt: "Citrus Rêverie Perfume Flacon",
   },
   {
     title: "Sultan Veils — Oriental Mystique",
-    src: "/images/perfumes/sultan-veils.png",
+    src: "/images/perfumes/Sultan’s Veil by Lanternlight.png",
     alt: "Sultan Veils Perfume Flacon",
   },
   {
     title: "Golden Serenity — Amber Nectar",
-    src: "/images/perfumes/golden-senerity.png",
+    src: "/images/perfumes/Golden Hour Gentle Man Perfume.png",
     alt: "Golden Serenity Perfume Flacon",
   },
   {
     title: "Secret Garden — Damask Floral",
-    src: "/images/perfumes/secret-garden.png",
+    src: "/images/perfumes/Secret Garden Perfume in Bloom.png",
     alt: "Secret Garden Perfume Flacon",
   },
   {
     title: "Dusk Absolu — Nightfall Woods",
-    src: "/images/perfumes/dusk.png",
+    src: "/images/perfumes/dusk-still-life.png",
     alt: "Dusk Absolu Perfume Flacon",
   },
   {
     title: "Vanilla Rêve — Bourbon Infusion",
-    src: "/images/perfumes/vanila_rev.png",
+    src: "/images/perfumes/collection_velvet_amber.jpg",
     alt: "Vanilla Rêve Perfume Flacon",
   },
   {
     title: "Whisper Blossom — Delicate Petals",
-    src: "/images/perfumes/whispers-bloom.jpg",
+    src: "/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png",
     alt: "Whisper Blossom Perfume Flacon",
   },
 ];

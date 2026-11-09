@@ -83,7 +83,7 @@ export function normalizeProduct(raw: any): Product {
       "Woody Oriental",
     notes,
     variants,
-    images: images.length > 0 ? images : ["/images/perfumes/oyd_royal.png"],
+    images: images.length > 0 ? images : ["/images/perfumes/collection_crown_legacy.jpg"],
     featured: Boolean(raw.featured),
     isNewArrival: Boolean(raw.newArrival || raw.isNewArrival),
     isBestSeller: Boolean(raw.bestseller || raw.isBestSeller),

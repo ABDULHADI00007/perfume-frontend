@@ -16,7 +16,7 @@ const bestSellers = [
     family: "Amber Oud",
     concentration: "32% Extrait",
     price: "PKR 18,500",
-    image: "/images/perfumes/oyd_royal.png",
+    image: "/images/perfumes/collection_crown_legacy.jpg",
     badge: "Best Seller",
   },
   {
@@ -26,7 +26,7 @@ const bestSellers = [
     family: "Fruity Floral",
     concentration: "28% Extrait",
     price: "PKR 22,000",
-    image: "/images/perfumes/lyce_blush.png",
+    image: "/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png",
     badge: "No. 1",
   },
   {
@@ -36,7 +36,7 @@ const bestSellers = [
     family: "Citrus Floral",
     concentration: "28% Extrait",
     price: "PKR 16,500",
-    image: "/images/perfumes/mediterrane_blu.png",
+    image: "/images/perfumes/blue-horizon-luxury.jpg",
     badge: "Signature",
   },
   {
@@ -46,7 +46,7 @@ const bestSellers = [
     family: "Spiced Oud",
     concentration: "30% Extrait",
     price: "PKR 19,000",
-    image: "/images/perfumes/sultan-veils.png",
+    image: "/images/perfumes/collection_sultans_veil.jpg",
     badge: "New",
   },
 ];

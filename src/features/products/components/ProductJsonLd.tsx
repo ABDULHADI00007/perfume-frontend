@@ -7,7 +7,7 @@ export interface ProductJsonLdProps {
 
 export const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product }) => {
   const primaryVariant = product.variants?.[0];
-  const primaryImage = product.images?.[0] || "/images/perfumes/oyd_royal.png";
+  const primaryImage = product.images?.[0] || "/images/perfumes/collection_crown_legacy.jpg";
 
   const schema = {
     "@context": "https://schema.org",
