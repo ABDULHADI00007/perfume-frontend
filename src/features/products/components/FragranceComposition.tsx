@@ -71,7 +71,24 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setReviews(parsed);
+          const legacyDummyNames = [
+            "Mohammad Ali",
+            "Sara Ahmed",
+            "Zainab Malik",
+            "Usman Tariq",
+            "Dr. Bilal Shah",
+          ];
+          const legacyDummyIds = ["rev-1", "rev-2", "rev-3", "rev-4", "rev-5"];
+          const cleanReviews = parsed.filter(
+            (r: CustomerReviewItem) =>
+              r &&
+              !legacyDummyIds.includes(r.id) &&
+              !legacyDummyNames.includes(r.name)
+          );
+          setReviews(cleanReviews);
+          if (cleanReviews.length !== parsed.length) {
+            localStorage.setItem(storageKey, JSON.stringify(cleanReviews));
+          }
         }
       }
     } catch {
