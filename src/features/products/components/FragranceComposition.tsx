@@ -753,35 +753,43 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
       {activeTab === "description" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-8 flex flex-col space-y-6">
-            <p className="text-xs sm:text-sm text-gray-600 font-sans leading-relaxed">
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1.5">
+                The Narrative
+              </span>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#0D1424]">
+                Fragrance Story
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-600 font-sans leading-relaxed">
               {description ||
                 `${productTitle} is an extraordinary blend that captures power, elegance, and mystery. Inspired by rare oriental traditions, this fragrance opens with rich spices, unfolds into deep oud, and settles into a warm, lingering trail. Perfect for evening wear and special occasions.`}
             </p>
 
             <div className="flex flex-col space-y-3 pt-2">
-              <div className="flex items-center gap-3 text-xs text-gray-700 font-medium">
-                <div className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-700 text-[10px] font-bold">
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-stone-700 font-medium">
+                <div className="w-5 h-5 rounded-full border border-[#590B16]/30 bg-[#590B16]/5 flex items-center justify-center text-[#590B16] text-[10px] font-bold shrink-0">
                   ✓
                 </div>
-                <span>Long-lasting fragrance (10-14 hours on fabric)</span>
+                <span className="font-sans">Long-lasting fragrance (10–14 hours on fabric)</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-700 font-medium">
-                <div className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-700 text-[10px] font-bold">
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-stone-700 font-medium">
+                <div className="w-5 h-5 rounded-full border border-[#590B16]/30 bg-[#590B16]/5 flex items-center justify-center text-[#590B16] text-[10px] font-bold shrink-0">
                   ✓
                 </div>
-                <span>Premium imported French & Arabian essential oils</span>
+                <span className="font-sans">Premium imported French & Arabian essential oils</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-700 font-medium">
-                <div className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-700 text-[10px] font-bold">
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-stone-700 font-medium">
+                <div className="w-5 h-5 rounded-full border border-[#590B16]/30 bg-[#590B16]/5 flex items-center justify-center text-[#590B16] text-[10px] font-bold shrink-0">
                   ✓
                 </div>
-                <span>Ideal for special occasions, formal evenings & daily signature wear</span>
+                <span className="font-sans">Ideal for special occasions, formal evenings & daily signature wear</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-700 font-medium">
-                <div className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-700 text-[10px] font-bold">
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-stone-700 font-medium">
+                <div className="w-5 h-5 rounded-full border border-[#590B16]/30 bg-[#590B16]/5 flex items-center justify-center text-[#590B16] text-[10px] font-bold shrink-0">
                   ✓
                 </div>
-                <span>Comes encased in bespoke luxury Soulmate Scents packaging</span>
+                <span className="font-sans">Comes encased in bespoke luxury Soulmate Scents packaging</span>
               </div>
             </div>
           </div>
@@ -790,26 +798,47 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
 
       {/* TAB 4: DETAILS */}
       {activeTab === "details" && (
-        <div className="max-w-3xl space-y-4 text-xs sm:text-sm text-stone-600">
-          <h3 className="font-serif text-2xl font-bold text-[#0D1424] mb-4">
-            Product Specifications
-          </h3>
+        <div className="max-w-3xl space-y-6">
+          <div>
+            <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1.5">
+              Formulation & Metrics
+            </span>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#0D1424]">
+              Product Specifications
+            </h3>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Fragrance Name</strong>
-              <span>{productTitle}</span>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Fragrance Name
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-medium text-stone-800 leading-normal">
+                {productTitle}
+              </span>
             </div>
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Concentration</strong>
-              <span>{concentration} (High Oil Load 25-30%)</span>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Concentration
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-medium text-stone-800 leading-normal">
+                {concentration} (High Oil Load 25–30%)
+              </span>
             </div>
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Olfactory Profile</strong>
-              <span>{olfactoryFamily}</span>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Olfactory Profile
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-medium text-stone-800 leading-normal">
+                {olfactoryFamily}
+              </span>
             </div>
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Longevity & Silage</strong>
-              <span>Heavy projection (4-6 hours), 12+ hours skin/fabric hold</span>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Longevity & Silage
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-medium text-stone-800 leading-normal">
+                Heavy projection (4–6 hours), 12+ hours skin/fabric hold
+              </span>
             </div>
           </div>
         </div>
@@ -817,22 +846,39 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
 
       {/* TAB 5: SHIPPING & RETURNS */}
       {activeTab === "shipping" && (
-        <div className="max-w-3xl space-y-6 text-xs sm:text-sm text-stone-600">
-          <h3 className="font-serif text-2xl font-bold text-[#0D1424]">
-            Shipping & Return Policy
-          </h3>
+        <div className="max-w-3xl space-y-6">
+          <div>
+            <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1.5">
+              White-Glove Service
+            </span>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#0D1424]">
+              Shipping & Return Policy
+            </h3>
+          </div>
           <div className="space-y-4">
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Fast Delivery Across Pakistan</strong>
-              <p>Orders are dispatched within 24 hours. Delivery takes 2-4 business days for major cities (Karachi, Lahore, Islamabad) and 3-5 days for other locations.</p>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Fast Delivery Across Pakistan
+              </span>
+              <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+                Orders are dispatched within 24 hours. Delivery takes 2–4 business days for major cities (Karachi, Lahore, Islamabad) and 3–5 days for other locations.
+              </p>
             </div>
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">Free Shipping on Orders Above Rs. 20,000</strong>
-              <p>Enjoy complimentary tracked courier delivery on qualifying luxury orders nationwide.</p>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                Free Shipping on Orders Above Rs. 20,000
+              </span>
+              <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+                Enjoy complimentary tracked courier delivery on qualifying luxury orders nationwide.
+              </p>
             </div>
-            <div className="p-4 bg-stone-50 rounded-xl border border-stone-200/80">
-              <strong className="block text-stone-900 font-serif mb-1">7-Day Hassle-Free Returns & Exchange</strong>
-              <p>We take pride in our artisanal scents. If you are not completely enchanted, our concierge team will gladly arrange a swift replacement or return for any unsealed product.</p>
+            <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
+              <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
+                7-Day Hassle-Free Returns & Exchange
+              </span>
+              <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+                We take pride in our artisanal scents. If you are not completely enchanted, our concierge team will gladly arrange a swift replacement or return for any unsealed product.
+              </p>
             </div>
           </div>
         </div>
