@@ -501,7 +501,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         )}
       </AnimatePresence>
 
-      <form onSubmit={handleSubmit} className="space-y-8 max-w-6xl mx-auto pb-20 font-sans">
+      <form onSubmit={handleSubmit} className="space-y-8 w-full pb-20 font-sans">
         {/* Top Header & Sticky Navigation */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
@@ -620,14 +620,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Card Cover Image Upload & Mini Preview */}
-            <div className="lg:col-span-5 space-y-3">
+            <div className="lg:col-span-5 xl:col-span-4 space-y-3">
               <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block font-serif">
                 Collection Card Picture (Cover Photo) *
               </label>
 
               {cardImage ? (
                 <div className="space-y-2">
-                  <div className="relative group rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[4/5] max-h-[340px] sm:max-h-none max-w-xs sm:max-w-none mx-auto sm:mx-0 flex items-center justify-center p-4">
+                  <div className="relative group rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[4/5] max-h-[360px] sm:max-h-[460px] max-w-xs sm:max-w-md mx-auto sm:mx-0 flex items-center justify-center p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={cardImage}
@@ -765,7 +765,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             </div>
 
             {/* Card Content & Details */}
-            <div className="lg:col-span-7 space-y-4">
+            <div className="lg:col-span-7 xl:col-span-8 space-y-4">
               <div>
                 <Input
                   label="Fragrance Name *"
