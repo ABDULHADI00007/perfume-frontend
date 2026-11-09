@@ -95,22 +95,22 @@ export default function HomePage() {
         "@type": "FAQPage",
         "@id": `${siteConfig.url}/#faq`,
         "name": "Soulmate Scents Haute Parfumerie Concierge & FAQ",
-        "description": "Expert answers to common questions about Eau de Parfum formulation, longevity, skin application rituals, and rare botanicals.",
+        "description": "Expert answers to common questions about Extrait de Parfum formulation, longevity, skin application rituals, and rare botanicals.",
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "What makes Soulmate Scents Eau de Parfum (EDP) uniquely long-lasting?",
-            "text": "What makes Soulmate Scents Eau de Parfum (EDP) uniquely long-lasting?",
+            "name": "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
+            "text": "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
             "dateCreated": "2026-01-01",
             "upvoteCount": 84,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Soulmate Scents crafts luxury Eau de Parfum (EDP) with 25% to 30% pure aromatic perfume oils—significantly higher than typical commercial EDPs (12–18%). Formulated specifically for Pakistan's warm climate, our fragrances deliver 12 to 18+ hours of lasting longevity on skin and over 24 hours on clothes without harsh alcohol evaporation.",
+              "text": "An Extrait de Parfum is the purest and most concentrated formulation of fine fragrance, containing 30% to 40% pure aromatic compounds. Unlike standard Eau de Parfum (15–20% concentration), extraits develop with greater depth on skin and provide 12 to 18 hours of continuous, intimate sillage without harsh alcoholic evaporation.",
               "dateCreated": "2026-01-01"
             },
             "suggestedAnswer": {
               "@type": "Answer",
-              "text": "Soulmate Scents Eau de Parfum features a high 25-30% concentration of pure fragrance oils ensuring all-day longevity in Pakistan.",
+              "text": "Extrait de Parfum features the highest concentration of fragrance oils (30-40%) ensuring all-day longevity.",
               "dateCreated": "2026-01-01"
             }
           },

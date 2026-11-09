@@ -516,9 +516,9 @@ const CSS =
   ".stt-letter>*{position:relative;z-index:1}" +
   ".stt-letter>.stt-stamp{position:absolute;right:clamp(12px,2cqw,28px);top:clamp(10px,1.6cqw,22px);width:clamp(84px,10cqw,130px);height:auto;max-width:none;overflow:visible;color:var(--stt-accent);opacity:.5;transform:rotate(-9deg);fill:none;stroke:currentColor;stroke-width:1.4}" +
   ".stt-stamp text{fill:currentColor;stroke:none;font-family:var(--stt-sans);font-size:6.5px;font-weight:600;letter-spacing:.04em;text-anchor:middle}" +
-  ".stt-note-k{font-size:clamp(10px,1.05cqw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--stt-accent);font-weight:600}" +
-  ".stt-note-t{font-family:var(--stt-display);font-size:clamp(16px,2.1cqw,28px);line-height:1.12;letter-spacing:-.02em;max-width:26em;padding-right:clamp(0px,7cqw,90px)}" +
-  ".stt-note-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:clamp(12px,1.2cqw,15px)}" +
+  ".stt-note-k{font-size:clamp(10px,1.05cqw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--stt-accent);font-weight:600;transform:translateY(-22px)}" +
+  ".stt-note-t{font-family:var(--stt-display);font-size:clamp(14.5px,1.55cqw,20.5px);line-height:1.32;letter-spacing:-.015em;max-width:30em;padding-right:clamp(0px,7cqw,90px);transform:translateY(-22px)}" +
+  ".stt-note-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:clamp(12px,1.2cqw,15px);transform:translateY(-14px)}" +
   ".stt-cta{display:inline-flex;align-items:center;gap:.5em;padding:.55em 1.05em;border-radius:99px;background:var(--stt-ink);color:var(--stt-paper);font-weight:500;transition:background .3s,transform .3s " + EASE + "}" +
   ".stt-cta:hover{background:var(--stt-accent);transform:translateY(-1px)}" +
   ".stt-cta svg{width:.8em;height:.8em;max-width:none;transition:transform .3s " + EASE + "}" +
@@ -531,13 +531,44 @@ const CSS =
   ".stt-cord .stt-hit{stroke:transparent;stroke-width:22px;pointer-events:none;cursor:grab;touch-action:none}" +
   ".stt-cord.is-loose .stt-hit{pointer-events:stroke}" +
   ".stt-cord.is-drag .stt-hit{cursor:grabbing}" +
+  "@container (max-width: 1024px){" +
+  ".stt-letter{padding:38px 24px calc(var(--tuck) + 16px);min-height:auto;justify-content:flex-start;gap:12px}" +
+  ".stt-note-k{font-size:11px;transform:none !important;letter-spacing:.14em;margin-top:6px}" +
+  ".stt-note-t{font-size:14px;line-height:1.36;transform:none !important;padding-right:60px;max-width:100%}" +
+  ".stt-note-row{transform:none !important;margin-top:8px;gap:10px 14px}" +
+  ".stt-letter>.stt-stamp{width:75px;right:16px;top:16px;opacity:.4}" +
+  "}" +
+  "@media (max-width: 1024px){" +
+  ".stt-letter{padding:38px 24px calc(var(--tuck) + 16px);min-height:auto;justify-content:flex-start;gap:12px}" +
+  ".stt-note-k{font-size:11px;transform:none !important;letter-spacing:.14em;margin-top:6px}" +
+  ".stt-note-t{font-size:14px;line-height:1.36;transform:none !important;padding-right:60px;max-width:100%}" +
+  ".stt-note-row{transform:none !important;margin-top:8px;gap:10px 14px}" +
+  ".stt-letter>.stt-stamp{width:75px;right:16px;top:16px;opacity:.4}" +
+  "}" +
   "@container (max-width: 640px){" +
   ".stt-content{grid-template-columns:1fr;align-items:start;gap:28px;padding:16px 20px 32px}" +
   ".stt-regards{align-items:flex-start;padding-right:0}" +
   ".stt-regards-t{margin-right:0}" +
-  ".stt-letter{--tuck:22px;min-height:200px;padding:14px 16px calc(var(--tuck) + 16px);transform:translate(-50%,calc(var(--r) * 3.1 + 8px))}" +
-  ".stt.is-open .stt-letter{transform:translate(-50%,clamp(24px,5cqw,36px))}" +
-  ".stt-note-t{font-size:14.5px;line-height:1.24}" +
+  ".stt-letter{--tuck:20px;padding:36px 18px calc(var(--tuck) + 18px);justify-content:flex-start;gap:10px;transform:translate(-50%,calc(var(--r) * 3.1 + 8px))}" +
+  ".stt.is-open .stt-letter{transform:translate(-50%,clamp(16px,4cqw,26px))}" +
+  ".stt-letter>.stt-stamp{width:60px;right:12px;top:12px;opacity:.3}" +
+  ".stt-note-k{font-size:10px;transform:none !important;letter-spacing:.12em;margin-top:4px}" +
+  ".stt-note-t{font-size:13px;line-height:1.34;transform:none !important;padding-right:20px;max-width:100%}" +
+  ".stt-note-row{transform:none !important;margin-top:8px;gap:8px 12px;font-size:12px}" +
+  ".stt-cta{padding:.45em .95em;font-size:12px}" +
+  ".stt-meta span:nth-child(2){display:none}" +
+  "}" +
+  "@media (max-width: 640px){" +
+  ".stt-content{grid-template-columns:1fr;align-items:start;gap:28px;padding:16px 20px 32px}" +
+  ".stt-regards{align-items:flex-start;padding-right:0}" +
+  ".stt-regards-t{margin-right:0}" +
+  ".stt-letter{--tuck:20px;padding:36px 18px calc(var(--tuck) + 18px);justify-content:flex-start;gap:10px;transform:translate(-50%,calc(var(--r) * 3.1 + 8px))}" +
+  ".stt.is-open .stt-letter{transform:translate(-50%,clamp(16px,4cqw,26px))}" +
+  ".stt-letter>.stt-stamp{width:60px;right:12px;top:12px;opacity:.3}" +
+  ".stt-note-k{font-size:10px;transform:none !important;letter-spacing:.12em;margin-top:4px}" +
+  ".stt-note-t{font-size:13px;line-height:1.34;transform:none !important;padding-right:20px;max-width:100%}" +
+  ".stt-note-row{transform:none !important;margin-top:8px;gap:8px 12px;font-size:12px}" +
+  ".stt-cta{padding:.45em .95em;font-size:12px}" +
   ".stt-meta span:nth-child(2){display:none}" +
   "}" +
   "@media (prefers-reduced-motion: reduce){" +
@@ -1166,8 +1197,8 @@ export default function StringTieFooter({
             {note.kicker && <p className="stt-note-k">{note.kicker}</p>}
             {note.text && <p className="stt-note-t">{note.text}</p>}
             <div className="stt-note-row">
-              <Link className="stt-cta" href={note.href || "/collections"}>
-                {note.cta || "Discover"}
+              <Link className="stt-cta" href={note.href || "/faq"}>
+                {note.cta || "FAQ / Q&A"}
                 <Arrow />
               </Link>
               <button type="button" className="stt-ghost" onClick={() => toggle(false)}>
@@ -1266,26 +1297,6 @@ export default function StringTieFooter({
 
             {(regards || signature.length > 0 || signatureText) && (
               <div className="stt-regards pt-4 sm:pt-8 md:pt-10">
-                {/* Big Heading for FAQ / Scents Guide above Warm Regards */}
-                <Link
-                  href="/faq"
-                  className="mb-6 sm:mb-8 group inline-flex flex-col items-center md:items-start text-center md:text-left transition-all"
-                >
-                  <span
-                    className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#C5A880] font-semibold mb-1.5 flex items-center gap-1.5 group-hover:text-[#E2D2B0]"
-                    style={{ fontFamily: "var(--stt-sans)" }}
-                  >
-                    <span>Client Help & Knowledge</span>
-                    <span className="transition-transform group-hover:translate-x-1">→</span>
-                  </span>
-                  <span
-                    className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#EBE3D7] group-hover:text-white transition-colors tracking-tight underline-offset-8 group-hover:underline"
-                    style={{ fontFamily: "var(--stt-display)" }}
-                  >
-                    FAQ / Scents Guide
-                  </span>
-                </Link>
-
                 {regards && <p className="stt-regards-t mt-3 sm:mt-5">{regards}</p>}
                 {signatureText ? (
                   <div className="stt-sign-wrap">

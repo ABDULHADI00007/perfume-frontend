@@ -36,8 +36,8 @@ export const Footer: React.FC<FooterProps> = (props) => {
       note={{
         kicker: "A letter from Soulmate Scents",
         text: "Crafting timeless memories through luxury perfumery. Have an inquiry, custom fragrance request, or wish to connect? Our concierge is always delighted to assist you.",
-        cta: "Discover",
-        href: "/collections",
+        cta: "FAQ / Q&A",
+        href: "/faq",
       }}
       height="clamp(500px, 74svh, 700px)"
       paper="#ffffff"

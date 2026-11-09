@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { ChevronDown, Search, Compass, BookOpen, Sparkles, ShieldCheck, HelpCircle, Layers, Send } from "lucide-react";
 
@@ -16,11 +15,11 @@ interface FAQItem {
 
 const FAQ_ITEMS: FAQItem[] = [
   {
-    id: "faq-edp-concentration",
-    question: "What makes Soulmate Scents Eau de Parfum (EDP) uniquely long-lasting?",
+    id: "faq-extrait-vs-edp",
+    question: "What is an Extrait de Parfum and how does it differ from Eau de Parfum?",
     answer:
-      "Soulmate Scents crafts luxury Eau de Parfum (EDP) featuring a high 25% to 30% imported pure aromatic essence oil concentration—significantly higher than typical commercial perfumes which use only 12% to 18%. Specially formulated for Pakistan's warm climate, our fragrances deliver 12 to 18+ hours of lasting longevity on skin and over 24 hours on clothes without harsh alcohol evaporation.",
-    definition: "Eau de Parfum (EDP) represents our high-concentration luxury formulation (25% to 30% pure essence), engineered for enduring performance and complex dry-down in Pakistan's weather.",
+      "An Extrait de Parfum is the purest form of fine fragrance. It contains between 30% and 40% pure aromatic oil. Standard Eau de Parfum contains only 15% to 20% oil. Extraits develop with rich depth on your skin. They offer 12 to 18 hours of smooth sillage without harsh alcohol evaporation.",
+    definition: "Extrait de Parfum refers to the highest oil concentration in haute perfumery (30% to 40% pure essence), engineered for enduring longevity and complex dry-down.",
   },
   {
     id: "faq-how-to-apply",
@@ -52,7 +51,7 @@ const FAQ_ITEMS: FAQItem[] = [
     id: "faq-niche-vs-designer",
     question: "What is the difference between niche perfume and designer fragrance?",
     answer:
-      "Niche perfumery focuses on artistic expression rather than mass-market appeal. We use higher concentrations of pure natural essences instead of synthetic fixatives. Each formula is distilled in small artisan batches. Soulmate Scents Eau de Parfum is made for fragrance lovers who want a distinctive and enduring personal scent aura.",
+      "Niche perfumery focuses on artistic expression rather than mass-market appeal. We use higher concentrations of pure natural essences instead of synthetic fixatives. Each formula is distilled in small artisan batches. Soulmate Scents extraits are made for fragrance lovers who want a distinctive and enduring personal scent aura.",
     definition: "Niche perfumery refers to independent fragrance houses that prioritize artistic expression, artisanal distillation, and noble raw materials over commercial trends.",
   },
 ];
@@ -278,17 +277,16 @@ export function OlfactoryConciergeSection() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#590B16]/10 text-[#590B16]/85">
-                <tr className="bg-[#590B16]/[0.035] hover:bg-[#590B16]/[0.06] transition-colors">
-                  <th scope="row" className="py-3.5 px-4 font-serif font-bold text-[#590B16] flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#590B16]" />
-                    Eau de Parfum (Soulmate Scents)
+                <tr className="bg-[#590B16]/[0.02] hover:bg-[#590B16]/[0.05] transition-colors">
+                  <th scope="row" className="py-3.5 px-4 font-serif font-bold text-[#590B16]">
+                    Extrait de Parfum (Soulmate Scents)
                   </th>
-                  <td className="py-3.5 px-4 font-bold text-[#590B16]">25% to 30% Pure Oil</td>
-                  <td className="py-3.5 px-4 font-bold text-[#590B16]">12 to 18+ Hours</td>
-                  <td className="py-3.5 px-4 text-[#590B16] font-medium">Magnetic & Deep (Strong Projection)</td>
-                  <td className="py-3.5 px-4">Signature Scent, Evenings & Milestones</td>
+                  <td className="py-3.5 px-4 font-semibold">30% to 40% Pure Oil</td>
+                  <td className="py-3.5 px-4">12 to 18+ Hours</td>
+                  <td className="py-3.5 px-4">Intimate, Magnetic (Arm&apos;s Length)</td>
+                  <td className="py-3.5 px-4">Evening, Signature Aura, Milestone Events</td>
                 </tr>
-                <tr className="hover:bg-[#590B16]/[0.03] transition-colors">
+                <tr className="hover:bg-[#590B16]/[0.05] transition-colors">
                   <th scope="row" className="py-3.5 px-4 font-serif font-bold text-[#590B16]">
                     Eau de Parfum (Standard EDP)
                   </th>
@@ -297,23 +295,14 @@ export function OlfactoryConciergeSection() {
                   <td className="py-3.5 px-4">Moderate Radiance (Room Enveloping)</td>
                   <td className="py-3.5 px-4">Daily Executive Wear & Daytime Gatherings</td>
                 </tr>
-                <tr className="hover:bg-[#590B16]/[0.03] transition-colors">
+                <tr className="hover:bg-[#590B16]/[0.05] transition-colors">
                   <th scope="row" className="py-3.5 px-4 font-serif font-bold text-[#590B16]">
                     Eau de Toilette (Diluted EDT)
                   </th>
-                  <td className="py-3.5 px-4">5% to 15% Pure Oil</td>
+                  <td className="py-3.5 px-4">8% to 12% Pure Oil</td>
                   <td className="py-3.5 px-4">3 to 5 Hours</td>
-                  <td className="py-3.5 px-4">Light / Fresh Burst</td>
-                  <td className="py-3.5 px-4">Casual Gym & Warm Weather Refreshment</td>
-                </tr>
-                <tr className="hover:bg-[#590B16]/[0.03] transition-colors">
-                  <th scope="row" className="py-3.5 px-4 font-serif font-bold text-[#590B16]">
-                    Eau de Cologne (EDC)
-                  </th>
-                  <td className="py-3.5 px-4">2% to 4% Pure Oil</td>
-                  <td className="py-3.5 px-4">1 to 2 Hours</td>
-                  <td className="py-3.5 px-4">Faint Burst</td>
-                  <td className="py-3.5 px-4">Post-Shower Refreshment</td>
+                  <td className="py-3.5 px-4">High Initial Burst, Rapid Dry-Down</td>
+                  <td className="py-3.5 px-4">Post-Workout & High Summer Refreshment</td>
                 </tr>
               </tbody>
             </table>
@@ -456,83 +445,65 @@ export function OlfactoryConciergeSection() {
               </h3>
             </div>
 
-            <div className="space-y-3">
-              {FAQ_ITEMS.map((item) => {
-                const isOpen = !!openIds[item.id];
-                return (
-                  <article
-                    key={item.id}
-                    className={`bg-white rounded-xl sm:rounded-2xl border transition-all duration-300 shadow-2xs overflow-hidden ${
-                      isOpen
-                        ? "border-[#590B16]/30 shadow-xs ring-1 ring-[#590B16]/10"
-                        : "border-[#E2DED6] hover:border-stone-300"
+            {FAQ_ITEMS.map((item) => {
+              const isOpen = !!openIds[item.id];
+              return (
+                <article
+                  key={item.id}
+                  className="bg-white border border-[#590B16]/15 transition-all duration-300 overflow-hidden"
+                >
+                  {/* Clean Direct Heading Tag with Click Toggle */}
+                  <div
+                    onClick={() => toggleFaq(item.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-panel-${item.id}`}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        toggleFaq(item.id);
+                      }
+                    }}
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FAF7EE]/50 transition-colors"
+                  >
+                    <h3
+                      id={item.id}
+                      className="text-base sm:text-lg font-serif font-bold text-[#590B16] tracking-wide"
+                      style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
+                    >
+                      {item.question}
+                    </h3>
+                    <ChevronDown
+                      size={18}
+                      className={`text-[#590B16] transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+                    />
+                  </div>
+
+                  {/* DOM-Persistent Paragraph for Immediate Search Engine Snippet Targeting */}
+                  <div
+                    id={`faq-answer-panel-${item.id}`}
+                    className={`px-5 pb-6 text-sm text-[#590B16]/85 font-sans leading-relaxed border-t border-[#590B16]/10 pt-4 space-y-3 ${
+                      isOpen ? "block" : "hidden sm:block"
                     }`}
                   >
-                    {/* Clean Direct Heading Tag with Click Toggle */}
-                    <button
-                      type="button"
-                      onClick={() => toggleFaq(item.id)}
-                      aria-expanded={isOpen}
-                      aria-controls={`faq-answer-panel-${item.id}`}
-                      className="w-full p-4 sm:p-5 sm:px-6 text-left flex items-center justify-between gap-4 cursor-pointer group"
-                    >
-                      <h3
-                        id={item.id}
-                        className={`text-sm sm:text-base font-serif font-bold tracking-wide transition-colors ${
-                          isOpen ? "text-[#590B16]" : "text-stone-900 group-hover:text-[#590B16]"
-                        }`}
-                        style={{ fontFamily: "'Cinzel', 'Marcellus', serif" }}
-                      >
-                        {item.question}
-                      </h3>
-                      <motion.div
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                        className="shrink-0"
-                      >
-                        <ChevronDown
-                          size={18}
-                          className={`transition-colors ${
-                            isOpen ? "text-[#590B16]" : "text-stone-400 group-hover:text-stone-700"
-                          }`}
-                        />
-                      </motion.div>
-                    </button>
-
-                    {/* Smooth Animated Accordion Panel */}
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          key="answer-panel"
-                          id={`faq-answer-panel-${item.id}`}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 pb-5 sm:px-6 sm:pb-6 pt-0 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed space-y-3 text-left border-t border-[#F0ECE1]/80 mt-0.5">
-                            <p className="leading-relaxed pt-3 text-stone-700">{item.answer}</p>
-                            {item.steps && (
-                              <ol className="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm font-medium text-stone-700 bg-[#FAF8F5] p-3.5 rounded-xl text-left border border-stone-200/60 mt-2">
-                                {item.steps.map((step, sIdx) => (
-                                  <li key={sIdx}>{step}</li>
-                                ))}
-                              </ol>
-                            )}
-                            {item.definition && (
-                              <p className="text-xs italic text-[#590B16]/80 bg-[#FAF7EE] p-3 border-l-2 border-[#590B16] rounded-r-lg mt-2">
-                                {item.definition}
-                              </p>
-                            )}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </article>
-                );
-              })}
-            </div>
+                    <p className="leading-relaxed text-[#590B16]/90">{item.answer}</p>
+                    {item.steps && (
+                      <ol className="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm font-medium text-[#590B16]/85 mt-2">
+                        {item.steps.map((step, sIdx) => (
+                          <li key={sIdx}>{step}</li>
+                        ))}
+                      </ol>
+                    )}
+                    {item.definition && (
+                      <p className="text-xs italic text-[#590B16]/75 bg-[#FAF7EE] p-3 border-l-2 border-[#590B16] mt-2">
+                        {item.definition}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </Container>
