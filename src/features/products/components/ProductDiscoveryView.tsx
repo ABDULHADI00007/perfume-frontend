@@ -101,10 +101,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
     <div className="w-full font-sans">
       {/* PRODUCT GRID & FILTERS SECTION */}
       <Container size="wide" className="pt-6 sm:pt-8 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
-        <h1
-          id="catalog-heading"
-          className="font-serif text-xl sm:text-2xl font-normal uppercase tracking-[0.18em] text-[#0D1424] text-center mb-5 sm:mb-7"
-        >
+        <h1 id="catalog-heading" className="sr-only">
           {title}
         </h1>
 
@@ -120,13 +117,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "all"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "all"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Flower Bouquet Icon */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-7m0 0a3 3 0 100-6 3 3 0 000 6zm0 0c-2.5 0-4.5-1.5-4.5-4s2-3.5 4.5-3.5 4.5 1 4.5 3.5-2 4-4.5 4z" />
                   <circle cx="12" cy="7" r="1.5" fill="currentColor" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 16c-1.5 1.5-3 1.5-4 1m10-1c1.5 1.5 3 1.5 4 1" />
@@ -149,13 +146,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "men"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "men"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Necktie Icon */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2 2-2 2-2-2 2-2zm-2 4h4l1.5 12-3.5 2-3.5-2L10 7z" />
                 </svg>
               </div>
@@ -176,13 +173,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "women"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "women"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Lotus Flower Icon */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4c-3 4-7 7-7 12a7 7 0 0014 0c0-5-4-8-7-12z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.5 3-4 5-4 8a4 4 0 008 0c0-3-2.5-5-4-8z" />
                 </svg>
@@ -204,13 +201,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "unisex"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "unisex"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Interlocking Circles Icon */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <circle cx="9" cy="12" r="5" />
                   <circle cx="15" cy="12" r="5" />
                 </svg>
@@ -232,13 +229,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "bestsellers"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "bestsellers"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Star Icon */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
               </div>
@@ -259,13 +256,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "premium"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "premium"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Diamond Gem Icon for Premium */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h12l4 6-10 12L2 9l4-6z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2 9h20M10 3l-2 6 4 12 4-12-2-6" />
                 </svg>
@@ -287,13 +284,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               className="flex flex-col items-center gap-2 sm:gap-3 group cursor-pointer"
             >
               <div
-                className={`w-14 h-14 min-[380px]:w-16 min-[380px]:h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "gold"
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${activeCategory === "gold"
                     ? "bg-[#FBD0D5] text-[#590B16] shadow-sm scale-105 border border-[#590B16]/25"
                     : "bg-[#F0ECE5] text-[#121A2D] hover:bg-[#FDE2E5] hover:text-[#590B16]"
                   }`}
               >
                 {/* Royal Crown Icon for Gold */}
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
+                <svg className="w-7 h-7 sm:w-9 sm:h-9 lg:w-10 lg:h-10 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="1.3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 18h16M4 18l2-10 4.5 4L12 6l1.5 6 4.5-4 2 10H4z" />
                   <circle cx="6" cy="7" r="1" fill="currentColor" />
                   <circle cx="12" cy="5" r="1" fill="currentColor" />
