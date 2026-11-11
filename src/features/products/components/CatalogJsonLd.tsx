@@ -41,8 +41,10 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
         "@id": `${pageUrl}#webpage`,
         url: pageUrl,
         name: title,
+        headline: title,
         description,
         isPartOf: { "@id": `${baseUrl}/#website` },
+        publisher: { "@id": `${baseUrl}/#organization` },
         author: {
           "@type": "Organization",
           name: "Soulmate Scents Master Perfumers",
@@ -82,7 +84,7 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
           const imgPath =
             typeof rawImg === "string"
               ? rawImg
-              : (rawImg as { url?: string } | undefined)?.url || "/images/perfumes/collection_crown_legacy.jpg";
+              : (rawImg as { url?: string } | undefined)?.url || "/images/perfumes/collection_crown_legacy.webp";
           const imgUrl = imgPath.startsWith("http") ? imgPath : `${baseUrl}${imgPath}`;
 
           return {

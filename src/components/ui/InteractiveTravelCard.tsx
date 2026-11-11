@@ -97,17 +97,18 @@ export const InteractiveTravelCard = React.forwardRef<
     const [isCardHovered, setIsCardHovered] = React.useState(false);
     const [isButtonHovered, setIsButtonHovered] = React.useState(false);
     const isFav = isWishlisted !== undefined ? isWishlisted : localLiked;
+    const headingId = `perfume-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
     const [imgSrc, setImgSrc] = React.useState<string>(
-      imageUrl || "/images/perfumes/vivid-desire-still-life.png"
+      imageUrl || "/images/perfumes/vivid-desire-still-life.webp"
     );
 
     React.useEffect(() => {
-      setImgSrc(imageUrl || "/images/perfumes/vivid-desire-still-life.png");
+      setImgSrc(imageUrl || "/images/perfumes/vivid-desire-still-life.webp");
     }, [imageUrl]);
 
     const handleImgError = () => {
-      if (imgSrc !== "/images/perfumes/vivid-desire-still-life.png") {
-        setImgSrc("/images/perfumes/vivid-desire-still-life.png");
+      if (imgSrc !== "/images/perfumes/vivid-desire-still-life.webp") {
+        setImgSrc("/images/perfumes/vivid-desire-still-life.webp");
       }
     };
 
@@ -281,7 +282,7 @@ export const InteractiveTravelCard = React.forwardRef<
               <div className="translate-y-0.5 sm:translate-y-4.5">
                 <div className="flex items-center justify-between gap-1.5">
                   <Link href={href} className="hover:opacity-90 transition-opacity block group/title flex-1 min-w-0">
-                    <h3 className={cn("font-serif text-[12.5px] min-[360px]:text-[13.5px] min-[440px]:text-[16px] sm:text-[19px] lg:text-[21px] font-bold text-[#0A0A0A] tracking-[-0.01em] leading-[1.15] truncate transition-colors group-hover/title:text-black/80", titleClassName)}>
+                    <h3 id={headingId} className={cn("font-serif text-[12.5px] min-[360px]:text-[13.5px] min-[440px]:text-[16px] sm:text-[19px] lg:text-[21px] font-bold text-[#0A0A0A] tracking-[-0.01em] leading-[1.15] truncate transition-colors group-hover/title:text-black/80", titleClassName)}>
                       {title}
                     </h3>
                   </Link>

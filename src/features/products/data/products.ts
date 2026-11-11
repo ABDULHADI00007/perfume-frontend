@@ -1,4 +1,4 @@
-import { Product } from "../types";
+﻿import { Product } from "../types";
 
 export const legacyProducts: Product[] = [
   {
@@ -20,7 +20,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-01-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-EF-50" },
     ],
-    images: ["/images/perfumes/Elite Fusion at Golden Hour.png", "/images/perfumes/elite-fusion-luxury.jpg", "/images/perfumes/collection_elite_fusion.jpg"],
+    images: ["/images/perfumes/Elite Fusion at Golden Hour.webp", "/images/perfumes/elite-fusion-luxury.jpg", "/images/perfumes/collection_elite_fusion.webp"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -50,7 +50,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-02-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-CL-50" },
     ],
-    images: ["/images/perfumes/Crown Legacy_ Regal Golden Perfume Still Life.png", "/images/perfumes/crown-legacy-luxury.jpg", "/images/perfumes/collection_crown_legacy.jpg"],
+    images: ["/images/perfumes/Crown Legacy_ Regal Golden Perfume Still Life.webp", "/images/perfumes/crown-legacy-luxury.jpg", "/images/perfumes/collection_crown_legacy.webp"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -80,7 +80,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-03-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 20, sku: "SS-SV-50" },
     ],
-    images: ["/images/perfumes/Sultan’s Veil by Lanternlight.png", "/images/perfumes/sultans-veil-luxury.jpg", "/images/perfumes/collection_sultans_veil.jpg"],
+    images: ["/images/perfumes/Sultan’s Veil by Lanternlight.webp", "/images/perfumes/sultans-veil-luxury.jpg", "/images/perfumes/collection_sultans_veil.webp"],
     featured: true,
     isBestSeller: false,
     isPlatinum: true,
@@ -110,7 +110,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-04-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 32, sku: "SS-BH-50" },
     ],
-    images: ["/images/perfumes/blue-horizon-luxury.jpg", "/images/perfumes/collection_blue_horizon.jpg"],
+    images: ["/images/perfumes/blue-horizon-luxury.webp", "/images/perfumes/collection_blue_horizon.webp"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -140,7 +140,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-05-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VO-50" },
     ],
-    images: ["/images/perfumes/Velvet Orchid at Golden Hour.png", "/images/perfumes/velvet-orchid-luxury.jpg", "/images/perfumes/collection_velvet_orchid.jpg"],
+    images: ["/images/perfumes/Velvet Orchid at Golden Hour.webp", "/images/perfumes/velvet-orchid-luxury.jpg", "/images/perfumes/collection_velvet_orchid.webp"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -170,7 +170,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-06-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 24, sku: "SS-SG-50" },
     ],
-    images: ["/images/perfumes/Secret Garden Perfume in Bloom.png", "/images/perfumes/Secret Garden in Sunlit Bloom.png", "/images/perfumes/Secret Garden Perfume at Golden Hour.png", "/images/perfumes/secret-garden-still-life.png"],
+    images: ["/images/perfumes/Secret Garden Perfume in Bloom.webp", "/images/perfumes/Secret Garden in Sunlit Bloom.png", "/images/perfumes/Secret Garden Perfume at Golden Hour.webp", "/images/perfumes/secret-garden-still-life.webp"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -200,7 +200,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-07-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-EB-50" },
     ],
-    images: ["/images/perfumes/Eternal Blaze Citrus Floral Fragrance.png", "/images/perfumes/eternal-blaze-luxury.jpg", "/images/perfumes/collection_velvet_amber.jpg"],
+    images: ["/images/perfumes/Eternal Blaze Citrus Floral Fragrance.webp", "/images/perfumes/eternal-blaze-luxury.jpg", "/images/perfumes/collection_velvet_amber.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,
@@ -230,7 +230,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-08-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-VD-50" },
     ],
-    images: ["/images/perfumes/vivid-desire-still-life.png", "/images/perfumes/vivid-desire-luxury.jpg", "/images/perfumes/vivid-desire.png"],
+    images: ["/images/perfumes/vivid-desire-still-life.webp", "/images/perfumes/vivid-desire-luxury.webp", "/images/perfumes/vivid-desire.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -260,7 +260,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-09-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 28, sku: "SS-SR-50" },
     ],
-    images: ["/images/perfumes/suroor-still-life.png", "/images/perfumes/Suroor Perfume in a Golden Zen Sanctuary.png"],
+    images: ["/images/perfumes/suroor-still-life.webp", "/images/perfumes/Suroor Perfume in a Golden Zen Sanctuary.webp"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -290,7 +290,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-10-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-GM-50" },
     ],
-    images: ["/images/perfumes/gentle-man-still-life.png", "/images/perfumes/Sunlit Gentle Man Perfume Still Life.png", "/images/perfumes/Golden Hour Gentle Man Perfume.png"],
+    images: ["/images/perfumes/gentle-man-still-life.webp", "/images/perfumes/Sunlit Gentle Man Perfume Still Life.webp", "/images/perfumes/Golden Hour Gentle Man Perfume.webp"],
     featured: true,
     isPlatinum: true,
     gender: "men",
@@ -319,7 +319,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-11-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 35, sku: "SS-DK-50" },
     ],
-    images: ["/images/perfumes/dusk-still-life.png", "/images/perfumes/Soulmate Dusk in Golden Hour.png", "/images/perfumes/dusk-luxury.jpg"],
+    images: ["/images/perfumes/dusk-still-life.webp", "/images/perfumes/Soulmate Dusk in Golden Hour.webp", "/images/perfumes/dusk-luxury.jpg"],
     featured: true,
     isBestSeller: true,
     isPlatinum: false,
@@ -349,7 +349,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-12-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 26, sku: "SS-WB-50" },
     ],
-    images: ["/images/perfumes/Whispers Bloom Luxury Perfume Still Life.png", "/images/perfumes/whispers-bloom-still-life.png"],
+    images: ["/images/perfumes/Whispers Bloom Luxury Perfume Still Life.webp", "/images/perfumes/whispers-bloom-still-life.png"],
     featured: true,
     isNewArrival: true,
     isPlatinum: false,
@@ -379,7 +379,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-13-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 18, sku: "SS-NO-50" },
     ],
-    images: ["/images/perfumes/noble-ocean-still-life.png", "/images/perfumes/noble-ocean-luxury.jpg", "/images/perfumes/Noble Ocean Perfume Still Life.png"],
+    images: ["/images/perfumes/noble-ocean-still-life.webp", "/images/perfumes/noble-ocean-luxury.webp", "/images/perfumes/Noble Ocean Perfume Still Life.webp"],
     featured: true,
     isPlatinum: true,
     gender: "men",
@@ -408,7 +408,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-14-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 25, sku: "SS-PL-50" },
     ],
-    images: ["/images/perfumes/pulse-luxury.jpg", "/images/perfumes/pulse-still-life.png", "/images/perfumes/cirtus-revrie.png"],
+    images: ["/images/perfumes/pulse-luxury.webp", "/images/perfumes/pulse-still-life.png", "/images/perfumes/cirtus-revrie.png"],
     featured: false,
     isNewArrival: true,
     isPlatinum: false,
@@ -438,7 +438,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-15-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 22, sku: "SS-IB-50" },
     ],
-    images: ["/images/perfumes/Infinite Boss in Golden Stone Light.png", "/images/perfumes/infinite-boss-still-life.png"],
+    images: ["/images/perfumes/Infinite Boss in Golden Stone Light.webp", "/images/perfumes/infinite-boss-still-life.png"],
     featured: true,
     isBestSeller: true,
     isPlatinum: true,

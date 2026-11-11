@@ -44,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const primaryImage =
     typeof rawImage === "string"
       ? rawImage
-      : (rawImage as { url?: string } | undefined)?.url || "/images/perfumes/vivid-desire-still-life.png";
+      : (rawImage as { url?: string } | undefined)?.url || "/images/perfumes/vivid-desire-still-life.webp";
 
   const handleAddToCart = () => {
     if (onQuickAdd && selectedVariant) {
