@@ -10,7 +10,7 @@ export interface FooterProps extends Partial<StringTieFooterProps> {
 export const Footer: React.FC<FooterProps> = (props) => {
   return (
     <StringTieFooter
-      logo="/images/perfumes/soulmate_logo_transparent.png"
+      logo="/images/perfumes/soulmate_logo_transparent.webp"
       meta={[]}
       title="Thank"
       titleAccent="You"

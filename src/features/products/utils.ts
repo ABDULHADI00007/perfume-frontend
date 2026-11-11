@@ -5,15 +5,63 @@ export function getStartingPrice(product: Product): number {
   return Math.min(...product.variants.map((v) => v.price));
 }
 
+const VERIFIED_WEBP_FILES = new Set([
+  "Elite Fusion at Golden Hour",
+  "Crown Legacy_ Regal Golden Perfume Still Life",
+  "Sultan’s Veil by Lanternlight",
+  "blue-horizon-luxury",
+  "Velvet Orchid at Golden Hour",
+  "Secret Garden Perfume in Bloom",
+  "Eternal Blaze Citrus Floral Fragrance",
+  "vivid-desire-still-life",
+  "vivid-desire-luxury",
+  "suroor-still-life",
+  "gentle-man-still-life",
+  "Golden Hour Gentle Man Perfume",
+  "Sunlit Gentle Man Perfume Still Life",
+  "dusk-still-life",
+  "Whispers Bloom Luxury Perfume Still Life",
+  "Whispers Bloom Perfume Portrait",
+  "noble-ocean-still-life",
+  "noble-ocean-luxury",
+  "Noble Ocean Perfume Still Life",
+  "pulse-luxury",
+  "Infinite Boss in Golden Stone Light",
+  "Secret Garden Perfume at Golden Hour",
+  "secret-garden-still-life",
+  "Soulmate Dusk in Golden Hour",
+  "Suroor Perfume in a Golden Zen Sanctuary",
+  "Velvet Orchid in Smoky Elegance",
+  "velvet_orchid_smoke",
+  "collection_crown_legacy",
+  "collection_elite_fusion",
+  "collection_sultans_veil",
+  "collection_blue_horizon",
+  "collection_velvet_orchid",
+]);
+
+function preferVerifiedWebp(src: string): string {
+  if (!src.startsWith("/images/perfumes/")) return src;
+  if (src.includes("Sultan") && src.includes("Lanternlight")) {
+    return "/images/perfumes/collection_sultans_veil.webp";
+  }
+  const match = src.match(/^\/images\/perfumes\/(.+)\.(png|jpg|jpeg)$/i);
+  if (match && VERIFIED_WEBP_FILES.has(match[1])) {
+    return `/images/perfumes/${match[1]}.webp`;
+  }
+  return src;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function normalizeProduct(raw: any): Product {
   if (!raw) return raw;
 
   const rawImages = Array.isArray(raw.images) ? raw.images : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const images = rawImages.map((img: any) =>
-    typeof img === "string" ? img : img?.url || ""
-  ).filter(Boolean);
+  const images = rawImages
+    .map((img: any) => (typeof img === "string" ? img : img?.url || ""))
+    .filter(Boolean)
+    .map(preferVerifiedWebp);
 
   const rawVariants = Array.isArray(raw.variants) ? raw.variants : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,7 +131,7 @@ export function normalizeProduct(raw: any): Product {
       "Woody Oriental",
     notes,
     variants,
-    images: images.length > 0 ? images : ["/images/perfumes/collection_crown_legacy.jpg"],
+    images: images.length > 0 ? images : ["/images/perfumes/collection_crown_legacy.webp"],
     featured: Boolean(raw.featured),
     isNewArrival: Boolean(raw.newArrival || raw.isNewArrival),
     isBestSeller: Boolean(raw.bestseller || raw.isBestSeller),

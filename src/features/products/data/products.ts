@@ -1,4 +1,4 @@
-﻿import { Product } from "../types";
+import { Product } from "../types";
 
 export const legacyProducts: Product[] = [
   {
@@ -80,7 +80,7 @@ export const legacyProducts: Product[] = [
     variants: [
       { id: "var-03-50", size: "50ml", price: 3000, compareAtPrice: 3500, stock: 20, sku: "SS-SV-50" },
     ],
-    images: ["/images/perfumes/Sultan’s Veil by Lanternlight.webp", "/images/perfumes/sultans-veil-luxury.jpg", "/images/perfumes/collection_sultans_veil.webp"],
+    images: ["/images/perfumes/collection_sultans_veil.webp", "/images/perfumes/sultans-veil-art-of-scent.webp"],
     featured: true,
     isBestSeller: false,
     isPlatinum: true,
