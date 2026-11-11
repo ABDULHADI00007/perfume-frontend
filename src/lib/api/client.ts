@@ -2,12 +2,12 @@ import { env } from "@/config/environment";
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
-  /** Timeout in milliseconds. Defaults to 5000ms on server, 10000ms on client. */
+  /** Timeout in milliseconds. Defaults to 8000ms on server, 30000ms on client. */
   timeout?: number;
 }
 
-/** Default timeout: 5000ms for SSR, 10000ms for client */
-const DEFAULT_TIMEOUT_MS = typeof window === "undefined" ? 5000 : 10000;
+/** Default timeout: 8000ms for SSR, 30000ms for client */
+const DEFAULT_TIMEOUT_MS = typeof window === "undefined" ? 8000 : 30000;
 
 export async function apiClient<T>(
   endpoint: string,
