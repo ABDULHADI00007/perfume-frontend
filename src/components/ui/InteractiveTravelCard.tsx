@@ -217,16 +217,6 @@ export const InteractiveTravelCard = React.forwardRef<
             />
           </div>
 
-          {/* Permanent Frosted Glass Blur at Bottom (Visible in Normal State) */}
-          <div
-            className="absolute inset-0 overflow-hidden pointer-events-none z-[5] backdrop-blur-[12px]"
-            aria-hidden="true"
-            style={{
-              maskImage: "linear-gradient(to top, black 0%, black 18%, transparent 40%)",
-              WebkitMaskImage: "linear-gradient(to top, black 0%, black 18%, transparent 40%)",
-            }}
-          />
-
           {/* Warm Luxury Cream Gradient Overlay matching reference mockup */}
           <div className="absolute inset-x-0 bottom-0 h-[55%] sm:h-[50%] pointer-events-none rounded-b-[18px] min-[380px]:rounded-b-[22px] sm:rounded-b-[30px] z-[6] bg-gradient-to-t from-[#EAE2D7] via-[#EDE6DC]/95 via-40% to-transparent" />
 
