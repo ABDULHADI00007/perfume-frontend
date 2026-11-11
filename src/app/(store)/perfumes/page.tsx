@@ -6,7 +6,7 @@ import { productService } from "@/features/products/services/productService";
 import { ProductCatalogSkeleton } from "@/features/products/components/ProductCatalogSkeleton";
 import { Product } from "@/features/products/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata = constructMetadata({
   title: "Perfumes & Extraits | Soulmate Scents",

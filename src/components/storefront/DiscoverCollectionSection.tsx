@@ -232,13 +232,12 @@ export function DiscoverCollectionSection() {
                     }}
                     className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
                   >
-                    <img
+                    <Image
                       src={product.image}
                       alt={product.title}
-                      width={400}
-                      height={430}
-                      loading="lazy"
-                      className="w-full h-full object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 22vw"
+                      className="object-contain p-1 drop-shadow-[0_8px_16px_rgba(89,11,22,0.08)] group-hover:drop-shadow-[0_18px_32px_rgba(89,11,22,0.18)] transition-all duration-700"
                     />
                   </motion.div>
                 </div>
@@ -317,10 +316,12 @@ export function DiscoverCollectionSection() {
               <div
                 className="relative w-full md:w-1/2 aspect-square min-h-[260px] bg-white flex items-center justify-center p-4 shadow-sm"
               >
-                <img
+                <Image
                   src={quickViewProduct.image}
                   alt={quickViewProduct.title}
-                  className="w-full h-full object-contain p-2 drop-shadow-md"
+                  fill
+                  sizes="(max-width: 768px) 90vw, 400px"
+                  className="object-contain p-2 drop-shadow-md"
                 />
               </div>
 

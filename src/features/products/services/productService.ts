@@ -5,12 +5,15 @@ import { ApiResponse } from "@/types/api";
 import { Product } from "../types";
 import { normalizeProduct } from "../utils";
 
+const getServerFetchOptions = (): { next?: { revalidate: number }; timeout?: number } =>
+  typeof window === "undefined" ? { next: { revalidate: 60 }, timeout: 2500 } : {};
+
 export const productService = {
   async getProducts(params?: Record<string, string | number>): Promise<ApiResponse<Product[]>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.list, {
       params,
-      cache: "no-store",
+      ...getServerFetchOptions(),
     });
     if (res.success && Array.isArray(res.data)) {
       return {
@@ -24,7 +27,7 @@ export const productService = {
   getProductBySlug: cache(async (slug: string): Promise<ApiResponse<Product>> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await apiClient<ApiResponse<any>>(API_ENDPOINTS.products.detail(slug), {
-      cache: "no-store",
+      ...getServerFetchOptions(),
     });
     if (res.success && res.data) {
       return {
@@ -38,7 +41,7 @@ export const productService = {
   getFeaturedProducts: cache(async (): Promise<ApiResponse<Product[]>> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await apiClient<ApiResponse<any[]>>(API_ENDPOINTS.products.featured, {
-      cache: "no-store",
+      ...getServerFetchOptions(),
     });
     if (res.success && Array.isArray(res.data)) {
       return {

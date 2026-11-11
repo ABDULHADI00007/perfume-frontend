@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, MotionValue, useScroll, useTransform, useSpring } from "framer-motion";
+import Image from "next/image";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
@@ -163,15 +164,13 @@ const Column = ({ images, y, colIdx, className = "" }: ColumnProps) => {
           className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)] hover:shadow-[0_24px_50px_-8px_rgba(62,6,14,0.18)] border border-stone-200/70 group transition-shadow duration-700"
           style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={src}
             alt="Soulmate Scents Parfumerie Flacon"
-            width={400}
-            height={600}
-            className="pointer-events-none w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            className="pointer-events-none object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
             loading="lazy"
-            decoding="async"
             draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#3E060E]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />

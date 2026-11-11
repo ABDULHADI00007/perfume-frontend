@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cache } from "react";
 import { notFound } from "next/navigation";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { Container } from "@/components/layout/Container";
@@ -12,14 +12,13 @@ import { ProductJsonLd } from "@/features/products/components/ProductJsonLd";
 import { productService } from "@/features/products/services/productService";
 import { Product } from "@/features/products/types";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function getProduct(slug: string): Promise<Product | undefined> {
+const getProduct = cache(async (slug: string): Promise<Product | undefined> => {
   try {
     const res = await productService.getProductBySlug(slug);
     if (res.success && res.data) {
@@ -29,7 +28,7 @@ async function getProduct(slug: string): Promise<Product | undefined> {
     // API endpoint unreachable or 404, fallback to local dataset
   }
   return allProducts.find((p) => p.slug === slug) || legacyProducts.find((p) => p.slug === slug);
-}
+});
 
 export async function generateStaticParams() {
   return allProducts.map((p) => ({
