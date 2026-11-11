@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import { Product } from "../types";
 import { ProductCard } from "./ProductCard";
 import { filterAndSortProducts, FilterOptions } from "../utils";
@@ -18,20 +19,15 @@ export interface ProductDiscoveryViewProps {
 
 export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
   initialProducts,
+  title = "Luxury Perfumes & Extraits",
+  subtitle = "Soulmate Scents crafts high-concentration Eau de Parfum fragrances using imported oils for 10 to 14 hours of lasting wear across Pakistan.",
   itemsPerPage = 16,
 }) => {
   const { addItem } = useCart();
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const isInitialLoading = initialProducts.length === 0;
 
   // Active Category State
   const [activeCategory, setActiveCategory] = useState<string>("all");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsInitialLoading(false);
-    }, 450);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Compute filtered & sorted products
   const filterOptions: FilterOptions = useMemo(
@@ -106,7 +102,38 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
   return (
     <div className="w-full font-sans">
       {/* PRODUCT GRID & FILTERS SECTION */}
-      <Container size="wide" className="pt-6 sm:pt-8 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
+      <Container size="wide" className="pt-4 sm:pt-6 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
+        {/* BREADCRUMB & PAGE TITLE (SINGLE H1 FOR SEO/AEO/GEO CLARITY) */}
+        <header className="mb-5 sm:mb-7 border-b border-[#EADECF]/70 pb-4 sm:pb-5">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-stone-500 mb-2">
+            <Link href="/" className="hover:text-[#590B16] transition-colors">
+              Home
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#590B16] font-semibold">Perfumes</span>
+          </nav>
+
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2">
+            <div>
+              <h1
+                id="catalog-heading"
+                className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-[#0D1424]"
+              >
+                {title}
+              </h1>
+              <p className="speakable-intro text-xs sm:text-sm text-stone-600 font-sans mt-1.5 max-w-2xl leading-relaxed">
+                {subtitle}
+              </p>
+            </div>
+            <div className="text-[11px] text-stone-500 font-sans shrink-0">
+              Collection Updated{" "}
+              <time dateTime="2026-11-11" className="font-medium text-stone-700">
+                Nov 2026
+              </time>
+            </div>
+          </div>
+        </header>
+
         {/* CIRCULAR CATEGORY FILTER ICONS ROW */}
         <div className="w-full mb-6 sm:mb-10 overflow-x-auto scrollbar-none py-1 sm:py-2 relative">
           <div className="flex items-center justify-start lg:justify-between gap-4 min-[380px]:gap-6 sm:gap-10 lg:gap-14 min-w-max px-1">
@@ -356,6 +383,111 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             </button>
           </div>
         )}
+
+        {/* OLFACTORY GUIDE & FAQ (AEO / GEO & VOICE SEARCH READINESS) */}
+        <section
+          aria-labelledby="perfume-faq-heading"
+          className="mt-14 pt-10 border-t border-[#EADECF]/80 space-y-8"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1">
+                Fragrance Concierge & Specifications
+              </span>
+              <h2
+                id="perfume-faq-heading"
+                className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-wider text-[#0D1424]"
+              >
+                Frequently Asked Questions About Our Perfumes
+              </h2>
+            </div>
+            <nav aria-label="Fragrance Quick Links" className="flex flex-wrap items-center gap-3 text-xs font-sans text-stone-600">
+              <a href="#catalog-heading" className="hover:text-[#590B16] underline underline-offset-4">
+                Back to Catalog
+              </a>
+              <span aria-hidden="true">•</span>
+              <Link href="/faq" className="hover:text-[#590B16] underline underline-offset-4">
+                Full FAQ
+              </Link>
+              <span aria-hidden="true">•</span>
+              <Link href="/shipping" className="hover:text-[#590B16] underline underline-offset-4">
+                Shipping
+              </Link>
+              <span aria-hidden="true">•</span>
+              <Link href="/returns" className="hover:text-[#590B16] underline underline-offset-4">
+                Returns
+              </Link>
+              <span aria-hidden="true">•</span>
+              <Link href="/contact" className="hover:text-[#590B16] underline underline-offset-4">
+                Contact
+              </Link>
+              <span aria-hidden="true">•</span>
+              <Link href="/privacy" className="hover:text-[#590B16] underline underline-offset-4">
+                Privacy
+              </Link>
+              <span aria-hidden="true">•</span>
+              <Link href="/terms" className="hover:text-[#590B16] underline underline-offset-4">
+                Terms
+              </Link>
+            </nav>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
+              <h3 id="faq-concentration" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
+                What concentration are Soulmate Scents perfumes?
+              </h3>
+              <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Soulmate Scents perfumes are crafted as Extrait de Parfum and Eau de Parfum with 25% to 30% pure aromatic oil concentration.
+              </p>
+            </article>
+
+            <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
+              <h3 id="faq-longevity" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
+                How long do Soulmate Scents fragrances last?
+              </h3>
+              <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Each bottle delivers 4 to 6 hours of strong projection and stays noticeable on skin and fabric for 10 to 14 hours.
+              </p>
+            </article>
+
+            <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
+              <h3 id="faq-delivery" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
+                How can you order perfumes across Pakistan?
+              </h3>
+              <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Orders ship nationwide within 24 hours with Cash on Delivery and bank transfer options in Karachi, Lahore, and Islamabad.
+              </p>
+            </article>
+          </div>
+
+          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 sm:p-5 bg-[#FAF8F5] rounded-2xl border border-[#EADECF]/70 text-xs">
+            <div>
+              <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
+                Oil Concentration
+              </dt>
+              <dd className="font-sans text-stone-700">25%–30% Pure Perfume Oils</dd>
+            </div>
+            <div>
+              <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
+                Wear Longevity
+              </dt>
+              <dd className="font-sans text-stone-700">10–14 Hours on Fabric</dd>
+            </div>
+            <div>
+              <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
+                Delivery Coverage
+              </dt>
+              <dd className="font-sans text-stone-700">All Over Pakistan (2–4 Days)</dd>
+            </div>
+            <div>
+              <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
+                Exchange Guarantee
+              </dt>
+              <dd className="font-sans text-stone-700">7-Day Hassle-Free Returns</dd>
+            </div>
+          </dl>
+        </section>
       </Container>
     </div>
   );

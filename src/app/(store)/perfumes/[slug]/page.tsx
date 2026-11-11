@@ -77,7 +77,7 @@ export default async function PerfumeDetailPage({ params }: PageProps) {
     <>
       <ProductJsonLd product={product} />
 
-      <main className="py-6 sm:py-10 bg-white min-h-screen">
+      <div className="py-6 sm:py-10 bg-white min-h-screen">
         <Container size="wide">
           {/* Breadcrumbs Navigation */}
           <div className="mb-6 sm:mb-8">
@@ -106,7 +106,7 @@ export default async function PerfumeDetailPage({ params }: PageProps) {
           {/* Curated Related Fragrances Slider */}
           <RelatedProducts currentProduct={product} allProducts={allProducts} />
         </Container>
-      </main>
+      </div>
     </>
   );
 }

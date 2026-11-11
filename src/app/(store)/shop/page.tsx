@@ -4,6 +4,7 @@ import { ProductDiscoveryView } from "@/features/products/components/ProductDisc
 import { allProducts } from "@/features/products/data/products";
 import { productService } from "@/features/products/services/productService";
 import { ProductCatalogSkeleton } from "@/features/products/components/ProductCatalogSkeleton";
+import { CatalogJsonLd } from "@/features/products/components/CatalogJsonLd";
 import { Product } from "@/features/products/types";
 
 export const revalidate = 60;
@@ -36,13 +37,19 @@ export default async function ShopPage() {
   const products = await getLiveProducts();
 
   return (
-    <main className="w-full bg-white min-h-screen">
+    <div className="w-full bg-white min-h-screen">
+      <CatalogJsonLd
+        products={products}
+        path="/shop"
+        title="Shop All Fragrances | Soulmate Scents"
+        description="Explore the complete Soulmate Scents catalog of extraits de parfum and luxury fragrances."
+      />
       <Suspense fallback={<ProductCatalogSkeleton cardCount={16} />}>
         <ProductDiscoveryView
           initialProducts={products}
           itemsPerPage={16}
         />
       </Suspense>
-    </main>
+    </div>
   );
 }

@@ -20,6 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onQuickAdd,
   onWishlistToggle,
   isWishlisted: propIsWishlisted,
+  priority = false,
   className = "",
   titleClassName,
 }) => {
@@ -90,6 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         rating={product.rating || 5}
         ratingCount={product.ratingCount || 124}
         imageUrl={primaryImage}
+        priority={priority}
         price={currentPrice}
         originalPrice={originalPrice}
         currency="Rs."

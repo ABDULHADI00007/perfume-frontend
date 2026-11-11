@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Heart, ShoppingBag, Check } from "lucide-react";
@@ -51,6 +52,8 @@ export interface InteractiveTravelCardProps {
   onWishlistToggle?: () => void;
   /** Optional custom class name or positioning for image */
   imageClassName?: string;
+  /** Whether to prioritize image loading (above the fold) */
+  priority?: boolean;
   /** Optional additional class names for custom styling. */
   className?: string;
 }
@@ -84,6 +87,7 @@ export const InteractiveTravelCard = React.forwardRef<
       isWishlisted,
       onWishlistToggle,
       imageClassName,
+      priority = false,
       className,
     },
     ref
@@ -197,9 +201,13 @@ export const InteractiveTravelCard = React.forwardRef<
         >
           {/* Base Sharp Image */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <img
+            <Image
               src={imgSrc}
               alt={title}
+              width={340}
+              height={440}
+              sizes="(max-width: 640px) 50vw, 340px"
+              priority={priority}
               onError={handleImgError}
               className={cn(
                 "w-full h-[112%] sm:h-[114%] object-cover object-top -translate-y-4 min-[380px]:-translate-y-5 sm:-translate-y-7",
@@ -210,23 +218,13 @@ export const InteractiveTravelCard = React.forwardRef<
 
           {/* Permanent Frosted Glass Blur at Bottom (Visible in Normal State) */}
           <div
-            className="absolute inset-0 overflow-hidden pointer-events-none z-[5]"
+            className="absolute inset-0 overflow-hidden pointer-events-none z-[5] backdrop-blur-[12px]"
+            aria-hidden="true"
             style={{
               maskImage: "linear-gradient(to top, black 0%, black 18%, transparent 40%)",
               WebkitMaskImage: "linear-gradient(to top, black 0%, black 18%, transparent 40%)",
             }}
-          >
-            <img
-              src={imgSrc}
-              alt=""
-              aria-hidden="true"
-              onError={handleImgError}
-              className={cn(
-                "w-full h-[112%] sm:h-[114%] object-cover object-top -translate-y-4 min-[380px]:-translate-y-5 sm:-translate-y-7 scale-110 filter blur-[16px]",
-                imageClassName
-              )}
-            />
-          </div>
+          />
 
           {/* Warm Luxury Cream Gradient Overlay matching reference mockup */}
           <div className="absolute inset-x-0 bottom-0 h-[55%] sm:h-[50%] pointer-events-none rounded-b-[18px] min-[380px]:rounded-b-[22px] sm:rounded-b-[30px] z-[6] bg-gradient-to-t from-[#EAE2D7] via-[#EDE6DC]/95 via-40% to-transparent" />

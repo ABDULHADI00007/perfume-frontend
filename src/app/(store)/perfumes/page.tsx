@@ -4,6 +4,7 @@ import { ProductDiscoveryView } from "@/features/products/components/ProductDisc
 import { allProducts } from "@/features/products/data/products";
 import { productService } from "@/features/products/services/productService";
 import { ProductCatalogSkeleton } from "@/features/products/components/ProductCatalogSkeleton";
+import { CatalogJsonLd } from "@/features/products/components/CatalogJsonLd";
 import { Product } from "@/features/products/types";
 
 export const revalidate = 60;
@@ -36,13 +37,19 @@ export default async function PerfumesPage() {
   const products = await getLiveProducts();
 
   return (
-    <main className="w-full bg-white min-h-screen">
+    <div className="w-full bg-white min-h-screen">
+      <CatalogJsonLd
+        products={products}
+        path="/perfumes"
+        title="Perfumes & Extraits | Soulmate Scents"
+        description="Discover handcrafted luxury perfumes and rare scent formulations from Soulmate Scents."
+      />
       <Suspense fallback={<ProductCatalogSkeleton cardCount={16} />}>
         <ProductDiscoveryView
           initialProducts={products}
           itemsPerPage={16}
         />
       </Suspense>
-    </main>
+    </div>
   );
 }
