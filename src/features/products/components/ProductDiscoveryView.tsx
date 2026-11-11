@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
 import { Product } from "../types";
 import { ProductCard } from "./ProductCard";
 import { filterAndSortProducts, FilterOptions } from "../utils";
@@ -20,15 +19,13 @@ export interface ProductDiscoveryViewProps {
 export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
   initialProducts,
   title = "Luxury Perfumes & Extraits",
-  subtitle = "Soulmate Scents is a Pakistani luxury perfumery house offering concentrated Eau de Parfum and Extrait fragrances with 10 to 14 hours of wear.",
   itemsPerPage = 16,
 }) => {
   const { addItem } = useCart();
   const isInitialLoading = initialProducts.length === 0;
 
-  // Active Category & Search Query State
+  // Active Category State
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Compute filtered & sorted products
   const filterOptions: FilterOptions = useMemo(
@@ -93,18 +90,8 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
       filtered = filtered.filter((p) => !isPremiumProduct(p));
     }
 
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(
-        (p) =>
-          p.title.toLowerCase().includes(q) ||
-          (p.olfactoryFamily || "").toLowerCase().includes(q) ||
-          (p.shortDescription || "").toLowerCase().includes(q)
-      );
-    }
-
     return filterAndSortProducts(filtered, filterOptions);
-  }, [initialProducts, activeCategory, searchQuery, filterOptions]);
+  }, [initialProducts, activeCategory, filterOptions]);
 
   if (isInitialLoading) {
     return <ProductCatalogSkeleton cardCount={itemsPerPage} />;
@@ -113,56 +100,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
   return (
     <div className="w-full font-sans">
       {/* PRODUCT GRID & FILTERS SECTION */}
-      <Container size="wide" className="pt-4 sm:pt-6 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
-        {/* BREADCRUMB & PAGE TITLE (SINGLE H1 FOR SEO/AEO/GEO CLARITY) */}
-        <header className="mb-5 sm:mb-7 border-b border-[#EADECF]/70 pb-4 sm:pb-5">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-stone-500 mb-2">
-            <Link href="/" className="hover:text-[#590B16] transition-colors">
-              Home
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#590B16] font-semibold">Perfumes</span>
-          </nav>
-
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
-            <div>
-              <h1
-                id="catalog-heading"
-                className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-[#0D1424]"
-              >
-                {title}
-              </h1>
-              <p className="speakable-intro text-xs sm:text-sm text-stone-600 font-sans mt-1.5 max-w-2xl leading-relaxed">
-                {subtitle}
-              </p>
-            </div>
-            <div className="text-[11px] text-stone-500 font-sans shrink-0">
-              Published{" "}
-              <time dateTime="2026-11-11" className="font-medium text-stone-700">
-                Nov 11, 2026
-              </time>
-            </div>
-          </div>
-
-          {/* IN-PAGE TABLE OF CONTENTS ANCHOR LINKS */}
-          <nav aria-label="Table of Contents" className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-[#EADECF]/50 text-xs text-stone-600">
-            <span className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16]">
-              On This Page:
-            </span>
-            <a href="#fragrance-collection-heading" className="hover:text-[#590B16] underline underline-offset-4">
-              Fragrance Collection
-            </a>
-            <a href="#concentration-guide" className="hover:text-[#590B16] underline underline-offset-4">
-              Concentration Guide
-            </a>
-            <a href="#how-to-apply" className="hover:text-[#590B16] underline underline-offset-4">
-              Application Steps
-            </a>
-            <a href="#perfume-faq-heading" className="hover:text-[#590B16] underline underline-offset-4">
-              Fragrance FAQs
-            </a>
-          </nav>
-        </header>
+      <Container size="wide" className="pt-6 sm:pt-8 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
+        <h1
+          id="catalog-heading"
+          className="font-serif text-xl sm:text-2xl font-normal uppercase tracking-[0.18em] text-[#0D1424] text-center mb-5 sm:mb-7"
+        >
+          {title}
+        </h1>
 
         {/* CIRCULAR CATEGORY FILTER ICONS ROW */}
         <div className="w-full mb-6 sm:mb-10 overflow-x-auto scrollbar-none py-1 sm:py-2 relative">
@@ -365,44 +309,13 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             </button>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
-          <div className="flex items-baseline gap-3">
-            <h2
-              id="fragrance-collection-heading"
-              className="font-serif text-base sm:text-lg font-bold uppercase tracking-wider text-[#0D1424]"
-            >
-              Signature Fragrance Collection
-            </h2>
-            <span className="text-[11px] sm:text-xs text-[#686D7A] font-sans">
-              Showing <strong className="text-[#121A2D] font-semibold">{products.length}</strong> fragrances
-            </span>
-          </div>
-
-          <form
-            id="perfume-search-form"
-            onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-2 w-full sm:w-auto"
-            {...({
-              toolname: "search_perfumes",
-              tooldescription: "Filter Soulmate Scents luxury perfumes by fragrance name, scent family, or olfactory note.",
-            } as React.FormHTMLAttributes<HTMLFormElement>)}
-          >
-            <label htmlFor="catalog-search-input" className="sr-only">
-              Search perfumes by name or note
-            </label>
-            <input
-              id="catalog-search-input"
-              name="query"
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Filter by scent or name..."
-              className="w-full sm:w-56 px-3.5 py-1.5 text-xs bg-stone-50 border border-[#EADECF] rounded-full text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-[#590B16]"
-              {...({
-                toolparamdescription: "Keyword such as bergamot, oud, floral, woody, or perfume title.",
-              } as React.InputHTMLAttributes<HTMLInputElement>)}
-            />
-          </form>
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 id="fragrance-collection-heading" className="sr-only">
+            Signature Fragrance Collection
+          </h2>
+          <span className="text-[11px] sm:text-xs text-[#686D7A] font-sans">
+            Showing <strong className="text-[#121A2D] font-semibold">{products.length}</strong> fragrances
+          </span>
         </div>
 
         {products.length > 0 ? (
@@ -440,7 +353,6 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               type="button"
               onClick={() => {
                 setActiveCategory("all");
-                setSearchQuery("");
               }}
               className="px-6 py-2.5 bg-[#590B16] hover:bg-[#3E060E] active:bg-[#30040A] text-white text-xs uppercase tracking-widest font-semibold rounded-full transition-all cursor-pointer shadow-xs active:scale-95"
             >
@@ -448,188 +360,6 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
             </button>
           </div>
         )}
-
-        {/* OLFACTORY GUIDE, TABLE, HOW-TO & FAQ (100% AEO / GEO / VOICE READINESS) */}
-        <section
-          aria-labelledby="perfume-faq-heading"
-          className="mt-14 pt-10 border-t border-[#EADECF]/80 space-y-10"
-        >
-          {/* Comparison Data Table for Featured Snippets */}
-          <div className="space-y-4">
-            <div>
-              <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1">
-                Concentration Comparison
-              </span>
-              <h2
-                id="concentration-guide"
-                className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-wider text-[#0D1424]"
-              >
-                What Are the Perfume Concentration Levels at Soulmate Scents?
-              </h2>
-              <p className="font-sans text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed max-w-3xl">
-                Extrait de Parfum is the highest luxury fragrance concentration crafted for deep projection and long wear in Pakistan’s climate.
-              </p>
-            </div>
-
-            <div className="overflow-x-auto rounded-2xl border border-[#EADECF]">
-              <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                <thead className="bg-[#FAF8F5] border-b border-[#EADECF] font-serif text-[#0D1424]">
-                  <tr>
-                    <th scope="col" className="py-3 px-4 font-bold">Collection Tier</th>
-                    <th scope="col" className="py-3 px-4 font-bold">Oil Concentration</th>
-                    <th scope="col" className="py-3 px-4 font-bold">Fabric Longevity</th>
-                    <th scope="col" className="py-3 px-4 font-bold">Best For</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#EADECF]/60 bg-white text-stone-700 font-sans">
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-[#590B16]">Extrait de Parfum</td>
-                    <td className="py-3 px-4">28% – 30%</td>
-                    <td className="py-3 px-4">12 – 14 Hours</td>
-                    <td className="py-3 px-4">Evenings, weddings & signature wear</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-[#590B16]">Eau de Parfum (EDP)</td>
-                    <td className="py-3 px-4">25% – 27%</td>
-                    <td className="py-3 px-4">10 – 12 Hours</td>
-                    <td className="py-3 px-4">Daily office & warm weather</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-[#590B16]">Oud & Amber Reserve</td>
-                    <td className="py-3 px-4">30% Aged Oils</td>
-                    <td className="py-3 px-4">14+ Hours</td>
-                    <td className="py-3 px-4">Formal nights & winter layering</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* How-To Ordered List for Step Snippets */}
-          <div className="p-5 sm:p-6 bg-[#FAF8F5] rounded-2xl border border-[#EADECF]/80 space-y-3">
-            <h2
-              id="how-to-apply"
-              className="font-serif text-lg sm:text-xl font-bold uppercase tracking-wider text-[#0D1424]"
-            >
-              How to Apply Luxury Perfume for 14-Hour Longevity
-            </h2>
-            <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
-              Proper application refers to spraying pure perfume oils onto warm pulse points without crushing top notes.
-            </p>
-            <ol className="list-decimal list-inside space-y-1.5 text-xs sm:text-sm text-stone-700 font-sans pl-1">
-              <li>Apply unscented moisturizer on clean wrists and neck before spraying perfume.</li>
-              <li>Spray two mists from 15 centimeters onto warm pulse points and collarbones.</li>
-              <li>Avoid rubbing your wrists together so bright top notes evaporate naturally.</li>
-              <li>Mist once lightly onto fabric collars to lock in base woods for up to 14 hours.</li>
-            </ol>
-          </div>
-
-          {/* Frequently Asked Questions */}
-          <div className="space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div>
-                <span className="text-[10px] sm:text-[11px] font-serif font-bold uppercase tracking-[0.25em] text-[#590B16] block mb-1">
-                  Fragrance Concierge & Specifications
-                </span>
-                <h2
-                  id="perfume-faq-heading"
-                  className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-wider text-[#0D1424]"
-                >
-                  Frequently Asked Questions About Our Perfumes
-                </h2>
-              </div>
-              <nav aria-label="Fragrance Quick Links" className="flex flex-wrap items-center gap-3 text-xs font-sans text-stone-600">
-                <a href="#catalog-heading" className="hover:text-[#590B16] underline underline-offset-4">
-                  Top
-                </a>
-                <span aria-hidden="true">•</span>
-                <Link href="/about" className="hover:text-[#590B16] underline underline-offset-4">
-                  About Us
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/contact" className="hover:text-[#590B16] underline underline-offset-4">
-                  Contact
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/faq" className="hover:text-[#590B16] underline underline-offset-4">
-                  FAQ
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/shipping" className="hover:text-[#590B16] underline underline-offset-4">
-                  Shipping
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/returns" className="hover:text-[#590B16] underline underline-offset-4">
-                  Returns
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/privacy" className="hover:text-[#590B16] underline underline-offset-4">
-                  Privacy Policy
-                </Link>
-                <span aria-hidden="true">•</span>
-                <Link href="/terms" className="hover:text-[#590B16] underline underline-offset-4">
-                  Terms of Service
-                </Link>
-              </nav>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
-                <h3 id="faq-concentration" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
-                  What concentration are Soulmate Scents perfumes?
-                </h3>
-                <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
-                  Soulmate Scents perfumes are Extrait de Parfum blends crafted with 25% to 30% pure imported oils.
-                </p>
-              </article>
-
-              <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
-                <h3 id="faq-longevity" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
-                  How long do Soulmate Scents fragrances last?
-                </h3>
-                <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
-                  Each bottle gives 4 to 6 hours of strong projection and lasts 10 to 14 hours on fabric.
-                </p>
-              </article>
-
-              <article className="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/70">
-                <h3 id="faq-delivery" className="font-serif text-sm font-bold text-[#0D1424] mb-2">
-                  How can you order perfumes across Pakistan?
-                </h3>
-                <p className="speakable-faq font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
-                  Orders dispatch within 24 hours across Pakistan with Cash on Delivery and bank transfer checkout.
-                </p>
-              </article>
-            </div>
-
-            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 sm:p-5 bg-[#FAF8F5] rounded-2xl border border-[#EADECF]/70 text-xs">
-              <div>
-                <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
-                  Oil Concentration
-                </dt>
-                <dd className="font-sans text-stone-700">25%–30% Pure Perfume Oils</dd>
-              </div>
-              <div>
-                <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
-                  Wear Longevity
-                </dt>
-                <dd className="font-sans text-stone-700">10–14 Hours on Fabric</dd>
-              </div>
-              <div>
-                <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
-                  Delivery Coverage
-                </dt>
-                <dd className="font-sans text-stone-700">All Over Pakistan (2–4 Days)</dd>
-              </div>
-              <div>
-                <dt className="font-serif font-bold uppercase tracking-wider text-[10px] text-[#590B16] mb-1">
-                  Exchange Guarantee
-                </dt>
-                <dd className="font-sans text-stone-700">7-Day Hassle-Free Returns</dd>
-              </div>
-            </dl>
-          </div>
-        </section>
       </Container>
     </div>
   );
