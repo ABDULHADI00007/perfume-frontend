@@ -15,6 +15,7 @@ import "./globals.css";
 import { constructMetadata } from "@/lib/seo/metadata";
 import { TopProgressBar } from "@/components/layout/TopProgressBar";
 import { Preloader } from "@/components/ui/Preloader";
+import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -109,6 +110,7 @@ export default function RootLayout({
           <TopProgressBar />
         </Suspense>
         {children}
+        <FloatingWhatsAppButton />
       </body>
     </html>
   );

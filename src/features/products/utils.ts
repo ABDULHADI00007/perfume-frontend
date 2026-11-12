@@ -42,9 +42,6 @@ const VERIFIED_WEBP_FILES = new Set([
 
 function preferVerifiedWebp(src: string): string {
   if (!src.startsWith("/images/perfumes/")) return src;
-  if (src.includes("Sultan") && src.includes("Lanternlight")) {
-    return "/images/perfumes/collection_sultans_veil.webp";
-  }
   const match = src.match(/^\/images\/perfumes\/(.+)\.(png|jpg|jpeg)$/i);
   if (match && VERIFIED_WEBP_FILES.has(match[1])) {
     return `/images/perfumes/${match[1]}.webp`;
