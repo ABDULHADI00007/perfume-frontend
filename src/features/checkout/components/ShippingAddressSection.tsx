@@ -18,7 +18,7 @@ interface ShippingAddressSectionProps {
 }
 
 const COUNTRY_OPTIONS: SelectOption[] = COUNTRIES.map((c) => ({
-  label: `${c.flag}  ${c.country}`,
+  label: c.country,
   value: c.country,
 }));
 

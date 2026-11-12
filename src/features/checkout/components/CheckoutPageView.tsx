@@ -10,8 +10,6 @@ import { ShippingAddressSection } from "./ShippingAddressSection";
 import { PaymentMethodSection } from "./PaymentMethodSection";
 import { CheckoutOrderSummary } from "./CheckoutOrderSummary";
 import { CheckoutEmptyState } from "./CheckoutEmptyState";
-import { Badge } from "@/components/ui/badge";
-import { Icons } from "@/components/ui/icons";
 import {
   CheckoutCustomer,
   CheckoutAddress,
@@ -287,24 +285,13 @@ export function CheckoutPageView() {
             <span className="text-black font-semibold">Checkout</span>
           </nav>
 
-          <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F0ECE1] pb-6">
-            <div>
-              <Badge variant="accent" className="mb-2 bg-[#590B16]/10 text-[#590B16] border border-[#590B16]/20">
-                <Icons.Lock className="w-3 h-3 mr-1.5 text-[#590B16]" />
-                256-BIT ENCRYPTED LUXURY CHECKOUT
-              </Badge>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight">
-                Secure Checkout
-              </h1>
-              <p className="text-xs sm:text-sm text-black/80 font-sans mt-1">
-                Finalize your bespoke fragrance acquisition with Maison concierge delivery
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 text-xs text-black/80 bg-white border border-[#E2DED6] px-4 py-2.5 rounded-xl shadow-2xs">
-              <Icons.ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>100% Authentic Product Guarantee</span>
-            </div>
+          <div className="mb-8 border-b border-[#F0ECE1] pb-6">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-black tracking-tight">
+              Secure Checkout
+            </h1>
+            <p className="text-xs sm:text-sm text-black/80 font-sans mt-1">
+              Finalize your bespoke fragrance acquisition with Maison concierge delivery
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start relative">
@@ -342,8 +329,8 @@ export function CheckoutPageView() {
               <CheckoutOrderSummary
                 items={cart.items}
                 subtotal={cart.subtotal}
-                freeShippingThreshold={storeSettings?.shipping?.freeShippingThreshold ?? 150}
-                flatRateFee={storeSettings?.shipping?.flatRateFee ?? 15}
+                freeShippingThreshold={0}
+                flatRateFee={0}
                 taxRate={storeSettings?.tax?.defaultTaxPercentage ?? 5}
                 enableTax={storeSettings?.tax?.enableTax ?? false}
                 appliedCoupon={appliedCoupon}

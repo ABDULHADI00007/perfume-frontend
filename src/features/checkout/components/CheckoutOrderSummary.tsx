@@ -29,8 +29,8 @@ interface CheckoutOrderSummaryProps {
 export function CheckoutOrderSummary({
   items,
   subtotal,
-  freeShippingThreshold = 150,
-  flatRateFee = 15,
+  freeShippingThreshold = 0,
+  flatRateFee = 0,
   taxRate = 5,
   enableTax = false,
   appliedCoupon,
@@ -38,7 +38,7 @@ export function CheckoutOrderSummary({
   onSubmitOrder,
   submitError,
 }: CheckoutOrderSummaryProps) {
-  const isFreeShipping = subtotal >= freeShippingThreshold;
+  const isFreeShipping = flatRateFee <= 0 || subtotal >= freeShippingThreshold;
   const shippingFee = isFreeShipping ? 0 : flatRateFee;
 
   const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;

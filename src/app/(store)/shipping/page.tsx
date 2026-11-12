@@ -8,8 +8,8 @@ export const metadata = constructMetadata({
 });
 
 const shippingOptions = [
-  { method: "Domestic Standard", time: "3–5 business days", cost: "PKR 350 / Free over PKR 5,000" },
-  { method: "Domestic Express", time: "1–2 business days", cost: "PKR 750" },
+  { method: "Domestic Standard", time: "3–5 business days", cost: "Complimentary (Free Delivery)" },
+  { method: "Domestic Express", time: "1–2 business days", cost: "Complimentary (Free Delivery)" },
   { method: "International Standard", time: "7–14 business days", cost: "From USD 25 / Free over USD 150" },
   { method: "International Express", time: "3–5 business days", cost: "From USD 55" },
 ];

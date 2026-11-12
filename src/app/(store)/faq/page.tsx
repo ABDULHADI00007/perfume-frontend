@@ -78,7 +78,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         q: "Do you offer free delivery?",
-        a: "Yes. All domestic orders above the free shipping threshold qualify for complimentary white-glove doorstep delivery.",
+        a: "Yes. We offer 100% free white-glove doorstep delivery across Pakistan on all orders with no minimum spend.",
       },
       {
         q: "Can I track my parcel once shipped?",

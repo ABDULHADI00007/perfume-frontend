@@ -195,29 +195,32 @@ export function CustomerInfoSection({
             </div>
 
             <div className="relative flex items-center w-full">
-              {/* Country Dial Code Selector Dropdown */}
+              {/* Country Dial Code */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
                   id="checkout-phone-country-btn"
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  className={`flex items-center gap-1.5 h-10 px-2.5 sm:px-3 rounded-l-xl border border-r-0 text-xs font-sans font-medium transition-all focus:outline-none ${
+                  onClick={() => COUNTRIES.length > 1 && setIsDropdownOpen((prev) => !prev)}
+                  className={`flex items-center gap-1.5 h-10 px-3 rounded-l-xl border border-r-0 text-xs font-sans font-medium transition-all focus:outline-none ${
+                    COUNTRIES.length <= 1 ? "cursor-default" : "hover:bg-[#F2EFE9]"
+                  } ${
                     errors.phone
                       ? "border-rose-500 bg-rose-50/30 text-rose-900"
-                      : "border-[#E6E2EA] bg-[#FAF9F6] hover:bg-[#F2EFE9] text-[#0B1938]"
+                      : "border-[#E6E2EA] bg-[#FAF9F6] text-[#0B1938]"
                   }`}
-                  aria-label="Select Country Dial Code"
+                  aria-label="Country Dial Code"
                   title={`${currentConfig.country} (${currentConfig.dialCode})`}
                 >
-                  <span className="text-base leading-none">{currentConfig.flag}</span>
                   <span className="font-semibold text-xs tracking-tight text-stone-800">
                     {currentConfig.dialCode}
                   </span>
-                  <Icons.ChevronDown className="w-3 h-3 text-stone-400 shrink-0 ml-0.5" />
+                  {COUNTRIES.length > 1 && (
+                    <Icons.ChevronDown className="w-3 h-3 text-stone-400 shrink-0 ml-0.5" />
+                  )}
                 </button>
 
                 {/* Country Code Dropdown Popover */}
-                {isDropdownOpen && (
+                {isDropdownOpen && COUNTRIES.length > 1 && (
                   <div className="absolute left-0 top-full mt-1.5 z-50 w-72 rounded-xl border border-[#E6E2EA] bg-white shadow-xl py-1 animate-in fade-in-0 zoom-in-95">
                     <div className="px-3 py-1.5 border-b border-[#F0ECE1] text-[10px] font-semibold uppercase tracking-wider text-stone-400">
                       Select Country & Dial Code
@@ -237,7 +240,6 @@ export function CustomerInfoSection({
                             }`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <span className="text-lg leading-none">{c.flag}</span>
                               <span className="truncate">{c.country}</span>
                             </div>
                             <span className="font-mono text-xs text-stone-500 font-medium shrink-0 ml-2">

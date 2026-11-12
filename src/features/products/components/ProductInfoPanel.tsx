@@ -237,8 +237,8 @@ export const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({
             <circle cx="18.5" cy="18.5" r="2.5" />
           </svg>
           <div>
-            <strong className="block font-bold text-black text-[11px]">Free Shipping</strong>
-            <span className="text-[10px] text-stone-400">On orders above Rs. 20,000</span>
+            <strong className="block font-bold text-black text-[11px]">Free Delivery</strong>
+            <span className="text-[10px] text-stone-400">Free across Pakistan on all orders</span>
           </div>
         </div>
 

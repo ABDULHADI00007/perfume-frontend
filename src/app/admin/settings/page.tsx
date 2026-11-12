@@ -34,8 +34,8 @@ export default function AdminSettingsPage() {
   const [instagram, setInstagram] = useState("https://instagram.com/soulmatescents");
 
   // 2. Shipping & Delivery Rates (PKR)
-  const [freeShippingThreshold, setFreeShippingThreshold] = useState<string>("20000");
-  const [flatRateFee, setFlatRateFee] = useState<string>("250");
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState<string>("0");
+  const [flatRateFee, setFlatRateFee] = useState<string>("0");
 
   // 3. Payment Methods: COD & Bank Transfer
   const [codEnabled, setCodEnabled] = useState(true);
@@ -62,8 +62,8 @@ export default function AdminSettingsPage() {
         setAddress(data.store.address || "Karachi, Pakistan");
       }
       if (data.shipping) {
-        setFreeShippingThreshold(String(data.shipping.freeShippingThreshold ?? 20000));
-        setFlatRateFee(String(data.shipping.flatRateFee ?? 250));
+        setFreeShippingThreshold(String(data.shipping.freeShippingThreshold ?? 0));
+        setFlatRateFee(String(data.shipping.flatRateFee ?? 0));
       }
       if (data.payment) {
         if (data.payment.cod) {
@@ -122,8 +122,8 @@ export default function AdminSettingsPage() {
         format: "Rs. {amount}",
       },
       shipping: {
-        freeShippingThreshold: freeShippingThreshold ? Number(freeShippingThreshold) : 20000,
-        flatRateFee: flatRateFee ? Number(flatRateFee) : 250,
+        freeShippingThreshold: freeShippingThreshold !== "" ? Number(freeShippingThreshold) : 0,
+        flatRateFee: flatRateFee !== "" ? Number(flatRateFee) : 0,
         defaultCarrier: "Express Courier Logistics (Nationwide)",
       },
       tax: {

@@ -866,10 +866,10 @@ export const FragranceComposition: React.FC<FragranceCompositionProps> = ({
             </div>
             <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
               <span className="block text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.16em] text-[#590B16] font-serif mb-1.5">
-                Free Shipping on Orders Above Rs. 20,000
+                Free Delivery All Over Pakistan
               </span>
               <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
-                Enjoy complimentary tracked courier delivery on qualifying luxury orders nationwide.
+                Enjoy complimentary tracked courier delivery on every luxury order nationwide with no minimum spend.
               </p>
             </div>
             <div className="p-4 sm:p-5 bg-stone-50/90 rounded-xl border border-stone-200/70 shadow-2xs hover:border-[#DAC8B1] transition-colors">
