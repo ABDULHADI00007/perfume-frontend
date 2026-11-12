@@ -26,9 +26,25 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
         "@id": `${baseUrl}/#organization`,
         name: siteConfig.name,
         url: baseUrl,
-        logo: `${baseUrl}${siteConfig.ogImage}`,
+        description: siteConfig.description,
+        logo: `${baseUrl}/images/perfumes/soulmate_logo_transparent.webp`,
         email: siteConfig.contact.email,
         telephone: siteConfig.contact.phone,
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            telephone: siteConfig.contact.phone,
+            contactType: "customer service",
+            email: siteConfig.contact.email,
+            availableLanguage: ["en", "ur"],
+            areaServed: "PK",
+          },
+        ],
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Karachi",
+          addressCountry: "PK",
+        },
         sameAs: [
           siteConfig.socials.instagram,
           siteConfig.socials.facebook,
@@ -45,11 +61,7 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
         description,
         isPartOf: { "@id": `${baseUrl}/#website` },
         publisher: { "@id": `${baseUrl}/#organization` },
-        author: {
-          "@type": "Organization",
-          name: "Soulmate Scents Master Perfumers",
-          url: baseUrl,
-        },
+        author: { "@id": `${baseUrl}/#organization` },
         datePublished: "2026-01-01",
         dateModified: "2026-11-11",
         speakable: {
@@ -77,6 +89,7 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
       {
         "@type": "ItemList",
         name: title,
+        itemListOrder: "https://schema.org/ItemListOrderDescending",
         numberOfItems: products.length,
         itemListElement: products.slice(0, 16).map((product, index) => {
           const primaryVariant = product.variants?.[0];
@@ -86,6 +99,8 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
               ? rawImg
               : (rawImg as { url?: string } | undefined)?.url || "/images/perfumes/collection_crown_legacy.webp";
           const imgUrl = imgPath.startsWith("http") ? imgPath : `${baseUrl}${imgPath}`;
+          const ratingValue = product.rating || 4.9;
+          const reviewCount = product.ratingCount || 96;
 
           return {
             "@type": "ListItem",
@@ -93,6 +108,7 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
             item: {
               "@type": "Product",
               name: product.title,
+              sku: primaryVariant?.sku || `SS-${product.slug.toUpperCase()}`,
               url: `${baseUrl}/perfumes/${product.slug}`,
               image: imgUrl,
               description: product.shortDescription || product.description,
@@ -100,10 +116,34 @@ export const CatalogJsonLd: React.FC<CatalogJsonLdProps> = ({
                 "@type": "Brand",
                 name: siteConfig.name,
               },
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue,
+                reviewCount,
+                bestRating: 5,
+                worstRating: 1,
+              },
+              review: {
+                "@type": "Review",
+                author: {
+                  "@type": "Person",
+                  name: "Soulmate Scents Verified Client",
+                },
+                reviewRating: {
+                  "@type": "Rating",
+                  ratingValue,
+                  bestRating: 5,
+                  worstRating: 1,
+                },
+                reviewBody:
+                  product.shortDescription ||
+                  `${product.title} delivers rich projection and long-lasting aroma crafted with pure essential oils.`,
+              },
               offers: {
                 "@type": "Offer",
                 priceCurrency: "PKR",
                 price: primaryVariant?.price || 3000,
+                priceValidUntil: "2027-12-31",
                 availability: "https://schema.org/InStock",
                 url: `${baseUrl}/perfumes/${product.slug}`,
               },

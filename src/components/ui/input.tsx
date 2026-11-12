@@ -11,7 +11,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
+  ({ className, type = "text", label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
     const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
 
     const inputElement = (

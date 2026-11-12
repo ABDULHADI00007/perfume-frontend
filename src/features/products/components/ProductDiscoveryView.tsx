@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import { Product } from "../types";
 import { ProductCard } from "./ProductCard";
 import { filterAndSortProducts, FilterOptions } from "../utils";
@@ -101,9 +102,61 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
     <div className="w-full font-sans">
       {/* PRODUCT GRID & FILTERS SECTION */}
       <Container size="wide" className="pt-6 sm:pt-8 pb-10 sm:pb-12 px-3 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Breadcrumb"
+          className="breadcrumb flex items-center gap-1.5 text-[11px] uppercase tracking-[0.16em] text-stone-400 font-sans mb-4"
+        >
+          <Link href="/" className="hover:text-[#590B16] transition-colors">
+            Home
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page" className="text-stone-600 font-medium">
+            Perfumes
+          </span>
+        </nav>
+
         <h1 id="catalog-heading" className="sr-only">
           {title}
         </h1>
+
+        <p className="speakable-intro sr-only">
+          Soulmate Scents is a luxury perfumery offering Extrait and Eau de Parfum fragrances with 10 to 14 hours of wear.
+        </p>
+
+        <p className="speakable-faq sr-only">
+          Orders across Pakistan ship within 24 hours with Cash on Delivery and a 7-day exchange guarantee.
+        </p>
+
+        <time dateTime="2026-11-11" className="sr-only">
+          Updated November 11, 2026
+        </time>
+
+        <nav aria-label="Storefront Trust Links" className="sr-only">
+          <Link href="/about">About Soulmate Scents</Link>
+          <Link href="/contact">Contact Concierge</Link>
+          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/terms">Terms of Service</Link>
+        </nav>
+
+        <nav aria-label="Table of Contents" className="sr-only">
+          <ul>
+            <li>
+              <a href="#catalog-heading">Luxury Perfumes &amp; Extraits</a>
+            </li>
+            <li>
+              <a href="#fragrance-collection-heading">Signature Fragrance Collection</a>
+            </li>
+            <li>
+              <a href="#perfume-elite-fusion">Elite Fusion Extrait</a>
+            </li>
+            <li>
+              <a href="#perfume-crown-legacy">Crown Legacy Extrait</a>
+            </li>
+            <li>
+              <a href="#perfume-blue-horizon">Blue Horizon Perfume</a>
+            </li>
+          </ul>
+        </nav>
 
         {/* CIRCULAR CATEGORY FILTER ICONS ROW */}
         <div className="w-full mb-6 sm:mb-10 overflow-x-auto scrollbar-none py-1 sm:py-2 relative">
@@ -321,7 +374,7 @@ export const ProductDiscoveryView: React.FC<ProductDiscoveryViewProps> = ({
               <ProductCard
                 key={product.id}
                 product={product}
-                priority={idx < 4}
+                priority={false}
                 onQuickAdd={(prod, variant) => {
                   addItem({
                     id: `${prod.id}-${variant.id}`,

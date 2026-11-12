@@ -1,10 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,600;0,700;1,700&family=Tenor+Sans&family=Poiret+One&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&family=Syne:wght@700;800;900&family=Outfit:wght@700;800;900&family=Bebas+Neue&family=Unbounded:wght@700;800;900&family=Big+Shoulders+Display:wght@800;900&family=Cinzel:wght@400;500;600;700;800;900&family=Italiana&family=Marcellus&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800;12..96,900&family=Great+Vibes&display=swap');
-
 @font-face {
   font-family: 'Hobo BT';
   src: url('/fonts/hobo-bt.woff') format('woff'),
-       url('/fonts/hobo.woff') format('woff'),
-       url('https://fonts.cdnfonts.com/s/56210/Hobo%20BT.woff') format('woff');
+       url('/fonts/hobo.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,8 +10,7 @@
 @font-face {
   font-family: 'Hobo';
   src: url('/fonts/hobo.woff') format('woff'),
-       url('/fonts/hobo-bt.woff') format('woff'),
-       url('https://fonts.cdnfonts.com/s/134738/hobo.woff') format('woff');
+       url('/fonts/hobo-bt.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

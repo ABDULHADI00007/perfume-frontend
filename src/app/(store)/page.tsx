@@ -38,8 +38,7 @@ export default function HomePage() {
         ],
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Gulberg III",
-          "addressLocality": "Lahore",
+          "addressLocality": "Karachi",
           "addressCountry": "PK"
         },
         "sameAs": [

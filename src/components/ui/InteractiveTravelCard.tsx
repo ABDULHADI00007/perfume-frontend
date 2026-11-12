@@ -193,7 +193,7 @@ export const InteractiveTravelCard = React.forwardRef<
             transformStyle: "preserve-3d",
           }}
           className={cn(
-            "relative h-[19.5rem] min-[360px]:h-[21rem] min-[440px]:h-[23rem] sm:h-[25rem] lg:h-[29.5rem] w-full max-w-[340px] rounded-[18px] min-[380px]:rounded-[22px] sm:rounded-[30px] overflow-hidden select-none group border border-[#E0D7CB]/80 outline-none bg-[#EBE4D8] cursor-pointer transition-[box-shadow] duration-500 ease-out",
+            "relative h-[17.25rem] min-[360px]:h-[18.5rem] min-[440px]:h-[20rem] sm:h-[21.5rem] md:h-[22.5rem] lg:h-[29.5rem] w-full max-w-[340px] rounded-[18px] min-[380px]:rounded-[22px] sm:rounded-[30px] overflow-hidden select-none group border border-[#E0D7CB]/80 outline-none bg-[#EBE4D8] cursor-pointer transition-[box-shadow] duration-500 ease-out",
             isCardHovered && !isButtonHovered
               ? "shadow-[0_20px_45px_rgba(40,30,20,0.14)]"
               : "shadow-[0_12px_36px_rgba(40,30,20,0.08)]",
@@ -209,6 +209,7 @@ export const InteractiveTravelCard = React.forwardRef<
               height={440}
               sizes="(max-width: 640px) 50vw, 340px"
               priority={priority}
+              unoptimized={imgSrc.toLowerCase().endsWith(".webp")}
               onError={handleImgError}
               className={cn(
                 "w-full h-[112%] sm:h-[114%] object-cover object-top -translate-y-4 min-[380px]:-translate-y-5 sm:-translate-y-7",
@@ -269,7 +270,7 @@ export const InteractiveTravelCard = React.forwardRef<
             {/* Bottom Section: Title, Description, Badges, Price, Button */}
             <div className="w-full">
               {/* Title & Description shifted down away from bottle base */}
-              <div className="translate-y-0.5 sm:translate-y-4.5">
+              <div className="translate-y-0.5 sm:translate-y-2 lg:translate-y-4.5">
                 <div className="flex items-center justify-between gap-1.5">
                   <Link href={href} className="hover:opacity-90 transition-opacity block group/title flex-1 min-w-0">
                     <h3 id={headingId} className={cn("font-serif text-[12.5px] min-[360px]:text-[13.5px] min-[440px]:text-[16px] sm:text-[19px] lg:text-[21px] font-bold text-[#0A0A0A] tracking-[-0.01em] leading-[1.15] truncate transition-colors group-hover/title:text-black/80", titleClassName)}>

@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Plus_Jakarta_Sans, Outfit, Playfair_Display } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Plus_Jakarta_Sans,
+  Outfit,
+  Playfair_Display,
+  Cinzel,
+  Marcellus,
+  Italiana,
+  Bricolage_Grotesque,
+  Great_Vibes,
+} from "next/font/google";
 import React, { Suspense } from "react";
 import "./globals.css";
 import { constructMetadata } from "@/lib/seo/metadata";
@@ -34,6 +44,41 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-cinzel",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const marcellus = Marcellus({
+  subsets: ["latin"],
+  variable: "--font-marcellus",
+  weight: ["400"],
+  display: "swap",
+});
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  variable: "--font-italiana",
+  weight: ["400"],
+  display: "swap",
+});
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+  weight: ["700", "800"],
+  display: "swap",
+});
+
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = constructMetadata();
 
 export default function RootLayout({
@@ -42,7 +87,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${cormorant.variable} ${plusJakarta.variable} ${outfit.variable}`}>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${cormorant.variable} ${plusJakarta.variable} ${outfit.variable} ${cinzel.variable} ${marcellus.variable} ${italiana.variable} ${bricolage.variable} ${greatVibes.variable}`}
+    >
       <head>
         <link rel="icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" sizes="any" />
         <link rel="shortcut icon" href="/images/perfumes/favicon-icon.png?v=soulmate-3" type="image/png" />

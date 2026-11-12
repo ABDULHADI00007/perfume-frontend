@@ -120,8 +120,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         }}
         imageClassName={
           isLuxuryFramed
-            ? "!h-[110%] !object-cover !object-top !-translate-y-4 min-[380px]:!-translate-y-5 sm:!-translate-y-8"
-            : "!h-[114%] !object-cover !object-top !-translate-y-4 min-[380px]:!-translate-y-5 sm:!-translate-y-8"
+            ? "!h-[110%] !object-cover !object-top !-translate-y-3 min-[380px]:!-translate-y-4 sm:!-translate-y-6 lg:!-translate-y-8"
+            : "!h-[114%] !object-cover !object-top !-translate-y-3 min-[380px]:!-translate-y-4 sm:!-translate-y-6 lg:!-translate-y-8"
         }
       />
     </article>

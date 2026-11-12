@@ -1216,6 +1216,7 @@ export default function StringTieFooter({
                     alt="Soulmate Scents"
                     width={832}
                     height={345}
+                    unoptimized={typeof logo === "string" && logo.toLowerCase().endsWith(".webp")}
                     style={{ objectPosition: "left" }}
                     className="h-9 min-[360px]:h-10 sm:h-16 md:h-22 lg:h-28 w-auto object-contain object-left brightness-0 invert opacity-100 select-none pointer-events-none"
                   />
