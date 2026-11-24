@@ -53,7 +53,9 @@ function detectSafeImageSignature(buffer: Buffer): { ext: string; mime: string }
 export async function POST(request: NextRequest) {
   try {
     // 1. Mandatory Authentication & Authorization Check
-    const cookieToken = request.cookies.get("admin_token")?.value;
+    const cookieToken =
+      request.cookies.get("admin_token")?.value ||
+      request.cookies.get("perfume_auth_token")?.value;
     const authHeader = request.headers.get("authorization");
     const headerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
     const token = cookieToken || headerToken;
@@ -74,7 +76,7 @@ export async function POST(request: NextRequest) {
       const authRes = await fetch(authUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
-          Cookie: `admin_token=${token}`,
+          Cookie: `admin_token=${token}; perfume_auth_token=${token}`,
         },
         cache: "no-store",
       });

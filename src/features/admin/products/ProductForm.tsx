@@ -60,6 +60,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [pickerTarget, setPickerTarget] = useState<"card" | number>("card");
+  const pickerTargetRef = useRef<"card" | number>("card");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [justSaved, setJustSaved] = useState(false);
@@ -215,26 +216,32 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }
 
       if (uploadedUrls.length > 0) {
-        if (pickerTarget === "card") {
+        const currentTarget = pickerTargetRef.current;
+        if (currentTarget === "card") {
           // Set collection card image
           setCardImage(uploadedUrls[0]);
           // If detail images is empty, auto-add as first detail view as well
-          if (detailImages.length === 0) {
-            setDetailImages([uploadedUrls[0]]);
-          }
+          setDetailImages((prev) => {
+            if (prev.length === 0) {
+              return [uploadedUrls[0]];
+            }
+            return prev;
+          });
         } else {
           // Setting a specific slot or multiple detail slots
-          const slotIndex = Number(pickerTarget);
-          const next = [...detailImages];
-          if (uploadedUrls.length === 1) {
-            next[slotIndex] = uploadedUrls[0];
-          } else {
-            // Multiple images uploaded
-            for (let i = 0; i < uploadedUrls.length && slotIndex + i < 4; i++) {
-              next[slotIndex + i] = uploadedUrls[i];
+          const slotIndex = Number(currentTarget);
+          setDetailImages((prev) => {
+            const next = [...prev];
+            if (uploadedUrls.length === 1) {
+              next[slotIndex] = uploadedUrls[0];
+            } else {
+              // Multiple images uploaded
+              for (let i = 0; i < uploadedUrls.length && slotIndex + i < 4; i++) {
+                next[slotIndex + i] = uploadedUrls[i];
+              }
             }
-          }
-          setDetailImages(next.slice(0, 4));
+            return next.slice(0, 4);
+          });
         }
       }
     } catch (err: unknown) {
@@ -249,32 +256,45 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   // Select image from Folder Modal
   const handleSelectFromFolder = (selected: { url: string }) => {
-    if (pickerTarget === "card") {
+    const currentTarget = pickerTargetRef.current;
+    if (currentTarget === "card") {
       setCardImage(selected.url);
-      if (detailImages.length === 0) {
-        setDetailImages([selected.url]);
-      }
+      setDetailImages((prev) => {
+        if (prev.length === 0) {
+          return [selected.url];
+        }
+        return prev;
+      });
     } else {
-      const slotIndex = Number(pickerTarget);
-      const next = [...detailImages];
-      next[slotIndex] = selected.url;
-      setDetailImages(next.slice(0, 4));
+      const slotIndex = Number(currentTarget);
+      setDetailImages((prev) => {
+        const next = [...prev];
+        next[slotIndex] = selected.url;
+        return next.slice(0, 4);
+      });
     }
     setIsFolderModalOpen(false);
   };
 
   const openPicker = (target: "card" | number, mode: "upload" | "browse") => {
+    pickerTargetRef.current = target;
     setPickerTarget(target);
     if (mode === "upload") {
-      fileUploadInputRef.current?.click();
+      // Small timeout or direct click ensures ref and state are synchronized
+      setTimeout(() => {
+        fileUploadInputRef.current?.click();
+      }, 0);
     } else {
       setIsFolderModalOpen(true);
     }
   };
 
   const handleRemoveDetailImage = (index: number) => {
-    const next = detailImages.filter((_, i) => i !== index);
-    setDetailImages(next);
+    setDetailImages((prev) => {
+      const next = [...prev];
+      next.splice(index, 1);
+      return next.filter(Boolean);
+    });
   };
 
   const handleAddExtraVariant = (sizeToAdd = "100ml") => {
@@ -943,7 +963,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => openPicker(detailImages.length < 4 ? detailImages.length : 0, "upload")}
+                  onClick={() => {
+                    const nextSlot = [0, 1, 2, 3].find((idx) => !detailImages[idx]) ?? 0;
+                    openPicker(nextSlot, "upload");
+                  }}
                   disabled={isUploadingImage}
                   className="gap-1.5 text-xs h-8 rounded-xl border-slate-200 bg-white hover:bg-slate-100 text-[#0C134F] font-semibold cursor-pointer shadow-2xs"
                 >
@@ -954,7 +977,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => openPicker(detailImages.length < 4 ? detailImages.length : 0, "browse")}
+                  onClick={() => {
+                    const nextSlot = [0, 1, 2, 3].find((idx) => !detailImages[idx]) ?? 0;
+                    openPicker(nextSlot, "browse");
+                  }}
                   className="gap-1.5 text-xs h-8 rounded-xl border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-900 font-semibold cursor-pointer shadow-2xs"
                 >
                   <FolderOpen className="w-3.5 h-3.5 text-indigo-600" />
@@ -993,18 +1019,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             className="w-full h-full object-contain drop-shadow-xs"
                           />
                           {/* Hover Overlay (Desktop) */}
-                          <div className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex flex-col items-center justify-center gap-1.5 p-2">
+                          <div className="absolute inset-0 bg-slate-900/75 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex flex-col items-center justify-center gap-1.5 p-2">
                             <button
                               type="button"
                               onClick={() => openPicker(slotIdx, "upload")}
-                              className="px-2 py-1 bg-white text-slate-900 rounded text-[10px] font-bold hover:bg-slate-100 cursor-pointer"
+                              className="w-full px-2 py-1 bg-white text-slate-900 rounded text-[10px] font-bold hover:bg-slate-100 cursor-pointer flex items-center justify-center gap-1"
                             >
-                              Replace
+                              <Upload className="w-2.5 h-2.5" />
+                              Upload
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => openPicker(slotIdx, "browse")}
+                              className="w-full px-2 py-1 bg-indigo-600 text-white rounded text-[10px] font-bold hover:bg-indigo-700 cursor-pointer flex items-center justify-center gap-1"
+                            >
+                              <FolderOpen className="w-2.5 h-2.5" />
+                              Folder
                             </button>
                             <button
                               type="button"
                               onClick={() => handleRemoveDetailImage(slotIdx)}
-                              className="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold hover:bg-rose-700 cursor-pointer"
+                              className="w-full px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold hover:bg-rose-700 cursor-pointer"
                             >
                               Remove
                             </button>
@@ -1018,7 +1053,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             onClick={() => openPicker(slotIdx, "upload")}
                             className="flex-1 py-1 px-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-md text-[9.5px] font-semibold"
                           >
-                            Change
+                            Upload
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openPicker(slotIdx, "browse")}
+                            className="flex-1 py-1 px-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-md text-[9.5px] font-semibold"
+                          >
+                            Folder
                           </button>
                           <button
                             type="button"
@@ -1033,11 +1075,45 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     ) : (
                       <div
                         onClick={() => openPicker(slotIdx, "upload")}
-                        className="w-full aspect-square rounded-lg border-2 border-dashed border-slate-200 hover:border-[#0C134F]/40 bg-slate-50/50 hover:bg-slate-50 flex flex-col items-center justify-center cursor-pointer transition-all p-2"
+                        className="w-full aspect-square rounded-lg border-2 border-dashed border-slate-200 hover:border-[#0C134F]/40 bg-slate-50/50 hover:bg-slate-50 flex flex-col items-center justify-center cursor-pointer transition-all p-2 group/slot"
                       >
-                        <Plus className="w-5 h-5 text-slate-400 mb-1" />
-                        <span className="text-[10.5px] font-semibold text-slate-600">Add View {slotIdx + 1}</span>
-                        <span className="text-[9px] text-slate-400">Upload or Pick</span>
+                        {isUploadingImage && pickerTarget === slotIdx ? (
+                          <div className="flex flex-col items-center justify-center">
+                            <Loader2 className="w-5 h-5 text-indigo-600 animate-spin mb-1" />
+                            <span className="text-[10px] text-slate-500 font-medium">Uploading...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <Plus className="w-5 h-5 text-slate-400 mb-1 group-hover/slot:text-[#0C134F] transition-colors" />
+                            <span className="text-[10.5px] font-semibold text-slate-700">Add View {slotIdx + 1}</span>
+                            <div className="flex items-center gap-1.5 mt-2">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openPicker(slotIdx, "upload");
+                                }}
+                                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-md text-[9.5px] font-medium flex items-center gap-1 shadow-2xs cursor-pointer"
+                                title="Upload from Computer"
+                              >
+                                <Upload className="w-2.5 h-2.5" />
+                                Computer
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openPicker(slotIdx, "browse");
+                                }}
+                                className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 text-indigo-700 rounded-md text-[9.5px] font-medium flex items-center gap-1 cursor-pointer"
+                                title="Pick from Folder"
+                              >
+                                <FolderOpen className="w-2.5 h-2.5" />
+                                Folder
+                              </button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>

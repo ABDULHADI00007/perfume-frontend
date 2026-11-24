@@ -16,35 +16,75 @@ import {
 } from "../types";
 
 // ==========================================
-// IN-MEMORY STALE-WHILE-REVALIDATE CACHE
+// IN-MEMORY + SESSION-STORAGE FAST CACHE
 // ==========================================
 const cacheMap = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes in-memory cache
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache
+const CACHE_PREFIX = "ss_admin_cache_";
 
 function getCached<T>(key: string): T | null {
   const item = cacheMap.get(key);
-  if (!item) return null;
-  if (Date.now() - item.timestamp > CACHE_TTL_MS) {
-    cacheMap.delete(key);
-    return null;
+  if (item && Date.now() - item.timestamp <= CACHE_TTL_MS) {
+    return item.data as T;
   }
-  return item.data as T;
+
+  // Check persistent session storage fallback for instant hydration on page reloads
+  if (typeof window !== "undefined") {
+    try {
+      const raw = sessionStorage.getItem(CACHE_PREFIX + key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.timestamp <= CACHE_TTL_MS) {
+          cacheMap.set(key, parsed);
+          return parsed.data as T;
+        } else {
+          sessionStorage.removeItem(CACHE_PREFIX + key);
+        }
+      }
+    } catch {}
+  }
+
+  return null;
 }
 
 function setCached<T>(key: string, data: T): T {
-  cacheMap.set(key, { data, timestamp: Date.now() });
+  const entry = { data, timestamp: Date.now() };
+  cacheMap.set(key, entry);
+
+  if (typeof window !== "undefined") {
+    try {
+      sessionStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
+    } catch {}
+  }
+
   return data;
 }
 
 export function clearAdminCache(prefix?: string): void {
   if (!prefix) {
     cacheMap.clear();
+    if (typeof window !== "undefined") {
+      try {
+        Object.keys(sessionStorage)
+          .filter((k) => k.startsWith(CACHE_PREFIX))
+          .forEach((k) => sessionStorage.removeItem(k));
+      } catch {}
+    }
     return;
   }
+
   for (const key of cacheMap.keys()) {
     if (key.startsWith(prefix)) {
       cacheMap.delete(key);
     }
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      Object.keys(sessionStorage)
+        .filter((k) => k.startsWith(CACHE_PREFIX + prefix))
+        .forEach((k) => sessionStorage.removeItem(k));
+    } catch {}
   }
 }
 

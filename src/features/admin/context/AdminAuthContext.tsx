@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { AdminPermission, AdminRole, AdminUser } from "../types";
 import { adminAuthService, LoginCredentials } from "../services/adminAuthService";
+import { authClient } from "@/lib/auth/auth-client";
 import { hasPermission as checkPermission } from "../permissions";
 
 export interface AdminAuthContextType {
@@ -19,21 +20,57 @@ export interface AdminAuthContextType {
 
 const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
 
+const PROFILE_STORAGE_KEY = "ss_admin_profile";
+
 export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AdminUser | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Synchronous hydration from cached profile for 0ms instantaneous load
+  const [user, setUser] = useState<AdminUser | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+        if (saved && authClient.getToken()) {
+          return JSON.parse(saved);
+        }
+      } catch {}
+    }
+    return null;
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+        if (saved && authClient.getToken()) {
+          return false; // Skip blocking skeleton if already authenticated!
+        }
+      } catch {}
+    }
+    return true;
+  });
+
   const [error, setError] = useState<string | null>(null);
 
   const refreshUser = useCallback(async (isInitial = false) => {
     try {
-      if (isInitial) {
+      // Only show full skeleton if we don't already have an active profile
+      if (isInitial && !authClient.getToken()) {
         setIsLoading(true);
       }
       setError(null);
       const profile = await adminAuthService.getMe();
       setUser(profile);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+        } catch {}
+      }
     } catch {
       setUser(null);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(PROFILE_STORAGE_KEY);
+        } catch {}
+      }
     } finally {
       setIsLoading(false);
     }
@@ -44,6 +81,11 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const handleUnauthorized = () => {
       setUser(null);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(PROFILE_STORAGE_KEY);
+        } catch {}
+      }
     };
 
     if (typeof window !== "undefined") {
@@ -63,6 +105,11 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setError(null);
       const authenticatedUser = await adminAuthService.login(credentials);
       setUser(authenticatedUser);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(authenticatedUser));
+        } catch {}
+      }
       return authenticatedUser;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to sign in";
@@ -79,6 +126,11 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       await adminAuthService.logout();
     } finally {
       setUser(null);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(PROFILE_STORAGE_KEY);
+        } catch {}
+      }
       setIsLoading(false);
     }
   };

@@ -1,4 +1,5 @@
 import { env } from "@/config/environment";
+import { authClient } from "@/lib/auth/auth-client";
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
@@ -35,12 +36,19 @@ export async function apiClient<T>(
   const timeoutMs = timeout ?? DEFAULT_TIMEOUT_MS;
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+  const token = authClient.getToken();
+  const authHeaders: Record<string, string> = {};
+  if (token) {
+    authHeaders["Authorization"] = `Bearer ${token}`;
+  }
+
   const config: RequestInit = {
     method: customConfig.method || "GET",
     credentials: "include",
     signal: controller.signal,
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders,
       ...headers,
     },
     ...customConfig,
@@ -76,6 +84,7 @@ export async function apiClient<T>(
 
       // Trigger session reset on 401 Unauthorized (unless attempting login)
       if (response.status === 401 && !endpoint.includes("/auth/login") && typeof window !== "undefined") {
+        authClient.clearToken();
         window.dispatchEvent(new CustomEvent("auth:unauthorized"));
       }
 

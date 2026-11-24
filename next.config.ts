@@ -71,6 +71,16 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // In development mode, use memory caching instead of filesystem packs
+      // to avoid disk exhaustion (ENOSPC) on constrained disk volumes
+      config.cache = {
+        type: "memory",
+      };
+    }
+    return config;
+  },
   async headers() {
     return [
       {

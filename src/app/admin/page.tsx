@@ -35,10 +35,10 @@ export default function AdminDashboardPage() {
         setError(null);
 
         const [statsData, ordersRes, pendingProofsRes, lowStockRes] = await Promise.allSettled([
-          adminService.getDashboardOverview(true),
-          adminService.getOrders({ limit: 6 }, true),
-          adminService.getOrders({ paymentStatus: "pending_verification", limit: 5 }, true),
-          adminService.getInventory({ lowStock: "true", limit: 6 }, true),
+          adminService.getDashboardOverview(false),
+          adminService.getOrders({ limit: 6 }, false),
+          adminService.getOrders({ paymentStatus: "pending_verification", limit: 5 }, false),
+          adminService.getInventory({ lowStock: "true", limit: 6 }, false),
         ]);
 
         if (statsData.status === "fulfilled") {

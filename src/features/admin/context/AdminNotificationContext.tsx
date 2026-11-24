@@ -185,21 +185,15 @@ export const AdminNotificationProvider: React.FC<{ children: React.ReactNode }> 
         return 0;
       };
 
-      // Query recent orders and pending orders with skipCache = true
-      const [allRes, pendingRes, verificationRes] = await Promise.all([
-        adminService.getOrders({ page: 1, limit: 20 }, true),
-        adminService.getOrders({ orderStatus: "pending", limit: 1 }, true),
-        adminService.getOrders({ orderStatus: "awaiting_payment_verification", limit: 1 }, true),
-      ]);
+      // Query recent orders in one unified call to eliminate unnecessary backend load
+      const allRes = await adminService.getOrders({ page: 1, limit: 20 }, true);
 
-      const metaPending = getMetaCount(pendingRes) + getMetaCount(verificationRes);
       const incomingOrders = allRes.orders || [];
       const listPending = incomingOrders.filter(
         (o) => o.orderStatus === "pending" || o.orderStatus === "awaiting_payment_verification"
       ).length;
 
-      const finalPending = Math.max(metaPending, listPending);
-      setPendingOrdersCount(finalPending);
+      setPendingOrdersCount(listPending);
       setRecentOrders(incomingOrders);
 
       if (isInitialLoadRef.current) {
@@ -296,14 +290,20 @@ export const AdminNotificationProvider: React.FC<{ children: React.ReactNode }> 
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    fetchOrdersStatus();
+    // Delay initial notification fetch by 2 seconds to prioritize primary dashboard render
+    const initialTimer = setTimeout(() => {
+      fetchOrdersStatus();
+    }, 2000);
 
-    // Poll every 12 seconds for real-time order detection
+    // Poll every 25 seconds for real-time order detection without hammering serverless resources
     const interval = setInterval(() => {
       fetchOrdersStatus();
-    }, 12000);
+    }, 25000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, [isAuthenticated, fetchOrdersStatus]);
 
   return (
